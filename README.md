@@ -1,16 +1,18 @@
-# facebook_app
+# facebook_app: Ứng dụng facebook
 
-A new Flutter project.
+Project môn học Phát triển ứng dụng đa nền tảng - Đại học Bách Khoa Hà Nội - 2023.1
 
-## Getting Started
+## Công nghệ sử dụng: Flutter
 
-This project is a starting point for a Flutter application.
+## Nhánh:
+- master: nhánh chính, luôn chạy được
+- develope: nhánh để phát triển. Các thành viên trong nhóm tạo nhánh được checkout từ nhánh này để phát triển tính năng
+- Mỗi thành viên trong nhóm sẽ tạo 1 nhánh riêng để phát triển tính năng.
+  + Quy tắc đặt tên: Tên thành viên nhóm. VD: TuanNV, NamDH, LoiVV,...
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Thành viên nhóm:
+- Ngô Văn Tuấn - 20200559
+- Phạm Thị Hồng Hạnh - 20204546
+- Đỗ Hải Nam - 20204590
+- Vũ Văn Lợi - 20204577
+- Nguyễn Khánh Duy - 20204547
