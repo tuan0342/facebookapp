@@ -9,8 +9,8 @@ Project môn học Phát triển ứng dụng đa nền tảng - Đại học B�
 - develope: nhánh để phát triển. Các thành viên trong nhóm tạo nhánh được checkout từ nhánh này để phát triển tính năng
 - Mỗi thành viên trong nhóm sẽ tạo 1 nhánh riêng để phát triển tính năng.
   + Quy tắc đặt tên: Tên thành viên nhóm. VD: TuanNV, NamDH, LoiVV,...
-  + 
-#### Note: merge nhánh
+  
+### Note: merge nhánh
 - B1: Nhánh của các thành viên sẽ được merge vào nhánh develope.
 - B2: Sau khi test và không có lỗi sẽ được merge nhánh develope vào nhánh master.
 - B3: Nếu có lỗi ở nhánh develope thì thành viên nhóm sẽ pull code và sửa lỗi tại nhánh của mình. Sửa xong sẽ được merge vào develope và tiếp tục test. Không có lỗi sẽ được merge vào nhánh master
