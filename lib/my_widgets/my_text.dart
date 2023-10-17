@@ -29,6 +29,6 @@ class MyText extends StatelessWidget {
     }
 
     return
-      Text(title, style: getTextStyle(type), overflow: TextOverflow.clip, textAlign: TextAlign.center);
+      Text(title, style: style ?? getTextStyle(type), overflow: TextOverflow.clip, textAlign: TextAlign.center);
   }
 }
