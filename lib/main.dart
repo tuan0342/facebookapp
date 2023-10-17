@@ -1,13 +1,12 @@
+import 'package:facebook_app/database/database.dart';
+import 'package:facebook_app/models/student.dart';
 import 'package:facebook_app/my_widgets/my_date_picker.dart';
-import 'package:facebook_app/my_widgets/my_editText.dart';
-import 'package:facebook_app/my_widgets/my_filled_button.dart';
-import 'package:facebook_app/my_widgets/my_text_button.dart';
 import 'package:facebook_app/navigation/app_navigator.dart';
-import 'package:facebook_app/navigation/routes/authenticatedRoute.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:sqflite/sql.dart';
 
 void main() {
+  openMyDatabase();
   runApp(const AppNavigator());
 }
 
@@ -62,10 +61,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
   void _incrementCounter() {
-    context.push("/authenticated");
+    final newStudent = Student(id: 1, name: "Nam", address: "Ha Noi", className: "KHMT-02", gpa: 3.0);
+    database().insert('students', newStudent.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   @override
