@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 class MyFilledButton extends StatelessWidget {
   final bool isDisabled;
   final String title;
+  final TextStyle? textStyle;
   final VoidCallback? cbFunction;
+  final ButtonStyle? style;
 
-  MyFilledButton({super.key, required this.isDisabled, this.title = "", required this.cbFunction});
+  MyFilledButton({super.key, required this.isDisabled , this.title = "",this.textStyle, required this.cbFunction, this.style});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +20,7 @@ class MyFilledButton extends StatelessWidget {
           children: <Widget>[
             Expanded(
               child: FilledButton(
-              style: ButtonStyle(
+              style: style ?? ButtonStyle(
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
@@ -26,7 +28,7 @@ class MyFilledButton extends StatelessWidget {
                 )
               ),
               onPressed: isDisabled ? null : () { cbFunction?.call(); },
-                child: Text(title),
+                child: Text(title, style: textStyle,),
               ),
             ),
           ],

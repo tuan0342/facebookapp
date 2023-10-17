@@ -38,6 +38,11 @@ dependencies:
 #  lint: ^2.1.2
   go_router: ^11.1.2
   google_fonts: ^6.1.0
+  email_validator: ^2.1.17
+  http: ^1.1.0
+  flutter_dotenv: ^5.1.0
+  sqflite: ^2.3.0
+  path: ^1.8.3
 
 dev_dependencies:
   flutter_test:
@@ -93,6 +98,8 @@ flutter:
   # see https://flutter.dev/custom-fonts/#from-packages
 
   assets:
+    - dev.env
+    - prod.env
     - assets/images/Illustration.png
     - assets/images/logo.png
     - assets/images/male_default_avatar.jpeg

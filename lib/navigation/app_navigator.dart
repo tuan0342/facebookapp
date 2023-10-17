@@ -1,10 +1,8 @@
-import 'package:facebook_app/main.dart';
 import 'package:facebook_app/navigation/routes/authenticatedRoute.dart';
 import 'package:facebook_app/navigation/routes/createAccountRoute.dart';
 import 'package:facebook_app/navigation/routes/logInRoute.dart';
-import 'package:facebook_app/navigation/rootTabNavigator.dart';
 import 'package:facebook_app/pages/ProfileLogin.dart';
-import 'package:facebook_app/pages/createAccount/JoinFacebookPage.dart';
+import 'package:facebook_app/pages/logIn/LoginForm.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -13,6 +11,11 @@ final _router = GoRouter(
     GoRoute(
       path: '/',
       builder: (context, state) => const ProfileLoginPage(),
+      // redirect: (context, state) => "/authenticated"
+    ),
+    GoRoute(
+      path: '/loginForm',
+      builder: (context, state) => const Login(),
       // redirect: (context, state) => "/authenticated"
     ),
     createAccountRoute,
@@ -31,6 +34,7 @@ class AppNavigator extends StatelessWidget {
       routerDelegate: _router.routerDelegate,
       routeInformationParser: _router.routeInformationParser,
       routeInformationProvider: _router.routeInformationProvider,
+      debugShowCheckedModeBanner: false,
     );
   }
 }

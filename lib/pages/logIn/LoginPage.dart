@@ -16,6 +16,7 @@ class LoginPage extends StatelessWidget {
     }
 
     return Scaffold(
+      appBar: MyAppBar(title: ""),
       body: Padding(
         padding: EdgeInsets.fromLTRB(16.0, 80.0, 16.0, 0),
         child: Center(
@@ -54,10 +55,7 @@ class LoginPage extends StatelessWidget {
                       padding: EdgeInsets.only(top: 16.0),
                       child: MyFilledButton(isDisabled: false, title: "Đăng nhập", cbFunction: nextScreen),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 16.0),
-                      child: MyTextButton(isDisabled: false, title: "Quên mật khẩu?", cbFunction: nextScreen),
-                    ),
+                    MyTextButton(isDisabled: false, title: "Quên mật khẩu?", cbFunction: nextScreen),
                   ],
                 ),
               ),
