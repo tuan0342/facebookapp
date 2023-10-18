@@ -12,7 +12,7 @@ class ProfileLoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void createAccount() {
-      context.push("/createAccount");
+      context.push("/addStudent");
     }
     void logIn() {
       context.push("/logIn");
@@ -45,7 +45,7 @@ class ProfileLoginPage extends StatelessWidget {
                                 alignment: Alignment.bottomLeft,
                                 child: Container(
                                   padding: EdgeInsets.only(left: 8.0),
-                                  child: MyText(title: "Anh Hoang", type: "labelLarge"),
+                                  child: MyText(title: "Ngô Văn Tuấn", type: "labelLarge"),
                                 )
                             ),
                           ),

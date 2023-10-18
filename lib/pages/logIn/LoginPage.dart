@@ -33,7 +33,7 @@ class LoginPage extends StatelessWidget {
                     ),
                     const Padding(
                       padding: EdgeInsets.only(top: 16.0),
-                      child: MyText(title: "Anh Hoang", type: "labelLarge",),
+                      child: MyText(title: "Ngô Văn Tuấn", type: "labelLarge",),
                     ),
                     const Padding(
                       padding: EdgeInsets.only(top: 24.0),
