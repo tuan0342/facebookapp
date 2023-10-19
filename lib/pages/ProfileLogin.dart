@@ -12,7 +12,7 @@ class ProfileLoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void createAccount() {
-      context.push("/addStudent");
+      context.push("/students");
     }
     void logIn() {
       context.push("/logIn");

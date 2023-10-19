@@ -8,22 +8,46 @@ import 'package:sqflite/sqflite.dart';
 import '../../database/database.dart';
 import '../../models/student.dart';
 
-class AddStudent extends StatefulWidget {
-  const AddStudent({super.key, required this.onSubmit});
+class UpdateStudent extends StatefulWidget {
+  const UpdateStudent({
+    super.key,
+    required this.onUpdateStudent,
+    required this.oldStudent
+  });
 
-  final void Function(Student) onSubmit;
+  final void Function(Student) onUpdateStudent;
+  final Student oldStudent;
 
   @override
-  State<AddStudent> createState() => _AddStudentState();
+  State<UpdateStudent> createState() => _UpdateStudentState();
 }
 
-class _AddStudentState extends State<AddStudent> {
+class _UpdateStudentState extends State<UpdateStudent> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController idPrimary = TextEditingController();
   TextEditingController name = TextEditingController();
   TextEditingController address = TextEditingController();
   TextEditingController classes = TextEditingController();
   TextEditingController gpa = TextEditingController();
+
+  @override
+  void dispose() {
+    idPrimary.dispose();
+    name.dispose();
+    address.dispose();
+    classes.dispose();
+    gpa.dispose();
+  }
+
+  @override
+  void initState() {
+    idPrimary.text = widget.oldStudent.id.toString();
+    name.text = widget.oldStudent.name.toString();
+    address.text = widget.oldStudent.address.toString();
+    classes.text = widget.oldStudent.className.toString();
+    gpa.text = widget.oldStudent.gpa.toString();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -146,13 +170,14 @@ class _AddStudentState extends State<AddStudent> {
           TextButton( child: const Text('Cancel'), onPressed: () {
             Navigator.pop(context);
           }),
-          TextButton( child: const Text('Add Student'), onPressed: () {
+          TextButton( child: const Text('Update Student'), onPressed: () {
             final newStudent = Student(id: int.parse(idPrimary.text),
                 name: name.text, address: address.text,
                 className: classes.text, gpa: double.parse(gpa.text));
-            widget.onSubmit(newStudent);
+            widget.onUpdateStudent(newStudent);
             Navigator.pop(context);
           }),
+          // TextButton( child: const Text('Button 3'), onPressed: () {}),
         ],
       ),
     );

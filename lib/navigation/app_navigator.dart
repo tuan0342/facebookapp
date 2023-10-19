@@ -3,6 +3,7 @@ import 'package:facebook_app/navigation/routes/authenticatedRoute.dart';
 import 'package:facebook_app/navigation/routes/createAccountRoute.dart';
 import 'package:facebook_app/navigation/routes/logInRoute.dart';
 import 'package:facebook_app/navigation/rootTabNavigator.dart';
+import 'package:facebook_app/navigation/routes/studentRoute.dart';
 import 'package:facebook_app/pages/ProfileLogin.dart';
 import 'package:facebook_app/pages/createAccount/JoinFacebookPage.dart';
 import 'package:facebook_app/pages/db/AddStudent.dart';
@@ -16,11 +17,7 @@ final _router = GoRouter(
       builder: (context, state) => const ProfileLoginPage(),
       // redirect: (context, state) => "/authenticated"
     ),
-    GoRoute(
-      path: '/addStudent',
-      builder: (context, state) => const AddStudent(),
-      // redirect: (context, state) => "/authenticated"
-    ),
+    studentRoute,
     createAccountRoute,
     logInRoute,
     authenticatedRoute,
@@ -37,6 +34,7 @@ class AppNavigator extends StatelessWidget {
       routerDelegate: _router.routerDelegate,
       routeInformationParser: _router.routeInformationParser,
       routeInformationProvider: _router.routeInformationProvider,
+      debugShowCheckedModeBanner: false,
     );
   }
 }
