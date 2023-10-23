@@ -13,17 +13,17 @@ class AuthService {
     required String password
     }) async {
       try {
-      final user = User(name: "",userEmail: email, password: password, id: '', address: '', userClass: '', gpa: '');
+      final user = User(name: "",userEmail: email, password: password, id: '', address: '', userClass: '', gpa: '', avatar: '');
       final response = await postMethod(endpoind: "auth/login", body: user);
 
       // ignore: use_build_context_synchronously
       HandleResponse(response: response, context: context, onSuccess: () {
-        showSnackBar(context, 'login successfully!');
+        showSnackBar(context: context,msg: 'login successfully!');
         context.go("/authenticated");
       });
       }catch (e) {
         // ignore: use_build_context_synchronously
-        showSnackBar(context, "invalid error");
+        showSnackBar(context: context, msg: "invalid error");
       }
 
   }
