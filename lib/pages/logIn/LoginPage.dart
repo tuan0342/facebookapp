@@ -14,7 +14,6 @@ class LoginPage extends StatelessWidget {
     void nextScreen() {
       context.go("/authenticated");
     }
-
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.fromLTRB(16.0, 80.0, 16.0, 0),

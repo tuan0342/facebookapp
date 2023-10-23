@@ -1,6 +1,7 @@
 import 'package:facebook_app/main.dart';
 import 'package:facebook_app/navigation/routes/authenticatedRoute.dart';
 import 'package:facebook_app/navigation/routes/createAccountRoute.dart';
+import 'package:facebook_app/navigation/routes/goHomeScreenRoute.dart';
 import 'package:facebook_app/navigation/routes/logInRoute.dart';
 import 'package:facebook_app/navigation/rootTabNavigator.dart';
 import 'package:facebook_app/pages/ProfileLogin.dart';
@@ -18,6 +19,7 @@ final _router = GoRouter(
     createAccountRoute,
     logInRoute,
     authenticatedRoute,
+    goHomeScreenRoute
   ],
 );
 

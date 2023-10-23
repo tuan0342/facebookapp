@@ -17,6 +17,9 @@ class ProfileLoginPage extends StatelessWidget {
     void logIn() {
       context.push("/logIn");
     }
+    void goHomeScreen(){
+      context.push("/homeScreen");
+    }
 
     return Scaffold(
       body: Column(
@@ -86,12 +89,25 @@ class ProfileLoginPage extends StatelessWidget {
                           )
                       )
                   ),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    padding: EdgeInsets.only(top: 16.0, left: 16,),
+                    child: InkWell(
+                      onTap: goHomeScreen,
+                      child: const Row(
+                        children:[
+                          Icon(Icons.add_home, color: Colors.blue),
+                          Text("Home page", style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),)
+                        ]
+                      )
+                    ),
+                  ),
                 ],
               ),
             ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 8),
+            padding: const EdgeInsets.symmetric(vertical: 8),
             child: Align(
                 alignment: Alignment.bottomCenter,
                 child: MyFilledButton(isDisabled: false, title: "Tạo tài khoản Facebook mới", cbFunction: createAccount,)
