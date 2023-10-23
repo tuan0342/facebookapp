@@ -15,6 +15,10 @@ class JoinFacebookPage extends StatelessWidget {
       context.push("/createAccount/name");
     }
 
+    void goToLoginForm() {
+      context.push("/loginForm");
+    }
+
     return Scaffold(
       appBar: MyAppBar(title: "Tạo tài khoản"),
       body: Padding(
@@ -43,7 +47,7 @@ class JoinFacebookPage extends StatelessWidget {
               ),
               Align(
                   alignment: Alignment.bottomCenter,
-                  child: MyTextButton(isDisabled: false, title: "Bạn đã có tài khoản?", cbFunction: nextScreen,)
+                  child: MyTextButton(isDisabled: false, title: "Bạn đã có tài khoản?", cbFunction: goToLoginForm,)
               ),
             ],
           ),

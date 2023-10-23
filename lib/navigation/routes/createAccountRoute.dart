@@ -1,4 +1,3 @@
-import 'package:facebook_app/main.dart';
 import 'package:facebook_app/pages/createAccount/AddEmailPage.dart';
 import 'package:facebook_app/pages/createAccount/ChoosingBirthdayPage.dart';
 import 'package:facebook_app/pages/createAccount/ConfirmCodePage.dart';

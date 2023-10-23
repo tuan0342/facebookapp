@@ -1,4 +1,5 @@
 import 'package:facebook_app/main.dart';
+import 'package:facebook_app/pages/homePage.dart';
 import 'package:flutter/material.dart';
 
 class RootTabNavigator extends StatefulWidget {
@@ -15,7 +16,7 @@ class _RootTabNavigatorState
   static const TextStyle optionStyle =
   TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
-    MyApp(),
+    HomePage(email: "Anh Hoang",),
     Text(
       'Index 1: Business',
       style: optionStyle,

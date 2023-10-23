@@ -1,8 +1,5 @@
-import 'package:facebook_app/my_widgets/my_app_bar.dart';
-import 'package:facebook_app/my_widgets/my_editText.dart';
 import 'package:facebook_app/my_widgets/my_filled_button.dart';
 import 'package:facebook_app/my_widgets/my_text.dart';
-import 'package:facebook_app/my_widgets/my_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -13,6 +10,9 @@ class ProfileLoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     void createAccount() {
       context.push("/createAccount");
+    }
+    void loginOtherAccount() {
+      context.push("/loginForm");
     }
     void logIn() {
       context.push("/logIn");
@@ -65,7 +65,7 @@ class ProfileLoginPage extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     padding: EdgeInsets.only(top: 16.0, left: 16,),
                     child: InkWell(
-                        onTap: () {},
+                        onTap: loginOtherAccount,
                         splashColor: Colors.blue,
                         child: const Row(
                           children: [
