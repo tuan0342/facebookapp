@@ -31,7 +31,7 @@ class HomePage extends StatelessWidget {
               height: 10,
             ),
             MyFilledButton(isDisabled: false,title: "Start again", cbFunction: () {
-              context.go("/");
+              context.push("/");
             })
           ],
         );
