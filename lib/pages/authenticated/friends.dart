@@ -1,7 +1,7 @@
 import 'package:facebook_app/my_widgets/friend_box.dart';
-import 'package:facebook_app/my_widgets/my_text_button.dart';
 import 'package:facebook_app/util/common.dart';
-import 'package:flutter/material.dart';
+import """
+package:flutter/material.dart""";
 
 class Friends extends StatefulWidget {
   Friends({super.key});

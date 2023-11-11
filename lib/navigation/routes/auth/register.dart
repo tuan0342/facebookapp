@@ -1,13 +1,13 @@
-import 'package:facebook_app/pages/createAccount/AddEmailPage.dart';
-import 'package:facebook_app/pages/createAccount/ChoosingBirthdayPage.dart';
-import 'package:facebook_app/pages/createAccount/ConfirmCodePage.dart';
-import 'package:facebook_app/pages/createAccount/JoinFacebookPage.dart';
-import 'package:facebook_app/pages/createAccount/NamingPage.dart';
-import 'package:facebook_app/pages/createAccount/TermOfServicePage.dart';
+import 'package:facebook_app/pages/auth/create_account/add_email_page.dart';
+import 'package:facebook_app/pages/auth/create_account/choosing_birthday_page.dart';
+import 'package:facebook_app/pages/auth/create_account/confirm_code_page.dart';
+import 'package:facebook_app/pages/auth/create_account/join_facebook_page.dart';
+import 'package:facebook_app/pages/auth/create_account/naming_page.dart';
+import 'package:facebook_app/pages/auth/create_account/term_of_service_page.dart';
 import 'package:go_router/go_router.dart';
 
-final GoRoute createAccountRoute = GoRoute(
-      path: '/createAccount',
+final GoRoute registerRoute = GoRoute(
+      path: 'register',
       builder: (context, state) => const JoinFacebookPage(),
       routes: [
         GoRoute(

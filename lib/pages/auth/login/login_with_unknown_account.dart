@@ -5,24 +5,28 @@ import 'package:facebook_app/my_widgets/my_text_button.dart';
 import 'package:facebook_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
-class Login extends StatefulWidget {
-  const Login({super.key});
+class LogInUnknownPage extends StatefulWidget {
+  const LogInUnknownPage({super.key});
 
   @override
-  State<Login> createState() => _LoginState();
+  State<LogInUnknownPage> createState() => _LogInUnknownPageState();
 }
 
-class _LoginState extends State<Login> {
+class _LogInUnknownPageState extends State<LogInUnknownPage> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  AuthService authService = AuthService();
 
   void handleLogin() async {
     if (_formKey.currentState!.validate()) {
+      final authService = Provider.of<AuthService>(context, listen: false);
       // call api here
-      authService.LogIn(context: context, email: emailController.text, password: passwordController.text);
+      authService.LogIn(
+          context: context,
+          email: emailController.text,
+          password: passwordController.text);
     }
   }
 
@@ -101,10 +105,10 @@ class _LoginState extends State<Login> {
                         minimumSize:
                             MaterialStateProperty.all(const Size(200, 50)))),
                 MyTextButton(
-                    title: "forget password?",
-                    textStyle: const TextStyle(color: Colors.black),
-                    cbFunction: forgetPasswordClick,
-                    ),
+                  title: "forget password?",
+                  textStyle: const TextStyle(color: Colors.black),
+                  cbFunction: forgetPasswordClick,
+                ),
               ],
             ),
           ),
@@ -120,13 +124,13 @@ class _LoginState extends State<Login> {
                   title: "Tạo tài khoản mới",
                   textStyle: const TextStyle(color: Colors.blueAccent),
                   style: FilledButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        side: const BorderSide(color: Colors.blueAccent),
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      minimumSize: const Size(200, 50),
-                      backgroundColor: Colors.transparent,
-                      ),
+                    shape: RoundedRectangleBorder(
+                      side: const BorderSide(color: Colors.blueAccent),
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    minimumSize: const Size(200, 50),
+                    backgroundColor: Colors.transparent,
+                  ),
                   cbFunction: createNewAccountClick),
             ),
           ),
