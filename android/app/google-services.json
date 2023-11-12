@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "635516182873",
+    "project_id": "anti-facebook-pj",
+    "storage_bucket": "anti-facebook-pj.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:635516182873:android:e8ae467243467d2ff7ac48",
+        "android_client_info": {
+          "package_name": "com.example.facebook_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkdBVrZNsIl88d1Ff9SFm9lWv584CUX4M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
