@@ -3,19 +3,24 @@ import 'package:facebook_app/my_widgets/my_text.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+// this page is show account logged in but logouted
 class ProfileLoginPage extends StatelessWidget {
   const ProfileLoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // go to create account
     void createAccount() {
-      context.push("/createAccount");
+      context.push("/auth/register");
     }
+    // login with unknown account (with both email and passoword)
     void loginOtherAccount() {
-      context.push("/loginForm");
+      context.push("/auth/logInUnknown");
     }
+
+    // login with known account in this page, just need password
     void logIn() {
-      context.push("/logIn");
+      context.push("/auth/logInKnown");
     }
 
     return Scaffold(
@@ -28,7 +33,7 @@ class ProfileLoginPage extends StatelessWidget {
                 children: [
                   Image.asset("assets/images/logo.png", width: 40, height: 40,),
                   Padding(
-                    padding: EdgeInsets.fromLTRB(16,24,16,0),
+                    padding: const EdgeInsets.fromLTRB(16,24,16,0),
                     child: InkWell(
                       onTap: logIn,
                       child: Row(
@@ -36,7 +41,7 @@ class ProfileLoginPage extends StatelessWidget {
                           ClipRRect(
                             borderRadius: BorderRadius.circular(8), // Image border
                             child: SizedBox.fromSize(
-                              size: Size.fromRadius(30), // Image radius
+                              size: const Size.fromRadius(30), // Image radius
                               child: Image.asset("assets/images/male_default_avatar.jpeg"),
                             ),
                           ),
@@ -44,15 +49,14 @@ class ProfileLoginPage extends StatelessWidget {
                             child: Container(
                                 alignment: Alignment.bottomLeft,
                                 child: Container(
-                                  padding: EdgeInsets.only(left: 8.0),
-                                  child: MyText(title: "Anh Hoang", type: "labelLarge"),
+                                  padding:const  EdgeInsets.only(left: 8.0),
+                                  child:const MyText(title: "Anh Hoang", type: "labelLarge"),
                                 )
                             ),
                           ),
-                          InkWell(
+                          const InkWell(
                               splashColor: Colors.black,
-                              child: Container(
-                                child: const Icon(Icons.more_vert, color: Colors.black,),)
+                              child: Icon(Icons.more_vert, color: Colors.black,)
                           )
                         ],
                       )
@@ -60,7 +64,7 @@ class ProfileLoginPage extends StatelessWidget {
                   ),
                   Container(
                     alignment: Alignment.centerLeft,
-                    padding: EdgeInsets.only(top: 16.0, left: 16,),
+                    padding: const EdgeInsets.only(top: 16.0, left: 16,),
                     child: InkWell(
                         onTap: loginOtherAccount,
                         splashColor: Colors.blue,
@@ -74,7 +78,7 @@ class ProfileLoginPage extends StatelessWidget {
                   ),
                   Container(
                       alignment: Alignment.centerLeft,
-                      padding: EdgeInsets.only(top: 16.0, left: 16,),
+                      padding:const EdgeInsets.only(top: 16.0, left: 16,),
                       child: InkWell(
                           onTap: () {},
                           splashColor: Colors.blue,
@@ -91,7 +95,7 @@ class ProfileLoginPage extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 8),
+            padding:const EdgeInsets.symmetric(vertical: 8),
             child: Align(
                 alignment: Alignment.bottomCenter,
                 child: MyFilledButton(isDisabled: false, title: "Tạo tài khoản Facebook mới", cbFunction: createAccount,)

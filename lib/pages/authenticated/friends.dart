@@ -1,7 +1,6 @@
 import 'package:facebook_app/my_widgets/friend_box.dart';
-import 'package:facebook_app/my_widgets/my_text_button.dart';
 import 'package:facebook_app/util/common.dart';
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
 class Friends extends StatefulWidget {
   Friends({super.key});
@@ -15,9 +14,10 @@ class _FriendsState extends State<Friends> {
     showSnackBar(context: context, msg: "show friend suggest");
   }
 
-    void _onShowFriends(BuildContext context) {
+  void _onShowFriends(BuildContext context) {
     showSnackBar(context: context, msg: "show all friends");
   }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -30,7 +30,10 @@ class _FriendsState extends State<Friends> {
                 border: Border(bottom: BorderSide(color: Colors.grey))),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const Text("Friends", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),),
+              const Text(
+                "Friends",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -74,7 +77,8 @@ class _FriendsState extends State<Friends> {
           ),
           Expanded(
             child: ListView.builder(
-                itemCount: 10, itemBuilder: (context, index) => const FriendBox()),
+                itemCount: 10,
+                itemBuilder: (context, index) => const FriendBox()),
           ),
         ]),
       ),
