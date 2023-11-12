@@ -11,16 +11,16 @@ class ProfileLoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     // go to create account
     void createAccount() {
-      context.push("/createAccount");
+      context.push("/auth/register");
     }
     // login with unknown account (with both email and passoword)
     void loginOtherAccount() {
-      context.push("/loginForm");
+      context.push("/auth/logInUnknown");
     }
 
     // login with known account in this page, just need password
     void logIn() {
-      context.push("/logIn");
+      context.push("/auth/logInKnown");
     }
 
     return Scaffold(

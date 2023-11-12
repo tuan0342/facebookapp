@@ -4,10 +4,14 @@ import 'package:facebook_app/pages/auth/login/profile_login_page.dart';
 import 'package:go_router/go_router.dart';
 
 final GoRoute authRoutes = GoRoute(
-    path: "/auth",
-    builder: (context, state) => const ProfileLoginPage(),
-    routes: [
-      logInKnownRoute,
-      logInUnKnownRoute,
-      registerRoute,
-    ]);
+  path: "/auth",
+  builder: (context, state) => const ProfileLoginPage(),
+  routes: [
+    logInKnownRoute,
+    logInUnKnownRoute,
+    registerRoute,
+  ],
+  redirect: (context, state) {
+    return null;
+  },
+);

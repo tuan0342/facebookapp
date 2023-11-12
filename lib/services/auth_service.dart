@@ -1,41 +1,43 @@
+import "dart:convert";
+
 import "package:cloud_firestore/cloud_firestore.dart";
+import 'package:facebook_app/rest_api/handle_response.dart';
+import "package:facebook_app/models/user_model.dart" as models;
+import "package:facebook_app/rest_api/rest_api.dart";
+import "package:facebook_app/services/app_service.dart";
 import "package:facebook_app/util/common.dart";
 import "package:firebase_auth/firebase_auth.dart";
+import "package:firebase_messaging/firebase_messaging.dart";
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
-import "package:shared_preferences/shared_preferences.dart";
+import "package:provider/provider.dart";
 
 // extends ChangeNotifier to become state
 class AuthService extends ChangeNotifier {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  SharedPreferences shared;
-  String? deviceId;
-  String? uid;
 
-  AuthService({required this.shared});
   // ignore: non_constant_identifier_names
-  void LogIn(
+  void logInWithFirebase(
       {required BuildContext context,
       required String email,
       required String password}) async {
     try {
-      debugPrint("info: $email $password");
+      final _appService = Provider.of<AppService>(context, listen: false);
+
       // login to firebase
       final userCredential = await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
       // get device id
-      deviceId = await getDeviceId();
+      final deviceId = await getDeviceId();
       // insert into firebase database
       _firestore.collection('users').doc(userCredential.user!.uid).set({
         'uid': userCredential.user!.uid,
         'email': email,
         'device_id': deviceId ?? "",
       }, SetOptions(merge: true));
-      // update state for auth service
-      uid = userCredential.user!.uid;
-      // save ref data
-      shared.setString('uid', uid!);
+
+      _appService.uidLoggedIn = userCredential.user!.uid;
       // ignore: use_build_context_synchronously
       context.go("/authenticated");
     } on FirebaseAuthException catch (e) {
@@ -50,19 +52,66 @@ class AuthService extends ChangeNotifier {
     }
   }
 
-  Future<void> logout(
+  void logInWithApi(
+      {required BuildContext context,
+      required String email,
+      required String password}) async {
+    try {
+      // ignore: no_leading_underscores_for_local_identifiers
+      final _appService = Provider.of<AppService>(context, listen: false);
+
+      final user = models.User(
+          id: '',
+          address: '',
+          avatar: '',
+          userClass: '',
+          gpa: '',
+          name: '',
+          userEmail: email,
+          password: password);
+      final response = await postMethod(endpoind: 'auth/login', body: user);
+      // get device id
+      final deviceId = await getDeviceId();
+      final body = jsonDecode(response.body);
+      // ignore: use_build_context_synchronously
+      handleResponse(
+          response: response,
+          context: context,
+          onSuccess: () {
+            // insert into firebase database
+            _firestore.collection('users').doc(body['Token']).set({
+              'uid': body['Token'],
+              'email': email,
+              'device_id': deviceId ?? "",
+            }, SetOptions(merge: true));
+          });
+
+      _appService.uidLoggedIn = body['Token'];
+      
+      // ignore: use_build_context_synchronously
+      context.go("/authenticated");
+    } catch (e) {
+      // ignore: use_build_context_synchronously
+      showSnackBar(
+          context: context, msg: "Have any error, please try again $e");
+    }
+  }
+
+  Future<void> logOut(
       {required BuildContext context, bool isShowSnackbar = false}) async {
+    final _appService = Provider.of<AppService>(context, listen: false);
+
     await FirebaseAuth.instance.signOut();
+    await FirebaseMessaging.instance
+        .unsubscribeFromTopic(_appService.uidLoggedIn);
+    _appService.uidLoggedIn = '';
 
     if (isShowSnackbar) {
       // ignore: use_build_context_synchronously
       showSnackBar(
           context: context, msg: 'Your account logged in another device');
     }
-    SharedPreferences sref = await SharedPreferences.getInstance();
-    await sref.remove('uid');
-
     // ignore: use_build_context_synchronously
-    context.go("/loginForm");
+    context.go("/auth");
   }
 }

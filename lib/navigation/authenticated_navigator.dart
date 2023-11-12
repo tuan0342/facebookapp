@@ -3,7 +3,9 @@ import 'package:facebook_app/my_widgets/bottom_nav_bar.dart';
 import 'package:facebook_app/pages/auth/login/login_with_unknown_account.dart';
 import 'package:facebook_app/pages/authenticated/friends.dart';
 import 'package:facebook_app/pages/authenticated/home_page.dart';
+import 'package:facebook_app/services/app_service.dart';
 import 'package:facebook_app/services/auth_service.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,11 +18,6 @@ class AuthenticatedNavigator extends StatefulWidget {
 
 class _AuthenticatedNavigatorState extends State<AuthenticatedNavigator> {
   int _selectedIndex = 0;
-  void logOut() async {
-    final authService = Provider.of<AuthService>(context, listen: false);
-
-    await authService.logout(context: context);
-  }
 
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
@@ -47,29 +44,35 @@ class _AuthenticatedNavigatorState extends State<AuthenticatedNavigator> {
 
   @override
   Widget build(BuildContext context) {
+    final _appService = Provider.of<AppService>(context, listen: false);
+    final _authService = Provider.of<AuthService>(context, listen: false);
+
+    FirebaseMessaging.instance.subscribeToTopic(_appService.uidLoggedIn);
     return StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('users')
-            .doc(Provider.of<AuthService>(context, listen: false).uid)
+            .doc(_appService.uidLoggedIn)
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return const Text("error");
+            return const Scaffold(body: Center(child: Text("Get error")));
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Scaffold(body: Text("waiting"));
+            return const Scaffold(body: Center(child: Text("Loading...")));
           }
 
           if (snapshot.hasData &&
-              snapshot.data!['device_id'] ==
-                  Provider.of<AuthService>(context, listen: false).deviceId) {
+              snapshot.data!['device_id'] == _appService.deviceId) {
             return Scaffold(
                 appBar: AppBar(
                   title: const Text("Home Page"),
                   actions: [
                     IconButton(
-                        onPressed: logOut, icon: const Icon(Icons.logout))
+                        onPressed: () {
+                          _authService.logOut(context: context);
+                        },
+                        icon: const Icon(Icons.logout))
                   ],
                 ),
                 body: Center(
@@ -80,7 +83,7 @@ class _AuthenticatedNavigatorState extends State<AuthenticatedNavigator> {
                   index: _selectedIndex,
                 ));
           }
-          Provider.of<AuthService>(context, listen: false).shared.remove('uid');
+          _authService.logOut(context: context, isShowSnackbar: true);
           return const LogInUnknownPage();
         });
   }

@@ -23,7 +23,7 @@ class _LogInUnknownPageState extends State<LogInUnknownPage> {
     if (_formKey.currentState!.validate()) {
       final authService = Provider.of<AuthService>(context, listen: false);
       // call api here
-      authService.LogIn(
+      authService.logInWithApi(
           context: context,
           email: emailController.text,
           password: passwordController.text);

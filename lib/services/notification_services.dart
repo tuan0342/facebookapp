@@ -1,15 +1,20 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
-import 'package:facebook_app/pages/splash_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-// AAAAk_e3YVk:APA91bHJ_t3VtCVFwsKK5OjnWa_dO9mTBqIfz5p6VEUIheDSTG3XZYo_07mgp7y7HDTkRd_A-0mTV2QfPUqt9gdmKqeLtZqdkuflZm-JHRYvo0VMfMgy8cIau7EIHe3wlVuDvcoFvzi1
-class NotificationServices {
+import 'package:go_router/go_router.dart';
+import 'package:http/http.dart' as http;
+
+class NotificationServices extends ChangeNotifier {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
 
   static final FlutterLocalNotificationsPlugin
       _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+  // request permission
   void requestNotificationPermission() async {
     NotificationSettings settings = await messaging.requestPermission(
         alert: true,
@@ -21,12 +26,12 @@ class NotificationServices {
         sound: true);
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      print("user granted permistion");
+      debugPrint("user granted permistion");
     } else if (settings.authorizationStatus ==
         AuthorizationStatus.provisional) {
-      print("user granted provisional permistion");
+      debugPrint("user granted provisional permistion");
     } else {
-      print("user denied permistion");
+      debugPrint("user denied permistion");
     }
   }
 
@@ -41,27 +46,26 @@ class NotificationServices {
 
     await _flutterLocalNotificationsPlugin.initialize(initializationSetting,
         onDidReceiveNotificationResponse: (payload) {
-          handleMessage(context, message);
-        });
+      handleMessage(context, message);
+    });
   }
 
   void firebaseInit(BuildContext context) {
     FirebaseMessaging.onMessage.listen((message) {
-        print(message.notification!.title.toString());
-        print(message.notification!.body.toString());
-        print(message.data.toString());
-        print(message.data['type']);
-        print(message.data['id']);
+      debugPrint(message.notification!.title.toString());
+      debugPrint(message.notification!.body.toString());
+      debugPrint(message.data.toString());
 
       if (Platform.isAndroid) {
-        print("on listen message");
         initLocalNotifications(context, message);
         showNotification(message);
       }
     });
   }
 
+  // show notification when receive
   Future<void> showNotification(RemoteMessage message) async {
+    // set up
     AndroidNotificationChannel channel = AndroidNotificationChannel(
         Random.secure().nextInt(100000).toString(),
         'High Importance Notifications',
@@ -82,7 +86,9 @@ class NotificationServices {
 
     NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
+    // end setup
 
+    // show
     Future.delayed(Duration.zero, () {
       _flutterLocalNotificationsPlugin.show(
         0,
@@ -93,6 +99,7 @@ class NotificationServices {
     });
   }
 
+  // get FCM token
   Future<String?> getDeviceToken() async {
     return await messaging.getToken();
   }
@@ -100,51 +107,78 @@ class NotificationServices {
   void isTokenRefresh() async {
     messaging.onTokenRefresh.listen((event) {
       event.toString();
-      print("refresh");
+      debugPrint("refresh");
     });
   }
 
+  // when click noti
   Future<void> setupInteractMessage(BuildContext context) async {
     // when app is terminated
-    RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+    RemoteMessage? initialMessage =
+        await FirebaseMessaging.instance.getInitialMessage();
 
     if (initialMessage != null) {
+      // ignore: use_build_context_synchronously
       handleMessage(context, initialMessage);
     }
 
     // when app ins inbackground
-    FirebaseMessaging.onMessageOpenedApp.listen((event) { 
+    FirebaseMessaging.onMessageOpenedApp.listen((event) {
       handleMessage(context, event);
     });
   }
 
   void handleMessage(BuildContext context, RemoteMessage message) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => const SplashScreen()));
+    print("clicked");
+    context.go("/");
   }
 
+  void sendNotificationWithFCMToken({required String token, String? priority,
+      required String title,required String message, Map<String, String>? data}) async {
+    debugPrint("token : ${token}");
+    debugPrint("api: ${dotenv.env['SERVER_API_MESSAGING']}");
+    final body = {
+      'to': token,
+      'priority': priority ?? 'high',
+      'notification': {
+        'title': title,
+        'body': message,
+      },
+      'data': data ?? {},
+    };
 
-  // () {
-  //         notificationServices.getDeviceToken().then((value) async {
-  //           var data = {
-  //             'to': value.toString(),
-  //             'priority': 'high',
-  //             'notification': {
-  //               'title': "this is title",
-  //               'body': "this is body",
-  //             },
-  //             'data': {
-  //               'type': 'msj',
-  //               'id': '123456',
-  //             }
-  //           };
+    await http.post(
+      Uri.parse('https://fcm.googleapis.com/fcm/send'),
+      body: jsonEncode(body),
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'key=${dotenv.env['SERVER_API_MESSAGING']}',
+      },
+    );
+  }
 
-  //           await http.post(
-  //             Uri.parse('https://fcm.googleapis.com/fcm/send'),
-  //             body: jsonEncode(data),
-  //             headers: {
-  //               'Content-Type': 'application/json; charset=UTF-8',
-  //               'Authorization':
-  //                   'key=AAAAMbDhyqM:APA91bEJjeEu3qseiLN5uOToGGR4t1soTJvy4127KCTQtHpPfwoi7nkd5Hio_oC9S1S8zfWJQ609ZWdXz5rDrAL-e0A2tiD9vtsTetXfkppFA0oevIucKGUsHqKbA5T1w-DWyKvAMDh3',
-  //             },
-  //           );
+    void sendNotificationToTopic({required String topic, String? priority,
+      required String title,required String message, Map<String, String>? data}) async {
+    debugPrint("topic : ${topic}");
+    debugPrint("api: ${dotenv.env['SERVER_API_MESSAGING']}");
+    final body = {
+      'to': '/topics/${topic}',
+      'priority': priority ?? 'high',
+      'notification': {
+        'title': title,
+        'body': message,
+      },
+      'data': data ?? {},
+    };
+
+    await http.post(
+      Uri.parse('https://fcm.googleapis.com/fcm/send'),
+      body: jsonEncode(body),
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'key=${dotenv.env['SERVER_API_MESSAGING']}',
+      },
+    );
+  }
+
 }

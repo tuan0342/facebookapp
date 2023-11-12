@@ -22,6 +22,26 @@ Project môn học Phát triển ứng dụng đa nền tảng - Đại học B�
 - Tên hàm, tên biến: sử dụng quy tắc camelCase. Eg: methodName, varName
 - Tên class: CamelCase: eg: ClassName
 
+## Explain some feature
+### Router
+- Gồm 3 route chính: 
+  + '/': Splash screen (khi đang khởi tạo ứng dụng)
+  + '/auth': Các auth screen (Sử dụng với các màn chức năng authen, ví dụ: đăng nhập, đăng ký, ..)
+  + '/authenticated': Các màn hình sau khi đã xác thực người dùng (authenticated) (Ví dụ: Home, Noti, ...)
+
+### Call api
+- Sử dụng các Rest method trong file "rest_api.dart" trong folder "rest_api"  
+- Sử dụng method handle_response trong folder "rest_api" để sử lý response từ api
+
+### Service
+- chung: 
+  + các service extends "ChangeNotifier" và được "Provide" tại hàm build của app_navigator
+  + khi muốn sử dụng các biến, hàm của các service: tạo 1 biến tại nơi muốn sử dụng bằng cách gọi **Provider.of<"Service">(context, listen: false);** để lấy instance của service và sử dụng
+- các services:
+  + appService: hold app state(props)
+  + authService: gồm các hàm sử lý authen
+  + notificationServices: gồm các hàm sử lý push noti
+
 
 ## Thành viên nhóm:
 - Ngô Văn Tuấn - 20200559
