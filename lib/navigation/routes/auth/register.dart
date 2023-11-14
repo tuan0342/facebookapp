@@ -4,11 +4,12 @@ import 'package:facebook_app/pages/auth/create_account/confirm_code_page.dart';
 import 'package:facebook_app/pages/auth/create_account/join_facebook_page.dart';
 import 'package:facebook_app/pages/auth/create_account/naming_page.dart';
 import 'package:facebook_app/pages/auth/create_account/term_of_service_page.dart';
+import 'package:facebook_app/pages/auth/register/register_page.dart';
 import 'package:go_router/go_router.dart';
 
 final GoRoute registerRoute = GoRoute(
       path: 'register',
-      builder: (context, state) => const JoinFacebookPage(),
+      builder: (context, state) => const RegisterPage(),
       routes: [
         GoRoute(
           path: 'joinFacebook',
