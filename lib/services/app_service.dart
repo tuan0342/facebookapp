@@ -13,28 +13,32 @@ class AppService with ChangeNotifier {
       StreamController<bool>.broadcast();
   String _uidLoggedIn = '';
   String _deviceId = '';
+  String _token = '';
   bool _initialized = false;
 
   AppService(this.sharedPreferences);
 
   String get uidLoggedIn => _uidLoggedIn;
   String get deviceId => _deviceId;
+  String get token => _token;
   bool get initialized => _initialized;
   Stream<bool> get loginStateChange => _uidLoggedInChange.stream;
 
   set uidLoggedIn(String uid) {
     sharedPreferences.setString(LOGIN_KEY, uid);
     _uidLoggedIn = uid;
-    // _uidLoggedInChange.add(state);
     notifyListeners();
   }
 
   set deviceId(String deviceId) {
     sharedPreferences.setString(DEVICE_ID, deviceId);
     _deviceId = deviceId;
-    // notifyListeners();
   }
 
+  set token(String token) {
+    sharedPreferences.setString(DEVICE_ID, token);
+    _token = token;
+  }
   set initialized(bool value) {
     _initialized = value;
     notifyListeners();

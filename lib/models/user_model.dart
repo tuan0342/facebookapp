@@ -1,41 +1,50 @@
 class User {
-  final String id;
-  final String name;
-  final String address;
-  final String avatar;
-  final String userClass;
-  final String gpa;
   final String userEmail;
   final String password;
+  final String uuid;
+  final int coins;
+  final String username;
 
-  const User(
-      {required this.id,
-      required this.address,
-      required this.avatar,
-      required this.userClass,
-      required this.gpa,
-      required this.name,
-      required this.userEmail,
-      required this.password});
+  const User({
+    required this.userEmail,
+    required this.password,
+    required this.uuid,
+    required this.coins,
+    required this.username,
+  });
 
   User.fromJson(Map<String, dynamic> json)
-      : id = json['id'],
-        name = json['name'],
-        address = json['address'],
-        avatar = json['avatar'],
-        userClass = json['class'],
-        gpa = json['gpa'],
-        userEmail = json['email'],
-        password = json['password'];
+      : userEmail = json['email'],
+        password = json['password'],
+        uuid = json['uuid'],
+        coins = json['coins'],
+        username = json['username'];
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-        "address": address,
-        "avatar": avatar,
-        "class": userClass,
-        "gpa": gpa,
         "email": userEmail,
         "password": password,
+        "uuid": uuid,
+        "coins": coins,
+        "username": username,
+      };
+}
+
+class UserLogIn {
+  final String userEmail;
+  final String password;
+  final String uuid;
+
+  UserLogIn(
+      {required this.userEmail, required this.password, required this.uuid});
+
+  UserLogIn.fromJson(Map<String, dynamic> json)
+      : userEmail = json['email'],
+        password = json['password'],
+        uuid = json['uuid'];
+
+  Map<String, dynamic> toJson() => {
+        "email": userEmail,
+        "password": password,
+        "uuid": uuid,
       };
 }

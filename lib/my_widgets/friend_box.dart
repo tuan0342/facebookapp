@@ -7,14 +7,12 @@ class FriendBox extends StatelessWidget {
   const FriendBox(
       {super.key,
       this.friend = const User(
-          id: "1",
-          name: "Full Name Request",
-          address: "address",
           userEmail: "email",
           password: "123456",
-          userClass: "IT1-02 K65",
-          gpa: "4.0",
-          avatar: 'https://picsum.photos/250?image=9')});
+          uuid: "",
+          coins: 0,
+          username: "Nguyen Van A",
+)});
 
   void _onDeleteRequest(BuildContext context) {
     showSnackBar(
@@ -55,7 +53,7 @@ class FriendBox extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      friend.name,
+                      friend.username,
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     const Text(
@@ -105,7 +103,10 @@ class FriendBox extends StatelessWidget {
                         },
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.grey[300]),
-                        child: const Text("Delete", style: TextStyle(color: Colors.black),),
+                        child: const Text(
+                          "Delete",
+                          style: TextStyle(color: Colors.black),
+                        ),
                       ),
                     ),
                   ],

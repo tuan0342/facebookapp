@@ -48,4 +48,4 @@ Project môn học Phát triển ứng dụng đa nền tảng - Đại học B�
 - Phạm Thị Hồng Hạnh - 20204546
 - Đỗ Hải Nam - 20204590
 - Vũ Văn Lợi - 20204577
-- Nguyễn Khánh Duy - 20204547
+- Nguyễn Khánh Duy - 20204647

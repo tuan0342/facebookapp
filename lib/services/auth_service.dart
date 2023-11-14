@@ -52,44 +52,77 @@ class AuthService extends ChangeNotifier {
     }
   }
 
-  void logInWithApi(
-      {required BuildContext context,
-      required String email,
-      required String password}) async {
+  Future<void> register({
+    required BuildContext context,
+    required String email,
+    required String password,
+  }) async {
+    try {
+      // ignore: no_leading_underscores_for_local_identifiers
+      // final _appService = Provider.of<AppService>(context, listen: false);
+      final deviceId = await getDeviceId();
+
+      final user = models.UserLogIn(
+          userEmail: email, password: password, uuid: deviceId ?? "");
+      final response = await postMethod(endpoind: 'signup', body: user);
+      // get device id
+      // ignore: use_build_context_synchronously
+      final body = jsonDecode(response.body);
+      debugPrint("body: $body");
+      if (response.statusCode == 201) {
+        // ignore: use_build_context_synchronously
+        showSnackBar(context: context, msg: 'Register successfully');
+        // ignore: use_build_context_synchronously
+        context.go('/auth/logInUnknown');
+      } else {
+        // ignore: use_build_context_synchronously
+        showSnackBar(context: context, msg: body['message']);
+      }
+    } catch (e) {
+      // ignore: use_build_context_synchronously
+      showSnackBar(
+          context: context, msg: "Have any error, please try again $e");
+    }
+  }
+
+  void logInWithApi({
+    required BuildContext context,
+    required String email,
+    required String password,
+  }) async {
     try {
       // ignore: no_leading_underscores_for_local_identifiers
       final _appService = Provider.of<AppService>(context, listen: false);
-
-      final user = models.User(
-          id: '',
-          address: '',
-          avatar: '',
-          userClass: '',
-          gpa: '',
-          name: '',
-          userEmail: email,
-          password: password);
-      final response = await postMethod(endpoind: 'auth/login', body: user);
-      // get device id
       final deviceId = await getDeviceId();
-      final body = jsonDecode(response.body);
-      // ignore: use_build_context_synchronously
-      handleResponse(
-          response: response,
-          context: context,
-          onSuccess: () {
-            // insert into firebase database
-            _firestore.collection('users').doc(body['Token']).set({
-              'uid': body['Token'],
-              'email': email,
-              'device_id': deviceId ?? "",
-            }, SetOptions(merge: true));
-          });
 
-      _appService.uidLoggedIn = body['Token'];
-      
+      final user = models.UserLogIn(
+          userEmail: email, password: password, uuid: deviceId ?? "",);
+      final response = await postMethod(endpoind: 'login', body: user);
+      // get device id
       // ignore: use_build_context_synchronously
-      context.go("/authenticated");
+      final body = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        final uid = body["data"]['id'];
+        final token = body["data"]['token'];
+        // insert into firebase database
+        _firestore.collection('users').doc(uid).set({
+          'uid': uid,
+          'token':token,
+          'email': email,
+          'device_id': deviceId ?? "",
+        }, SetOptions(merge: true));
+
+        _appService.uidLoggedIn = uid;
+        _appService.token = token;
+
+        // ignore: use_build_context_synchronously
+        context.go("/authenticated");
+        // ignore: use_build_context_synchronously
+        showSnackBar(context: context, msg: 'Login successfully');
+      } else {
+        // ignore: use_build_context_synchronously
+        showSnackBar(context: context, msg: body['message']);
+      }
     } catch (e) {
       // ignore: use_build_context_synchronously
       showSnackBar(

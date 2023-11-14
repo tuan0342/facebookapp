@@ -9,11 +9,12 @@ void handleResponse({
   required BuildContext context,
   required VoidCallback onSuccess,
 }) {
+  debugPrint("status code: ${response.statusCode}");
   switch(response.statusCode) {
     case 200:
       onSuccess();
       break;
     default:
-      showSnackBar(context: context, msg: jsonDecode(response.body)['Message']);
+      showSnackBar(context: context, msg: "other status code: ${response.statusCode}");
   }
 }
