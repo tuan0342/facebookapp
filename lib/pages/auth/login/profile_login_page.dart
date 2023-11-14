@@ -20,7 +20,7 @@ class ProfileLoginPage extends StatelessWidget {
 
     // login with known account in this page, just need password
     void logIn() {
-      context.push("/auth/logInKnown");
+      // context.push("/auth/logInKnown");
     }
 
     return Scaffold(
