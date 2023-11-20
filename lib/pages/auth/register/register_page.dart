@@ -37,8 +37,9 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: const MyAppBar(title: ""),
-      body: Column(children: [
+      appBar: const MyAppBar(title: "Register"),
+      body: Column(
+        children: [
         Expanded(
           flex: 1,
           child: Image.asset(
