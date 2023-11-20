@@ -73,7 +73,7 @@ class AuthService extends ChangeNotifier {
         // ignore: use_build_context_synchronously
         showSnackBar(context: context, msg: 'Register successfully');
         // ignore: use_build_context_synchronously
-        context.go('/auth/logInUnknown');
+        context.go('/auth/register/confirmCode/${email}');
       } else {
         // ignore: use_build_context_synchronously
         showSnackBar(context: context, msg: body['message']);
