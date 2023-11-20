@@ -1,5 +1,8 @@
+import 'package:facebook_app/navigation/authenticated_navigator.dart';
 import 'package:facebook_app/navigation/routes/auth/auth_routes.dart';
 import 'package:facebook_app/navigation/routes/authenticated/authenticated_route.dart';
+import 'package:facebook_app/navigation/test.dart';
+import 'package:facebook_app/pages/authenticated/home_page.dart';
 import 'package:facebook_app/pages/error_page.dart';
 import 'package:facebook_app/pages/splash_screen.dart';
 import 'package:facebook_app/services/app_service.dart';
@@ -18,7 +21,8 @@ class AppRouter {
       GoRoute(
         path: '/',
         builder: (context, state) {
-          return const SplashScreen();
+          // return const SplashScreen();
+          return const TestAuthenticatedNavigator();
         },
         redirect: (context, state) {
           final uidLoggedIn = appService.uidLoggedIn;
