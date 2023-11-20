@@ -31,7 +31,7 @@ class ProfileLoginPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset("assets/images/logo.png", width: 40, height: 40,),
+                  Image.asset("assets/images/logo.png", width: 80, height: 80,),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16,24,16,0),
                     child: InkWell(
@@ -98,7 +98,13 @@ class ProfileLoginPage extends StatelessWidget {
             padding:const EdgeInsets.symmetric(vertical: 8),
             child: Align(
                 alignment: Alignment.bottomCenter,
-                child: MyFilledButton(isDisabled: false, title: "Tạo tài khoản Facebook mới", cbFunction: createAccount,)
+                child:                 MyFilledButton(
+                    isDisabled: false,
+                    title: "Đăng ký tài khoản mới",
+                    cbFunction: createAccount,
+                    style: ButtonStyle(
+                        minimumSize:
+                            MaterialStateProperty.all(const Size(200, 50)))),
             ),
           )
         ],
