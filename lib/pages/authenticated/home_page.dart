@@ -1,3 +1,4 @@
+import 'package:facebook_app/models/notification_model.dart';
 import 'package:facebook_app/my_widgets/my_filled_button.dart';
 import 'package:facebook_app/services/app_service.dart';
 import 'package:facebook_app/services/notification_services.dart';
@@ -33,8 +34,20 @@ class HomePage extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
-            MyFilledButton(isDisabled: false,title: "Send notify", cbFunction: () async {
-              _notificationService.sendNotificationToTopic(topic: _appService.uidLoggedIn,title:  'title',message: 'message');
+            MyFilledButton(isDisabled: false,title: "Send new notify", cbFunction: () async {
+              _notificationService.sendNotificationToTopic(topic: _appService.uidLoggedIn,notification: NotificationModel(title: "new title", message: "New message",data: {
+                "sender":"khanhduy",
+                "receiver": _appService.uidLoggedIn
+              } ));
+            }),
+                        const SizedBox(
+              height: 10,
+            ),
+            MyFilledButton(isDisabled: false,title: "Send other notify", cbFunction: () async {
+              _notificationService.sendNotificationToTopic(topic: _appService.uidLoggedIn,notification: NotificationModel(title: "other title", message: "New message",data: {
+                "sender":"khanhduy",
+                "receiver": _appService.uidLoggedIn
+              } ));
             })
           ],
         );

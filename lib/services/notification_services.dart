@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:facebook_app/models/notification_model.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -10,6 +12,7 @@ import 'package:http/http.dart' as http;
 
 class NotificationServices extends ChangeNotifier {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
+  FirebaseFirestore fireStore = FirebaseFirestore.instance;
 
   static final FlutterLocalNotificationsPlugin
       _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -133,8 +136,12 @@ class NotificationServices extends ChangeNotifier {
     context.go("/");
   }
 
-  void sendNotificationWithFCMToken({required String token, String? priority,
-      required String title,required String message, Map<String, String>? data}) async {
+  void sendNotificationWithFCMToken(
+      {required String token,
+      String? priority,
+      required String title,
+      required String message,
+      Map<String, String>? data}) async {
     debugPrint("token : ${token}");
     debugPrint("api: ${dotenv.env['SERVER_API_MESSAGING']}");
     final body = {
@@ -157,20 +164,21 @@ class NotificationServices extends ChangeNotifier {
     );
   }
 
-    void sendNotificationToTopic({required String topic, String? priority,
-      required String title,required String message, Map<String, String>? data}) async {
-    debugPrint("topic : ${topic}");
-    debugPrint("api: ${dotenv.env['SERVER_API_MESSAGING']}");
+  void sendNotificationToTopic(
+      {required String topic,
+      String? priority,
+      required NotificationModel notification}) async {
     final body = {
       'to': '/topics/${topic}',
       'priority': priority ?? 'high',
       'notification': {
-        'title': title,
-        'body': message,
+        'title': notification.title,
+        'body': notification.message,
       },
-      'data': data ?? {},
+      'data': notification.data ?? {},
     };
 
+    // send noti
     await http.post(
       Uri.parse('https://fcm.googleapis.com/fcm/send'),
       body: jsonEncode(body),
@@ -179,6 +187,8 @@ class NotificationServices extends ChangeNotifier {
         'Authorization': 'key=${dotenv.env['SERVER_API_MESSAGING']}',
       },
     );
-  }
 
+    // save noti to database
+    fireStore.collection("topics").doc(topic).collection("notifications").add({...body, "createdAt": DateTime.now().millisecondsSinceEpoch});
+  }
 }
