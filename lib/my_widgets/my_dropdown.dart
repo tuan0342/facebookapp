@@ -1,10 +1,13 @@
+import 'package:facebook_app/models/menu_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class MyDropDown extends StatefulWidget {
-  const MyDropDown({super.key, required this.title});
+  const MyDropDown({super.key, required this.title, required this.iconOfTitle, required this.arrayList,});
 
   final String title;
+  final String iconOfTitle;
+  final List<MenuItem> arrayList;
 
   @override
   State<MyDropDown> createState() => _MyDropDownState();
@@ -28,7 +31,7 @@ class _MyDropDownState extends State<MyDropDown> {
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-                child: Image.asset("assets/images/question_icon.png", height: 35, width: 35,)
+                child: Image.asset(widget.iconOfTitle, height: 35, width: 35,)
               ),
               Text(
                 widget.title,
@@ -54,27 +57,53 @@ class _MyDropDownState extends State<MyDropDown> {
         ),
         AnimatedContainer(
           duration: const Duration(milliseconds: 300),
-          height: isDropdownVisible ? 150.0 : 0.0,
+          height: isDropdownVisible ? getHeightOfList(widget.arrayList) : 0.0,
           child: ListView(
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  // Handle button click
-                },
-                child: Text('Option 1'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  // Handle button click
-                },
-                child: Text('Option 2'),
-              ),
-              // Add more buttons as needed
-            ],
+            children: getListOptions(widget.arrayList)
           ),
         ),
         // ),
       ],
     );
+  }
+
+  List<Widget> getListOptions(List<MenuItem> array) {
+    final listOption = <Widget>[];
+    for (var i=0; i< array.length; i++) {
+      listOption.add(
+        Container(
+          margin: const EdgeInsets.only(bottom: 10.0),
+          child: ElevatedButton(
+            onPressed: () {
+              // Handle button click
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.white
+            ),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+              child: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                    child: Image.asset(array[i].icon, height: 35, width: 35,)
+                  ),
+                  Text(
+                    array[i].title, 
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black)
+                  ),
+                ],
+              ),
+            ),
+          ),
+        )
+      );
+    }
+
+    return listOption;
+  }
+
+  double getHeightOfList(List array) {
+    return 65.0 * array.length;
   }
 }

@@ -113,3 +113,6 @@ flutter:
     - assets/images/logo.png
     - assets/images/male_default_avatar.jpeg
     - assets/images/question_icon.png
+    - assets/images/rules_icon.png
+    - assets/images/setting_and_private_icon.png
+    - assets/images/setting_icon.png

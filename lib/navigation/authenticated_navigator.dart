@@ -3,6 +3,7 @@ import 'package:facebook_app/my_widgets/bottom_nav_bar.dart';
 import 'package:facebook_app/pages/auth/login/login_with_unknown_account.dart';
 import 'package:facebook_app/pages/authenticated/friends.dart';
 import 'package:facebook_app/pages/authenticated/home_page.dart';
+import 'package:facebook_app/pages/authenticated/menu.dart';
 import 'package:facebook_app/services/app_service.dart';
 import 'package:facebook_app/services/auth_service.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -30,10 +31,7 @@ class _AuthenticatedNavigatorState extends State<AuthenticatedNavigator> {
       'List notify',
       style: optionStyle,
     ),
-    const Text(
-      'Menu',
-      style: optionStyle,
-    ),
+    const Menu(),
   ];
 
   void _onItemTapped(int index) {
