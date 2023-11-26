@@ -10,6 +10,7 @@ import 'package:facebook_app/services/app_service.dart';
 import 'package:facebook_app/services/auth_service.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class AuthenticatedNavigator extends StatefulWidget {
@@ -50,8 +51,12 @@ class _AuthenticatedNavigatorState extends State<AuthenticatedNavigator> {
     FirebaseMessaging.instance.subscribeToTopic(_appService.uidLoggedIn);
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Home Page"),
+        title: const Text("Anti Facebook"),
         actions: [
+          IconButton(onPressed: () {
+            context.push("/authenticated/search");
+          }, icon: const Icon(Icons.search_rounded)),
+
           IconButton(
               onPressed: () {
                 _authService.logOut(context: context);

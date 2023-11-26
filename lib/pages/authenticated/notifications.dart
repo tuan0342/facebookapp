@@ -17,7 +17,6 @@ class _NotificationPageState extends State<NotificationPage> {
   @override
   Widget build(BuildContext context) {
     final _appService = Provider.of<AppService>(context, listen: false);
-    debugPrint("uid: ${_appService.uidLoggedIn}");
     return StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection("topics")
@@ -34,7 +33,6 @@ class _NotificationPageState extends State<NotificationPage> {
             return const WaitingDataScreen();
           }
 
-          debugPrint(snapshot.data!.docs.length.toString());
           return SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(12.0),
@@ -45,7 +43,9 @@ class _NotificationPageState extends State<NotificationPage> {
                     "Notifications",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                   ),
-                  const SizedBox(height: 20,),
+                  const SizedBox(
+                    height: 20,
+                  ),
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -69,19 +69,49 @@ class _NotificationPageState extends State<NotificationPage> {
     return GestureDetector(
       onTap: handleClickNotification,
       child: Container(
-        padding: const EdgeInsets.fromLTRB(0,0,0, 20),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(data["notification"]["body"], style: const TextStyle(fontSize: 16),),
-          const SizedBox(
-            height: 5,
-          ),
-          Text(getDifferenceTime(DateTime.now(),
-              DateTime.fromMillisecondsSinceEpoch(data["createdAt"])), style: const TextStyle(color: Color.fromRGBO(30, 30, 30, 0.6), fontSize: 14),)
-        ]),
+        padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+        child: Row(
+          children: [
+            Expanded(
+                flex: 1,
+                child: Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(90),
+                      // child: Image.network(friend.avatar))),
+                      child: Image.asset(
+                          "assets/images/male_default_avatar.jpeg")),
+                )),
+            const SizedBox(
+              width: 12,
+            ),
+            Expanded(
+              flex: 3,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      data["notification"]["body"],
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      getDifferenceTime(
+                          DateTime.now(),
+                          DateTime.fromMillisecondsSinceEpoch(
+                              data["createdAt"])),
+                      style: const TextStyle(
+                          color: Color.fromRGBO(30, 30, 30, 0.6), fontSize: 14),
+                    )
+                  ]),
+            ),
+          ],
+        ),
       ),
     );
   }
-
 
   void handleClickNotification() {}
 }

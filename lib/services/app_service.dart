@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 String LOGIN_KEY = "uid";
 String DEVICE_ID = "device_id";
+String TOKEN_KEY = "token";
 
 class AppService with ChangeNotifier {
   late final SharedPreferences sharedPreferences;
@@ -36,9 +37,10 @@ class AppService with ChangeNotifier {
   }
 
   set token(String token) {
-    sharedPreferences.setString(DEVICE_ID, token);
+    sharedPreferences.setString(TOKEN_KEY, token);
     _token = token;
   }
+
   set initialized(bool value) {
     _initialized = value;
     notifyListeners();
@@ -46,6 +48,7 @@ class AppService with ChangeNotifier {
 
   Future<void> onAppStart() async {
     _uidLoggedIn = sharedPreferences.getString(LOGIN_KEY) ?? '';
+    _token = sharedPreferences.getString(TOKEN_KEY) ?? '';
     _deviceId = sharedPreferences.getString(DEVICE_ID) ?? '';
     _initialized = true;
     // solve exception setState or markBuild during build
