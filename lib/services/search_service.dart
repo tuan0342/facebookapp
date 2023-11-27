@@ -8,7 +8,6 @@ import 'package:facebook_app/services/auth_service.dart';
 import 'package:facebook_app/util/common.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:facebook_app/models/image_model.dart' as ImageModel;
 
 class SearchService {
   final BuildContext context;

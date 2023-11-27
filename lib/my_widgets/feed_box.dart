@@ -1,17 +1,16 @@
-import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:facebook_app/models/post_model.dart';
 import 'package:facebook_app/util/common.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class FeedBox extends StatelessWidget {
   Post post;
   final Function() ontap;
   FeedBox({required this.post, required this.ontap});
   @override
   Widget build(BuildContext context) {
-    debugPrint("post: ${jsonEncode(post)}");
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
       child: Column(

@@ -1,5 +1,6 @@
+import 'package:facebook_app/models/friend_model.dart';
 import 'package:facebook_app/my_widgets/friend_box.dart';
-import 'package:facebook_app/util/common.dart';
+import 'package:facebook_app/services/friend_service.dart';
 import "package:flutter/material.dart";
 
 class Friends extends StatefulWidget {
@@ -10,12 +11,69 @@ class Friends extends StatefulWidget {
 }
 
 class _FriendsState extends State<Friends> {
-  void _onShowSuggest(BuildContext context) {
-    showSnackBar(context: context, msg: "show friend suggest");
+  late ScrollController _scrollController;
+  int index = 0;
+  static const int count = 20;
+  List<FriendModel> requests = [];
+  int total = 0;
+  bool isEnd = false;
+  bool isLoading = false;
+
+  void _onShowSuggest(BuildContext context) async {
+    final data =
+        await FriendService(context: context).getSuggestFriends(index, 5);
+    debugPrint("data: $data");
   }
 
-  void _onShowFriends(BuildContext context) {
-    showSnackBar(context: context, msg: "show all friends");
+  void _onShowFriends(BuildContext context) async {
+    final data = await FriendService(context: context).getFriends(index, 5);
+    debugPrint("data: $data");
+  }
+
+  void _scrollListener() {
+    if (_scrollController.position.extentAfter == 0) {
+      onGetRequest(context);
+    }
+  }
+
+  void onGetRequest(BuildContext context) async {
+    if (!isEnd) {
+      setState(() {
+        isLoading = true;
+      });
+      final data =
+          await FriendService(context: context).getRequests(index, count);
+
+      debugPrint("data: $data");
+      if (data["requests"].isEmpty) {
+        setState(() {
+          isEnd = true;
+        });
+      } else {
+        setState(() {
+          requests.addAll(data["requests"]);
+          total = data["total"];
+        });
+      }
+
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+    _scrollController.addListener(_scrollListener);
+    onGetRequest(context);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_scrollListener);
+    super.dispose();
   }
 
   @override
@@ -27,12 +85,11 @@ class _FriendsState extends State<Friends> {
           Container(
             width: double.infinity,
             decoration: const BoxDecoration(
-                border: Border(bottom: BorderSide(color: Colors.grey))
-            ),
+                border: Border(bottom: BorderSide(color: Colors.grey))),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               const Text(
-                "Friends",
+                "Bạn bè",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
               ),
               Row(
@@ -49,7 +106,7 @@ class _FriendsState extends State<Friends> {
                             borderRadius: BorderRadius.circular(50),
                           )),
                       child: const Text(
-                        "Suggest",
+                        "Gợi ý",
                         style: TextStyle(color: Colors.black),
                       )),
                   const SizedBox(
@@ -66,23 +123,57 @@ class _FriendsState extends State<Friends> {
                             borderRadius: BorderRadius.circular(50),
                           )),
                       child: const Text(
-                        "Friends",
+                        "Bạn bè",
                         style: TextStyle(color: Colors.black),
                       )),
                 ],
               )
             ]),
           ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                const Text("Lời mời kết bạn: "),
+                Text(
+                  total.toString(),
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                )
+              ],
+            ),
+          ),
           const SizedBox(
             height: 12,
           ),
-          Expanded(
-            child: ListView.builder(
-                itemCount: 10,
-                itemBuilder: (context, index) => const FriendBox()),
-          ),
+          listRequestWidget(),
         ]),
       ),
     );
+  }
+
+  Widget listRequestWidget() {
+    return requests.isEmpty
+        ? const Text("Không có lời mời kết bạn")
+        : Expanded(
+            child: Column(
+            children: [
+              Expanded(
+                child: ListView.builder(
+                  controller: _scrollController,
+                  itemCount: requests.length,
+                  itemBuilder: (context, index) => FriendBox(
+                    friend: requests[index],
+                    remove: () {
+                      setState(() {
+                        requests.removeAt(index);
+                        total -= 1;
+                      });
+                    },
+                  ),
+                ),
+              ),
+              if (isLoading) const CircularProgressIndicator()
+            ],
+          ));
   }
 }
