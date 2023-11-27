@@ -29,10 +29,6 @@ class _AuthenticatedNavigatorState extends State<AuthenticatedNavigator> {
   static final List<Widget> _widgetOptions = <Widget>[
     HomePage(email: "fdgdfgdfg"),
     Friends(),
-    const Text(
-      'List notify',
-      style: optionStyle,
-    ),
     const NotificationPage(),
     const Menu(),
   ];
