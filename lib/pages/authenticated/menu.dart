@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:facebook_app/models/menu_model.dart';
 import 'package:facebook_app/my_widgets/my_dropdown.dart';
+import 'package:facebook_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class Menu extends StatefulWidget {
   const Menu({super.key});
@@ -22,6 +26,8 @@ class _MenuState extends State<Menu> {
 
   @override
   Widget build(BuildContext context) {
+    final _authService = Provider.of<AuthService>(context, listen: false);
+
     return SafeArea(
       child: Container(
         color: const Color.fromARGB(241,242,246,255),
@@ -89,7 +95,7 @@ class _MenuState extends State<Menu> {
                       margin: const EdgeInsets.only(top: 20.0),
                       child: ElevatedButton(
                         onPressed: () {
-                          // do something
+                          _authService.logOut(context: context);
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white
@@ -111,7 +117,7 @@ class _MenuState extends State<Menu> {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        // Handle button click
+                        exit(0);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white
