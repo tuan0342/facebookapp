@@ -102,6 +102,7 @@ class AuthService extends ChangeNotifier {
       // get device id
       // ignore: use_build_context_synchronously
       final body = jsonDecode(response.body);
+      debugPrint("body: $body");
       if (response.statusCode == 200) {
         final uid = body["data"]['id'];
         final token = body["data"]['token'];
@@ -121,10 +122,12 @@ class AuthService extends ChangeNotifier {
         // ignore: use_build_context_synchronously
         showSnackBar(context: context, msg: 'Login successfully');
       } else {
+        debugPrint("get err: $body");
         // ignore: use_build_context_synchronously
         showSnackBar(context: context, msg: body['message']);
       }
     } catch (e) {
+      debugPrint("get err $e");
       // ignore: use_build_context_synchronously
       showSnackBar(
           context: context, msg: "Have any error, please try again $e");

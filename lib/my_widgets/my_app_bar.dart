@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   const MyAppBar({super.key, required this.title});
