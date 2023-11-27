@@ -1,13 +1,12 @@
 import 'package:facebook_app/my_widgets/my_app_bar.dart';
-import 'package:facebook_app/my_widgets/my_editText.dart';
 import 'package:facebook_app/my_widgets/my_filled_button.dart';
 import 'package:facebook_app/my_widgets/my_text.dart';
 import 'package:facebook_app/my_widgets/my_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+class LogInKnownPage extends StatelessWidget {
+  const LogInKnownPage({super.key});
 
   @override
   Widget build(BuildContext context) {

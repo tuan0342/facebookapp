@@ -7,9 +7,10 @@ Future<http.Response> postMethod({
   required String endpoind, 
   Object? body, 
   Map<String, String>? headers,
+  Map<String, String>? params,
 }) async {
   return await http.post(
-    getUri(endpoind: endpoind),
+    getUri(endpoind: endpoind, params: params),
     body: jsonEncode(body ?? <String, dynamic>{}),
     headers: headers ?? <String, String> {
     'Content-Type': 'application/json; charset=UTF-8'
