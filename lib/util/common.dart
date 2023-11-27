@@ -27,3 +27,17 @@ Future<String?> getDeviceId() async{
         return iosInfo.toString();
       }
 }
+
+String getDifferenceTime(DateTime firstTime, DateTime secondTime) {
+  Duration subtime = firstTime.difference(secondTime);
+  if (subtime.inDays >= 7) {
+    return "${(subtime.inDays/7).round()} tuần trước";
+  } else if (subtime.inDays > 0) {
+    return "${subtime.inDays} ngày trước";
+  } else if (subtime.inHours > 0) {
+    return "${subtime.inHours} giờ trước";
+  } else if (subtime.inMinutes > 0 ) {
+    return "${subtime.inMinutes} phút trước";
+  }
+  return "Vừa xong";
+}

@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:facebook_app/models/notification_model.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -10,6 +12,7 @@ import 'package:http/http.dart' as http;
 
 class NotificationServices extends ChangeNotifier {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
+  FirebaseFirestore fireStore = FirebaseFirestore.instance;
 
   static final FlutterLocalNotificationsPlugin
       _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -52,10 +55,6 @@ class NotificationServices extends ChangeNotifier {
 
   void firebaseInit(BuildContext context) {
     FirebaseMessaging.onMessage.listen((message) {
-      debugPrint(message.notification!.title.toString());
-      debugPrint(message.notification!.body.toString());
-      debugPrint(message.data.toString());
-
       if (Platform.isAndroid) {
         initLocalNotifications(context, message);
         showNotification(message);
@@ -107,7 +106,6 @@ class NotificationServices extends ChangeNotifier {
   void isTokenRefresh() async {
     messaging.onTokenRefresh.listen((event) {
       event.toString();
-      debugPrint("refresh");
     });
   }
 
@@ -133,52 +131,69 @@ class NotificationServices extends ChangeNotifier {
     context.go("/");
   }
 
-  void sendNotificationWithFCMToken({required String token, String? priority,
-      required String title,required String message, Map<String, String>? data}) async {
-    debugPrint("token : ${token}");
-    debugPrint("api: ${dotenv.env['SERVER_API_MESSAGING']}");
-    final body = {
-      'to': token,
-      'priority': priority ?? 'high',
-      'notification': {
-        'title': title,
-        'body': message,
-      },
-      'data': data ?? {},
-    };
+  void sendNotificationWithFCMToken(
+      {required String token,
+      String? priority,
+      required String title,
+      required String message,
+      Map<String, String>? data}) async {
+    try {
+      final body = {
+        'to': token,
+        'priority': priority ?? 'high',
+        'notification': {
+          'title': title,
+          'body': message,
+        },
+        'data': data ?? {},
+      };
 
-    await http.post(
-      Uri.parse('https://fcm.googleapis.com/fcm/send'),
-      body: jsonEncode(body),
-      headers: {
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'key=${dotenv.env['SERVER_API_MESSAGING']}',
-      },
-    );
+      await http.post(
+        Uri.parse('https://fcm.googleapis.com/fcm/send'),
+        body: jsonEncode(body),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'key=${dotenv.env['SERVER_API_MESSAGING']}',
+        },
+      );
+    } catch (err) {
+      debugPrint("get error when send noti to specific device $err");
+    }
   }
 
-    void sendNotificationToTopic({required String topic, String? priority,
-      required String title,required String message, Map<String, String>? data}) async {
-    debugPrint("topic : ${topic}");
-    debugPrint("api: ${dotenv.env['SERVER_API_MESSAGING']}");
-    final body = {
-      'to': '/topics/${topic}',
-      'priority': priority ?? 'high',
-      'notification': {
-        'title': title,
-        'body': message,
-      },
-      'data': data ?? {},
-    };
+  void sendNotificationToTopic(
+      {required String topic,
+      String? priority,
+      required NotificationModel notification}) async {
+    try {
+      final body = {
+        'to': '/topics/${topic}',
+        'priority': priority ?? 'high',
+        'notification': {
+          'title': notification.title,
+          'body': notification.message,
+        },
+        'data': notification.data ?? {},
+      };
 
-    await http.post(
-      Uri.parse('https://fcm.googleapis.com/fcm/send'),
-      body: jsonEncode(body),
-      headers: {
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'key=${dotenv.env['SERVER_API_MESSAGING']}',
-      },
-    );
+      // send noti
+      await http.post(
+        Uri.parse('https://fcm.googleapis.com/fcm/send'),
+        body: jsonEncode(body),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'key=${dotenv.env['SERVER_API_MESSAGING']}',
+        },
+      );
+
+      // save noti to database
+      fireStore
+          .collection("topics")
+          .doc(topic)
+          .collection("notifications")
+          .add({...body, "createdAt": DateTime.now().millisecondsSinceEpoch});
+    } catch (err) {
+      debugPrint("get error when send noti to topic $err");
+    }
   }
-
 }

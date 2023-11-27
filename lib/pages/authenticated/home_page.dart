@@ -1,3 +1,4 @@
+import 'package:facebook_app/models/notification_model.dart';
 
 import 'package:facebook_app/models/feed_model.dart';
 import 'package:facebook_app/my_widgets/feed_box.dart';
