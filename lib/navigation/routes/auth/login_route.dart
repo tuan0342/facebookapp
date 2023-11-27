@@ -5,9 +5,10 @@ import 'package:go_router/go_router.dart';
 final logInRoute = GoRoute(
   path: "",
   routes: [
-  logInKnownRoute,
-  logInUnKnownRoute,
-]);
+    logInKnownRoute,
+    logInUnKnownRoute,
+  ]
+);
 
 final GoRoute logInKnownRoute = GoRoute(
   path: 'logInKnown',

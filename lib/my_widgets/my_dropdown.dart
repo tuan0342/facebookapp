@@ -1,6 +1,7 @@
 import 'package:facebook_app/models/menu_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class MyDropDown extends StatefulWidget {
   const MyDropDown({super.key, required this.title, required this.iconOfTitle, required this.arrayList,});
@@ -75,7 +76,7 @@ class _MyDropDownState extends State<MyDropDown> {
           margin: const EdgeInsets.only(bottom: 10.0),
           child: ElevatedButton(
             onPressed: () {
-              // Handle button click
+              context.push(array[i].route);
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.white

@@ -116,3 +116,9 @@ flutter:
     - assets/images/rules_icon.png
     - assets/images/setting_and_private_icon.png
     - assets/images/setting_icon.png
+    - assets/images/terms_and_services_icon.png
+    - assets/images/policy_and_privacy_icon.png
+    - assets/images/community_standards_icon.png
+    - assets/images/personal_information_icon.png
+    - assets/images/block_icon.png
+    - assets/images/security_icon.png
