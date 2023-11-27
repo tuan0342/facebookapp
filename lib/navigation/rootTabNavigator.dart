@@ -16,7 +16,7 @@ class _RootTabNavigatorState extends State<RootTabNavigator> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static final List<Widget> _widgetOptions = <Widget>[
-      const HomePage(
+       HomePage(
         email: "Nguyen Van Tam",
       ),
       Friends(),

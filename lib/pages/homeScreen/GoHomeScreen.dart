@@ -6,34 +6,35 @@ class GoHomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body:  Column(
-        children: [
-          Expanded(
-              child: Center(
-                child: Column(
-                  children: [
-                    Container(
-                        alignment: Alignment.centerLeft,
-                        padding: EdgeInsets.only(top: 16.0, left: 16,),
-                        child: InkWell(
-                            onTap: () {},
-                            splashColor: Colors.blue,
-                            child: const Row(
-                              children: [
-                                Icon(Icons.add, color: Colors.blue,),
-                                Text("Đăng nhập bằng tài khoản khác", style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),)
-                              ],
-                            )
-                        )
-                    ),
-                  ],
-                ),
-              )
-          )
+    return Scaffold(
+      appBar: AppBar(
+          backgroundColor: Colors.white,
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(0.5),
+            child: Container(
+              color: Colors.grey,
+              height: 0.4,
+            ),
+          ),
+          automaticallyImplyLeading: true,
+          elevation: 0.0, // for elevation
+          titleSpacing: 0.0, // if you want remove title spacing with back button
+          title: Material(
+            //Custom leading icon, such as back icon or other icon
+            color: Colors.transparent,
+            child: InkWell(
+                onTap: () {
+                  // context.pop();
+                },
+                child: TextButton(
+                  onPressed: (){},
+                  // padding: const EdgeInsets.fromLTRB(12.0, 16.0, 16.0, 16.0),
+                  child: Text('Facebook', style: TextStyle(color: Colors.blue),),
+                )
 
-        ],
-      ),
+            )
+          )
+    )
     );
   }
 
