@@ -28,6 +28,10 @@ class _AuthenticatedNavigatorState extends State<AuthenticatedNavigator> {
   static final List<Widget> _widgetOptions = <Widget>[
      HomePage(email: "fdgdfgdfg"),
     Friends(),
+        const Text(
+      'Video',
+      style: optionStyle,
+    ),
     const NotificationPage(),
     const Text(
       'Menu',

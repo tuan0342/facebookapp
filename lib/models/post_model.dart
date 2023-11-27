@@ -1,20 +1,18 @@
-import 'dart:convert';
-
 import 'package:facebook_app/models/image_model.dart';
 
 class Post {
   final int id;
   final String name;
-  final List<Image> image;
-  final String described;
-  final String created;
-  final int feel;
-  final int markComment;
-  final int isFelt;
-  final String state;
+  List<Image> image;
+  String described;
+  String created;
+  int feel;
+  int markComment;
+  int isFelt;
+  String state;
   final Author author;
 
-  const Post( 
+  Post(
       {required this.id,
       required this.name,
       required this.image,
@@ -29,7 +27,9 @@ class Post {
   Post.fromJson(Map<String, dynamic> json)
       : id = int.parse(json["id"]),
         name = json["name"],
-        image = (json["image"] as List).map((image) => Image.fromJson(image)).toList(),
+        image = (json["image"] as List)
+            .map((image) => Image.fromJson(image))
+            .toList(),
         described = json["described"],
         created = json["created"],
         feel = int.parse(json["feel"]),
@@ -40,18 +40,18 @@ class Post {
 
   Map<String, dynamic> toJson() {
     return {
-        "id" : id,
-        "name" : name,
-        "image" : image.map((e) => e.toJson()).toList(),
-        "described" : described,
-        "created" : created,
-        "feel" : feel,
-        "mark_comment" : markComment,
-        "is_felt" : isFelt,
-        "state" : state,
-        "author" : author,
-      };
-  } 
+      "id": id,
+      "name": name,
+      "image": image.map((e) => e.toJson()).toList(),
+      "described": described,
+      "created": created,
+      "feel": feel,
+      "mark_comment": markComment,
+      "is_felt": isFelt,
+      "state": state,
+      "author": author,
+    };
+  }
 }
 
 class Author {
