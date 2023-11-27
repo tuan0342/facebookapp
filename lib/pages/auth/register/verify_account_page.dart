@@ -22,7 +22,6 @@ class _VerifyAccountPageState extends State<VerifyAccountPage> {
   TextEditingController verifyCodeController = TextEditingController();
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getVerifyCode();
   }
@@ -41,7 +40,7 @@ class _VerifyAccountPageState extends State<VerifyAccountPage> {
         verifyCode = jsonDecode(response.body)["data"]["verify_code"];
       });
     } else {
-      debugPrint("body : ${jsonDecode(response.body)}");
+      // ignore: use_build_context_synchronously
       showSnackBar(context: context, msg: "get error");
     }
 
@@ -81,7 +80,7 @@ class _VerifyAccountPageState extends State<VerifyAccountPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(
+      appBar: const MyAppBar(
         title: "Verify Account",
       ),
       body: Column(
@@ -91,14 +90,14 @@ class _VerifyAccountPageState extends State<VerifyAccountPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Code của bạn: "),
+                  const Text("Code của bạn: "),
                   Text(
                     verifyCode,
                     style: TextStyle(fontWeight: FontWeight.bold),
                   )
                 ],
               ),
-              Text("Vui lòng nhập code vào ô bên dưới"),
+              const Text("Vui lòng nhập code vào ô bên dưới"),
               Form(
                 key: _formKey,
                 child: Padding(
@@ -107,13 +106,15 @@ class _VerifyAccountPageState extends State<VerifyAccountPage> {
                     controller: verifyCodeController,
                     decoration: const InputDecoration(
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10))),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10))),
                         labelText: "Verify Code"),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter verify code';
                       }
-                      if (value.contains(RegExp(r'[A-Z]', caseSensitive: false))) {
+                      if (value
+                          .contains(RegExp(r'[A-Z]', caseSensitive: false))) {
                         return 'Code just only digits';
                       }
                       return null;
@@ -121,13 +122,13 @@ class _VerifyAccountPageState extends State<VerifyAccountPage> {
                   ),
                 ),
               ),
-                MyFilledButton(
-                    isDisabled: isLoading,
-                    title: "Verify Account",
-                    cbFunction: verifyAccount,
-                    style: ButtonStyle(
-                        minimumSize:
-                            MaterialStateProperty.all(const Size(200, 50)))),
+              MyFilledButton(
+                  isDisabled: isLoading,
+                  title: "Verify Account",
+                  cbFunction: verifyAccount,
+                  style: ButtonStyle(
+                      minimumSize:
+                          MaterialStateProperty.all(const Size(200, 50)))),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Divider(
@@ -135,13 +136,13 @@ class _VerifyAccountPageState extends State<VerifyAccountPage> {
                   color: Colors.blueGrey[500],
                 ),
               ),
-                MyFilledButton(
-                    isDisabled: isLoading,
-                    title: "Get new code",
-                    cbFunction: getVerifyCode,
-                    style: ButtonStyle(
-                        minimumSize:
-                            MaterialStateProperty.all(const Size(200, 50)))),
+              MyFilledButton(
+                  isDisabled: isLoading,
+                  title: "Get new code",
+                  cbFunction: getVerifyCode,
+                  style: ButtonStyle(
+                      minimumSize:
+                          MaterialStateProperty.all(const Size(200, 50)))),
               const SizedBox(
                 height: 10,
               ),
@@ -152,19 +153,18 @@ class _VerifyAccountPageState extends State<VerifyAccountPage> {
                     )
             ]),
           ),
-
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: MyFilledButton(
-                      isDisabled: false,
-                      title: "Verify after, go to login",
-                      cbFunction: () {
-                        context.go("/auth/loginUnknown");
-                      },
-                      style: ButtonStyle(
-                          minimumSize:
-                              MaterialStateProperty.all(const Size(200, 50)))),
-                ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: MyFilledButton(
+                isDisabled: false,
+                title: "Verify after, go to login",
+                cbFunction: () {
+                  context.go("/auth/loginUnknown");
+                },
+                style: ButtonStyle(
+                    minimumSize:
+                        MaterialStateProperty.all(const Size(200, 50)))),
+          ),
         ],
       ),
     );

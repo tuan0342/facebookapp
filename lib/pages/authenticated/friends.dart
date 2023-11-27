@@ -27,7 +27,8 @@ class _FriendsState extends State<Friends> {
           Container(
             width: double.infinity,
             decoration: const BoxDecoration(
-                border: Border(bottom: BorderSide(color: Colors.grey))),
+                border: Border(bottom: BorderSide(color: Colors.grey))
+            ),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               const Text(

@@ -1,7 +1,6 @@
 import "dart:convert";
 
 import "package:cloud_firestore/cloud_firestore.dart";
-import 'package:facebook_app/rest_api/handle_response.dart';
 import "package:facebook_app/models/user_model.dart" as models;
 import "package:facebook_app/rest_api/rest_api.dart";
 import "package:facebook_app/services/app_service.dart";
@@ -68,12 +67,11 @@ class AuthService extends ChangeNotifier {
       // get device id
       // ignore: use_build_context_synchronously
       final body = jsonDecode(response.body);
-      debugPrint("body: $body");
       if (response.statusCode == 201) {
         // ignore: use_build_context_synchronously
         showSnackBar(context: context, msg: 'Register successfully');
         // ignore: use_build_context_synchronously
-        context.go('/auth/register/confirmCode/${email}');
+        context.go('/auth/register/confirmCode/$email');
       } else {
         // ignore: use_build_context_synchronously
         showSnackBar(context: context, msg: body['message']);
@@ -96,18 +94,22 @@ class AuthService extends ChangeNotifier {
       final deviceId = await getDeviceId();
 
       final user = models.UserLogIn(
-          userEmail: email, password: password, uuid: deviceId ?? "",);
+        userEmail: email,
+        password: password,
+        uuid: deviceId ?? "",
+      );
       final response = await postMethod(endpoind: 'login', body: user);
       // get device id
       // ignore: use_build_context_synchronously
       final body = jsonDecode(response.body);
+      debugPrint("body: $body");
       if (response.statusCode == 200) {
         final uid = body["data"]['id'];
         final token = body["data"]['token'];
         // insert into firebase database
         _firestore.collection('users').doc(uid).set({
           'uid': uid,
-          'token':token,
+          'token': token,
           'email': email,
           'device_id': deviceId ?? "",
         }, SetOptions(merge: true));
@@ -120,10 +122,12 @@ class AuthService extends ChangeNotifier {
         // ignore: use_build_context_synchronously
         showSnackBar(context: context, msg: 'Login successfully');
       } else {
+        debugPrint("get err: $body");
         // ignore: use_build_context_synchronously
         showSnackBar(context: context, msg: body['message']);
       }
     } catch (e) {
+      debugPrint("get err $e");
       // ignore: use_build_context_synchronously
       showSnackBar(
           context: context, msg: "Have any error, please try again $e");
@@ -131,18 +135,19 @@ class AuthService extends ChangeNotifier {
   }
 
   Future<void> logOut(
-      {required BuildContext context, bool isShowSnackbar = false}) async {
+      {required BuildContext context,
+      bool isShowSnackbar = false,
+      msg = "Your account logged in another device"}) async {
     final _appService = Provider.of<AppService>(context, listen: false);
 
-    await FirebaseAuth.instance.signOut();
     await FirebaseMessaging.instance
         .unsubscribeFromTopic(_appService.uidLoggedIn);
     _appService.uidLoggedIn = '';
+    _appService.token = '';
 
     if (isShowSnackbar) {
       // ignore: use_build_context_synchronously
-      showSnackBar(
-          context: context, msg: 'Your account logged in another device');
+      showSnackBar(context: context, msg: msg);
     }
     // ignore: use_build_context_synchronously
     context.go("/auth");
