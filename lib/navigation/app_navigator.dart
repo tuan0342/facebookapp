@@ -1,12 +1,14 @@
-import 'package:facebook_app/navigation/routes/authenticatedRoute.dart';
-import 'package:facebook_app/navigation/routes/createAccountRoute.dart';
-import 'package:facebook_app/navigation/routes/logInRoute.dart';
-import 'package:facebook_app/pages/ProfileLogin.dart';
-import 'package:facebook_app/pages/logIn/LoginForm.dart';
+
+import 'package:facebook_app/navigation/routes/app_router.dart';
+import 'package:facebook_app/services/app_service.dart';
+import 'package:facebook_app/services/auth_service.dart';
+import 'package:facebook_app/services/notification_services.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
+
+import '../util/common.dart';
 
 // ignore: must_be_immutable
 class AppNavigator extends StatefulWidget {
