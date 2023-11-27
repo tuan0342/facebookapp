@@ -52,7 +52,7 @@ class AppService with ChangeNotifier {
     _deviceId = sharedPreferences.getString(DEVICE_ID) ?? '';
     _initialized = true;
     // solve exception setState or markBuild during build
-    Future.delayed(Duration.zero, () {
+    Future.delayed(Duration(seconds: 1), () {
       notifyListeners();
     });
   }
