@@ -22,9 +22,7 @@ class _AuthenticatedNavigatorState extends State<AuthenticatedNavigator> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static final List<Widget> _widgetOptions = <Widget>[
-    const HomePage(
-      email: "Nguyen Van Tam",
-    ),
+     HomePage(email: "fdgdfgdfg"),
     Friends(),
     const Text(
       'List notify',
