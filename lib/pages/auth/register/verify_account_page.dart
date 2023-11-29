@@ -41,7 +41,7 @@ class _VerifyAccountPageState extends State<VerifyAccountPage> {
       });
     } else {
       // ignore: use_build_context_synchronously
-      showSnackBar(context: context, msg: "get error");
+      showSnackBar(context: context, msg: "Có lỗi xảy ra khi lấy mã xác thực");
     }
 
     setState(() {
@@ -63,12 +63,12 @@ class _VerifyAccountPageState extends State<VerifyAccountPage> {
 
       if (response.statusCode == 200) {
         // ignore: use_build_context_synchronously
-        showSnackBar(context: context, msg: "Verify successfully");
+        showSnackBar(context: context, msg: "Xác thực thành công");
         // ignore: use_build_context_synchronously
         context.go("/auth/logInUnknown");
       } else {
         // ignore: use_build_context_synchronously
-        showSnackBar(context: context, msg: "get error when verify code");
+        showSnackBar(context: context, msg: "Có lỗi xảy ra khi xác thực tài khoản");
       }
 
       setState(() {

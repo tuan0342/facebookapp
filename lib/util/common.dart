@@ -13,7 +13,7 @@ Uri getUri({required String endpoind, Map<String, dynamic>? params}) {
   return Uri.parse('${dotenv.env['BACKEND_URL']}/$endpoind?$queryParameters');
 }
 
-void showSnackBar({required BuildContext context,required String msg, int timeShow = 4000}) {
+void showSnackBar({required BuildContext context,required String msg, int timeShow = 3000}) {
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg), duration: Duration(milliseconds: timeShow),));
 }
 

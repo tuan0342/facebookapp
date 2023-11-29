@@ -8,7 +8,6 @@ import 'package:facebook_app/services/auth_service.dart';
 import 'package:facebook_app/util/common.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:facebook_app/models/image_model.dart' as ImageModel;
 
 class SearchService {
   final BuildContext context;
@@ -32,13 +31,13 @@ class SearchService {
       final response =
           await postMethod(endpoind: "search", body: body, headers: headers);
       final responseBody = jsonDecode(response.body);
+      if (int.parse(responseBody["code"]) == 9998) {
+        throw UnauthorizationException();
+      }
       if (response.statusCode == 200) {
         posts = (responseBody["data"] as List)
             .map((post) => Post.fromJson(post))
             .toList();
-      }
-      if (int.parse(responseBody["code"]) == 9998) {
-        throw UnauthorizationException();
       }
     } on UnauthorizationException {
       // ignore: use_build_context_synchronously
@@ -78,13 +77,13 @@ class SearchService {
       final response = await postMethod(
           endpoind: "get_saved_search", body: body, headers: headers);
       final responseBody = jsonDecode(response.body);
+      if (int.parse(responseBody["code"]) == 9998) {
+        throw UnauthorizationException();
+      }
       if (response.statusCode == 200) {
         recentKeywords = (responseBody["data"] as List)
             .map((e) => SearchLogModel.fromJson(e))
             .toList();
-      }
-      if (int.parse(responseBody["code"]) == 9998) {
-        throw UnauthorizationException();
       }
     } on UnauthorizationException {
       // ignore: use_build_context_synchronously
@@ -110,12 +109,12 @@ class SearchService {
       final response = await postMethod(
           endpoind: "del_saved_search", body: body, headers: headers);
       final responseBody = jsonDecode(response.body);
+      if (int.parse(responseBody["code"]) == 9998) {
+        throw UnauthorizationException();
+      }
       if (response.statusCode == 200) {
         // ignore: use_build_context_synchronously
         showSnackBar(context: context, msg: "Xóa thành công");
-      }
-      if (int.parse(responseBody["code"]) == 9998) {
-        throw UnauthorizationException();
       }
     } on UnauthorizationException {
       // ignore: use_build_context_synchronously

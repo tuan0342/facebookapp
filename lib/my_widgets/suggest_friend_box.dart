@@ -1,14 +1,27 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:facebook_app/models/friend_model.dart';
-import 'package:facebook_app/util/common.dart';
+import 'package:facebook_app/services/friend_service.dart';
 import 'package:flutter/material.dart';
 
-class FriendBox extends StatelessWidget {
+class SuggestFriendBox extends StatelessWidget {
   final FriendModel friend;
-  const FriendBox({
-    super.key,
-    required this.friend,
-  });
+  final VoidCallback onAcceptSuccess;
+  final VoidCallback onRejectSuccess;
+  const SuggestFriendBox(
+      {super.key,
+      required this.friend,
+      required this.onAcceptSuccess,
+      required this.onRejectSuccess});
+
+  void _onRemoveSuggest(BuildContext context) async {
+    await FriendService(context: context)
+        .setAcceptFriend(friend.id, 0, onRejectSuccess);
+  }
+
+  void _onAddFriend(BuildContext context) async {
+    await FriendService(context: context)
+        .setAcceptFriend(friend.id, 1, onAcceptSuccess);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,17 +70,12 @@ class FriendBox extends StatelessWidget {
             children: [
               // name and time
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
                     friend.username,
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  Text(
-                    getDifferenceTime(
-                        DateTime.now(), DateTime.parse(friend.created)),
-                    style: const TextStyle(color: Colors.grey),
-                  )
                 ],
               ),
               const SizedBox(
@@ -86,6 +94,41 @@ class FriendBox extends StatelessWidget {
                     ),
                   ],
                 ),
+
+              const SizedBox(
+                height: 6,
+              ),
+              // button
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        _onAddFriend(context);
+                      },
+                      style: ElevatedButton.styleFrom(),
+                      child: const Text("Thêm bạn bè"),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        _onRemoveSuggest(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.grey[300]),
+                      child: const Text(
+                        "Gỡ",
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
+                  ),
+                ],
+              )
             ],
           ))
     ]);
