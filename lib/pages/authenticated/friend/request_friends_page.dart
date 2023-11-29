@@ -1,16 +1,18 @@
 import 'package:facebook_app/models/friend_model.dart';
-import 'package:facebook_app/my_widgets/friend_box.dart';
+import 'package:facebook_app/my_widgets/request_friend_box.dart';
 import 'package:facebook_app/services/friend_service.dart';
+import 'package:facebook_app/util/common.dart';
 import "package:flutter/material.dart";
+import 'package:go_router/go_router.dart';
 
-class Friends extends StatefulWidget {
-  Friends({super.key});
+class RequestFriendsPage extends StatefulWidget {
+  const RequestFriendsPage({super.key});
 
   @override
-  State<Friends> createState() => _FriendsState();
+  State<RequestFriendsPage> createState() => _RequestFriendsPageState();
 }
 
-class _FriendsState extends State<Friends> {
+class _RequestFriendsPageState extends State<RequestFriendsPage> {
   late ScrollController _scrollController;
   int index = 0;
   static const int count = 20;
@@ -20,14 +22,11 @@ class _FriendsState extends State<Friends> {
   bool isLoading = false;
 
   void _onShowSuggest(BuildContext context) async {
-    final data =
-        await FriendService(context: context).getSuggestFriends(index, 5);
-    debugPrint("data: $data");
+    context.push("/authenticated/friends/suggests");
   }
 
   void _onShowFriends(BuildContext context) async {
-    final data = await FriendService(context: context).getFriends(index, 5);
-    debugPrint("data: $data");
+    context.push("/authenticated/friends");
   }
 
   void _scrollListener() {
@@ -123,7 +122,7 @@ class _FriendsState extends State<Friends> {
                             borderRadius: BorderRadius.circular(50),
                           )),
                       child: const Text(
-                        "Bạn bè",
+                        "Tất cả bạn bè",
                         style: TextStyle(color: Colors.black),
                       )),
                 ],
@@ -136,8 +135,10 @@ class _FriendsState extends State<Friends> {
               children: [
                 const Text("Lời mời kết bạn: "),
                 Text(
-                  total.toString(),
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  total >= requests.length
+                      ? total.toString()
+                      : requests.length.toString(),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 )
               ],
             ),
@@ -161,13 +162,24 @@ class _FriendsState extends State<Friends> {
                 child: ListView.builder(
                   controller: _scrollController,
                   itemCount: requests.length,
-                  itemBuilder: (context, index) => FriendBox(
+                  itemBuilder: (context, index) => RequestFriendBox(
                     friend: requests[index],
-                    remove: () {
+                    onAcceptSuccess: () {
                       setState(() {
                         requests.removeAt(index);
                         total -= 1;
                       });
+                      showSnackBar(
+                          context: context,
+                          msg: "Đã chấp nhận lời mời kết bạn");
+                    },
+                    onRejectSuccess: () {
+                      setState(() {
+                        requests.removeAt(index);
+                        total -= 1;
+                      });
+                      showSnackBar(
+                          context: context, msg: "Đã từ chối lời mời kết bạn");
                     },
                   ),
                 ),

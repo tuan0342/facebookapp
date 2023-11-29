@@ -17,6 +17,7 @@ class FriendService {
 
   Future<Map<String, dynamic>> getRequests(int index, int count) async {
     Map<String, dynamic> result = {"requests": <FriendModel>[], "total": 0};
+    debugPrint("token: ${_appService.token}");
     try {
       Map<String, dynamic> body = {
         "index": index,
@@ -33,15 +34,16 @@ class FriendService {
       final responseBody = jsonDecode(response.body);
       debugPrint("body: $responseBody");
 
+      if (int.parse(responseBody["code"]) == 9998) {
+        throw UnauthorizationException();
+      }
       if (response.statusCode == 200) {
         result["requests"] = (responseBody["data"]["requests"] as List)
             .map((e) => FriendModel.fromJson(e))
             .toList();
         result["total"] = int.parse(responseBody["data"]["total"]);
-      }
-
-      if (int.parse(responseBody["code"]) == 9998) {
-        throw UnauthorizationException();
+      } else {
+        throw ApiFailException();
       }
     } on UnauthorizationException {
       // ignore: use_build_context_synchronously
@@ -73,17 +75,15 @@ class FriendService {
       final response = await postMethod(
           endpoind: "get_user_friends", body: body, headers: headers);
       final responseBody = jsonDecode(response.body);
-
+      if (int.parse(responseBody["code"]) == 9998) {
+        throw UnauthorizationException();
+      }
       debugPrint("data: $responseBody");
       if (response.statusCode == 200) {
         result["friends"] = (responseBody["data"]["friends"] as List)
             .map((e) => FriendModel.fromJson(e))
             .toList();
         result["total"] = int.parse(responseBody["data"]["total"]);
-      }
-
-      if (int.parse(responseBody["code"]) == 9998) {
-        throw UnauthorizationException();
       }
     } on UnauthorizationException {
       // ignore: use_build_context_synchronously
@@ -115,14 +115,13 @@ class FriendService {
           endpoind: "get_suggested_friends", body: body, headers: headers);
       final responseBody = jsonDecode(response.body);
       debugPrint("body: $responseBody");
+      if (int.parse(responseBody["code"]) == 9998) {
+        throw UnauthorizationException();
+      }
       if (response.statusCode == 200) {
         result = (responseBody["data"] as List)
             .map((e) => FriendModel.fromJson(e))
             .toList();
-      }
-
-      if (int.parse(responseBody["code"]) == 9998) {
-        throw UnauthorizationException();
       }
     } on UnauthorizationException {
       // ignore: use_build_context_synchronously
@@ -137,7 +136,8 @@ class FriendService {
     return result;
   }
 
-  Future<void> setAcceptFriend(int userRequestId, int isAccept) async {
+  Future<void> setAcceptFriend(
+      int userRequestId, int isAccept, VoidCallback? onSuccess) async {
     try {
       Map<String, dynamic> body = {
         "is_accept": isAccept.toString(),
@@ -153,17 +153,19 @@ class FriendService {
           endpoind: "set_accept_friend", body: body, headers: headers);
       final responseBody = jsonDecode(response.body);
       debugPrint("body: $responseBody");
-      if (response.statusCode == 200) {
-        // ignore: use_build_context_synchronously
-        showSnackBar(
-            context: context,
-            msg: isAccept == 1
-                ? "Đã chấp nhận lời mời kết bạn"
-                : "Đã từ chối lời mời kết bạn");
-      }
-
       if (int.parse(responseBody["code"]) == 9998) {
         throw UnauthorizationException();
+      }
+
+      if (response.statusCode == 200) {
+        if (onSuccess != null) {
+          onSuccess();
+        } else {
+          // ignore: use_build_context_synchronously
+          showSnackBar(
+              context: context,
+              msg: isAccept == 1 ? "Đã chấp nhận lời mời kết bạn" : "Đã từ chối lời mời kết bạn");
+        }
       }
     } on UnauthorizationException {
       // ignore: use_build_context_synchronously
@@ -179,7 +181,7 @@ class FriendService {
     }
   }
 
-    Future<void> setRequestFriend(int userRequestId) async {
+  Future<void> setRequestFriend(int userRequestId) async {
     try {
       Map<String, dynamic> body = {
         "user_id": userRequestId,
@@ -193,16 +195,12 @@ class FriendService {
       final response = await postMethod(
           endpoind: "set_request_friend", body: body, headers: headers);
       final responseBody = jsonDecode(response.body);
-
-      if (response.statusCode == 200) {
-        // ignore: use_build_context_synchronously
-        showSnackBar(
-            context: context,
-            msg: "gửi lời mởi kết bạn thành công");
-      }
-
       if (int.parse(responseBody["code"]) == 9998) {
         throw UnauthorizationException();
+      }
+      if (response.statusCode == 200) {
+        // ignore: use_build_context_synchronously
+        showSnackBar(context: context, msg: "gửi lời mởi kết bạn thành công");
       }
     } on UnauthorizationException {
       // ignore: use_build_context_synchronously

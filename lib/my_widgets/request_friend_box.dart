@@ -1,14 +1,28 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:facebook_app/models/friend_model.dart';
+import 'package:facebook_app/services/friend_service.dart';
 import 'package:facebook_app/util/common.dart';
 import 'package:flutter/material.dart';
 
-class FriendBox extends StatelessWidget {
+class RequestFriendBox extends StatelessWidget {
   final FriendModel friend;
-  const FriendBox({
-    super.key,
-    required this.friend,
-  });
+  final VoidCallback onAcceptSuccess;
+  final VoidCallback onRejectSuccess;
+  const RequestFriendBox(
+      {super.key,
+      required this.friend,
+      required this.onAcceptSuccess,
+      required this.onRejectSuccess});
+
+  void _onRejectRequest(BuildContext context) async {
+    await FriendService(context: context)
+        .setAcceptFriend(friend.id, 0, onRejectSuccess);
+  }
+
+  void _onAcceptRequest(BuildContext context) async {
+    await FriendService(context: context)
+        .setAcceptFriend(friend.id, 1, onAcceptSuccess);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +58,7 @@ class FriendBox extends StatelessWidget {
                         image: DecorationImage(
                             image: AssetImage(
                                 "assets/images/male_default_avatar.jpeg"),
-                            fit: BoxFit.cover)),
+                            fit: BoxFit.contain)),
                   ))),
       const SizedBox(
         width: 12,
@@ -53,7 +67,7 @@ class FriendBox extends StatelessWidget {
       Expanded(
           flex: 5,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               // name and time
               Row(
@@ -79,13 +93,46 @@ class FriendBox extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
-                      friend.sameFriends > 0
-                          ? "${friend.sameFriends} bạn chung"
-                          : "",
+                      "${friend.sameFriends} bạn chung",
                       style: const TextStyle(color: Colors.grey),
                     ),
                   ],
                 ),
+
+              const SizedBox(
+                height: 6,
+              ),
+              // button
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        _onAcceptRequest(context);
+                      },
+                      style: ElevatedButton.styleFrom(),
+                      child: const Text("Chấp nhận"),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        _onRejectRequest(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.grey[300]),
+                      child: const Text(
+                        "Từ chối",
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
+                  ),
+                ],
+              )
             ],
           ))
     ]);

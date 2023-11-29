@@ -18,8 +18,12 @@ class _LogInUnknownPageState extends State<LogInUnknownPage> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  bool isLoading = false;
 
   void handleLogin() async {
+    setState(() {
+      isLoading = true;
+    });
     if (_formKey.currentState!.validate()) {
       final authService = Provider.of<AuthService>(context, listen: false);
       // call api here
@@ -28,6 +32,9 @@ class _LogInUnknownPageState extends State<LogInUnknownPage> {
           email: emailController.text,
           password: passwordController.text);
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   void forgetPasswordClick() {
@@ -101,7 +108,7 @@ class _LogInUnknownPageState extends State<LogInUnknownPage> {
                   ),
                 ),
                 MyFilledButton(
-                    isDisabled: false,
+                    isDisabled: isLoading,
                     title: "Login",
                     cbFunction: handleLogin,
                     style: ButtonStyle(

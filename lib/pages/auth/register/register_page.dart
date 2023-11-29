@@ -18,7 +18,12 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
+  bool isLoading = false;
+
   void handleRegister() async {
+    setState(() {
+      isLoading = true;
+    });
     if (_formKey.currentState!.validate()) {
       final authService = Provider.of<AuthService>(context, listen: false);
       // call api here
@@ -27,6 +32,9 @@ class _RegisterPageState extends State<RegisterPage> {
           email: emailController.text,
           password: passwordController.text);
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   void logInClick() {
@@ -38,8 +46,7 @@ class _RegisterPageState extends State<RegisterPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: const MyAppBar(title: "Register"),
-      body: Column(
-        children: [
+      body: Column(children: [
         Expanded(
           flex: 1,
           child: Image.asset(
@@ -89,7 +96,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your password';
                       }
-                      if (value.length <6 || value.length > 10) {
+                      if (value.length < 6 || value.length > 10) {
                         return "Password must be between 6 and 10 characters";
                       }
                       return null;
@@ -97,7 +104,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
                 MyFilledButton(
-                    isDisabled: false,
+                    isDisabled: isLoading,
                     title: "Register",
                     cbFunction: handleRegister,
                     style: ButtonStyle(
