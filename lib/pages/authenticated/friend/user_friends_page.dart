@@ -245,7 +245,7 @@ class _UserFriendsPageState extends State<UserFriendsPage> {
 
   Widget listSuggestFriends() {
     return friends.isEmpty
-        ? const Text("Chưa có bạn bè")
+        ? const Center(child: Text("Chưa có bạn bè"))
         : Expanded(
             child: Column(
             children: [

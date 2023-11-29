@@ -116,7 +116,9 @@ class _SuggestFriendsPageState extends State<SuggestFriendsPage> {
 
   Widget listSuggestFriends() {
     return suggests.isEmpty
-        ? const Text("Không có lời mời kết bạn")
+        ?  const Center(
+          child: Text("Chưa có gợi ý kết bạn"),
+        )
         : Expanded(
             child: Column(
             children: [
