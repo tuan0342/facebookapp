@@ -1,7 +1,7 @@
 
 import 'package:facebook_app/models/feed_model.dart';
 import 'package:facebook_app/my_widgets/feed_box.dart';
-import 'package:facebook_app/pages/createNewFeed/NewFeed.dart';
+import 'package:facebook_app/pages/createNewFeed/new_feed.dart';
 import 'package:facebook_app/services/feed_service.dart';
 import 'package:flutter/material.dart';
 
@@ -92,8 +92,9 @@ class mainHomePageState extends State<HomePage> {
                         const SizedBox(width: 10,),
                         OutlinedButton(
                             onPressed: () {
-                               NewFeed();
-                            },
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => NewFeed()));},
                             style: OutlinedButton.styleFrom(
                               backgroundColor: Colors.white,
                               foregroundColor: Colors.black,
