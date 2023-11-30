@@ -17,7 +17,6 @@ class FriendService {
 
   Future<Map<String, dynamic>> getRequests(int index, int count) async {
     Map<String, dynamic> result = {"requests": <FriendModel>[], "total": 0};
-    debugPrint("token: ${_appService.token}");
     try {
       Map<String, dynamic> body = {
         "index": index,
@@ -32,7 +31,6 @@ class FriendService {
       final response = await postMethod(
           endpoind: "get_requested_friends", body: body, headers: headers);
       final responseBody = jsonDecode(response.body);
-      debugPrint("body: $responseBody");
 
       if (int.parse(responseBody["code"]) == 9998) {
         throw UnauthorizationException();
@@ -78,7 +76,6 @@ class FriendService {
       if (int.parse(responseBody["code"]) == 9998) {
         throw UnauthorizationException();
       }
-      debugPrint("data: $responseBody");
       if (response.statusCode == 200) {
         result["friends"] = (responseBody["data"]["friends"] as List)
             .map((e) => FriendModel.fromJson(e))
@@ -114,7 +111,6 @@ class FriendService {
       final response = await postMethod(
           endpoind: "get_suggested_friends", body: body, headers: headers);
       final responseBody = jsonDecode(response.body);
-      debugPrint("body: $responseBody");
       if (int.parse(responseBody["code"]) == 9998) {
         throw UnauthorizationException();
       }
@@ -152,7 +148,6 @@ class FriendService {
       final response = await postMethod(
           endpoind: "set_accept_friend", body: body, headers: headers);
       final responseBody = jsonDecode(response.body);
-      debugPrint("body: $responseBody");
       if (int.parse(responseBody["code"]) == 9998) {
         throw UnauthorizationException();
       }

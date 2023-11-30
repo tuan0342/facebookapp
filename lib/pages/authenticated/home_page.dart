@@ -43,7 +43,6 @@ class mainHomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final _appService = Provider.of<AppService>(context, listen: false);
-    debugPrint("avatar: ${_appService.avatar}");
     return SafeArea(
         child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,

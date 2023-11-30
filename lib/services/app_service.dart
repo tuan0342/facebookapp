@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 String LOGIN_KEY = "uid";
+String EMAIL_KEY = "email";
 String DEVICE_ID = "device_id";
 String TOKEN_KEY = "token";
 String AVATAR_KEY = "avatar";
@@ -16,6 +17,7 @@ class AppService with ChangeNotifier {
   final StreamController<bool> _uidLoggedInChange =
       StreamController<bool>.broadcast();
   String _uidLoggedIn = '';
+  String _email = '';
   String _deviceId = '';
   String _token = '';
   String _avatar = '';
@@ -26,6 +28,7 @@ class AppService with ChangeNotifier {
   AppService(this.sharedPreferences);
 
   String get uidLoggedIn => _uidLoggedIn;
+  String get email => _email;
   String get deviceId => _deviceId;
   String get token => _token;
   String get avatar => _avatar;
@@ -37,6 +40,12 @@ class AppService with ChangeNotifier {
   set uidLoggedIn(String uid) {
     sharedPreferences.setString(LOGIN_KEY, uid);
     _uidLoggedIn = uid;
+    notifyListeners();
+  }
+
+  set email(String email) {
+    sharedPreferences.setString(EMAIL_KEY, email);
+    _email = email;
     notifyListeners();
   }
 
@@ -72,6 +81,7 @@ class AppService with ChangeNotifier {
 
   Future<void> onAppStart() async {
     _uidLoggedIn = sharedPreferences.getString(LOGIN_KEY) ?? '';
+    _email = sharedPreferences.getString(EMAIL_KEY) ?? '';
     _token = sharedPreferences.getString(TOKEN_KEY) ?? '';
     _deviceId = sharedPreferences.getString(DEVICE_ID) ?? '';
     _avatar = sharedPreferences.getString(AVATAR_KEY) ?? '';
