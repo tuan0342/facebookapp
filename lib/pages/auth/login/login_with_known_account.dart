@@ -13,7 +13,6 @@ class LogInKnownPage extends StatelessWidget {
     void nextScreen() {
       context.go("/authenticated");
     }
-
     return Scaffold(
       appBar: MyAppBar(title: ""),
       body: Padding(

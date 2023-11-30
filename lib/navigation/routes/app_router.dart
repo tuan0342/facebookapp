@@ -1,5 +1,5 @@
 import 'package:facebook_app/navigation/routes/auth/auth_routes.dart';
-import 'package:facebook_app/navigation/routes/authenticated/authenticated_route.dart';
+import 'package:facebook_app/navigation/routes/authenticated/authenticated_routes.dart';
 import 'package:facebook_app/pages/error_page.dart';
 import 'package:facebook_app/pages/splash_screen.dart';
 import 'package:facebook_app/services/app_service.dart';
@@ -24,7 +24,7 @@ class AppRouter {
           final uidLoggedIn = appService.uidLoggedIn;
           final isInitialized = appService.initialized;
 
-          //return "/auth/register/confirmCode/dtrang1570@gmail.com";
+          // return "/auth/register/confirmCode/dtrang1570@gmail.com";
           if (!isInitialized) {
             return '/';
           } else if (isInitialized && uidLoggedIn == '') {

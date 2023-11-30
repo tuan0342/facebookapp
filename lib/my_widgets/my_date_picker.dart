@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 class MyDatePicker extends StatelessWidget {
-  const MyDatePicker({super.key, });
+  const MyDatePicker({super.key });
 
   @override
   Widget build(BuildContext context) {
