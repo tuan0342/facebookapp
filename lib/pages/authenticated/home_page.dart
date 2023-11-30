@@ -92,9 +92,9 @@ class mainHomePageState extends State<HomePage> {
                         const SizedBox(width: 10,),
                         OutlinedButton(
                             onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => NewFeed()));},
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => NewFeed()));
+                              },
+
                             style: OutlinedButton.styleFrom(
                               backgroundColor: Colors.white,
                               foregroundColor: Colors.black,
