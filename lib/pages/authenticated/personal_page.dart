@@ -35,7 +35,7 @@ class _PersonalPageState extends State<PersonalPage> {
                     decoration: const BoxDecoration(
                       image: DecorationImage(
                         fit: BoxFit.fill,
-                        image: NetworkImage("https://vnw-img-cdn.popsww.com/api/v2/containers/file2/cms_topic/doraemons9_02_sbsmarttv-e73982260c40-1609395345843-63UWkTZR.png?v=0"),
+                        image: NetworkImage("https://mcdn.coolmate.me/image/October2023/nhan-vat-doraemon-3012_329.jpg"),
                       ),
                     ),
                   ),  
