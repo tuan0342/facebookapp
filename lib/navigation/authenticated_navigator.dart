@@ -7,6 +7,7 @@ import 'package:facebook_app/pages/authenticated/friend/request_friends_page.dar
 import 'package:facebook_app/pages/authenticated/home_page.dart';
 import 'package:facebook_app/pages/authenticated/menu.dart';
 import 'package:facebook_app/pages/authenticated/notifications.dart';
+import 'package:facebook_app/pages/authenticated/video_page.dart';
 import 'package:facebook_app/services/app_service.dart';
 import 'package:facebook_app/services/auth_service.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -29,10 +30,7 @@ class _AuthenticatedNavigatorState extends State<AuthenticatedNavigator> {
   static final List<Widget> _widgetOptions = <Widget>[
     HomePage(email: "fdgdfgdfg"),
     const RequestFriendsPage(),
-    const Text(
-      'Video',
-      style: optionStyle,
-    ),
+    const VideoPage(),
     const NotificationPage(),
     const Menu(),
   ];

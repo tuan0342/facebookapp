@@ -33,6 +33,7 @@ class _NotificationPageState extends State<NotificationPage> {
             return const WaitingDataScreen();
           }
 
+          
           return SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(12.0),
