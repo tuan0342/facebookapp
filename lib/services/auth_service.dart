@@ -42,12 +42,12 @@ class AuthService extends ChangeNotifier {
     } on FirebaseAuthException catch (e) {
       if (e.code == 'INVALID_LOGIN_CREDENTIALS') {
         // ignore: use_build_context_synchronously
-        showSnackBar(context: context, msg: 'Wrong email or password');
+        showSnackBar(context: context, msg: 'Sai email hoặc mật khẩu');
       }
     } catch (e) {
       // ignore: use_build_context_synchronously
       showSnackBar(
-          context: context, msg: "Have any error, please try again $e");
+          context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau $e");
     }
   }
 
@@ -69,7 +69,7 @@ class AuthService extends ChangeNotifier {
       final body = jsonDecode(response.body);
       if (response.statusCode == 201) {
         // ignore: use_build_context_synchronously
-        showSnackBar(context: context, msg: 'Register successfully');
+        // showSnackBar(context: context, msg: 'Đăng ký thành công');
         // ignore: use_build_context_synchronously
         context.go('/auth/register/confirmCode/$email');
       } else {
@@ -77,9 +77,9 @@ class AuthService extends ChangeNotifier {
         showSnackBar(context: context, msg: body['message']);
       }
     } catch (e) {
+      debugPrint("get err: $e");
       // ignore: use_build_context_synchronously
-      showSnackBar(
-          context: context, msg: "Have any error, please try again $e");
+      showSnackBar(context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
     }
   }
 
@@ -120,7 +120,7 @@ class AuthService extends ChangeNotifier {
         // ignore: use_build_context_synchronously
         context.go("/authenticated");
         // ignore: use_build_context_synchronously
-        showSnackBar(context: context, msg: 'Login successfully');
+        showSnackBar(context: context, msg: 'Đăng nhập thành công');
       } else {
         debugPrint("get err: $body");
         // ignore: use_build_context_synchronously
@@ -130,14 +130,14 @@ class AuthService extends ChangeNotifier {
       debugPrint("get err $e");
       // ignore: use_build_context_synchronously
       showSnackBar(
-          context: context, msg: "Have any error, please try again $e");
+          context: context, msg: "Có lỗi xảy ra, vui lòng thử lại sau");
     }
   }
 
   Future<void> logOut(
       {required BuildContext context,
       bool isShowSnackbar = false,
-      msg = "Your account logged in another device"}) async {
+      msg = "Tài khoản đang được đăng nhập trên thiết bị khác"}) async {
     final _appService = Provider.of<AppService>(context, listen: false);
 
     await FirebaseMessaging.instance

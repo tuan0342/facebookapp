@@ -1,4 +1,5 @@
 import 'package:facebook_app/models/post_model.dart';
+import 'package:facebook_app/my_widgets/feed_box.dart';
 import 'package:facebook_app/my_widgets/my_text_button.dart';
 import 'package:facebook_app/services/app_service.dart';
 import 'package:facebook_app/services/search_service.dart';
@@ -294,9 +295,8 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Widget postItem(Post post) {
-    return SizedBox(
-      height: 500,
-      child: Text(post.id.toString()),
-    );
+    return FeedBox(post: post, ontap: () {
+      debugPrint("click interactive");
+    });
   }
 }

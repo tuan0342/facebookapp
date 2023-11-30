@@ -1,10 +1,14 @@
-import 'package:facebook_app/models/feed_model.dart';
+
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:facebook_app/models/post_model.dart';
+import 'package:facebook_app/util/common.dart';
 import 'package:flutter/material.dart';
 
-class FeedBox extends StatelessWidget{
-  Feed feed;
+// ignore: must_be_immutable
+class FeedBox extends StatelessWidget {
+  Post post;
   final Function() ontap;
-  FeedBox({required this.feed,required this.ontap});
+  FeedBox({required this.post, required this.ontap});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -17,52 +21,124 @@ class FeedBox extends StatelessWidget{
             children: <Widget>[
               Row(
                 children: <Widget>[
-                  Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                            image: AssetImage(feed.userImage),
-                            fit: BoxFit.cover
-                        )
+                  CachedNetworkImage(
+                    imageUrl: post.author.avatar,
+                    imageBuilder: (context, imageProvider) => Container(
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                              image: imageProvider, fit: BoxFit.cover)),
+                    ),
+                    placeholder: (context, url) => Container(
+                      height: 50,
+                      width: 50,
+                      decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                              image: AssetImage(
+                                  "assets/images/male_default_avatar.jpeg"),
+                              fit: BoxFit.cover)),
+                    ),
+                    errorWidget: (context, url, error) => Container(
+                      height: 50,
+                      width: 50,
+                      decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                              image: AssetImage(
+                                  "assets/images/male_default_avatar.jpeg"),
+                              fit: BoxFit.cover)),
                     ),
                   ),
-                  const SizedBox(width: 10,),
+                  const SizedBox(
+                    width: 10,
+                  ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(feed.userName, style: TextStyle(color: Colors.grey[900], fontSize: 18, fontWeight: FontWeight.bold, letterSpacing: 1),),
-                      const SizedBox(height: 3,),
-                      Text(feed.feedTime, style: const TextStyle(fontSize: 15, color: Colors.grey),),
+                      Text(
+                        post.author.name,
+                        style: TextStyle(
+                            color: Colors.grey[900],
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1),
+                      ),
+                      const SizedBox(
+                        height: 3,
+                      ),
+                      Text(
+                        getDifferenceTime(
+                            DateTime.now(), DateTime.parse(post.created)),
+                        style:
+                            const TextStyle(fontSize: 15, color: Colors.grey),
+                      ),
                     ],
                   )
                 ],
               ),
               IconButton(
-                icon: Icon(Icons.more_horiz, size: 30, color: Colors.grey[600],),
+                icon: Icon(
+                  Icons.more_horiz,
+                  size: 30,
+                  color: Colors.grey[600],
+                ),
                 onPressed: () {},
               )
             ],
           ),
-          const SizedBox(height: 20,),
-          Padding(
-              padding: const EdgeInsets.only(left: 10) ,
-              child: Text(feed.feedContent, style: TextStyle(fontSize: 15, color: Colors.grey[800], height: 1.5, letterSpacing: .7),),
+          const SizedBox(
+            height: 20,
           ),
-          const SizedBox(height: 20,),
-          feed.feedImageList.length != 0 ?
-          Container(
-            height: 200,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                image: DecorationImage(
-                    image: AssetImage(feed.feedImageList[0]),
-                    fit: BoxFit.cover
-                )
+          Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: Text(
+              post.described,
+              style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.grey[800],
+                  height: 1.5,
+                  letterSpacing: .7),
             ),
-          ) : Container(),
-          const SizedBox(height: 20,),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          post.image.isNotEmpty
+              ? CachedNetworkImage(
+                  imageUrl: post.image[0].url,
+                  imageBuilder: (context, imageProvider) => Container(
+                    height: 150,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        image: DecorationImage(
+                            image: imageProvider, fit: BoxFit.contain)),
+                  ),
+                  placeholder: (context, url) => Container(
+                    height: 150,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        image: const DecorationImage(
+                            image: AssetImage(
+                                "assets/images/male_default_avatar.jpeg"),
+                            fit: BoxFit.contain)),
+                  ),
+                  errorWidget: (context, url, error) => Container(
+                    height: 150,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        image: const DecorationImage(
+                            image: AssetImage(
+                                "assets/images/male_default_avatar.jpeg"),
+                            fit: BoxFit.contain)),
+                  ),
+                )
+              : Container(),
+          const SizedBox(
+            height: 20,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
@@ -73,29 +149,31 @@ class FeedBox extends StatelessWidget{
                     Row(
                       children: [
                         makeKudos(),
-                        const SizedBox(width: 5,),
-                        Text("${feed.kudosNumber}", style: TextStyle(fontSize: 15, color: Colors.grey[800]),),
-                      ],
-                    ),
-                    const SizedBox(width: 5,),
-                    Row(
-                      children: [
-                        makeDisappointed(),
-                        const SizedBox(width: 5,),
-                        Text("${feed.disappointedNumber}", style: TextStyle(fontSize: 15, color: Colors.grey[800]),),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          "${post.feel}",
+                          style:
+                              TextStyle(fontSize: 15, color: Colors.grey[800]),
+                        ),
                       ],
                     ),
                   ],
                 ),
               ),
-               Padding(
+              Padding(
                 padding: const EdgeInsets.only(right: 5),
-                child: Text("${feed.markNumber} Marks", style: TextStyle(fontSize: 15, color: Colors.grey[800]),)
-                ,
+                child: Text(
+                  "${post.markComment} Marks",
+                  style: TextStyle(fontSize: 15, color: Colors.grey[800]),
+                ),
               )
             ],
           ),
-          const SizedBox(height: 20,),
+          const SizedBox(
+            height: 20,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
@@ -116,8 +194,7 @@ class FeedBox extends StatelessWidget{
       decoration: BoxDecoration(
           color: Colors.blue,
           shape: BoxShape.circle,
-          border: Border.all(color: Colors.white)
-      ),
+          border: Border.all(color: Colors.white)),
       child: const Center(
         child: Icon(Icons.check, size: 12, color: Colors.white),
       ),
@@ -131,8 +208,7 @@ class FeedBox extends StatelessWidget{
       decoration: BoxDecoration(
           color: Colors.red,
           shape: BoxShape.circle,
-          border: Border.all(color: Colors.white)
-      ),
+          border: Border.all(color: Colors.white)),
       child: const Center(
         child: Icon(Icons.dangerous_outlined, size: 20, color: Colors.white),
       ),
@@ -147,16 +223,24 @@ class FeedBox extends StatelessWidget{
         style: OutlinedButton.styleFrom(
             // backgroundColor: Colors.grey.shade200,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(50),
-            )),
-        onPressed: (){
-        },
+          borderRadius: BorderRadius.circular(50),
+        )),
+        onPressed: ontap,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Icon(Icons.check, color: isActive ? Colors.blue : Colors.grey, size: 18,),
-            const SizedBox(width: 5,),
-            Text("Kudos", style: TextStyle(color: isActive ? Colors.blue : Colors.grey),)
+            Icon(
+              Icons.check,
+              color: isActive ? Colors.blue : Colors.grey,
+              size: 18,
+            ),
+            const SizedBox(
+              width: 5,
+            ),
+            Text(
+              "Kudos",
+              style: TextStyle(color: isActive ? Colors.blue : Colors.grey),
+            )
           ],
         ),
       ),
@@ -169,17 +253,26 @@ class FeedBox extends StatelessWidget{
       margin: const EdgeInsets.only(right: 20, top: 5),
       child: OutlinedButton(
         style: OutlinedButton.styleFrom(
-          // backgroundColor: Colors.grey.shade200,
+            // backgroundColor: Colors.grey.shade200,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(50),
-            )),
+          borderRadius: BorderRadius.circular(50),
+        )),
         onPressed: ontap,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Icon(Icons.dangerous_outlined, color: isActive ? Colors.red : Colors.grey, size: 18,),
-            const SizedBox(width: 5,),
-            Text("Diss", style: TextStyle(color: isActive ? Colors.red : Colors.grey),)
+            Icon(
+              Icons.dangerous_outlined,
+              color: isActive ? Colors.red : Colors.grey,
+              size: 18,
+            ),
+            const SizedBox(
+              width: 5,
+            ),
+            Text(
+              "Diss",
+              style: TextStyle(color: isActive ? Colors.red : Colors.grey),
+            )
           ],
         ),
       ),
@@ -189,24 +282,27 @@ class FeedBox extends StatelessWidget{
   Widget makeMarkButton() {
     return Container(
       width: 100,
-      margin: const EdgeInsets.only( top: 5),
+      margin: const EdgeInsets.only(top: 5),
       child: OutlinedButton(
         style: OutlinedButton.styleFrom(
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(50),
-            )),
-        onPressed: (){},
+          borderRadius: BorderRadius.circular(50),
+        )),
+        onPressed: () {},
         child: const Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Icon(Icons.comment, color: Colors.grey, size: 18),
-            SizedBox(width: 5,),
-            Text("Mark", style: TextStyle(color: Colors.grey),)
+            SizedBox(
+              width: 5,
+            ),
+            Text(
+              "Mark",
+              style: TextStyle(color: Colors.grey),
+            )
           ],
         ),
       ),
     );
   }
 }
-
-

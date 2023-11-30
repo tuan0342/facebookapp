@@ -3,7 +3,7 @@ import 'package:facebook_app/my_widgets/bottom_nav_bar.dart';
 import 'package:facebook_app/my_widgets/error_when_get_data_screen.dart';
 import 'package:facebook_app/my_widgets/waiting_data_screen.dart';
 import 'package:facebook_app/pages/auth/login/login_with_unknown_account.dart';
-import 'package:facebook_app/pages/authenticated/friends.dart';
+import 'package:facebook_app/pages/authenticated/friend/request_friends_page.dart';
 import 'package:facebook_app/pages/authenticated/home_page.dart';
 import 'package:facebook_app/pages/authenticated/menu.dart';
 import 'package:facebook_app/pages/authenticated/notifications.dart';
@@ -28,7 +28,11 @@ class _AuthenticatedNavigatorState extends State<AuthenticatedNavigator> {
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static final List<Widget> _widgetOptions = <Widget>[
     HomePage(email: "fdgdfgdfg"),
-    Friends(),
+    const RequestFriendsPage(),
+    const Text(
+      'Video',
+      style: optionStyle,
+    ),
     const NotificationPage(),
     const Menu(),
   ];
@@ -49,10 +53,11 @@ class _AuthenticatedNavigatorState extends State<AuthenticatedNavigator> {
       appBar: AppBar(
         title: const Text("Anti Facebook"),
         actions: [
-          IconButton(onPressed: () {
-            context.push("/authenticated/search");
-          }, icon: const Icon(Icons.search_rounded)),
-
+          IconButton(
+              onPressed: () {
+                context.push("/authenticated/search");
+              },
+              icon: const Icon(Icons.search_rounded)),
           IconButton(
               onPressed: () {
                 _authService.logOut(context: context);
