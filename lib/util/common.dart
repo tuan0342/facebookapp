@@ -13,7 +13,7 @@ Uri getUri({required String endpoind, Map<String, dynamic>? params}) {
   return Uri.parse('${dotenv.env['BACKEND_URL']}/$endpoind?$queryParameters');
 }
 
-void showSnackBar({required BuildContext context,required String msg, int timeShow = 4000}) {
+void showSnackBar({required BuildContext context,required String msg, int timeShow = 3000}) {
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg), duration: Duration(milliseconds: timeShow),));
 }
 
@@ -26,4 +26,18 @@ Future<String?> getDeviceId() async{
         final iosInfo = plugin.iosInfo;
         return iosInfo.toString();
       }
+}
+
+String getDifferenceTime(DateTime firstTime, DateTime secondTime) {
+  Duration subtime = firstTime.difference(secondTime);
+  if (subtime.inDays >= 7) {
+    return "${(subtime.inDays/7).round()} tuần trước";
+  } else if (subtime.inDays > 0) {
+    return "${subtime.inDays} ngày trước";
+  } else if (subtime.inHours > 0) {
+    return "${subtime.inHours} giờ trước";
+  } else if (subtime.inMinutes > 0 ) {
+    return "${subtime.inMinutes} phút trước";
+  }
+  return "Vừa xong";
 }

@@ -1,5 +1,5 @@
 import 'package:facebook_app/navigation/routes/auth/auth_routes.dart';
-import 'package:facebook_app/navigation/routes/authenticated/authenticated_route.dart';
+import 'package:facebook_app/navigation/routes/authenticated/authenticated_routes.dart';
 import 'package:facebook_app/pages/error_page.dart';
 import 'package:facebook_app/pages/splash_screen.dart';
 import 'package:facebook_app/services/app_service.dart';

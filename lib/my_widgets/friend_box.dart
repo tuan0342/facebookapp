@@ -1,119 +1,93 @@
-import 'package:facebook_app/models/user_model.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:facebook_app/models/friend_model.dart';
 import 'package:facebook_app/util/common.dart';
 import 'package:flutter/material.dart';
 
 class FriendBox extends StatelessWidget {
-  final User friend;
-  const FriendBox(
-      {super.key,
-      this.friend = const User(
-          userEmail: "email",
-          password: "123456",
-          uuid: "",
-          coins: 0,
-          username: "Nguyen Van A",
-)});
-
-  void _onDeleteRequest(BuildContext context) {
-    showSnackBar(
-      context: context,
-      msg: "Delete friend",
-    );
-  }
-
-  void _onAcceptRequest(BuildContext context) {
-    showSnackBar(
-      context: context,
-      msg: "Accept friend",
-    );
-  }
+  final FriendModel friend;
+  const FriendBox({
+    super.key,
+    required this.friend,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Row(children: [
-        // avatar
-        Expanded(
-            flex: 2,
-            child: ClipRRect(
-                borderRadius: BorderRadius.circular(90),
-                // child: Image.network(friend.avatar))),
-                child: Image.asset("assets/images/male_default_avatar.jpeg"))),
-        const SizedBox(
-          width: 12,
-        ),
-        // info and button
-        Expanded(
-            flex: 5,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // name and time
+    return Row(children: [
+      // avatar
+      Expanded(
+          flex: 2,
+          child: CachedNetworkImage(
+              imageUrl: friend.avatar,
+              imageBuilder: (context, imageProvider) => Container(
+                    width: 90,
+                    height: 90,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                            image: imageProvider, fit: BoxFit.contain)),
+                  ),
+              placeholder: (context, url) => Container(
+                    height: 90,
+                    width: 90,
+                    decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                            image: AssetImage(
+                                "assets/images/male_default_avatar.jpeg"),
+                            fit: BoxFit.cover)),
+                  ),
+              errorWidget: (context, url, error) => Container(
+                    height: 90,
+                    width: 90,
+                    decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                            image: AssetImage(
+                                "assets/images/male_default_avatar.jpeg"),
+                            fit: BoxFit.cover)),
+                  ))),
+      const SizedBox(
+        width: 12,
+      ),
+      // info and button
+      Expanded(
+          flex: 5,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // name and time
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    friend.username,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    getDifferenceTime(
+                        DateTime.now(), DateTime.parse(friend.created)),
+                    style: const TextStyle(color: Colors.grey),
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 2,
+              ),
+              // bạn chung
+              if (friend.sameFriends > 0)
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
-                      friend.username,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    const Text(
-                      "9w",
-                      style: TextStyle(color: Colors.grey),
-                    )
-                  ],
-                ),
-                // mutual friends
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "1 mutual friend",
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                    Text(
-                      "",
-                      style: TextStyle(color: Colors.grey),
-                    )
-                  ],
-                ),
-
-                const SizedBox(
-                  height: 10,
-                ),
-                // button
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          _onAcceptRequest(context);
-                        },
-                        style: ElevatedButton.styleFrom(),
-                        child: const Text("Accept"),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          _onDeleteRequest(context);
-                        },
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.grey[300]),
-                        child: const Text(
-                          "Delete",
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      ),
+                      friend.sameFriends > 0
+                          ? "${friend.sameFriends} bạn chung"
+                          : "",
+                      style: const TextStyle(color: Colors.grey),
                     ),
                   ],
-                )
-              ],
-            ))
-      ]),
-    );
+                ),
+            ],
+          ))
+    ]);
   }
 }

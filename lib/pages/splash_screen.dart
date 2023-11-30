@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({ Key? key }) : super(key: key);
+  const SplashScreen({Key? key}) : super(key: key);
 
   @override
   _SplashScreenState createState() => _SplashScreenState();
@@ -14,9 +14,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
+    super.initState();
     _appService = Provider.of<AppService>(context, listen: false);
     onStartUp();
-    super.initState();
   }
 
   void onStartUp() async {
@@ -25,13 +25,19 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      // appBar: AppBar(
-      //   title: const Text('Splash'),
-      // ),
+    return Scaffold(
       body: Center(
-        child: CircularProgressIndicator(),
-      ),
+          child: Column(children: [
+        const SizedBox(
+          height: 150,
+        ),
+        Image.asset(
+          "assets/images/af_logo.png",
+          height: 200,
+          width: 100,
+        ),
+        const CircularProgressIndicator()
+      ])),
     );
   }
 }

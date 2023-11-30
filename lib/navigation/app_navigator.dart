@@ -33,9 +33,9 @@ class _AppNavigatorState extends State<AppNavigator> {
     notificationServices.requestNotificationPermission();
     notificationServices.firebaseInit(context);
     notificationServices.setupInteractMessage(context);
-    notificationServices.getDeviceToken().then((value) {
-      debugPrint("divice token: $value");
-    });
+    // notificationServices.getDeviceToken().then((value) {
+    //   debugPrint("divice token: $value");
+    // });
     super.initState();
   }
 
