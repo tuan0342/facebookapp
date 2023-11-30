@@ -5,7 +5,9 @@ import 'package:facebook_app/my_widgets/waiting_data_screen.dart';
 import 'package:facebook_app/pages/auth/login/login_with_unknown_account.dart';
 import 'package:facebook_app/pages/authenticated/friend/request_friends_page.dart';
 import 'package:facebook_app/pages/authenticated/home_page.dart';
+import 'package:facebook_app/pages/authenticated/menu.dart';
 import 'package:facebook_app/pages/authenticated/notifications.dart';
+import 'package:facebook_app/pages/authenticated/video_page.dart';
 import 'package:facebook_app/services/app_service.dart';
 import 'package:facebook_app/services/auth_service.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -23,20 +25,12 @@ class AuthenticatedNavigator extends StatefulWidget {
 class _AuthenticatedNavigatorState extends State<AuthenticatedNavigator> {
   int _selectedIndex = 0;
 
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static final List<Widget> _widgetOptions = <Widget>[
     HomePage(email: "fdgdfgdfg"),
     const RequestFriendsPage(),
-    const Text(
-      'Video',
-      style: optionStyle,
-    ),
+    const VideoPage(),
     const NotificationPage(),
-    const Text(
-      'Menu',
-      style: optionStyle,
-    ),
+    const Menu(),
   ];
 
   void _onItemTapped(int index) {

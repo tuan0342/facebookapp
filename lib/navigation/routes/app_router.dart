@@ -24,7 +24,7 @@ class AppRouter {
           final uidLoggedIn = appService.uidLoggedIn;
           final isInitialized = appService.initialized;
 
-          //return "/auth/register/confirmCode/dtrang1570@gmail.com";
+          // return "/auth/register/confirmCode/dtrang1570@gmail.com";
           if (!isInitialized) {
             return '/';
           } else if (isInitialized && uidLoggedIn == '') {

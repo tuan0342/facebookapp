@@ -127,7 +127,6 @@ class NotificationServices extends ChangeNotifier {
   }
 
   void handleMessage(BuildContext context, RemoteMessage message) {
-    print("clicked");
     context.go("/");
   }
 
