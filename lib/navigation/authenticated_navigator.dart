@@ -7,6 +7,7 @@ import 'package:facebook_app/services/app_service.dart';
 import 'package:facebook_app/services/auth_service.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class AuthenticatedNavigator extends StatefulWidget {
@@ -67,7 +68,12 @@ class _AuthenticatedNavigatorState extends State<AuthenticatedNavigator> {
             return Scaffold(
                 appBar: AppBar(
                   title: const Text("Home Page"),
-                  actions: [
+                   actions: [
+                    IconButton(
+                        onPressed: () {
+                          context.go("/authenticated/chat");
+                        },
+                        icon: const Icon(Icons.message_outlined)),
                     IconButton(
                         onPressed: () {
                           _authService.logOut(context: context);
