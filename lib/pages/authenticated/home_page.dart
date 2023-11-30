@@ -1,8 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:facebook_app/models/post_model.dart';
 import 'package:facebook_app/my_widgets/feed_box.dart';
 import 'package:facebook_app/pages/createNewFeed/NewFeed.dart';
+import 'package:facebook_app/services/app_service.dart';
 import 'package:facebook_app/services/feed_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({super.key, required this.email});
@@ -26,19 +29,21 @@ class mainHomePageState extends State<HomePage> {
   }
 
   void clickKudosButton(int index) {
-      setState(() {
-        if (feeds![index].isFelt == 0) {
-          feeds![index].feel += 1;
-          feeds![index].isFelt = 1;
-        } else {
-          feeds![index].feel -= 1;
-          feeds![index].isFelt = 0;
-        }
-      });
+    setState(() {
+      if (feeds![index].isFelt == 0) {
+        feeds![index].feel += 1;
+        feeds![index].isFelt = 1;
+      } else {
+        feeds![index].feel -= 1;
+        feeds![index].isFelt = 0;
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final _appService = Provider.of<AppService>(context, listen: false);
+    debugPrint("avatar: ${_appService.avatar}");
     return SafeArea(
         child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,20 +53,42 @@ class mainHomePageState extends State<HomePage> {
           child: Column(
             children: [
               Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                     border: Border(bottom: BorderSide(color: Colors.grey))),
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: Row(
                   children: [
-                    Container(
-                      width: 50,
-                      height: 50,
-                      decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                              image: AssetImage('assets/images/logo.png'),
-                              fit: BoxFit.cover)),
-                    ),
+                    CachedNetworkImage(
+                        imageUrl: _appService.avatar,
+                        imageBuilder: (context, imageProvider) => Container(
+                              width: 50,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                      image: imageProvider,
+                                      fit: BoxFit.contain)),
+                            ),
+                        placeholder: (context, url) => Container(
+                              height: 50,
+                              width: 50,
+                              decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                      image: AssetImage(
+                                          "assets/images/male_default_avatar.jpeg"),
+                                      fit: BoxFit.cover)),
+                            ),
+                        errorWidget: (context, url, error) => Container(
+                              height: 50,
+                              width: 50,
+                              decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                      image: AssetImage(
+                                          "assets/images/male_default_avatar.jpeg"),
+                                      fit: BoxFit.cover)),
+                            )),
                     const SizedBox(
                       width: 10,
                     ),

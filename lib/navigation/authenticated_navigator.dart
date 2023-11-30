@@ -25,8 +25,6 @@ class AuthenticatedNavigator extends StatefulWidget {
 class _AuthenticatedNavigatorState extends State<AuthenticatedNavigator> {
   int _selectedIndex = 0;
 
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static final List<Widget> _widgetOptions = <Widget>[
     HomePage(email: "fdgdfgdfg"),
     const RequestFriendsPage(),

@@ -8,7 +8,7 @@ String LOGIN_KEY = "uid";
 String DEVICE_ID = "device_id";
 String TOKEN_KEY = "token";
 String AVATAR_KEY = "avatar";
-String USERNAME_KEY = "avatar";
+String USERNAME_KEY = "username";
 String COINS_KEY = "coins";
 
 class AppService with ChangeNotifier {
@@ -19,7 +19,7 @@ class AppService with ChangeNotifier {
   String _deviceId = '';
   String _token = '';
   String _avatar = '';
-  String _userName = '';
+  String _username = '';
   int _coins = 0;
   bool _initialized = false;
 
@@ -29,7 +29,7 @@ class AppService with ChangeNotifier {
   String get deviceId => _deviceId;
   String get token => _token;
   String get avatar => _avatar;
-  String get userName => _userName;
+  String get username => _username;
   int get coins => _coins;
   bool get initialized => _initialized;
   Stream<bool> get loginStateChange => _uidLoggedInChange.stream;
@@ -55,9 +55,9 @@ class AppService with ChangeNotifier {
     _avatar = avatar;
   }
 
-  set userName(String userName) {
-    sharedPreferences.setString(USERNAME_KEY, userName);
-    _userName = userName;
+  set username(String username) {
+    sharedPreferences.setString(USERNAME_KEY, username);
+    _username = username;
   }
 
   set coins(int coins) {
@@ -75,7 +75,7 @@ class AppService with ChangeNotifier {
     _token = sharedPreferences.getString(TOKEN_KEY) ?? '';
     _deviceId = sharedPreferences.getString(DEVICE_ID) ?? '';
     _avatar = sharedPreferences.getString(AVATAR_KEY) ?? '';
-    _userName = sharedPreferences.getString(USERNAME_KEY) ?? '';
+    _username = sharedPreferences.getString(USERNAME_KEY) ?? '';
     _coins = sharedPreferences.getInt(COINS_KEY) ?? 0;
     _initialized = true;
     // solve exception setState or markBuild during build
