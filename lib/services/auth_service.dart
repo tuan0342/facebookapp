@@ -102,7 +102,6 @@ class AuthService extends ChangeNotifier {
       // get device id
       // ignore: use_build_context_synchronously
       final body = jsonDecode(response.body);
-      debugPrint("body: $body");
       if (response.statusCode == 200) {
         final uid = body["data"]['id'];
         final token = body["data"]['token'];
@@ -114,9 +113,9 @@ class AuthService extends ChangeNotifier {
           'uid': uid,
           'token': token,
           'email': email,
-          'avatar':avatar,
-          'username':username,
-          'coins':coins,
+          'avatar': avatar,
+          'username': username,
+          'coins': coins,
           'device_id': deviceId ?? "",
         }, SetOptions(merge: true));
 
@@ -125,13 +124,16 @@ class AuthService extends ChangeNotifier {
         _appService.avatar = avatar;
         _appService.username = username;
         _appService.coins = coins;
+        _appService.email = email;
+
+        debugPrint("uid: $uid");
+        debugPrint("uid: ${_appService.uidLoggedIn}");
 
         // ignore: use_build_context_synchronously
         context.go("/authenticated");
         // ignore: use_build_context_synchronously
         showSnackBar(context: context, msg: 'Đăng nhập thành công');
       } else {
-        debugPrint("get err: $body");
         // ignore: use_build_context_synchronously
         showSnackBar(context: context, msg: body['message']);
       }
@@ -148,17 +150,21 @@ class AuthService extends ChangeNotifier {
       bool isShowSnackbar = false,
       msg = "Tài khoản đang được đăng nhập trên thiết bị khác"}) async {
     final _appService = Provider.of<AppService>(context, listen: false);
-
-    await FirebaseMessaging.instance
-        .unsubscribeFromTopic(_appService.uidLoggedIn);
-    _appService.uidLoggedIn = '';
-    _appService.token = '';
-
-    if (isShowSnackbar) {
+    try {
+      if (isShowSnackbar) {
+        // ignore: use_build_context_synchronously
+        showSnackBar(context: context, msg: msg);
+      }
+      await FirebaseMessaging.instance
+          .unsubscribeFromTopic(_appService.uidLoggedIn)
+          .timeout(const Duration(seconds: 3));
+    } catch (err) {
+      debugPrint("get error $err");
+    } finally {
+      _appService.uidLoggedIn = '';
+      _appService.token = '';
       // ignore: use_build_context_synchronously
-      showSnackBar(context: context, msg: msg);
+      context.go("/auth");
     }
-    // ignore: use_build_context_synchronously
-    context.go("/auth");
   }
 }

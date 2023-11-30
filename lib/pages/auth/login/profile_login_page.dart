@@ -25,7 +25,7 @@ class ProfileLoginPage extends StatelessWidget {
 
     // login with known account in this page, just need password
     void logIn() {
-      // context.push("/auth/logInKnown");
+      context.push("/auth/logInKnown");
     }
 
     return Scaffold(
@@ -36,11 +36,13 @@ class ProfileLoginPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset(
-                    "assets/images/logo.png",
-                    width: 80,
-                    height: 80,
-                  ),
+                  ClipRRect(
+                            borderRadius: BorderRadius.circular(10), // Image border
+                            child: SizedBox.fromSize(
+                              size: const Size.fromRadius(30), // Image radius
+                              child: Image.asset("assets/images/af_logo.png"),
+                            ),
+                          ),
                   Padding(
                       padding: const EdgeInsets.fromLTRB(16, 24, 16, 0),
                       child: InkWell(
@@ -51,8 +53,8 @@ class ProfileLoginPage extends StatelessWidget {
                                   imageUrl: _appService.avatar,
                                   imageBuilder: (context, imageProvider) =>
                                       Container(
-                                        width: 90,
-                                        height: 90,
+                                        width: 70,
+                                        height: 70,
                                         decoration: BoxDecoration(
                                             shape: BoxShape.rectangle,
                                             borderRadius:
@@ -62,8 +64,8 @@ class ProfileLoginPage extends StatelessWidget {
                                                 fit: BoxFit.cover)),
                                       ),
                                   placeholder: (context, url) => Container(
-                                        height: 90,
-                                        width: 90,
+                                        height: 70,
+                                        width: 70,
                                         decoration: BoxDecoration(
                                             shape: BoxShape.rectangle,
                                             borderRadius:
@@ -75,8 +77,8 @@ class ProfileLoginPage extends StatelessWidget {
                                       ),
                                   errorWidget: (context, url, error) =>
                                       Container(
-                                        height: 90,
-                                        width: 90,
+                                        height: 70,
+                                        width: 70,
                                         decoration: BoxDecoration(
                                             shape: BoxShape.rectangle,
                                             borderRadius:
