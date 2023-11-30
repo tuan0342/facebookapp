@@ -1,8 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:facebook_app/models/post_model.dart';
 import 'package:facebook_app/my_widgets/feed_box.dart';
-import 'package:facebook_app/pages/createNewFeed/NewFeed.dart';
+import 'package:facebook_app/pages/createNewFeed/new_feed.dart';
+import 'package:facebook_app/services/app_service.dart';
 import 'package:facebook_app/services/feed_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({super.key, required this.email});
@@ -39,6 +42,7 @@ class mainHomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final _appService = Provider.of<AppService>(context, listen: false);
     return SafeArea(
         child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,31 +57,64 @@ class mainHomePageState extends State<HomePage> {
                 padding: EdgeInsets.all(10),
                 child: Row(
                   children: [
-                    Container(
-                      width: 50,
-                      height: 50,
-                      decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                              image: AssetImage('assets/images/logo.png'),
-                              fit: BoxFit.cover)),
-                    ),
+                    CachedNetworkImage(
+                            imageUrl: _appService.avatar,
+                            imageBuilder: (context, imageProvider) => Container(
+                              width: 50,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                      image: imageProvider, fit: BoxFit.cover)),
+                            ),
+                            placeholder: (context, url) => Container(
+                              height: 50,
+                              width: 50,
+                              decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                      image: AssetImage(
+                                          "assets/images/male_default_avatar.jpeg"),
+                                      fit: BoxFit.cover)),
+                            ),
+                            errorWidget: (context, url, error) => Container(
+                              height: 50,
+                              width: 50,
+                              decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                      image: AssetImage(
+                                          "assets/images/male_default_avatar.jpeg"),
+                                      fit: BoxFit.cover)),
+                            ),
+                          ),
                     const SizedBox(
                       width: 10,
                     ),
-                    OutlinedButton(
-                        onPressed: () {
-                          NewFeed();
-                        },
-                        style: OutlinedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          foregroundColor: Colors.black,
-                          shape: StadiumBorder(),
-                        ),
-                        child: const Text(
-                          "Bạn Đang Nghĩ Gì ?",
-                          style: TextStyle(color: Colors.grey, fontSize: 16),
-                        ))
+                    Expanded(
+                        child: OutlinedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => NewFeed()),
+                              );
+                            },
+                            style: OutlinedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              foregroundColor: Colors.black,
+                              shape: StadiumBorder(),
+
+                            ),
+                            child: Align(
+                              alignment: Alignment.topLeft,
+                              child: const Text(
+                                "Bạn Đang Nghĩ Gì ?",
+                                style: TextStyle(color: Colors.grey, fontSize: 18),
+                              )
+                            ),
+                            )
+
+                    )
                   ],
                 ),
               ),

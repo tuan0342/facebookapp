@@ -7,6 +7,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 String LOGIN_KEY = "uid";
 String DEVICE_ID = "device_id";
 String TOKEN_KEY = "token";
+String AVATAR_KEY = "avatar";
+String USERNAME_KEY = "username";
 
 class AppService with ChangeNotifier {
   late final SharedPreferences sharedPreferences;
@@ -15,6 +17,8 @@ class AppService with ChangeNotifier {
   String _uidLoggedIn = '';
   String _deviceId = '';
   String _token = '';
+  String _avatar = '';
+  String _username = '';
   bool _initialized = false;
 
   AppService(this.sharedPreferences);
@@ -22,6 +26,8 @@ class AppService with ChangeNotifier {
   String get uidLoggedIn => _uidLoggedIn;
   String get deviceId => _deviceId;
   String get token => _token;
+  String get avatar => _avatar;
+  String get username => _username;
   bool get initialized => _initialized;
   Stream<bool> get loginStateChange => _uidLoggedInChange.stream;
 
@@ -30,6 +36,18 @@ class AppService with ChangeNotifier {
     _uidLoggedIn = uid;
     notifyListeners();
   }
+
+  set avatar(String avatar) {
+    sharedPreferences.setString(AVATAR_KEY, avatar);
+    _avatar = avatar;
+    notifyListeners();
+  }
+  set username(String username) {
+    sharedPreferences.setString(USERNAME_KEY, username);
+    _username = username;
+    notifyListeners();
+  }
+
 
   set deviceId(String deviceId) {
     sharedPreferences.setString(DEVICE_ID, deviceId);

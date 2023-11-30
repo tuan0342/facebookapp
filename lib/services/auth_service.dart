@@ -106,16 +106,24 @@ class AuthService extends ChangeNotifier {
       if (response.statusCode == 200) {
         final uid = body["data"]['id'];
         final token = body["data"]['token'];
+        final avatar = body["data"]['avatar'];
+        final username = body["data"]['username'];
+
+        debugPrint("avatar: $avatar}");
         // insert into firebase database
         _firestore.collection('users').doc(uid).set({
           'uid': uid,
           'token': token,
           'email': email,
+          'avatar': avatar,
+          'username': username,
           'device_id': deviceId ?? "",
         }, SetOptions(merge: true));
 
         _appService.uidLoggedIn = uid;
         _appService.token = token;
+        _appService.avatar = avatar;
+        _appService.username = username;
 
         // ignore: use_build_context_synchronously
         context.go("/authenticated");
