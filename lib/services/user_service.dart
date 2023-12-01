@@ -31,9 +31,6 @@ class UserService {
       final response =
           await postMethod(endpoind: "get_user_info", body: body, headers: headers);
       final responseBody = jsonDecode(response.body);
-      
-      debugPrint('>>check haha ${responseBody}');
-      debugPrint('>>check res : ${response.statusCode}');
 
       if (int.parse(responseBody["code"]) == 9998) {
         throw UnauthorizationException();
@@ -44,7 +41,7 @@ class UserService {
         
         final result = responseBody["data"];
         profile = Profile.fromJson(result);
-        debugPrint('>>check respon: ${responseBody}');
+        _appService.coverImage = profile.imageCover;
       }
     }on UnauthorizationException {
       // ignore: use_build_context_synchronously

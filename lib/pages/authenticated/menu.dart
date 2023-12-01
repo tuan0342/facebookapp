@@ -33,7 +33,7 @@ class _MenuState extends State<Menu> {
 
     return SafeArea(
       child: Container(
-        color: const Color.fromARGB(241,242,246,255),
+        color: const Color(0xFFf1f2f6),
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
