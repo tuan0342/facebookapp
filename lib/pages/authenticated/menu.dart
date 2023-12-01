@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:facebook_app/models/menu_model.dart';
 import 'package:facebook_app/my_widgets/my_dropdown.dart';
+import 'package:facebook_app/services/app_service.dart';
 import 'package:facebook_app/services/auth_service.dart';
+import 'package:facebook_app/util/common.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -26,11 +28,12 @@ class _MenuState extends State<Menu> {
 
   @override
   Widget build(BuildContext context) {
+    late AppService _appService = Provider.of<AppService>(context, listen: false);
     final _authService = Provider.of<AuthService>(context, listen: false);
 
     return SafeArea(
       child: Container(
-        color: const Color.fromARGB(241,242,246,255),
+        color: const Color(0xFFf1f2f6),
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
@@ -56,24 +59,22 @@ class _MenuState extends State<Menu> {
                         children: [
                           ClipRRect(
                             borderRadius: BorderRadius.circular(90),
-                            // child: Image.network(friend.avatar))),
-                            child: Image.asset("assets/images/male_default_avatar.jpeg", 
-                                  height: 50, width: 50,)
+                            child: Image.network(_appService.avatar, height: 50, width: 50,), 
                           ),
                           const SizedBox(
                             width: 12,
                           ),
-                          const Column(
+                          Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Padding(
-                                padding: EdgeInsets.fromLTRB(0, 0, 0, 5), 
+                                padding: const EdgeInsets.fromLTRB(0, 0, 0, 5), 
                                 child: Text(
-                                  'Ngo Van Tuan', 
-                                  style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold)
+                                  _appService.username, 
+                                  style: const TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold)
                                 ),
                               ),
-                              Text(
+                              const Text(
                                 'Xem trang cá nhân của bạn', 
                                 style: TextStyle(color: Color.fromARGB(255, 132, 132, 132))
                               ),
