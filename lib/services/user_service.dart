@@ -36,9 +36,6 @@ class UserService {
         throw UnauthorizationException();
       }
       if (int.parse(responseBody["code"]) == 1000) {
-        // ignore: use_build_context_synchronously
-        showSnackBar(context: context, msg: "Lấy thông tin thành công");
-        
         final result = responseBody["data"];
         profile = Profile.fromJson(result);
         _appService.coverImage = profile.imageCover;

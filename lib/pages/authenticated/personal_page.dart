@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:facebook_app/models/profile_model.dart';
+import 'package:facebook_app/my_widgets/images_dialog.dart';
 import 'package:facebook_app/my_widgets/my_app_bar.dart';
 import 'package:facebook_app/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 
 class PersonalPage extends StatefulWidget {
   const PersonalPage({super.key});
@@ -17,6 +21,8 @@ class _PersonalPageState extends State<PersonalPage> {
               avatar: "", imageCover: "", link: "", address: "", city: "", country: "", listing: "", 
               isFriend: "", online: "", coins: "");
   bool isLoading = false;
+  late File selectedImages = File('');// List of selected image
+  final picker = ImagePicker();  // Instance of Image picker
 
   @override
   void initState() {
@@ -56,35 +62,75 @@ class _PersonalPageState extends State<PersonalPage> {
                         ),
                         //cover image
                         Positioned(
-                          child: CachedNetworkImage(
-                            imageUrl: profile.imageCover,
-                            imageBuilder: (context, imageProvider) => Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: 200,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.rectangle,
-                                image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
+                          child: ButtonTheme(
+                            height: 200,
+                            minWidth: MediaQuery.of(context).size.width,
+                            child: TextButton(
+                              onPressed: (){
+                                List<String> images;
+                                if(profile.imageCover == '') {
+                                  images = ["assets/images/male_default_avatar.jpeg"];
+                                } else {
+                                  images = [profile.imageCover];
+                                }
+                                _showPopupList(context, images);
+                              },
+                              style: TextButton.styleFrom(
+                                padding: EdgeInsets.zero,
                               ),
-                            ),
-                            placeholder: (context, url) => Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: 200,
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.rectangle,
-                                image: DecorationImage(
-                                  image: AssetImage("assets/images/male_default_avatar.jpeg"),
-                                  fit: BoxFit.cover
+                              child: CachedNetworkImage(
+                                imageUrl: profile.imageCover,
+                                imageBuilder: (context, imageProvider) => Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 200,
+                                  decoration: selectedImages.path == '' ? BoxDecoration(
+                                    shape: BoxShape.rectangle,
+                                    image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                                  ) : BoxDecoration(
+                                    shape: BoxShape.rectangle,
+                                    // image: DecorationImage(
+                                    //   image: AssetImage(selectedImages.path),
+                                    //   fit: BoxFit.cover
+                                    // ),
+                                    image: DecorationImage(image: FileImage(selectedImages) , fit: BoxFit.cover),
+                                  ),
+                                ),
+                                placeholder: (context, url) => Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 200,
+                                  decoration: selectedImages.path == '' ?  const BoxDecoration(
+                                    shape: BoxShape.rectangle,
+                                    image: DecorationImage(
+                                      image: AssetImage("assets/images/male_default_avatar.jpeg"),
+                                      fit: BoxFit.cover
+                                    ),
+                                  ) : BoxDecoration(
+                                    shape: BoxShape.rectangle,
+                                    // image: DecorationImage(
+                                    //   image: AssetImage(selectedImages.path),
+                                    //   fit: BoxFit.cover
+                                    // ) ,
+                                    image: DecorationImage(image: FileImage(selectedImages) , fit: BoxFit.cover),
+                                  ),
+                                ),
+                                errorWidget: (context, url, error) => Container(
+                                  height: 200,
+                                  width: MediaQuery.of(context).size.width,
+                                  decoration: selectedImages.path == '' ? const BoxDecoration(
+                                    shape: BoxShape.rectangle, 
+                                    image: DecorationImage(
+                                      image: AssetImage("assets/images/male_default_avatar.jpeg"),
+                                      fit: BoxFit.cover
+                                    ),
+                                  ) : BoxDecoration(
+                                    shape: BoxShape.rectangle,
+                                    // image: DecorationImage(
+                                    //   image: AssetImage(selectedImages.path),
+                                    //   fit: BoxFit.cover
+                                    // ),
+                                    image: DecorationImage(image: FileImage(selectedImages), fit: BoxFit.cover),
+                                  ),
                                 )
-                              ),
-                            ),
-                            errorWidget: (context, url, error) => Container(
-                              height: 200,
-                              width: MediaQuery.of(context).size.width,
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.rectangle, 
-                                image: DecorationImage(
-                                image: AssetImage("assets/images/male_default_avatar.jpeg"),
-                                fit: BoxFit.cover)
                               ),
                             )
                           ),
@@ -93,40 +139,54 @@ class _PersonalPageState extends State<PersonalPage> {
                         Positioned(
                           top: 90,
                           left: 10,
-                          child: CachedNetworkImage(
-                            imageUrl: profile.avatar,
-                            imageBuilder: (context, imageProvider) => Container(
-                              width: 140,
-                              height: 140,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
-                                border: Border.all(width: 3, color: Colors.white)
-                              ),
-                            ),
-                            placeholder: (context, url) => Container(
-                              width: 140,
-                              height: 140,
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                  image: AssetImage("assets/images/male_default_avatar.jpeg"),
-                                  fit: BoxFit.cover
+                          child: ButtonTheme(
+                            child: TextButton(
+                              onPressed: () {
+                                List<String> images;
+                                if(profile.avatar == '') {
+                                  images = ["assets/images/male_default_avatar.jpeg"];
+                                } else {
+                                  images = [profile.avatar];
+                                }
+                                _showPopupList(context, images);
+                              },
+                              style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                              child: CachedNetworkImage(
+                                imageUrl: profile.avatar,
+                                imageBuilder: (context, imageProvider) => Container(
+                                  width: 140,
+                                  height: 140,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
+                                    border: Border.all(width: 3, color: Colors.white)
+                                  ),
                                 ),
-                              ),
-                            ),
-                            errorWidget: (context, url, error) => Container(
-                              height: 140,
-                              width: 140,
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle, 
-                                image: DecorationImage(
-                                  image: AssetImage("assets/images/male_default_avatar.jpeg"),
-                                  fit: BoxFit.cover
+                                placeholder: (context, url) => Container(
+                                  width: 140,
+                                  height: 140,
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: DecorationImage(
+                                      image: AssetImage("assets/images/male_default_avatar.jpeg"),
+                                      fit: BoxFit.cover
+                                    ),
+                                  ),
+                                ),
+                                errorWidget: (context, url, error) => Container(
+                                  height: 140,
+                                  width: 140,
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle, 
+                                    image: DecorationImage(
+                                      image: AssetImage("assets/images/male_default_avatar.jpeg"),
+                                      fit: BoxFit.cover
+                                    )
+                                  ),
                                 )
                               ),
                             )
-                          ),
+                          )
                         ),
                         //icon change
                         Positioned(
@@ -348,5 +408,33 @@ class _PersonalPageState extends State<PersonalPage> {
       ],
     );
 }
+
+  void _showPopupList(BuildContext context, List<String> images) async {
+    final result = await showDialog(
+      context: context,
+      builder: (_) => ImagesDialog(images: images, index: 0,)
+    );
+  }
+
+  Future getCoverImages() async {
+      final pickedFile = await picker.pickMultiImage(
+          imageQuality: 100, maxHeight: 1000, maxWidth: 1000);
+      List<XFile> xfilePick = pickedFile;
+  
+      setState(
+        () {
+          if (xfilePick.isNotEmpty) {
+            debugPrint('check ${selectedImages}'); 
+            for (var i = 0; i < xfilePick.length; i++) {
+              selectedImages = (File(xfilePick[i].path));
+            }
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Nothing is selected'))
+            );
+          }
+        },
+      );
+    }
 }
 
