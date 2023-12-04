@@ -36,14 +36,17 @@ class ProfileLoginPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ClipRRect(
-                            borderRadius: BorderRadius.circular(10), // Image border
-                            child: SizedBox.fromSize(
-                              size: const Size.fromRadius(30), // Image radius
-                              child: Image.asset("assets/images/af_logo.png"),
-                            ),
-                          ),
                   Padding(
+                    padding: const EdgeInsets.only(bottom: 20),
+                    child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10), // Image border
+                              child: SizedBox.fromSize(
+                                size: const Size.fromRadius(30), // Image radius
+                                child: Image.asset("assets/images/af_logo.png"),
+                              ),
+                            ),
+                  ),
+                  if (_appService.email != "") Padding(
                       padding: const EdgeInsets.fromLTRB(16, 24, 16, 0),
                       child: InkWell(
                           onTap: logIn,
