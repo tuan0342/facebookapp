@@ -107,8 +107,6 @@ class _LoginSecurityChangePasswordState extends State<LoginSecurityChangePasswor
                             labelText: "Gõ lại mật khẩu mới"
                           ),
                           validator: (value) {
-                            debugPrint('check new password: ${reNewPasswordController.text}');
-                            debugPrint('check value: ${value}');
                             if (value != newPasswordController.text) {
                               return 'Nhập sai mật khẩu mới';
                             }

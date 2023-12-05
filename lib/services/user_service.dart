@@ -54,4 +54,47 @@ class UserService {
 
     return profile;
   }
+
+  Future<void> changeUsernameOrAvt({
+    required BuildContext context, required String fullName, required String avatar
+  }) async {
+    late AuthService _authService = Provider.of<AuthService>(context, listen: false);
+    try {
+      final _appService = Provider.of<AppService>(context, listen: false);
+ 
+      Map<String, dynamic> body = avatar.isEmpty ? {"username": fullName,} :  {  //
+        "username": fullName,
+        "avatar": avatar,
+      };
+
+      Map<String, String> headers = {
+        "accept": "*/*",
+        "Authorization": "Bearer ${_appService.token}",
+        "Content-Type": "multipart/form-data",
+      };
+
+      final response =
+          await postMethod(endpoind: "change_profile_after_signup", body: body, headers: headers);
+      final responseBody = jsonDecode(response.body);
+
+      if (int.parse(responseBody["code"]) == 9998) {
+        throw UnauthorizationException();
+      }
+      if (int.parse(responseBody["code"]) == 1000) {
+        final result = responseBody["data"];
+        // profile = Profile.fromJson(result);
+        // _appService.avatar = profile.imageCover;
+      } 
+    }on UnauthorizationException {
+      // ignore: use_build_context_synchronously
+      _authService.logOut(
+          context: context,
+          isShowSnackbar: true,
+          msg: "Phiên đăng nhập hết hạn");
+    }  catch (err) {
+      debugPrint("get exception $err");
+      // ignore: use_build_context_synchronously
+      showSnackBar(context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau $err");
+    }
+  }
 }
