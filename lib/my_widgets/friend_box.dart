@@ -1,5 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:facebook_app/models/friend_model.dart';
+import 'package:facebook_app/my_widgets/my_image.dart';
 import 'package:facebook_app/util/common.dart';
 import 'package:flutter/material.dart';
 
@@ -16,36 +16,11 @@ class FriendBox extends StatelessWidget {
       // avatar
       Expanded(
           flex: 2,
-          child: CachedNetworkImage(
-              imageUrl: friend.avatar,
-              imageBuilder: (context, imageProvider) => Container(
-                    width: 90,
-                    height: 90,
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                            image: imageProvider, fit: BoxFit.contain)),
-                  ),
-              placeholder: (context, url) => Container(
-                    height: 90,
-                    width: 90,
-                    decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                            image: AssetImage(
-                                "assets/images/male_default_avatar.jpeg"),
-                            fit: BoxFit.cover)),
-                  ),
-              errorWidget: (context, url, error) => Container(
-                    height: 90,
-                    width: 90,
-                    decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                            image: AssetImage(
-                                "assets/images/male_default_avatar.jpeg"),
-                            fit: BoxFit.cover)),
-                  ))),
+          child: MyImage(
+            imageUrl: friend.avatar,
+            height: 90,
+            width: 90,
+          )),
       const SizedBox(
         width: 12,
       ),

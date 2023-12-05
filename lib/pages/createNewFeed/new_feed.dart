@@ -1,5 +1,5 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:facebook_app/my_widgets/my_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 import '../../services/app_service.dart';
@@ -19,7 +19,6 @@ class NewFeed extends StatefulWidget {
 }
 
 class _NewFeedState extends State<NewFeed> {
-
   List<File> selectedImages = [];
   final picker = ImagePicker();
 
@@ -46,10 +45,6 @@ class _NewFeedState extends State<NewFeed> {
   //
   //   super.dispose();
   // }
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +75,7 @@ class _NewFeedState extends State<NewFeed> {
                                         mainAxisSize: MainAxisSize.min,
                                         children: <Widget>[
                                           Container(
-                                            child:const Column(
+                                            child: const Column(
                                               children: [
                                                 Text(
                                                   "Bạn muốn hoàn thành bài viết của mình sau?",
@@ -100,7 +95,6 @@ class _NewFeedState extends State<NewFeed> {
                                           const SizedBox(
                                             height: 15,
                                           ),
-
                                           TextButton(
                                             onPressed: () {
                                               Navigator.pop(context);
@@ -116,24 +110,27 @@ class _NewFeedState extends State<NewFeed> {
                                                   width: 15,
                                                 ),
                                                 Container(
-                                                  child:const Column(
+                                                  child: const Column(
                                                     mainAxisAlignment:
-                                                    MainAxisAlignment.start,
+                                                        MainAxisAlignment.start,
                                                     crossAxisAlignment:
-                                                    CrossAxisAlignment.start,                                                    children: [
-                                                    Text(
-                                                      "Lưu làm bản nháp",
-                                                      style: TextStyle(
-                                                          fontSize: 16,
-                                                          color: Colors.black),
-                                                    ),
-                                                    Text(
-                                                      "Bạn sẽ nhận được thông báo về bản nháp",
-                                                      style: TextStyle(
-                                                          fontSize: 14,
-                                                          color: Colors.grey),
-                                                    ),
-                                                  ],
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        "Lưu làm bản nháp",
+                                                        style: TextStyle(
+                                                            fontSize: 16,
+                                                            color:
+                                                                Colors.black),
+                                                      ),
+                                                      Text(
+                                                        "Bạn sẽ nhận được thông báo về bản nháp",
+                                                        style: TextStyle(
+                                                            fontSize: 14,
+                                                            color: Colors.grey),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
                                               ],
@@ -146,7 +143,6 @@ class _NewFeedState extends State<NewFeed> {
                                             onPressed: () {
                                               Navigator.pop(context);
                                               Navigator.pop(context);
-
                                             },
                                             child: Row(
                                               children: [
@@ -159,18 +155,21 @@ class _NewFeedState extends State<NewFeed> {
                                                   width: 15,
                                                 ),
                                                 Container(
-                                                  child:const Column(
+                                                  child: const Column(
                                                     mainAxisAlignment:
-                                                    MainAxisAlignment.start,
+                                                        MainAxisAlignment.start,
                                                     crossAxisAlignment:
-                                                    CrossAxisAlignment.start,                                                    children: [
-                                                    Text(
-                                                      "Bỏ bài viết",
-                                                      style: TextStyle(
-                                                          fontSize: 16,
-                                                          color: Colors.black),
-                                                    ),
-                                                  ],
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        "Bỏ bài viết",
+                                                        style: TextStyle(
+                                                            fontSize: 16,
+                                                            color:
+                                                                Colors.black),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
                                               ],
@@ -194,18 +193,21 @@ class _NewFeedState extends State<NewFeed> {
                                                   width: 15,
                                                 ),
                                                 Container(
-                                                  child:const Column(
+                                                  child: const Column(
                                                     mainAxisAlignment:
-                                                    MainAxisAlignment.start,
+                                                        MainAxisAlignment.start,
                                                     crossAxisAlignment:
-                                                    CrossAxisAlignment.start,                                                    children: [
-                                                    Text(
-                                                      "Tiếp tục chỉnh sửa",
-                                                      style: TextStyle(
-                                                          fontSize: 16,
-                                                          color: Colors.lightBlue),
-                                                    ),
-                                                  ],
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        "Tiếp tục chỉnh sửa",
+                                                        style: TextStyle(
+                                                            fontSize: 16,
+                                                            color: Colors
+                                                                .lightBlue),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
                                               ],
@@ -214,7 +216,6 @@ class _NewFeedState extends State<NewFeed> {
                                           const SizedBox(
                                             height: 15,
                                           ),
-
                                         ]));
                               });
                         },
@@ -238,37 +239,7 @@ class _NewFeedState extends State<NewFeed> {
               Container(
                   child: Row(
                 children: [
-                  CachedNetworkImage(
-                    imageUrl: _appService.avatar,
-                    imageBuilder: (context, imageProvider) => Container(
-                      width: 100,
-                      height: 100,
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                              image: imageProvider, fit: BoxFit.cover)),
-                    ),
-                    placeholder: (context, url) => Container(
-                      height: 100,
-                      width: 100,
-                      decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                              image: AssetImage(
-                                  "assets/images/male_default_avatar.jpeg"),
-                              fit: BoxFit.cover)),
-                    ),
-                    errorWidget: (context, url, error) => Container(
-                      height: 100,
-                      width: 100,
-                      decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                              image: AssetImage(
-                                  "assets/images/male_default_avatar.jpeg"),
-                              fit: BoxFit.cover)),
-                    ),
-                  ),
+                  MyImage(imageUrl: _appService.avatar, width: 70, height: 70,),
                   Column(
                     children: <Widget>[
                       Text(
@@ -296,101 +267,105 @@ class _NewFeedState extends State<NewFeed> {
                 child: TextField(
                   controller: described,
                   decoration: InputDecoration(
-                      border: InputBorder.none, hintText: this.selectedImages.isEmpty ? "Bạn đang nghĩ gì?" : "Hãy nói gì đó về bức ảnh này" ),
+                      border: InputBorder.none,
+                      hintText: this.selectedImages.isEmpty
+                          ? "Bạn đang nghĩ gì?"
+                          : "Hãy nói gì đó về bức ảnh này"),
                   style: TextStyle(fontSize: 24),
                 ),
               ),
-
-              addImage ?
-              Expanded(
-                child: SizedBox(
-                  width: 300.0,
-                  child: selectedImages.isEmpty
-                      ? Container()
-                      : GridView.builder(
-                          itemCount: selectedImages.length,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2),
-                          itemBuilder: (BuildContext context, int index) {
-                            return Center(
-                              child: kIsWeb
-                                  ? Stack(
-                                      children: <Widget>[
-                                        Container(
-                                          child: Image.network(
-                                              selectedImages[index].path),
-                                        ),
-                                        Positioned(
-                                          top: 0,
-                                          right: 0,
-                                          child: GestureDetector(
-                                            onTap: () {
-                                              setState(() {
-                                                selectedImages.removeAt(index);
-                                              });
-                                            },
-                                            child: const Icon(Icons.close,
-                                                color: Colors.black),
+              addImage
+                  ? Expanded(
+                      child: SizedBox(
+                        width: 300.0,
+                        child: selectedImages.isEmpty
+                            ? Container()
+                            : GridView.builder(
+                                itemCount: selectedImages.length,
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2),
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Center(
+                                    child: kIsWeb
+                                        ? Stack(
+                                            children: <Widget>[
+                                              Container(
+                                                child: Image.network(
+                                                    selectedImages[index].path),
+                                              ),
+                                              Positioned(
+                                                top: 0,
+                                                right: 0,
+                                                child: GestureDetector(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      selectedImages
+                                                          .removeAt(index);
+                                                    });
+                                                  },
+                                                  child: const Icon(Icons.close,
+                                                      color: Colors.black),
+                                                ),
+                                              ),
+                                            ],
+                                          )
+                                        : Stack(
+                                            children: <Widget>[
+                                              Container(
+                                                  child: Image.file(
+                                                      selectedImages[index])),
+                                              Positioned(
+                                                top: 0,
+                                                right: 0,
+                                                child: GestureDetector(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      selectedImages
+                                                          .removeAt(index);
+                                                    });
+                                                  },
+                                                  child: const Icon(Icons.close,
+                                                      color: Colors.black),
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        ),
-                                      ],
-                                    )
-                                  : Stack(
-                                      children: <Widget>[
-                                        Container(
-                                            child: Image.file(
-                                                selectedImages[index])),
-                                        Positioned(
-                                          top: 0,
-                                          right: 0,
-                                          child: GestureDetector(
-                                            onTap: () {
-                                              setState(() {
-                                                selectedImages.removeAt(index);
-                                              });
-                                            },
-                                            child: const Icon(Icons.close,
-                                                color: Colors.black),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                            );
-                          },
-                        ),
-                ),
-              ) :
-            //   Container(
-            //     child: Column(
-            //       children: <Widget>[
-            //     Visibility(
-            //     visible: _controller != null,
-            //       child: FutureBuilder(
-            //         future: _initializeVideoPlayerFuture,
-            //         builder: (context, snapshot) {
-            //           if (snapshot.connectionState == ConnectionState.done) {
-            //             // If the VideoPlayerController has finished initialization, use
-            //             // the data it provides to limit the aspect ratio of the video.
-            //             return AspectRatio(
-            //               aspectRatio: _controller.value.aspectRatio,
-            //               // Use the VideoPlayer widget to display the video.
-            //               child: VideoPlayer(_controller),
-            //             );
-            //           } else {
-            //             // If the VideoPlayerController is still initializing, show a
-            //             // loading spinner.
-            //             return Center(child: CircularProgressIndicator());
-            //           }
-            //         },
-            //       ),
-            //
-            //     ),
-            //     ]
-            //   ),
-            // )
-              Container()
-
+                                  );
+                                },
+                              ),
+                      ),
+                    )
+                  :
+                  //   Container(
+                  //     child: Column(
+                  //       children: <Widget>[
+                  //     Visibility(
+                  //     visible: _controller != null,
+                  //       child: FutureBuilder(
+                  //         future: _initializeVideoPlayerFuture,
+                  //         builder: (context, snapshot) {
+                  //           if (snapshot.connectionState == ConnectionState.done) {
+                  //             // If the VideoPlayerController has finished initialization, use
+                  //             // the data it provides to limit the aspect ratio of the video.
+                  //             return AspectRatio(
+                  //               aspectRatio: _controller.value.aspectRatio,
+                  //               // Use the VideoPlayer widget to display the video.
+                  //               child: VideoPlayer(_controller),
+                  //             );
+                  //           } else {
+                  //             // If the VideoPlayerController is still initializing, show a
+                  //             // loading spinner.
+                  //             return Center(child: CircularProgressIndicator());
+                  //           }
+                  //         },
+                  //       ),
+                  //
+                  //     ),
+                  //     ]
+                  //   ),
+                  // )
+                  Container()
             ],
           ),
         ),
@@ -409,7 +384,7 @@ class _NewFeedState extends State<NewFeed> {
               addImage = true;
               getImages();
             },
-            icon:const Icon(
+            icon: const Icon(
               Icons.image,
               color: Colors.green,
             )),
@@ -418,15 +393,13 @@ class _NewFeedState extends State<NewFeed> {
               addImage = false;
               // getVideo();
             },
-            icon:const Icon(
+            icon: const Icon(
               Icons.video_collection,
               color: Colors.green,
             )),
-
-
         IconButton(
             onPressed: () {},
-            icon:const Icon(
+            icon: const Icon(
               Icons.emoji_emotions,
               color: Colors.amber,
             ))
@@ -466,6 +439,5 @@ class _NewFeedState extends State<NewFeed> {
   //   });
   // }
 
-  void pushPost() {
-  }
+  void pushPost() {}
 }

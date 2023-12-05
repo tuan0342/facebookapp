@@ -1,5 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:facebook_app/my_widgets/my_filled_button.dart';
+import 'package:facebook_app/my_widgets/my_image.dart';
 import 'package:facebook_app/my_widgets/my_text.dart';
 import 'package:facebook_app/services/app_service.dart';
 import 'package:flutter/material.dart';
@@ -52,45 +52,7 @@ class ProfileLoginPage extends StatelessWidget {
                           onTap: logIn,
                           child: Row(
                             children: [
-                              CachedNetworkImage(
-                                  imageUrl: _appService.avatar,
-                                  imageBuilder: (context, imageProvider) =>
-                                      Container(
-                                        width: 70,
-                                        height: 70,
-                                        decoration: BoxDecoration(
-                                            shape: BoxShape.rectangle,
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                            image: DecorationImage(
-                                                image: imageProvider,
-                                                fit: BoxFit.cover)),
-                                      ),
-                                  placeholder: (context, url) => Container(
-                                        height: 70,
-                                        width: 70,
-                                        decoration: BoxDecoration(
-                                            shape: BoxShape.rectangle,
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                            image: const DecorationImage(
-                                                image: AssetImage(
-                                                    "assets/images/male_default_avatar.jpeg"),
-                                                fit: BoxFit.cover)),
-                                      ),
-                                  errorWidget: (context, url, error) =>
-                                      Container(
-                                        height: 70,
-                                        width: 70,
-                                        decoration: BoxDecoration(
-                                            shape: BoxShape.rectangle,
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                            image: const DecorationImage(
-                                                image: AssetImage(
-                                                    "assets/images/male_default_avatar.jpeg"),
-                                                fit: BoxFit.cover)),
-                                      )),
+                              MyImage(imageUrl: _appService.avatar, width: 70, height: 70,),
                               Expanded(
                                 child: Container(
                                     alignment: Alignment.bottomLeft,

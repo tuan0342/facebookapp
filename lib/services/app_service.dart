@@ -9,7 +9,7 @@ String EMAIL_KEY = "email";
 String DEVICE_ID = "device_id";
 String TOKEN_KEY = "token";
 String AVATAR_KEY = "avatar";
-String COVER_IMAGE_KEY= "cover_image";
+String COVER_IMAGE_KEY = "cover_image";
 String USERNAME_KEY = "username";
 String COINS_KEY = "coins";
 
@@ -60,26 +60,31 @@ class AppService with ChangeNotifier {
   set token(String token) {
     sharedPreferences.setString(TOKEN_KEY, token);
     _token = token;
+    notifyListeners();
   }
 
   set avatar(String avatar) {
     sharedPreferences.setString(AVATAR_KEY, avatar);
     _avatar = avatar;
+    notifyListeners();
   }
 
   set coverImage(String coverImage) {
     sharedPreferences.setString(COVER_IMAGE_KEY, coverImage);
     _coverImage = coverImage;
+    notifyListeners();
   }
 
   set username(String username) {
     sharedPreferences.setString(USERNAME_KEY, username);
     _username = username;
+    notifyListeners();
   }
 
   set coins(int coins) {
     sharedPreferences.setInt(COINS_KEY, coins);
     _coins = coins;
+    notifyListeners();
   }
 
   set initialized(bool value) {
