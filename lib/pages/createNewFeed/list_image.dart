@@ -34,7 +34,7 @@ class _ListImagePageState extends State<ListImage>  {
               child: SizedBox(
                 width: 300.0,
                 child: selectedImages.isEmpty
-                    ? const Center(child: Text('Sorry nothing selected!!'))
+                    ? Container()
                     : GridView.builder(
                   itemCount: selectedImages.length,
                   gridDelegate:

@@ -1,8 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:facebook_app/models/post_model.dart';
 import 'package:facebook_app/my_widgets/feed_box.dart';
-import 'package:facebook_app/pages/createNewFeed/NewFeed.dart';
+import 'package:facebook_app/pages/createNewFeed/new_feed.dart';
 import 'package:facebook_app/services/feed_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../services/app_service.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({super.key, required this.email});
