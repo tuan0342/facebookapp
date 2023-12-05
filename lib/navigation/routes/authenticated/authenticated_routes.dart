@@ -1,4 +1,5 @@
 import 'package:facebook_app/models/profile_model.dart';
+import 'package:facebook_app/models/webview_model.dart';
 import 'package:facebook_app/navigation/authenticated_navigator.dart';
 import 'package:facebook_app/navigation/routes/authenticated/submenu_route.dart';
 import 'package:facebook_app/navigation/routes/authenticated/search_routes.dart';
@@ -7,6 +8,7 @@ import 'package:facebook_app/pages/authenticated/personal/setting_personal_page.
 import 'package:facebook_app/pages/authenticated/friend/suggest_friends_page.dart';
 import 'package:facebook_app/pages/authenticated/friend/user_friends_page.dart';
 import 'package:facebook_app/pages/authenticated/personal_page.dart';
+import 'package:facebook_app/pages/webview/webview_container.dart';
 import 'package:go_router/go_router.dart';
 
 final GoRoute authenticatedRoute = GoRoute(
@@ -41,7 +43,14 @@ final GoRoute authenticatedRoute = GoRoute(
       builder: (context, state) => const SuggestFriendsPage()),
     GoRoute(
       path: "friends",
-      builder: (context, state) => const UserFriendsPage())
+      builder: (context, state) => const UserFriendsPage()),
+    GoRoute(
+      path: "webViewContainer",
+      builder: (context, state) {
+        WebView webView = state.extra as WebView;
+        return WebViewContainer(webView: webView,);
+      },
+    ),
   ],
   redirect: (context, state) {
     return null;

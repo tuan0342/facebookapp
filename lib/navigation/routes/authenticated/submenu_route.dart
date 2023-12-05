@@ -3,19 +3,33 @@ import 'package:facebook_app/pages/authenticated/submenu/login_security.dart';
 import 'package:facebook_app/pages/authenticated/submenu/login_security_change_password.dart';
 import 'package:facebook_app/pages/authenticated/submenu/personal_information.dart';
 import 'package:facebook_app/pages/authenticated/submenu/personal_name.dart';
+import 'package:facebook_app/pages/authenticated/submenu/policy_and_privacy.dart';
 import 'package:facebook_app/pages/authenticated/submenu/setting.dart';
 import 'package:facebook_app/pages/authenticated/submenu/term_and_policies.dart';
+import 'package:facebook_app/pages/authenticated/submenu/terms_of_service.dart';
 import 'package:go_router/go_router.dart';
 
 final GoRoute menuRoute = GoRoute(
   path: 'menu',
   builder: (context, state) => const Menu(),
   routes: [
-    GoRoute(
-      path: 'termAndPolicies',
-      builder: (context, state) => const TermAndPolicies(),
-    ),
+    termRoute,
     settingRoute,
+  ]
+);
+
+final GoRoute termRoute =  GoRoute(
+  path: 'termAndPolicies',
+  builder: (context, state) => const TermAndPolicies(),
+  routes: [
+    GoRoute(
+      path: 'termsOfService',
+      builder: (context, state) => const TermsOfService(),
+    ),
+    GoRoute(
+      path: 'policyAndPrivacy',
+      builder: (context, state) => const PolicyAndPrivacy(),
+    ),
   ]
 );
 
