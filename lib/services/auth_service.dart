@@ -134,6 +134,7 @@ class AuthService extends ChangeNotifier {
         // ignore: use_build_context_synchronously
         showSnackBar(context: context, msg: 'Đăng nhập thành công');
       } else {
+        debugPrint("get err: $body");
         // ignore: use_build_context_synchronously
         showSnackBar(context: context, msg: body['message']);
       }
