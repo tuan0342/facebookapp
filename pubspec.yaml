@@ -54,6 +54,9 @@ dependencies:
   flutter_local_notifications: ^16.1.0
   cached_network_image: ^3.3.0
   multi_image_picker: ^4.7.14
+  image_picker: ^1.0.4
+  video_uploader: ^1.2.0
+  video_player: ^2.8.1
 
 dev_dependencies:
   flutter_test:
@@ -127,3 +130,4 @@ flutter:
     - assets/images/Logo_Hust.png
     - assets/images/img.png
     - assets/images/af_logo.png
+    - assets/images/globe-solid.svg
