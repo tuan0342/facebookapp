@@ -9,6 +9,7 @@ String EMAIL_KEY = "email";
 String DEVICE_ID = "device_id";
 String TOKEN_KEY = "token";
 String AVATAR_KEY = "avatar";
+String COVER_IMAGE_KEY= "cover_image";
 String USERNAME_KEY = "username";
 String COINS_KEY = "coins";
 
@@ -21,6 +22,7 @@ class AppService with ChangeNotifier {
   String _deviceId = '';
   String _token = '';
   String _avatar = '';
+  String _coverImage = '';
   String _username = '';
   int _coins = 0;
   bool _initialized = false;
@@ -32,6 +34,7 @@ class AppService with ChangeNotifier {
   String get deviceId => _deviceId;
   String get token => _token;
   String get avatar => _avatar;
+  String get coverImage => _coverImage;
   String get username => _username;
   int get coins => _coins;
   bool get initialized => _initialized;
@@ -64,6 +67,11 @@ class AppService with ChangeNotifier {
     _avatar = avatar;
   }
 
+  set coverImage(String coverImage) {
+    sharedPreferences.setString(COVER_IMAGE_KEY, coverImage);
+    _coverImage = coverImage;
+  }
+
   set username(String username) {
     sharedPreferences.setString(USERNAME_KEY, username);
     _username = username;
@@ -85,6 +93,7 @@ class AppService with ChangeNotifier {
     _token = sharedPreferences.getString(TOKEN_KEY) ?? '';
     _deviceId = sharedPreferences.getString(DEVICE_ID) ?? '';
     _avatar = sharedPreferences.getString(AVATAR_KEY) ?? '';
+    _coverImage = sharedPreferences.getString(COVER_IMAGE_KEY) ?? '';
     _username = sharedPreferences.getString(USERNAME_KEY) ?? '';
     _coins = sharedPreferences.getInt(COINS_KEY) ?? 0;
     _initialized = true;

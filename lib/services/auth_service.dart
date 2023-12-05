@@ -168,4 +168,45 @@ class AuthService extends ChangeNotifier {
       context.go("/auth");
     }
   }
+
+  Future<void> changePassword({
+    required BuildContext context, required String password, required String newPassword
+  }) async {
+    late AuthService _authService = Provider.of<AuthService>(context, listen: false);
+
+    try {
+      final _appService = Provider.of<AppService>(context, listen: false);
+      Map<String, dynamic> body = {
+        "password": password,
+        "new_password": newPassword,
+      };
+      Map<String, String> headers = {
+        "Authorization": "Bearer ${_appService.token}",
+        'Content-Type': 'application/json; charset=UTF-8'
+      };
+
+      final response =
+          await postMethod(endpoind: "change_password", body: body, headers: headers);
+      final responseBody = jsonDecode(response.body);
+      if (int.parse(responseBody["code"]) == 9998) {
+        throw UnauthorizationException();
+      }
+      if (response.statusCode == 200) {
+        // ignore: use_build_context_synchronously
+        showSnackBar(context: context, msg: "Đổi mật khẩu thành công");
+        // ignore: use_build_context_synchronously
+        _authService.logOut(context: context);
+      }
+    }on UnauthorizationException {
+      // ignore: use_build_context_synchronously
+      _authService.logOut(
+          context: context,
+          isShowSnackbar: true,
+          msg: "Phiên đăng nhập hết hạn");
+    }  catch (err) {
+      debugPrint("get exception $err");
+      // ignore: use_build_context_synchronously
+      showSnackBar(context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau $err");
+    }
+  }
 }
