@@ -1,6 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:facebook_app/models/post_model.dart';
 import 'package:facebook_app/my_widgets/feed_box.dart';
+import 'package:facebook_app/my_widgets/my_image.dart';
 import 'package:facebook_app/pages/createNewFeed/new_feed.dart';
 import 'package:facebook_app/services/feed_service.dart';
 import 'package:flutter/material.dart';
@@ -58,37 +58,7 @@ class mainHomePageState extends State<HomePage> {
                 padding: EdgeInsets.all(10),
                 child: Row(
                   children: [
-                    CachedNetworkImage(
-                            imageUrl: _appService.avatar,
-                            imageBuilder: (context, imageProvider) => Container(
-                              width: 50,
-                              height: 50,
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  image: DecorationImage(
-                                      image: imageProvider, fit: BoxFit.cover)),
-                            ),
-                            placeholder: (context, url) => Container(
-                              height: 50,
-                              width: 50,
-                              decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  image: DecorationImage(
-                                      image: AssetImage(
-                                          "assets/images/male_default_avatar.jpeg"),
-                                      fit: BoxFit.cover)),
-                            ),
-                            errorWidget: (context, url, error) => Container(
-                              height: 50,
-                              width: 50,
-                              decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  image: DecorationImage(
-                                      image: AssetImage(
-                                          "assets/images/male_default_avatar.jpeg"),
-                                      fit: BoxFit.cover)),
-                            ),
-                          ),
+                    MyImage(imageUrl: _appService.avatar, width: 50, height: 50,),
                     const SizedBox(
                       width: 10,
                     ),

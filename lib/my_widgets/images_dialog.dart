@@ -65,6 +65,7 @@ class _ImagesDialogState extends State<ImagesDialog> {
                           });
                         },
                       ) : const SizedBox() ,
+                      // MyImage(imageUrl: widget.images[currentIndex], shape: BoxShape.rectangle, fit: BoxFit.contain, height: MediaQuery.of(context).size.height - 100, width: MediaQuery.of(context).size.width - 100),
                       CachedNetworkImage(
                         imageUrl: widget.images[currentIndex],
                         imageBuilder: (context, imageProvider) => Container(

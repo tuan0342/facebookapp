@@ -1,6 +1,5 @@
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:facebook_app/models/post_model.dart';
+import 'package:facebook_app/my_widgets/my_image.dart';
 import 'package:facebook_app/util/common.dart';
 import 'package:flutter/material.dart';
 
@@ -21,37 +20,7 @@ class FeedBox extends StatelessWidget {
             children: <Widget>[
               Row(
                 children: <Widget>[
-                  CachedNetworkImage(
-                    imageUrl: post.author.avatar,
-                    imageBuilder: (context, imageProvider) => Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                              image: imageProvider, fit: BoxFit.cover)),
-                    ),
-                    placeholder: (context, url) => Container(
-                      height: 50,
-                      width: 50,
-                      decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                              image: AssetImage(
-                                  "assets/images/male_default_avatar.jpeg"),
-                              fit: BoxFit.cover)),
-                    ),
-                    errorWidget: (context, url, error) => Container(
-                      height: 50,
-                      width: 50,
-                      decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                              image: AssetImage(
-                                  "assets/images/male_default_avatar.jpeg"),
-                              fit: BoxFit.cover)),
-                    ),
-                  ),
+                  MyImage(imageUrl: post.author.avatar, height: 50, width: 50),
                   const SizedBox(
                     width: 10,
                   ),
@@ -107,34 +76,7 @@ class FeedBox extends StatelessWidget {
             height: 20,
           ),
           post.image.isNotEmpty
-              ? CachedNetworkImage(
-                  imageUrl: post.image[0].url,
-                  imageBuilder: (context, imageProvider) => Container(
-                    height: 150,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        image: DecorationImage(
-                            image: imageProvider, fit: BoxFit.contain)),
-                  ),
-                  placeholder: (context, url) => Container(
-                    height: 150,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        image: const DecorationImage(
-                            image: AssetImage(
-                                "assets/images/male_default_avatar.jpeg"),
-                            fit: BoxFit.contain)),
-                  ),
-                  errorWidget: (context, url, error) => Container(
-                    height: 150,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        image: const DecorationImage(
-                            image: AssetImage(
-                                "assets/images/male_default_avatar.jpeg"),
-                            fit: BoxFit.contain)),
-                  ),
-                )
+              ? MyImage(imageUrl: post.image[0].url, height: 150, width: 150)
               : Container(),
           const SizedBox(
             height: 20,
