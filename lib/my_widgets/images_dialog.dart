@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:photo_view/photo_view.dart';
 
 class ImagesDialog extends StatefulWidget {
   final int index;
@@ -68,11 +69,13 @@ class _ImagesDialogState extends State<ImagesDialog> {
                       // MyImage(imageUrl: widget.images[currentIndex], shape: BoxShape.rectangle, fit: BoxFit.contain, height: MediaQuery.of(context).size.height - 100, width: MediaQuery.of(context).size.width - 100),
                       CachedNetworkImage(
                         imageUrl: widget.images[currentIndex],
-                        imageBuilder: (context, imageProvider) => Container(
+                        imageBuilder: (context, imageProvider) => SizedBox(
                           width: MediaQuery.of(context).size.width - 100,
                           height: MediaQuery.of(context).size.height - 100,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
+                          child: PhotoView(
+                            imageProvider: imageProvider, 
+                            initialScale: PhotoViewComputedScale.contained,
+                            backgroundDecoration: BoxDecoration(color: Colors.black.withOpacity(0)),
                           ),
                         ),
                         placeholder: (context, url) => Container(

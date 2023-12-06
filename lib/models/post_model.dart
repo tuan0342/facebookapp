@@ -11,6 +11,9 @@ class Post {
   int isFelt;
   String state;
   final Author author;
+  int isBlocked;
+  int canEdit;
+  int banned;
 
   Post(
       {required this.id,
@@ -22,7 +25,10 @@ class Post {
       required this.markComment,
       required this.isFelt,
       required this.state,
-      required this.author});
+      required this.author,
+      required this.isBlocked,
+      required this.canEdit,
+      required this.banned});
 
   Post.fromJson(Map<String, dynamic> json)
       : id = int.parse(json["id"]),
@@ -33,10 +39,13 @@ class Post {
         described = json["described"],
         created = json["created"],
         feel = int.parse(json["feel"]),
-        markComment = int.parse(json["mark_comment"]),
+        markComment = int.parse(json["comment_mark"]),
         isFelt = int.parse(json["is_felt"]),
         state = json["state"],
-        author = Author.fromJson(json["author"]);
+        author = Author.fromJson(json["author"]),
+        isBlocked = int.parse(json["is_blocked"]),
+        canEdit = int.parse(json["can_edit"]),
+        banned = int.parse(json["banned"]);
 
   Map<String, dynamic> toJson() {
     return {
@@ -46,10 +55,13 @@ class Post {
       "described": described,
       "created": created,
       "feel": feel,
-      "mark_comment": markComment,
+      "comment_mark": markComment,
       "is_felt": isFelt,
       "state": state,
       "author": author,
+      "is_blocked": isBlocked,
+      "can_edit": canEdit,
+      "banned": banned,
     };
   }
 }

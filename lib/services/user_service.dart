@@ -7,6 +7,7 @@ import 'package:facebook_app/services/app_service.dart';
 import 'package:facebook_app/services/auth_service.dart';
 import 'package:facebook_app/util/common.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class UserService {
@@ -112,6 +113,8 @@ class UserService {
                 : "Đã đổi tên thành công");
         _appService.username = responseBody["data"]["username"];
         _appService.avatar = responseBody["data"]["avatar"];
+        // ignore: use_build_context_synchronously
+        context.go('/authenticated');
       }
     } on UnauthorizationException {
       // ignore: use_build_context_synchronously
