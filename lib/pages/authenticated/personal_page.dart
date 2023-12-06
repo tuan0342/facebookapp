@@ -1,15 +1,20 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:facebook_app/models/post_model.dart';
 import 'package:facebook_app/models/profile_model.dart';
+import 'package:facebook_app/my_widgets/feed_box.dart';
 import 'package:facebook_app/my_widgets/images_dialog.dart';
 import 'package:facebook_app/my_widgets/my_app_bar.dart';
 import 'package:facebook_app/services/app_service.dart';
+import 'package:facebook_app/services/feed_service.dart';
 import 'package:facebook_app/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+
+const COUNT = "10";
 
 class PersonalPage extends StatefulWidget {
   const PersonalPage({super.key});
@@ -37,11 +42,37 @@ class _PersonalPageState extends State<PersonalPage> {
   bool isLoading = false;
   late File selectedImages = File(''); // List of selected image
   final picker = ImagePicker(); // Instance of Image picker
+  final ScrollController controller = ScrollController();
+  int lastId = 0;
+  int countPost = 0;
+  late List<Post> feeds;
 
   @override
   void initState() {
     super.initState();
     getProfile();
+    controller.addListener(handleScrolling);
+    getNewFeed();
+  }
+
+  void handleScrolling() {
+    if (controller.position.pixels == controller.position.maxScrollExtent) {
+      getMoreNewFeed();
+    }
+  }
+
+  void getNewFeed() async {
+    feeds = await FeedService().getPersonalFeeds(context: context, campaign_id: "1", count: COUNT, 
+      in_campaign: "1", index: "0", last_id: lastId.toString(), latitude: "1.0", longitude: "1.0");
+
+    setState(() {
+      lastId = feeds[feeds.length - 1].id;
+      countPost = countPost + feeds.length;
+    });
+  }
+
+  void getMoreNewFeed() async {
+
   }
 
   void getProfile() async {
@@ -55,60 +86,53 @@ class _PersonalPageState extends State<PersonalPage> {
     });
   }
 
+  void clickKudosButton(int index) {
+    setState(() {
+      if (feeds[index].isFelt == 0) {
+        feeds[index].feel += 1;
+        feeds[index].isFelt = 1;
+      } else {
+        feeds[index].feel -= 1;
+        feeds[index].isFelt = 0;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: const MyAppBar(title: "Trang cá nhân"),
-        body: Column(
-          children: <Widget>[
-            Expanded(
-              flex: 1,
-              child: SingleChildScrollView(
-                child: isLoading
-                    ? NewsCardSkelton()
-                    : Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          PersonalImages(),
+        body: 
+        Container(
+          height: double.infinity,
+          child: SingleChildScrollView(
+            controller: controller,
+            child: isLoading
+              ? NewsCardSkelton()
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    PersonalImages(),
+                    PersonalInfo(),
+                    Container(
+                      height: 20,
+                      margin: const EdgeInsets.only(top: 10),
+                      color: const Color(0xFFc9ccd1),
+                    ),
+                    PersonalDetail(),
+                    Container(
+                      height: 20,
+                      margin: const EdgeInsets.only(top: 10),
+                      color: const Color(0xFFc9ccd1),
+                    ),     
 
-                          PersonalInfo(),
-
-                          Container(
-                            height: 20,
-                            margin: const EdgeInsets.only(top: 10),
-                            color: const Color(0xFFc9ccd1),
-                          ),
-
-                          PersonalDetail(),
-
-                          // User Posts
-                          // Container(
-                          //   padding: EdgeInsets.all(16.0),
-                          //   child: Column(
-                          //     crossAxisAlignment: CrossAxisAlignment.start,
-                          //     children: [
-                          //       Text(
-                          //         'Posts',
-                          //         style: TextStyle(
-                          //           fontSize: 24.0,
-                          //           fontWeight: FontWeight.bold,
-                          //         ),
-                          //       ),
-                          //       // Add your post widgets here
-                          //       // Example:
-                          //       PostWidget('Post 1'),
-                          //       PostWidget('Post 2'),
-                          //       // ...
-                          //     ],
-                          //   ),
-                          // ),
-                        ],
-                      ),
-              ),
-            ),
-          ],
-        ));
+                    PersonalNewFeed(),
+                  ],
+                ),
+          ),
+        )
+      );
   }
 
   Widget NewsCardSkelton() {
@@ -521,13 +545,30 @@ class _PersonalPageState extends State<PersonalPage> {
     );
   }
 
+  Widget PersonalNewFeed() {
+    return ListView.builder(
+      // padding: const EdgeInsets.only(left: 10, right: 10),
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: feeds.length,
+      itemBuilder: (context, index) => FeedBox(
+        post: feeds[index],
+        ontap: () => clickKudosButton(index),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    controller.removeListener(handleScrolling);
+    super.dispose();
+  }
+
   void _showPopupList(BuildContext context, List<String> images) async {
     final result = await showDialog(
         context: context,
-        builder: (_) => ImagesDialog(
-              images: images,
-              index: 0,
-            ));
+        builder: (_) => ImagesDialog(images: images, index: 0,));
+    debugPrint(result);
   }
 
   Future<void> getAvatarImage(ImageSource source) async {
