@@ -70,424 +70,9 @@ class _PersonalPageState extends State<PersonalPage> {
                     : Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Stack(
-                            children: <Widget>[
-                              Container(
-                                height: 240,
-                              ),
-                              //cover image
-                              Positioned(
-                                child: ButtonTheme(
-                                    height: 200,
-                                    minWidth: MediaQuery.of(context).size.width,
-                                    child: TextButton(
-                                      onPressed: () {
-                                        List<String> images;
-                                        if (profile.imageCover == '') {
-                                          images = [
-                                            "assets/images/male_default_avatar.jpeg"
-                                          ];
-                                        } else {
-                                          images = [profile.imageCover];
-                                        }
-                                        _showPopupList(context, images);
-                                      },
-                                      style: TextButton.styleFrom(
-                                        padding: EdgeInsets.zero,
-                                      ),
-                                      child: CachedNetworkImage(
-                                          imageUrl: profile.imageCover,
-                                          imageBuilder:
-                                              (context, imageProvider) =>
-                                                  Container(
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                            .size
-                                                            .width,
-                                                    height: 200,
-                                                    decoration:
-                                                        selectedImages.path ==
-                                                                ''
-                                                            ? BoxDecoration(
-                                                                shape: BoxShape
-                                                                    .rectangle,
-                                                                image: DecorationImage(
-                                                                    image:
-                                                                        imageProvider,
-                                                                    fit: BoxFit
-                                                                        .cover),
-                                                              )
-                                                            : BoxDecoration(
-                                                                shape: BoxShape
-                                                                    .rectangle,
-                                                                // image: DecorationImage(
-                                                                //   image: AssetImage(selectedImages.path),
-                                                                //   fit: BoxFit.cover
-                                                                // ),
-                                                                image: DecorationImage(
-                                                                    image: FileImage(
-                                                                        selectedImages),
-                                                                    fit: BoxFit
-                                                                        .cover),
-                                                              ),
-                                                  ),
-                                          placeholder: (context, url) =>
-                                              Container(
-                                                width: MediaQuery.of(context)
-                                                    .size
-                                                    .width,
-                                                height: 200,
-                                                decoration: selectedImages
-                                                            .path ==
-                                                        ''
-                                                    ? const BoxDecoration(
-                                                        shape:
-                                                            BoxShape.rectangle,
-                                                        image: DecorationImage(
-                                                            image: AssetImage(
-                                                                "assets/images/male_default_avatar.jpeg"),
-                                                            fit: BoxFit.cover),
-                                                      )
-                                                    : BoxDecoration(
-                                                        shape:
-                                                            BoxShape.rectangle,
-                                                        // image: DecorationImage(
-                                                        //   image: AssetImage(selectedImages.path),
-                                                        //   fit: BoxFit.cover
-                                                        // ) ,
-                                                        image: DecorationImage(
-                                                            image: FileImage(
-                                                                selectedImages),
-                                                            fit: BoxFit.cover),
-                                                      ),
-                                              ),
-                                          errorWidget: (context, url, error) =>
-                                              Container(
-                                                height: 200,
-                                                width: MediaQuery.of(context)
-                                                    .size
-                                                    .width,
-                                                decoration: selectedImages
-                                                            .path ==
-                                                        ''
-                                                    ? const BoxDecoration(
-                                                        shape:
-                                                            BoxShape.rectangle,
-                                                        image: DecorationImage(
-                                                            image: AssetImage(
-                                                                "assets/images/male_default_avatar.jpeg"),
-                                                            fit: BoxFit.cover),
-                                                      )
-                                                    : BoxDecoration(
-                                                        shape:
-                                                            BoxShape.rectangle,
-                                                        // image: DecorationImage(
-                                                        //   image: AssetImage(selectedImages.path),
-                                                        //   fit: BoxFit.cover
-                                                        // ),
-                                                        image: DecorationImage(
-                                                            image: FileImage(
-                                                                selectedImages),
-                                                            fit: BoxFit.cover),
-                                                      ),
-                                              )),
-                                    )),
-                              ),
-                              //avatar
-                              Positioned(
-                                  top: 90,
-                                  left: 10,
-                                  child: ButtonTheme(
-                                      child: TextButton(
-                                          onPressed: () {
-                                            List<String> images;
-                                            if (profile.avatar == '') {
-                                              images = [
-                                                "assets/images/male_default_avatar.jpeg"
-                                              ];
-                                            } else {
-                                              images = [profile.avatar];
-                                            }
-                                            _showPopupList(context, images);
-                                          },
-                                          style: TextButton.styleFrom(
-                                              padding: EdgeInsets.zero),
-                                          child: Selector<AppService, String>(
-                                            selector: (_, notifier) =>
-                                                notifier.avatar,
-                                            builder: (_, value, __) =>
-                                                CachedNetworkImage(
-                                                    imageUrl: value,
-                                                    imageBuilder: (context,
-                                                            imageProvider) =>
-                                                        Container(
-                                                          width: 140,
-                                                          height: 140,
-                                                          decoration: BoxDecoration(
-                                                              shape: BoxShape
-                                                                  .circle,
-                                                              image: DecorationImage(
-                                                                  image:
-                                                                      imageProvider,
-                                                                  fit: BoxFit
-                                                                      .contain),
-                                                              border: Border.all(
-                                                                  width: 3,
-                                                                  color: Colors
-                                                                      .white)),
-                                                        ),
-                                                    placeholder: (context,
-                                                            url) =>
-                                                        Container(
-                                                          width: 140,
-                                                          height: 140,
-                                                          decoration:
-                                                              const BoxDecoration(
-                                                            shape:
-                                                                BoxShape.circle,
-                                                            image: DecorationImage(
-                                                                image: AssetImage(
-                                                                    "assets/images/male_default_avatar.jpeg"),
-                                                                fit: BoxFit
-                                                                    .cover),
-                                                          ),
-                                                        ),
-                                                    errorWidget:
-                                                        (context, url, error) =>
-                                                            Container(
-                                                              height: 140,
-                                                              width: 140,
-                                                              decoration: const BoxDecoration(
-                                                                  shape: BoxShape
-                                                                      .circle,
-                                                                  image: DecorationImage(
-                                                                      image: AssetImage(
-                                                                          "assets/images/male_default_avatar.jpeg"),
-                                                                      fit: BoxFit
-                                                                          .cover)),
-                                                            )),
-                                          )))),
-                              //icon change
-                              Positioned(
-                                top: 170,
-                                left: 100,
-                                child: ElevatedButton(
-                                  onPressed: () {},
-                                  style: ElevatedButton.styleFrom(
-                                    shape: const CircleBorder(),
-                                    padding: const EdgeInsets.all(10),
-                                    backgroundColor: const Color.fromARGB(
-                                        255, 219, 219, 219), // <-- Button color
-                                    foregroundColor: const Color.fromARGB(
-                                        255, 133, 133, 133), // <-- Splash color
-                                  ),
-                                  child: IconButton(
-                                      onPressed: () {
-                                        showModalBottomSheet(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return Container(
-                                              padding: const EdgeInsets.all(10),
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: <Widget>[
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      getAvatarImage(
-                                                          ImageSource.camera);
-                                                      Navigator.pop(context);
-                                                    },
-                                                    child: const Row(
-                                                      children: [
-                                                        Icon(
-                                                          Icons.camera_alt,
-                                                          size: 32,
-                                                          color: Colors.black,
-                                                        ),
-                                                        SizedBox(
-                                                          width: 10,
-                                                        ),
-                                                        Text(
-                                                          "Chụp ảnh",
-                                                          style: TextStyle(
-                                                              fontSize: 16,
-                                                              color:
-                                                                  Colors.black),
-                                                        )
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 16,
-                                                  ),
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      getAvatarImage(
-                                                          ImageSource.gallery);
-                                                      Navigator.pop(context);
-                                                    },
-                                                    child: const Row(
-                                                      children: [
-                                                        Icon(
-                                                          Icons.library_books,
-                                                          size: 32,
-                                                          color: Colors.black,
-                                                        ),
-                                                        SizedBox(
-                                                          width: 10,
-                                                        ),
-                                                        Text(
-                                                          "Thư viện",
-                                                          style: TextStyle(
-                                                              fontSize: 16,
-                                                              color:
-                                                                  Colors.black),
-                                                        )
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 16,
-                                                  ),
-                                                ],
-                                              ),
-                                            );
-                                          },
-                                        );
-                                      },
-                                      icon: const Icon(Icons.camera_alt,
-                                          color: Colors.black)),
-                                ),
-                              ),
-                            ],
-                          ),
+                          PersonalImages(),
 
-                          Row(
-                            children: [
-                              Expanded(
-                                  child: Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          20, 5, 20, 10),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            profile.username,
-                                            style: const TextStyle(
-                                              fontSize: 24,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                          Text(
-                                            profile.description,
-                                            style: const TextStyle(
-                                              fontSize: 24,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                          Row(
-                                            children: [
-                                              Expanded(
-                                                child: Container(
-                                                  margin: EdgeInsets.only(
-                                                      top: profile.description
-                                                              .isNotEmpty
-                                                          ? 10.0
-                                                          : 0.0,
-                                                      right: 10),
-                                                  height: 40,
-                                                  child: ElevatedButton(
-                                                    onPressed: () {
-                                                      context.push(
-                                                          '/authenticated/personalPage/editPersonalInfoPage',
-                                                          extra: profile);
-                                                    },
-                                                    style: ElevatedButton
-                                                        .styleFrom(
-                                                            backgroundColor:
-                                                                const Color(
-                                                                    0xFFe5e6eb)),
-                                                    child: const Padding(
-                                                      padding:
-                                                          EdgeInsets.fromLTRB(
-                                                              0, 0, 0, 0),
-                                                      child: Row(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .center,
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          Padding(
-                                                            padding:
-                                                                EdgeInsets.only(
-                                                                    right: 5),
-                                                            child: Icon(
-                                                              Icons.edit,
-                                                              color:
-                                                                  Colors.black,
-                                                              size: 20,
-                                                            ),
-                                                          ),
-                                                          Text(
-                                                              "Chỉnh sửa trang cá nhân",
-                                                              style: TextStyle(
-                                                                  fontSize: 16,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  color: Colors
-                                                                      .black)),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                              Container(
-                                                margin: EdgeInsets.only(
-                                                  top: profile.description
-                                                          .isNotEmpty
-                                                      ? 10.0
-                                                      : 0.0,
-                                                ),
-                                                height: 40,
-                                                child: ElevatedButton(
-                                                  onPressed: () {
-                                                    context.push(
-                                                        '/authenticated/personalPage/settingPersonalPage',
-                                                        extra: profile);
-                                                  },
-                                                  style:
-                                                      ElevatedButton.styleFrom(
-                                                          backgroundColor:
-                                                              const Color(
-                                                                  0xFFe5e6eb)),
-                                                  child: const Padding(
-                                                    padding:
-                                                        EdgeInsets.fromLTRB(
-                                                            0, 0, 0, 0),
-                                                    child: Icon(
-                                                        Icons.more_horiz,
-                                                        color: Colors.black,
-                                                        size: 28),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          )
-                                        ],
-                                      ))),
-                            ],
-                          ),
+                          PersonalInfo(),
 
                           Container(
                             height: 20,
@@ -495,76 +80,7 @@ class _PersonalPageState extends State<PersonalPage> {
                             color: const Color(0xFFc9ccd1),
                           ),
 
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(20, 20, 20, 10),
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    'Chi tiết',
-                                    style: TextStyle(
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  Visibility(
-                                    visible: !profile.address.isNotEmpty,
-                                    child: Row(
-                                      children: [
-                                        const Icon(Icons.location_on,
-                                            color: Colors.black54, size: 28),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        Text(
-                                          'Đến từ ${profile.address}',
-                                          style: const TextStyle(fontSize: 18),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Visibility(
-                                    visible: !profile.city.isNotEmpty,
-                                    child: Row(
-                                      children: [
-                                        const Icon(Icons.home,
-                                            color: Colors.black54, size: 28),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        Text(
-                                          'Sống tại ${profile.address}',
-                                          style: const TextStyle(fontSize: 18),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Visibility(
-                                    visible: profile.listing.isNotEmpty,
-                                    child: Row(
-                                      children: [
-                                        const Icon(Icons.rss_feed,
-                                            color: Colors.black54, size: 26),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        Text(
-                                          'Có ${profile.listing} người theo dõi',
-                                          style: const TextStyle(fontSize: 18),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ]),
-                          )
+                          PersonalDetail(),
 
                           // User Posts
                           // Container(
@@ -649,6 +165,362 @@ class _PersonalPageState extends State<PersonalPage> {
     );
   }
 
+  Widget PersonalImages() {
+    return Stack(
+      children: <Widget>[
+        Container(
+          height: 240,
+        ),
+        //cover image
+        Positioned(
+          child: ButtonTheme(
+            height: 200,
+            minWidth: MediaQuery.of(context).size.width,
+            child: TextButton(
+              onPressed: () {
+                List<String> images;
+                if (profile.imageCover == '') {
+                  images = [
+                    "assets/images/male_default_avatar.jpeg"
+                  ];
+                } else {
+                  images = [profile.imageCover];
+                }
+                _showPopupList(context, images);
+              },
+              style: TextButton.styleFrom(padding: EdgeInsets.zero),
+              child: CachedNetworkImage(
+                imageUrl: profile.imageCover,
+                imageBuilder:
+                  (context, imageProvider) =>
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 200,
+                      decoration:
+                          selectedImages.path == ''
+                            ? BoxDecoration(
+                                shape: BoxShape.rectangle,
+                                image: DecorationImage(
+                                  image:imageProvider,
+                                  fit: BoxFit.cover
+                                ),
+                              )
+                            : BoxDecoration(
+                                shape: BoxShape.rectangle,
+                                // image: DecorationImage(
+                                //   image: AssetImage(selectedImages.path),
+                                //   fit: BoxFit.cover
+                                // ),
+                                image: DecorationImage(
+                                  image: FileImage(selectedImages),
+                                  fit: BoxFit.cover
+                                ),
+                              ),
+                    ),
+                    placeholder: (context, url) =>
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 200,
+                        decoration: selectedImages.path == ''
+                          ? const BoxDecoration(
+                              shape: BoxShape.rectangle,
+                              image: DecorationImage(
+                                image: AssetImage(
+                                    "assets/images/male_default_avatar.jpeg"),
+                                fit: BoxFit.cover
+                              ),
+                            )
+                          : BoxDecoration(
+                              shape: BoxShape.rectangle,
+                              // image: DecorationImage(
+                              //   image: AssetImage(selectedImages.path),
+                              //   fit: BoxFit.cover
+                              // ) ,
+                              image: DecorationImage(
+                                image: FileImage(selectedImages),
+                                fit: BoxFit.cover
+                              ),
+                            ),
+                      ),
+                    errorWidget: (context, url, error) =>
+                      Container(
+                        height: 200,
+                        width: MediaQuery.of(context).size.width,
+                        decoration: selectedImages.path == ''
+                          ? const BoxDecoration(
+                              shape: BoxShape.rectangle,
+                              image: DecorationImage(
+                                image: AssetImage("assets/images/male_default_avatar.jpeg"),
+                                fit: BoxFit.cover
+                              ),
+                            )
+                          : BoxDecoration(
+                              shape: BoxShape.rectangle,
+                              // image: DecorationImage(
+                              //   image: AssetImage(selectedImages.path),
+                              //   fit: BoxFit.cover
+                              // ),
+                              image: DecorationImage(
+                                image: FileImage(selectedImages),
+                                fit: BoxFit.cover
+                              ),
+                            ),
+                      )
+                    ),
+              )
+            ),
+        ),
+        //avatar
+        Positioned(
+          top: 90,
+          left: 10,
+          child: ButtonTheme(
+            child: TextButton(
+              onPressed: () {
+                List<String> images;
+                if (profile.avatar == '') {
+                  images = [
+                    "assets/images/male_default_avatar.jpeg"
+                  ];
+                } else {
+                  images = [profile.avatar];
+                }
+                _showPopupList(context, images);
+              },
+              style: TextButton.styleFrom(padding: EdgeInsets.zero),
+              child: Selector<AppService, String>(
+                selector: (_, notifier) => notifier.avatar,
+                builder: (_, value, __) =>
+                  CachedNetworkImage(
+                      imageUrl: value,
+                      imageBuilder: (context, imageProvider) =>
+                        Container(
+                          width: 140,
+                          height: 140,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                              image: imageProvider,
+                              fit: BoxFit.cover),
+                            border: Border.all(
+                              width: 3,
+                              color: Colors.white)
+                          ),
+                        ),
+                      placeholder: (context, url) =>
+                        Container(
+                          width: 140,
+                          height: 140,
+                          decoration:const BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                              image: AssetImage("assets/images/male_default_avatar.jpeg"),
+                              fit: BoxFit.cover),
+                          ),
+                        ),
+                      errorWidget:
+                        (context, url, error) =>
+                          Container(
+                            height: 140,
+                            width: 140,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                  image: AssetImage("assets/images/male_default_avatar.jpeg"),
+                                  fit: BoxFit.cover)
+                            ),
+                        )
+                    ),
+                  )
+            )
+          )
+        ),
+        //icon change
+        Positioned(
+          top: 170,
+          left: 100,
+          child: ElevatedButton(
+            onPressed: () {},
+            style: ElevatedButton.styleFrom(
+              shape: const CircleBorder(),
+              padding: const EdgeInsets.all(0),
+              backgroundColor: const Color.fromARGB(255, 219, 219, 219), // <-- Button color
+              foregroundColor: const Color.fromARGB(255, 133, 133, 133), // <-- Splash color
+            ),
+            child: IconButton(
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Container(
+                      padding: const EdgeInsets.all(10),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              getAvatarImage(ImageSource.camera);
+                              Navigator.pop(context);
+                            },
+                            child: const Row(
+                              children: [
+                                Icon(Icons.camera_alt, size: 32, color: Colors.black, ),
+                                SizedBox(width: 10),
+                                Text("Chụp ảnh", style: TextStyle(fontSize: 16, color:Colors.black),)
+                              ],
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 16,
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              getAvatarImage(ImageSource.gallery);
+                              Navigator.pop(context);
+                            },
+                            child: const Row(
+                              children: [
+                                Icon(Icons.library_books, size: 32, color: Colors.black, ),
+                                SizedBox(width: 10),
+                                Text("Thư viện", style: TextStyle(fontSize: 16, color:Colors.black))
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 16,),
+                        ],
+                      ),
+                    );
+                  },
+                );
+              },
+              icon: const Icon(Icons.camera_alt,color: Colors.black)),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget PersonalInfo() {
+    return Row(
+      children: [
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 5, 20, 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(profile.username, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600)),
+                Text(profile.description,style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600)),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          margin: EdgeInsets.only(top: profile.description.isNotEmpty ? 10.0 : 0.0, right: 10),
+                          height: 40,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              context.push('/authenticated/personalPage/editPersonalInfoPage', extra: profile);
+                            },
+                            style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFe5e6eb)),
+                            child: const Padding(
+                              padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Padding(padding: EdgeInsets.only(right: 5),
+                                    child: Icon(Icons.edit,color: Colors.black,size: 20),
+                                  ),
+                                  Text("Chỉnh sửa trang cá nhân", style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight:FontWeight.bold,
+                                    color: Colors.black)
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: profile.description.isNotEmpty? 10.0 : 0.0,),
+                        height: 40,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            context.push('/authenticated/personalPage/settingPersonalPage',extra: profile);
+                          },
+                          style: ElevatedButton.styleFrom(backgroundColor:const Color(0xFFe5e6eb)),
+                          child: const Padding(
+                            padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                            child: Icon(
+                              Icons.more_horiz,
+                              color: Colors.black,
+                              size: 28
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              )
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget PersonalDetail() {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(20, 20, 20, 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Chi tiết',
+            style: TextStyle(fontSize: 24,fontWeight: FontWeight.w600),
+          ),
+          const SizedBox(height: 20),
+          Visibility(
+            visible: !profile.address.isNotEmpty,
+            child: Row(
+              children: [
+                const Icon(Icons.location_on, color: Colors.black54, size: 28),
+                const SizedBox(width: 10),
+                Text('Đến từ ${profile.address}', style: const TextStyle(fontSize: 18),)
+              ],
+            ),
+          ),
+          const SizedBox(height: 10),
+          Visibility(
+            visible: !profile.city.isNotEmpty,
+            child: Row(
+              children: [
+                const Icon(Icons.home, color: Colors.black54, size: 28),
+                const SizedBox(width: 10),
+                Text('Sống tại ${profile.address}', style: const TextStyle(fontSize: 18),)
+              ],
+            ),
+          ),
+          const SizedBox(height: 10),
+          Visibility(
+            visible: profile.listing.isNotEmpty,
+            child: Row(
+              children: [
+                const Icon(Icons.rss_feed, color: Colors.black54, size: 26),
+                const SizedBox(width: 10),
+                Text('Có ${profile.listing} người theo dõi', style: const TextStyle(fontSize: 18),)
+              ],
+            ),
+          ),
+        ]
+      ),
+    );
+  }
+
   void _showPopupList(BuildContext context, List<String> images) async {
     final result = await showDialog(
         context: context,
@@ -662,9 +534,7 @@ class _PersonalPageState extends State<PersonalPage> {
     final pickedFile = await picker.pickImage(
         source: source, imageQuality: 100, maxHeight: 10000, maxWidth: 10000);
     if (pickedFile != null) {
-      debugPrint("add file");
       final file = File(pickedFile.path);
-      debugPrint("add file $file");
 
       // ignore: use_build_context_synchronously
       await UserService().changeUsernameOrAvt(
