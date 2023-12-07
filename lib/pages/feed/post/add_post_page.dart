@@ -2,30 +2,30 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
-import '../../services/app_service.dart';
+import '../../../services/app_service.dart';
 import 'dart:io';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
 
-class NewFeed extends StatefulWidget {
-  const NewFeed({super.key});
+class PostPage extends StatefulWidget {
+  const PostPage({super.key});
 
   @override
-  State<NewFeed> createState() {
+  State<PostPage> createState() {
     return _NewFeedState();
   }
 }
 
-class _NewFeedState extends State<NewFeed> {
+class _NewFeedState extends State<PostPage> {
 
   List<File> selectedImages = [];
   final picker = ImagePicker();
 
-  // late VideoPlayerController _controller;
-  // late Future<void>   _initializeVideoPlayerFuture;
-  // late File videoFile;
+   // VideoPlayerController _controller;
+   // Future<void>   _initializeVideoPlayerFuture;
+   // File videoFile;
 
   TextEditingController described = TextEditingController();
   String status = "";
@@ -163,14 +163,15 @@ class _NewFeedState extends State<NewFeed> {
                                                     mainAxisAlignment:
                                                     MainAxisAlignment.start,
                                                     crossAxisAlignment:
-                                                    CrossAxisAlignment.start,                                                    children: [
+                                                    CrossAxisAlignment.start,
+                                                    children: [
                                                     Text(
                                                       "Bỏ bài viết",
                                                       style: TextStyle(
                                                           fontSize: 16,
                                                           color: Colors.black),
-                                                    ),
-                                                  ],
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
                                               ],
@@ -293,10 +294,12 @@ class _NewFeedState extends State<NewFeed> {
                 ],
               )),
               Container(
+                padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
                 child: TextField(
                   controller: described,
                   decoration: InputDecoration(
-                      border: InputBorder.none, hintText: this.selectedImages.isEmpty ? "Bạn đang nghĩ gì?" : "Hãy nói gì đó về bức ảnh này" ),
+                      border: InputBorder.none, 
+                      hintText: this.selectedImages.isEmpty ? "Bạn đang nghĩ gì?" : "Hãy nói gì đó về bức ảnh này" ),
                   style: TextStyle(fontSize: 24),
                 ),
               ),
@@ -422,8 +425,6 @@ class _NewFeedState extends State<NewFeed> {
               Icons.video_collection,
               color: Colors.green,
             )),
-
-
         IconButton(
             onPressed: () {},
             icon:const Icon(
@@ -467,5 +468,6 @@ class _NewFeedState extends State<NewFeed> {
   // }
 
   void pushPost() {
+
   }
 }

@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:facebook_app/models/post_model.dart';
 import 'package:facebook_app/my_widgets/feed_box.dart';
-import 'package:facebook_app/pages/createNewFeed/new_feed.dart';
+import 'package:facebook_app/pages/feed/post/add_post_page.dart';
 import 'package:facebook_app/services/feed_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -97,7 +97,7 @@ class mainHomePageState extends State<HomePage> {
                             onPressed: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => NewFeed()),
+                                MaterialPageRoute(builder: (context) => PostPage()),
                               );
                             },
                             style: OutlinedButton.styleFrom(
