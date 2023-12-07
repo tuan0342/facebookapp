@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:facebook_app/models/post_model.dart';
 import 'package:facebook_app/models/profile_model.dart';
-import 'package:facebook_app/my_widgets/feed_box.dart';
+import 'package:facebook_app/my_widgets/post/feed_item.dart';
 import 'package:facebook_app/my_widgets/images_dialog.dart';
 import 'package:facebook_app/my_widgets/my_app_bar.dart';
 import 'package:facebook_app/services/app_service.dart';
@@ -62,7 +62,7 @@ class _PersonalPageState extends State<PersonalPage> {
   }
 
   void getNewFeed() async {
-    feeds = await FeedService().getPersonalFeeds(context: context, campaign_id: "1", count: COUNT, 
+    feeds = await FeedService(context: context).getPersonalFeeds(context: context, campaign_id: "1", count: COUNT, 
       in_campaign: "1", index: "0", last_id: lastId.toString(), latitude: "1.0", longitude: "1.0");
 
     setState(() {
@@ -86,17 +86,6 @@ class _PersonalPageState extends State<PersonalPage> {
     });
   }
 
-  void clickKudosButton(int index) {
-    setState(() {
-      if (feeds[index].isFelt == 0) {
-        feeds[index].feel += 1;
-        feeds[index].isFelt = 1;
-      } else {
-        feeds[index].feel -= 1;
-        feeds[index].isFelt = 0;
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -551,9 +540,8 @@ class _PersonalPageState extends State<PersonalPage> {
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemCount: feeds.length,
-      itemBuilder: (context, index) => FeedBox(
-        post: feeds[index],
-        ontap: () => clickKudosButton(index),
+      itemBuilder: (context, index) => FeedItem(
+        postData: feeds[index]
       ),
     );
   }

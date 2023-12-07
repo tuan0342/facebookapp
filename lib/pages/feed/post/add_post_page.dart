@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:facebook_app/my_widgets/my_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
-import '../../services/app_service.dart';
+import '../../../services/app_service.dart';
 import 'dart:io';
 import 'dart:async';
 import 'package:flutter/material.dart';
@@ -99,39 +99,37 @@ class _NewFeedState extends State<NewFeed> {
                                             onPressed: () {
                                               Navigator.pop(context);
                                             },
-                                            child: Row(
+                                            child: const Row(
                                               children: [
-                                                const Icon(
+                                                Icon(
                                                   Icons.bookmark,
                                                   size: 32,
                                                   color: Colors.black,
                                                 ),
-                                                const SizedBox(
+                                                SizedBox(
                                                   width: 15,
                                                 ),
-                                                Container(
-                                                  child: const Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Text(
-                                                        "Lưu làm bản nháp",
-                                                        style: TextStyle(
-                                                            fontSize: 16,
-                                                            color:
-                                                                Colors.black),
-                                                      ),
-                                                      Text(
-                                                        "Bạn sẽ nhận được thông báo về bản nháp",
-                                                        style: TextStyle(
-                                                            fontSize: 14,
-                                                            color: Colors.grey),
-                                                      ),
-                                                    ],
-                                                  ),
+                                                Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment
+                                                          .start,
+                                                  children: [
+                                                    Text(
+                                                      "Lưu làm bản nháp",
+                                                      style: TextStyle(
+                                                          fontSize: 16,
+                                                          color:
+                                                              Colors.black),
+                                                    ),
+                                                    Text(
+                                                      "Bạn sẽ nhận được thông báo về bản nháp",
+                                                      style: TextStyle(
+                                                          fontSize: 14,
+                                                          color: Colors.grey),
+                                                    ),
+                                                  ],
                                                 ),
                                               ],
                                             ),
