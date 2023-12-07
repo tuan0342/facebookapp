@@ -83,7 +83,7 @@ class FeedService {
   Future<List<Post>> getPersonalFeeds({
     required BuildContext context, required String in_campaign, required String campaign_id,
     required String latitude, required String longitude, required String last_id, 
-    required String index, required String count,
+    required String index, required String count, required String uid,
   }) async {
     List<Post> myPosts = [];
     late AuthService _authService =
@@ -92,7 +92,7 @@ class FeedService {
       final _appService = Provider.of<AppService>(context, listen: false);
 
       Map<String, dynamic> body = {
-        "user_id": _appService.uidLoggedIn,
+        "user_id": uid,
         "in_campaign": in_campaign,
         "campaign_id": campaign_id,
         "latitude": latitude,

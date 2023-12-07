@@ -1,9 +1,11 @@
 import 'package:facebook_app/models/friend_model.dart';
 import 'package:facebook_app/my_widgets/friend_box.dart';
 import 'package:facebook_app/my_widgets/my_text_button.dart';
+import 'package:facebook_app/services/app_service.dart';
 import 'package:facebook_app/services/friend_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 const defaultSort = 0;
 const newFirstSort = 1;
@@ -17,6 +19,7 @@ class UserFriendsPage extends StatefulWidget {
 }
 
 class _UserFriendsPageState extends State<UserFriendsPage> {
+  late AppService appService = Provider.of<AppService>(context, listen: false);
   late ScrollController _scrollController;
   List<FriendModel> friends = [];
   bool isLoading = false;
@@ -32,7 +35,7 @@ class _UserFriendsPageState extends State<UserFriendsPage> {
         isLoading = true;
       });
       final data =
-          await FriendService(context: context).getFriends(index, count);
+          await FriendService(context: context).getFriends(index, count, appService.uidLoggedIn);
 
       if (data["friends"].isEmpty) {
         setState(() {

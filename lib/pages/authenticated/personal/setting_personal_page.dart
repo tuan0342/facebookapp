@@ -42,7 +42,7 @@ class _SettingPersonalPageState extends State<SettingPersonalPage> {
                     padding: const EdgeInsets.only(top: 10, bottom: 10, left: 10),
                   ),
                   onPressed: (){
-                    context.push('/authenticated/personalPage/editPersonalInfoPage', extra: widget.profile);
+                    context.push('/authenticated/personalPage/${widget.profile.id}/editPersonalInfoPage', extra: widget.profile);
                   }, 
                   child: const Row(
                     children: [

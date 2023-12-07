@@ -11,7 +11,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class UserService {
-  Future<Profile> getProfile({required BuildContext context}) async {
+  Future<Profile> getProfile({required BuildContext context, required String uid}) async {
     Profile profile = const Profile(
         id: "",
         username: "",
@@ -33,7 +33,7 @@ class UserService {
       final _appService = Provider.of<AppService>(context, listen: false);
 
       Map<String, dynamic> body = {
-        "user_id": _appService.uidLoggedIn,
+        "user_id": uid,
       };
       Map<String, String> headers = {
         "Authorization": "Bearer ${_appService.token}",
