@@ -1,5 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:facebook_app/my_widgets/my_filled_button.dart';
+import 'package:facebook_app/my_widgets/my_image.dart';
 import 'package:facebook_app/my_widgets/my_text.dart';
 import 'package:facebook_app/services/app_service.dart';
 import 'package:flutter/material.dart';
@@ -36,58 +36,23 @@ class ProfileLoginPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ClipRRect(
-                            borderRadius: BorderRadius.circular(10), // Image border
-                            child: SizedBox.fromSize(
-                              size: const Size.fromRadius(30), // Image radius
-                              child: Image.asset("assets/images/af_logo.png"),
-                            ),
-                          ),
                   Padding(
+                    padding: const EdgeInsets.only(bottom: 20),
+                    child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10), // Image border
+                              child: SizedBox.fromSize(
+                                size: const Size.fromRadius(30), // Image radius
+                                child: Image.asset("assets/images/af_logo.png"),
+                              ),
+                            ),
+                  ),
+                  if (_appService.email != "") Padding(
                       padding: const EdgeInsets.fromLTRB(16, 24, 16, 0),
                       child: InkWell(
                           onTap: logIn,
                           child: Row(
                             children: [
-                              CachedNetworkImage(
-                                  imageUrl: _appService.avatar,
-                                  imageBuilder: (context, imageProvider) =>
-                                      Container(
-                                        width: 70,
-                                        height: 70,
-                                        decoration: BoxDecoration(
-                                            shape: BoxShape.rectangle,
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                            image: DecorationImage(
-                                                image: imageProvider,
-                                                fit: BoxFit.cover)),
-                                      ),
-                                  placeholder: (context, url) => Container(
-                                        height: 70,
-                                        width: 70,
-                                        decoration: BoxDecoration(
-                                            shape: BoxShape.rectangle,
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                            image: const DecorationImage(
-                                                image: AssetImage(
-                                                    "assets/images/male_default_avatar.jpeg"),
-                                                fit: BoxFit.cover)),
-                                      ),
-                                  errorWidget: (context, url, error) =>
-                                      Container(
-                                        height: 70,
-                                        width: 70,
-                                        decoration: BoxDecoration(
-                                            shape: BoxShape.rectangle,
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                            image: const DecorationImage(
-                                                image: AssetImage(
-                                                    "assets/images/male_default_avatar.jpeg"),
-                                                fit: BoxFit.cover)),
-                                      )),
+                              MyImage(imageUrl: _appService.avatar, width: 70, height: 70,),
                               Expanded(
                                 child: Container(
                                     alignment: Alignment.bottomLeft,

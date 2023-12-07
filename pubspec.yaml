@@ -57,8 +57,8 @@ dependencies:
   image_picker: ^1.0.4
   video_uploader: ^1.2.0
   video_player: ^2.8.1
-
-
+  webview_flutter: ^4.4.2
+  photo_view: ^0.14.0
 
 dev_dependencies:
   flutter_test:
