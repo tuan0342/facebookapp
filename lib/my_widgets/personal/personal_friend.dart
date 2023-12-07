@@ -5,7 +5,8 @@ import 'package:go_router/go_router.dart';
 
 class PersonalFriend extends StatelessWidget {
   final List<FriendModel> friends;
-  const PersonalFriend({super.key, required this.friends});
+  final BuildContext contextPage;
+  const PersonalFriend({super.key, required this.friends, required this.contextPage});
 
   @override
   Widget build(BuildContext context) {

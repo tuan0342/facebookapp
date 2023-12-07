@@ -72,11 +72,15 @@ class UserService {
       {required BuildContext context,
       required String fullName,
       File? avatar}) async {
+    debugPrint('>> check 1.1');
     late AuthService _authService =
         Provider.of<AuthService>(context, listen: false);
+    debugPrint('>> check 1.2');
     try {
       final _appService = Provider.of<AppService>(context, listen: false);
-
+      debugPrint('>> check 1.3');
+      
+      debugPrint('>> check 3');
       Map<String, String> body = {
         "username": fullName,
       };
@@ -84,6 +88,7 @@ class UserService {
       Map<String, String> headers = {
         "Authorization": "Bearer ${_appService.token}",
       };
+      debugPrint('>> check 4');
 
       final response = await postWithFormDataMethod(
           endpoind: "change_profile_after_signup",
@@ -124,6 +129,7 @@ class UserService {
           msg: "Phiên đăng nhập hết hạn");
     } catch (err) {
       debugPrint("get exception $err");
+      debugPrint('>> check 1.4');
       // ignore: use_build_context_synchronously
       showSnackBar(
           context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau $err");

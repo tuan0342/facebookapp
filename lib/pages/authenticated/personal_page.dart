@@ -24,6 +24,7 @@ class PersonalPage extends StatefulWidget {
 }
 
 class _PersonalPageState extends State<PersonalPage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late Profile profile = const Profile(id: "", username: "", created: "", description: "", avatar: "",
       imageCover: "", link: "", address: "", city: "", country: "", listing: "", isFriend: "",
       online: "", coins: "");
@@ -125,10 +126,10 @@ class _PersonalPageState extends State<PersonalPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        key: _scaffoldKey,
         resizeToAvoidBottomInset: false,
         appBar: const MyAppBar(title: "Trang cá nhân"),
-        body: 
-        SizedBox(
+        body: SizedBox(
           height: double.infinity,
           child: SingleChildScrollView(
             controller: controller,
@@ -137,8 +138,8 @@ class _PersonalPageState extends State<PersonalPage> {
               : Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    PersonalImages(profile: profile),
-                    PersonalInfo(profile: profile),
+                    PersonalImages(profile: profile, contextPage: context,),
+                    PersonalInfo(profile: profile, contextPage: context,),
 
                     Container(
                       height: 20,
@@ -146,8 +147,8 @@ class _PersonalPageState extends State<PersonalPage> {
                       color: const Color(0xFFc9ccd1),
                     ),
 
-                    PersonalDetail(profile: profile),
-                    PersonalFriend(friends: friends),
+                    PersonalDetail(profile: profile, contextPage: context,),
+                    PersonalFriend(friends: friends, contextPage: context,),
 
                     Container(
                       height: 20,

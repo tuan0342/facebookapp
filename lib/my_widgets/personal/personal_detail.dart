@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 
 class PersonalDetail extends StatelessWidget {
   final Profile profile;
-  const PersonalDetail({super.key, required this.profile});
+  final BuildContext contextPage;
+  const PersonalDetail({super.key, required this.profile, required this.contextPage});
 
   @override
   Widget build(BuildContext context) {

@@ -36,22 +36,22 @@ class PersonalSkeleton extends StatelessWidget {
                 ),
               ),
             ),
-            Positioned(
-              top: 170,
-              left: 100,
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  shape: const CircleBorder(),
-                  padding: const EdgeInsets.all(10),
-                  backgroundColor: const Color.fromARGB(
-                      255, 219, 219, 219), // <-- Button color
-                  foregroundColor: const Color.fromARGB(
-                      255, 133, 133, 133), // <-- Splash color
-                ),
-                child: const Icon(Icons.camera_alt, color: Colors.black),
-              ),
-            ),
+            // Positioned(
+            //   top: 170,
+            //   left: 100,
+            //   child: ElevatedButton(
+            //     onPressed: () {},
+            //     style: ElevatedButton.styleFrom(
+            //       shape: const CircleBorder(),
+            //       padding: const EdgeInsets.all(10),
+            //       backgroundColor: const Color.fromARGB(
+            //           255, 219, 219, 219), // <-- Button color
+            //       foregroundColor: const Color.fromARGB(
+            //           255, 133, 133, 133), // <-- Splash color
+            //     ),
+            //     child: const Icon(Icons.camera_alt, color: Colors.black),
+            //   ),
+            // ),
           ],
         ),
       ],
