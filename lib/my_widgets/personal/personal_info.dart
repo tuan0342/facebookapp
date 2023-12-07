@@ -7,7 +7,8 @@ import 'package:provider/provider.dart';
 // ignore: must_be_immutable
 class PersonalInfo extends StatelessWidget {
   Profile profile;
-  PersonalInfo({super.key, required this.profile});
+  final BuildContext contextPage;
+  PersonalInfo({super.key, required this.profile, required this.contextPage});
   
 
   @override

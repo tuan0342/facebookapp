@@ -12,10 +12,13 @@ import 'package:provider/provider.dart';
 class PersonalImages extends StatelessWidget {
   final Profile profile;
   final picker = ImagePicker();
-  PersonalImages({super.key, required this.profile});
+  final BuildContext contextPage;
+  PersonalImages({super.key, required this.profile, required this.contextPage});
 
   @override
   Widget build(BuildContext context) {
+    final appService = Provider.of<AppService>(context, listen: false);
+
     return Stack(
       children: <Widget>[
         Container(
@@ -102,8 +105,8 @@ class PersonalImages extends StatelessWidget {
               },
               style: TextButton.styleFrom(padding: EdgeInsets.zero),
               child: Selector<AppService, String>(
-                // selector: (_, notifier) => notifier.avatar,
-                selector: (_, notifier) => profile.avatar,
+                selector: (_, notifier) => notifier.avatar,
+                // selector: (_, notifier) => profile.avatar,
                 builder: (_, value, __) =>
                   CachedNetworkImage(
                       imageUrl: value,
@@ -150,7 +153,7 @@ class PersonalImages extends StatelessWidget {
           )
         ),
         //icon change
-        Positioned(
+        appService.uidLoggedIn == profile.id ? Positioned(
           top: 170,
           left: 100,
           child: ElevatedButton(
@@ -175,7 +178,7 @@ class PersonalImages extends StatelessWidget {
                         children: <Widget>[
                           TextButton(
                             onPressed: () {
-                              getAvatarImage(ImageSource.camera, context);
+                              getAvatarImage(ImageSource.camera, contextPage);
                               Navigator.pop(context);
                             },
                             child: const Row(
@@ -191,7 +194,7 @@ class PersonalImages extends StatelessWidget {
                           ),
                           TextButton(
                             onPressed: () {
-                              getAvatarImage(ImageSource.gallery, context);
+                              getAvatarImage(ImageSource.gallery, contextPage);
                               Navigator.pop(context);
                             },
                             child: const Row(
@@ -211,7 +214,7 @@ class PersonalImages extends StatelessWidget {
               },
               icon: const Icon(Icons.camera_alt,color: Colors.black)),
           ),
-        ),
+        ) : const SizedBox(),
       ],
     );
   }
@@ -228,10 +231,11 @@ class PersonalImages extends StatelessWidget {
         source: source, imageQuality: 100, maxHeight: 10000, maxWidth: 10000);
     if (pickedFile != null) {
       final file = File(pickedFile.path);
-
+      debugPrint('>> check 1');
       // ignore: use_build_context_synchronously
       await UserService().changeUsernameOrAvt(
           context: context, fullName: profile.username, avatar: file);
+      debugPrint('>> check 2');
     } else {
       debugPrint("no change");
     }
