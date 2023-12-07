@@ -55,7 +55,7 @@ class _MenuState extends State<Menu> {
                   ),
                   TextButton(
                     onPressed: () {
-                      context.push('/authenticated/personalPage');
+                      context.push('/authenticated/personalPage/${_appService.uidLoggedIn}');
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,

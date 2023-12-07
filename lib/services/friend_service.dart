@@ -56,13 +56,13 @@ class FriendService {
     return result;
   }
 
-  Future<Map<String, dynamic>> getFriends(int index, int count) async {
+  Future<Map<String, dynamic>> getFriends(int index, int count, String uid) async {
     Map<String, dynamic> result = {"friends": <FriendModel>[], "total": 0};
     try {
       Map<String, dynamic> body = {
         "index": index,
         "count": count,
-        "user_id": _appService.uidLoggedIn,
+        "user_id": uid,
       };
 
       Map<String, String> headers = {
