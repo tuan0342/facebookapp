@@ -105,8 +105,8 @@ class PersonalImages extends StatelessWidget {
               },
               style: TextButton.styleFrom(padding: EdgeInsets.zero),
               child: Selector<AppService, String>(
-                selector: (_, notifier) => notifier.avatar,
-                // selector: (_, notifier) => profile.avatar,
+                // selector: (_, notifier) => notifier.avatar,
+                selector: (_, notifier) => profile.avatar,
                 builder: (_, value, __) =>
                   CachedNetworkImage(
                       imageUrl: value,
@@ -231,11 +231,9 @@ class PersonalImages extends StatelessWidget {
         source: source, imageQuality: 100, maxHeight: 10000, maxWidth: 10000);
     if (pickedFile != null) {
       final file = File(pickedFile.path);
-      debugPrint('>> check 1');
       // ignore: use_build_context_synchronously
       await UserService().changeUsernameOrAvt(
           context: context, fullName: profile.username, avatar: file);
-      debugPrint('>> check 2');
     } else {
       debugPrint("no change");
     }

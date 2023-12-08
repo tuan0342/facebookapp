@@ -42,7 +42,7 @@ class _MenuState extends State<Menu> {
         padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
-            Container(
+            SizedBox(
               width: double.infinity,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -68,6 +68,7 @@ class _MenuState extends State<Menu> {
                                 _appService.avatar,
                                 height: 50,
                                 width: 50,
+                                fit: BoxFit.cover,
                               ),
                             )),
                         const SizedBox(

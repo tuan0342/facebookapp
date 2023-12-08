@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
@@ -27,6 +29,7 @@ class _ImagesDialogState extends State<ImagesDialog> {
   }
 
   Widget dialogContent(BuildContext context) {
+    debugPrint('check ${widget.images[currentIndex]}');
     return Container(
       margin: const EdgeInsets.only(left: 0.0,right: 0.0),
       child: Stack(
@@ -76,7 +79,7 @@ class _ImagesDialogState extends State<ImagesDialog> {
                             imageProvider: imageProvider, 
                             initialScale: PhotoViewComputedScale.contained,
                             backgroundDecoration: BoxDecoration(color: Colors.black.withOpacity(0)),
-                          ),
+                          )
                         ),
                         placeholder: (context, url) => Container(
                           width: MediaQuery.of(context).size.width - 100,
@@ -88,14 +91,15 @@ class _ImagesDialogState extends State<ImagesDialog> {
                             ),
                           ),
                         ),
-                        errorWidget: (context, url, error) => Container(
+                        errorWidget: (context, url, error) => SizedBox(
                           height: MediaQuery.of(context).size.height - 100,
                           width: MediaQuery.of(context).size.width - 100,
-                          decoration: const BoxDecoration(
-                            image: DecorationImage(
-                              image: AssetImage("assets/images/male_default_avatar.jpeg"),
-                              fit: BoxFit.contain
-                            )
+                          child: PhotoView(
+                            imageProvider: widget.images[currentIndex][0] != "/" 
+                                ? const AssetImage("assets/images/male_default_avatar.jpeg")
+                                : Image.file(File(widget.images[currentIndex])).image,
+                            initialScale: PhotoViewComputedScale.contained,
+                            backgroundDecoration: BoxDecoration(color: Colors.black.withOpacity(0)),
                           ),
                         )
                       ),
