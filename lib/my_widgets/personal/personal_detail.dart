@@ -24,7 +24,23 @@ class PersonalDetail extends StatelessWidget {
               children: [
                 const Icon(Icons.location_on, color: Colors.black54, size: 28),
                 const SizedBox(width: 10),
-                Text('Đến từ ${profile.address}', style: const TextStyle(fontSize: 18),)
+                Flexible(
+                  child: RichText(
+                    text: TextSpan(
+                      text: 'Đến từ ',
+                      style: const TextStyle(fontSize: 18, color: Colors.black87),
+                      children: [
+                        TextSpan(
+                          text: profile.address,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -35,7 +51,23 @@ class PersonalDetail extends StatelessWidget {
               children: [
                 const Icon(Icons.home, color: Colors.black54, size: 28),
                 const SizedBox(width: 10),
-                Text('Sống tại ${profile.address}', style: const TextStyle(fontSize: 18),)
+                Flexible(
+                  child: RichText(
+                    text: TextSpan(
+                      text: 'Sống tại ',
+                      style: const TextStyle(fontSize: 18, color: Colors.black87),
+                      children: [
+                        TextSpan(
+                          text: profile.city,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -46,7 +78,9 @@ class PersonalDetail extends StatelessWidget {
               children: [
                 const Icon(Icons.rss_feed, color: Colors.black54, size: 26),
                 const SizedBox(width: 10),
-                Text('Có ${profile.listing} người theo dõi', style: const TextStyle(fontSize: 18),)
+                Flexible(
+                  child: Text('Có ${profile.listing} người theo dõi', style: const TextStyle(fontSize: 18),)
+                ),
               ],
             ),
           ),

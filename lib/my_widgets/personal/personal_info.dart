@@ -25,7 +25,8 @@ class PersonalInfo extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(profile.username, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600)),
-                profile.description.isNotEmpty ? Text(profile.description,style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600)) : const SizedBox(height: 5,),
+                profile.description.isNotEmpty ? const SizedBox(height: 10,) : const SizedBox(height: 0,),
+                profile.description.isNotEmpty ? Text(profile.description,style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400)) : const SizedBox(height: 5,),
                 profile.id == appService.uidLoggedIn ? Row(
                   children: [
                     Expanded(

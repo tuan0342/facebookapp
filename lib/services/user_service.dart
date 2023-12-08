@@ -72,15 +72,11 @@ class UserService {
       {required BuildContext context,
       required String fullName,
       File? avatar}) async {
-    debugPrint('>> check 1.1');
     late AuthService _authService =
         Provider.of<AuthService>(context, listen: false);
-    debugPrint('>> check 1.2');
     try {
       final _appService = Provider.of<AppService>(context, listen: false);
-      debugPrint('>> check 1.3');
       
-      debugPrint('>> check 3');
       Map<String, String> body = {
         "username": fullName,
       };
@@ -88,7 +84,6 @@ class UserService {
       Map<String, String> headers = {
         "Authorization": "Bearer ${_appService.token}",
       };
-      debugPrint('>> check 4');
 
       final response = await postWithFormDataMethod(
           endpoind: "change_profile_after_signup",
@@ -129,10 +124,89 @@ class UserService {
           msg: "Phiên đăng nhập hết hạn");
     } catch (err) {
       debugPrint("get exception $err");
-      debugPrint('>> check 1.4');
+      // ignore: use_build_context_synchronously
+      showSnackBar(
+          context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau $err");
+    }
+  }
+
+  Future<void> changeProfile({
+    required BuildContext context,
+    required String fullName, 
+    required String description,
+    required String address,
+    required String city,
+    required String country,
+    required String link,
+    File? cover,
+    File? avatar}) async {
+    late AuthService _authService =
+        Provider.of<AuthService>(context, listen: false);
+    try {
+      final _appService = Provider.of<AppService>(context, listen: false);
+      
+      Map<String, String> body = {
+        "username": fullName.trim(),
+        "description": description.trim(),
+        "address": address.trim(),
+        "city": city.trim(),
+        "country": country.trim(),
+        "link": link.trim(),
+      };
+
+      Map<String, String> headers = {
+        "Authorization": "Bearer ${_appService.token}",
+      };
+
+      List<FileData> files = [];
+      if(avatar != null ) {
+        if(avatar.path.isNotEmpty) {
+          files.add(FileData(fieldName: 'avatar', file: avatar, type: "image", subType: "png"),);
+        }
+      }
+      if(cover != null) {
+        if(cover.path.isNotEmpty) {
+          files.add(FileData(fieldName: 'cover_image', file: cover, type: "image", subType: "png"),);
+        }
+      }
+
+      final response = await postWithFormDataMethod(
+          endpoind: "set_user_info",
+          body: body,
+          headers: headers,
+          files: files.isEmpty ? null : files);
+      final responseBody = jsonDecode(response.body);
+      debugPrint("body: $responseBody");
+
+      if (int.parse(responseBody["code"]) == 9998) {
+        throw UnauthorizationException();
+      }
+      if (int.parse(responseBody["code"]) == 1000) {
+        // ignore: use_build_context_synchronously
+        showSnackBar(
+            context: context,
+            msg: "Cập nhật thông tin cá nhân thành công");
+        _appService.avatar = responseBody["data"]["avatar"];
+        _appService.coverImage = responseBody["data"]["cover_image"];
+        // ignore: use_build_context_synchronously
+        context.go('/authenticated');
+      } else {
+        // ignore: use_build_context_synchronously
+        showSnackBar(
+          context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau ${responseBody["error"]["message"]}");
+      }
+    } on UnauthorizationException {
+      // ignore: use_build_context_synchronously
+      _authService.logOut(
+          context: context,
+          isShowSnackbar: true,
+          msg: "Phiên đăng nhập hết hạn");
+    } catch (err) {
+      debugPrint("check get exception $err");
       // ignore: use_build_context_synchronously
       showSnackBar(
           context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau $err");
     }
   }
 }
+
