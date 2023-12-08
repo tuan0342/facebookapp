@@ -30,3 +30,28 @@ class FriendModel {
     };
   }
 }
+
+class FriendBlock {
+  final int id;
+  final String username;
+  final String avatar;
+
+  FriendBlock({
+    required this.id,
+    required this.username,
+    required this.avatar,
+  });
+
+  FriendBlock.fromJson(Map<String, dynamic> json)
+      : id = int.parse(json["id"] ?? 0),
+        username = json["name"] ?? "",
+        avatar = json["avatar"] ?? "";
+
+  Map<String, dynamic> toJson() {
+    return {
+      "id": id,
+      "name": username,
+      "avatar": avatar,
+    };
+  }
+}

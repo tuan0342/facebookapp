@@ -26,8 +26,8 @@ class MyImage extends StatelessWidget {
     return CachedNetworkImage(
         imageUrl: imageUrl,
         imageBuilder: (context, imageProvider) => Container(
-              width: height,
-              height: width,
+              width: width,
+              height: height,
               decoration: BoxDecoration(
                   shape: shape,
                   image: DecorationImage(
