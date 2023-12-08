@@ -14,7 +14,6 @@ class SettingPersonalPage extends StatefulWidget {
 }
 
 class _SettingPersonalPageState extends State<SettingPersonalPage> {
-  String link = 'https://www.facebook.com/TuanNgoMomon342';
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +41,7 @@ class _SettingPersonalPageState extends State<SettingPersonalPage> {
                     padding: const EdgeInsets.only(top: 10, bottom: 10, left: 10),
                   ),
                   onPressed: (){
-                    context.push('/authenticated/personalPage/editPersonalInfoPage', extra: widget.profile);
+                    context.push('/authenticated/personalPage/${widget.profile.id}/editPersonalInfoPage', extra: widget.profile);
                   }, 
                   child: const Row(
                     children: [
@@ -91,7 +90,7 @@ class _SettingPersonalPageState extends State<SettingPersonalPage> {
                           children: [
                             Padding(
                               padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                              child: Text('Tìm kiếm trên trang cá nhân', style: const TextStyle(color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w400),),
+                              child: Text('Tìm kiếm trên trang cá nhân', style: TextStyle(color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w400),),
                             ),
                           ],
                         )
@@ -111,7 +110,7 @@ class _SettingPersonalPageState extends State<SettingPersonalPage> {
 
                 // Liên kết đến trang cá nhân
                 Padding(
-                  padding: EdgeInsets.only(right: 12, left: 12, top: 20),
+                  padding: const EdgeInsets.only(right: 12, left: 12, top: 20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -129,12 +128,20 @@ class _SettingPersonalPageState extends State<SettingPersonalPage> {
                       const SizedBox(height: 15,),
 
                       // link
-                      Text(link, style: const TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.w700),),
+                      Text(
+                        widget.profile.link.isEmpty ? 'Bạn không có đường link đến trang cá nhân'  : widget.profile.link, 
+                        style: const TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.w700),),
                       const SizedBox(height: 10,),
 
                       ElevatedButton(
                         onPressed: (){
-                          Clipboard.setData(ClipboardData(text: link));
+                          Clipboard.setData(
+                            ClipboardData(
+                              text: widget.profile.link.isEmpty 
+                              ? 'Bạn không có đường link đến trang cá nhân' 
+                              : widget.profile.link
+                            )
+                          );
                           showSnackBar(context: context, msg: "Đã copy liên kết", timeShow: 1000);
                         },
                         style: ElevatedButton.styleFrom(

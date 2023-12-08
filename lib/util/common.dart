@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:android_id/android_id.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:facebook_app/my_widgets/images_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -40,4 +41,11 @@ String getDifferenceTime(DateTime firstTime, DateTime secondTime) {
     return "${subtime.inMinutes} phút trước";
   }
   return "Vừa xong";
+}
+
+void showPopupList(BuildContext context, List<String> images) async {
+  final result = await showDialog(
+      context: context,
+      builder: (_) => ImagesDialog(images: images, index: 0,));
+  debugPrint(result);
 }

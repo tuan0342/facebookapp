@@ -148,14 +148,9 @@ class FeedService {
   }
 
   Future<List<Post>> getPersonalFeeds({
-    required BuildContext context,
-    required String in_campaign,
-    required String campaign_id,
-    required String latitude,
-    required String longitude,
-    required String last_id,
-    required String index,
-    required String count,
+    required BuildContext context, required String in_campaign, required String campaign_id,
+    required String latitude, required String longitude, required String last_id, 
+    required String index, required String count, required String uid,
   }) async {
     List<Post> myPosts = [];
     late AuthService _authService =
@@ -164,7 +159,7 @@ class FeedService {
       final _appService = Provider.of<AppService>(context, listen: false);
 
       Map<String, dynamic> body = {
-        "user_id": _appService.uidLoggedIn,
+        "user_id": uid,
         "in_campaign": in_campaign,
         "campaign_id": campaign_id,
         "latitude": latitude,
@@ -181,24 +176,14 @@ class FeedService {
       final response = await postMethod(
           endpoind: "get_list_posts", body: body, headers: headers);
       final responseBody = jsonDecode(response.body);
-      debugPrint('check responseBody: ${responseBody}');
 
       if (int.parse(responseBody["code"]) == 9998) {
         throw UnauthorizationException();
       }
       if (int.parse(responseBody["code"]) == 1000) {
-        var test = (responseBody["data"]["post"] as List);
-        debugPrint('check ${test}');
-
         myPosts = (responseBody["data"]["post"] as List)
             .map((e) => Post.fromJson(e))
             .toList();
-        debugPrint('check ${myPosts}');
-
-        // List<Post> postsObj = postsJson.map((tagJson) => Post.fromJson(tagJson)).toList();
-        // debugPrint('check hehe');
-        // debugPrint('check postsObj: ${postsObj}');
-        // return postsObj;
       }
     } on UnauthorizationException {
       // ignore: use_build_context_synchronously
@@ -214,6 +199,5 @@ class FeedService {
     }
 
     return myPosts;
-    // return Future.value(posts);
   }
 }

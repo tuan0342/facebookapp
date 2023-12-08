@@ -13,8 +13,8 @@ class PolicyAndPrivacy extends StatefulWidget {
 
 class _PolicyAndPrivacyState extends State<PolicyAndPrivacy> { 
   final WebView webViewPrintableVersion = const WebView(titleOfAppBar: 'Chính sách bảo mật', uri: 'https://mbasic.facebook.com/privacy/policy/printable/');
-  final WebView webViewPreVersions = const WebView(titleOfAppBar: 'Chính sách bảo mật', uri: 'https://www.facebook.com/privacy/policy/?show_versions=1');
-  final WebView webViewProducts = const WebView(titleOfAppBar: 'Chính sách bảo mật', uri: 'https://www.facebook.com/privacy/policy/?annotations[0]=0.ex.0-WhatProductsDoesThis');
+  final WebView webViewPreVersions = const WebView(titleOfAppBar: 'Chính sách bảo mật', uri: 'https://mbasic.facebook.com/privacy/policy/printable/');
+  final WebView webViewProducts = const WebView(titleOfAppBar: 'Chính sách bảo mật', uri: 'https://mbasic.facebook.com/privacy/policy/printable/');
   @override
   Widget build(BuildContext context) {
     return Scaffold(

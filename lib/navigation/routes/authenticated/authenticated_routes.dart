@@ -18,8 +18,8 @@ final GoRoute authenticatedRoute = GoRoute(
     searchRoutes,
     menuRoute,
     GoRoute(
-      path: 'personalPage',
-      builder: (context, state) => const PersonalPage(),
+      path: 'personalPage/:uid',
+      builder: (context, state) => PersonalPage(uid: state.pathParameters["uid"]!,),
       routes: [
         GoRoute(
           path: "settingPersonalPage",
