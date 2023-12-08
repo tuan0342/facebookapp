@@ -1,3 +1,4 @@
+import 'package:facebook_app/pages/authenticated/submenu/setting_and_privacy/add_block_page.dart';
 import 'package:facebook_app/pages/authenticated/menu.dart';
 import 'package:facebook_app/pages/authenticated/submenu/setting_and_privacy/block_page.dart';
 import 'package:facebook_app/pages/authenticated/submenu/setting_and_privacy/login_security.dart';
@@ -61,12 +62,12 @@ final GoRoute settingRoute = GoRoute(
     GoRoute(
       path: 'block',
       builder: (context, state) => const BlockPage(),
-      // routes: [
-      //   GoRoute(
-      //     path: 'changePassword',
-      //     builder: (context, state) => const LoginSecurityChangePassword(),
-      //   ),
-      // ]
+      routes: [
+        GoRoute(
+          path: 'addBlock',
+          builder: (context, state) => const AddBlockPage(),
+        ),
+      ]
     ),
   ]
 );

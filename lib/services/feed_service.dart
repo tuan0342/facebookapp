@@ -80,12 +80,13 @@ class FeedService {
     return true;
   }
 
-  Future<List<Post>> getPersonalFeeds({
+  Future<Map<String, dynamic>> getPersonalFeeds({
     required BuildContext context, required String in_campaign, required String campaign_id,
     required String latitude, required String longitude, required String last_id, 
     required String index, required String count, required String uid,
   }) async {
-    List<Post> myPosts = [];
+    Map<String, dynamic> result = {"posts": <Post>[], "lastId": 0};
+    // List<Post> myPosts = [];
     late AuthService _authService =
         Provider.of<AuthService>(context, listen: false);
     try {
@@ -113,9 +114,13 @@ class FeedService {
         throw UnauthorizationException();
       }
       if (int.parse(responseBody["code"]) == 1000) {
-        myPosts = (responseBody["data"]["post"] as List)
+        // myPosts = (responseBody["data"]["post"] as List)
+        //     .map((e) => Post.fromJson(e))
+        //     .toList();
+        result["posts"] = (responseBody["data"]["post"] as List)
             .map((e) => Post.fromJson(e))
             .toList();
+        result["lastId"] = (responseBody["data"]["last_id"]);
       }
     } on UnauthorizationException {
       // ignore: use_build_context_synchronously
@@ -130,6 +135,7 @@ class FeedService {
           context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau $err");
     }
 
-    return myPosts;
+    // return myPosts;
+    return result;
   }
 }
