@@ -81,54 +81,51 @@ class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final _appService = Provider.of<AppService>(context, listen: false);
     return SafeArea(
-        child: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-              border:
-                  Border(bottom: BorderSide(color: Colors.grey, width: 1)),
-            ),
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: Row(
-              children: [
-                MyImage(
-                  imageUrl: _appService.avatar,
-                  width: 50,
-                  height: 50,
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                    child: OutlinedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const NewFeed()),
-                    );
-                  },
-                  style: OutlinedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: Colors.black,
-                    shape: const StadiumBorder(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                border:
+                    Border(bottom: BorderSide(color: Colors.grey, width: 1)),
+              ),
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+              child: Row(
+                children: [
+                  MyImage(
+                    imageUrl: _appService.avatar,
+                    width: 50,
+                    height: 50,
                   ),
-                  child: const Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        "Bạn Đang Nghĩ Gì ?",
-                        style: TextStyle(color: Colors.grey, fontSize: 18),
-                      )),
-                ))
-              ],
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                      child: OutlinedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const NewFeed()),
+                      );
+                    },
+                    style: OutlinedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: Colors.black,
+                      shape: const StadiumBorder(),
+                    ),
+                    child: const Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          "Bạn Đang Nghĩ Gì ?",
+                          style: TextStyle(color: Colors.grey, fontSize: 18),
+                        )),
+                  ))
+                ],
+              ),
             ),
-          ),
-          ListPost(posts: posts, scrollController: _scrollController, isLoading: isLoading)
-        ],
-      ),
-    ));
+            ListPost(posts: posts, scrollController: _scrollController, isLoading: isLoading)
+          ],
+        ));
   }
 
 }

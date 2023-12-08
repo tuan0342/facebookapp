@@ -1,12 +1,15 @@
 import 'dart:convert';
 
 import 'package:facebook_app/models/image_model.dart';
+import 'package:facebook_app/models/notification_model.dart';
 import 'package:facebook_app/models/post_model.dart';
 import 'package:facebook_app/rest_api/rest_api.dart';
 import 'package:facebook_app/services/app_service.dart';
 import 'package:facebook_app/services/auth_service.dart';
+import 'package:facebook_app/services/notification_services.dart';
 import 'package:facebook_app/util/common.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 
 class FeedService {
@@ -93,7 +96,7 @@ class FeedService {
       int? lastId,
       int index = 0,
       int count = 20}) async {
-    return fakePosts;
+    // return fakePosts;
 
     List<Post> posts = [];
     try {
@@ -148,9 +151,15 @@ class FeedService {
   }
 
   Future<List<Post>> getPersonalFeeds({
-    required BuildContext context, required String in_campaign, required String campaign_id,
-    required String latitude, required String longitude, required String last_id, 
-    required String index, required String count, required String uid,
+    required BuildContext context,
+    required String in_campaign,
+    required String campaign_id,
+    required String latitude,
+    required String longitude,
+    required String last_id,
+    required String index,
+    required String count,
+    required String uid,
   }) async {
     List<Post> myPosts = [];
     late AuthService _authService =
@@ -199,5 +208,146 @@ class FeedService {
     }
 
     return myPosts;
+  }
+
+  Future<bool> feelPost(
+      {required BuildContext context,
+      required int postId,
+      required int postOwnerId,
+      required int feelType}) async {
+    final _appService = Provider.of<AppService>(context, listen: false);
+    final _authService = Provider.of<AuthService>(context, listen: false);
+    final _notificationService =
+        Provider.of<NotificationServices>(context, listen: false);
+    try {
+      Map<String, dynamic> body = {
+        "id": postId,
+        "type": feelType,
+      };
+
+      Map<String, String> headers = {
+        "Authorization": "Bearer ${_appService.token}",
+        'Content-Type': 'application/json'
+      };
+
+      final response =
+          await postMethod(endpoind: "feel", body: body, headers: headers);
+      final responseBody = jsonDecode(response.body);
+      if (int.parse(responseBody["code"]) == 9998) {
+        throw UnauthorizationException();
+      }
+      if (int.parse(responseBody["code"]) == 1000) {
+        // send noti
+        if (feelType == 1) {
+          _notificationService.sendNotificationToTopic(
+              topic: postOwnerId.toString(),
+              notification: NotificationModel(
+                  title: "Anti Facebook",
+                  message:
+                      "${_appService.username} đã bày tỏ cảm xúc kudos vào bài viết của bạn"));
+        } else {
+          _notificationService.sendNotificationToTopic(
+              topic: postOwnerId.toString(),
+              notification: NotificationModel(
+                  title: "Anti Facebook",
+                  message:
+                      "${_appService.username} đã bày tỏ cảm xúc disapointed vào bài viết của bạn"));
+        }
+        return true;
+      }
+    } on UnauthorizationException {
+      // ignore: use_build_context_synchronously
+      _authService.logOut(
+          context: context,
+          isShowSnackbar: true,
+          msg: "Phiên đăng nhập hết hạn");
+    } catch (e) {
+      debugPrint("get error $e");
+      // ignore: use_build_context_synchronously
+      showSnackBar(
+          context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau $e");
+    }
+
+    return false;
+  }
+
+  Future<bool> deleteFeelPost(
+      {required BuildContext context, required int postId}) async {
+    final _appService = Provider.of<AppService>(context, listen: false);
+    final _authService = Provider.of<AuthService>(context, listen: false);
+
+    try {
+      Map<String, dynamic> body = {
+        "id": postId,
+      };
+
+      Map<String, String> headers = {
+        "Authorization": "Bearer ${_appService.token}",
+        'Content-Type': 'application/json'
+      };
+
+      final response = await postMethod(
+          endpoind: "delete_feel", body: body, headers: headers);
+      final responseBody = jsonDecode(response.body);
+      if (int.parse(responseBody["code"]) == 9998) {
+        throw UnauthorizationException();
+      }
+      if (int.parse(responseBody["code"]) == 1000) {
+        return true;
+      }
+    } on UnauthorizationException {
+      // ignore: use_build_context_synchronously
+      _authService.logOut(
+          context: context,
+          isShowSnackbar: true,
+          msg: "Phiên đăng nhập hết hạn");
+    } catch (e) {
+      debugPrint("get error $e");
+      // ignore: use_build_context_synchronously
+      showSnackBar(
+          context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau $e");
+    }
+
+    return false;
+  }
+
+  Future<bool> getListFeel(
+      {required BuildContext context, required int postId}) async {
+    final _appService = Provider.of<AppService>(context, listen: false);
+    final _authService = Provider.of<AuthService>(context, listen: false);
+
+    try {
+      Map<String, dynamic> body = {
+        "id": postId,
+      };
+
+      Map<String, String> headers = {
+        "Authorization": "Bearer ${_appService.token}",
+        'Content-Type': 'application/json'
+      };
+
+      final response = await postMethod(
+          endpoind: "delete_feel", body: body, headers: headers);
+      final responseBody = jsonDecode(response.body);
+      if (int.parse(responseBody["code"]) == 9998) {
+        throw UnauthorizationException();
+      }
+      if (int.parse(responseBody["code"]) == 1000) {
+        return true;
+      }
+    } on UnauthorizationException {
+      // ignore: use_build_context_synchronously
+      _authService.logOut(
+          context: context,
+          isShowSnackbar: true,
+          msg: "Phiên đăng nhập hết hạn");
+    } catch (e) {
+      debugPrint("get error $e");
+      // ignore: use_build_context_synchronously
+      showSnackBar(
+          context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau $e");
+    }
+
+    return false;
   }
 }

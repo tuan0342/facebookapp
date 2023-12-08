@@ -2,6 +2,7 @@ import 'package:facebook_app/models/friend_model.dart';
 import 'package:facebook_app/my_widgets/my_image.dart';
 import 'package:facebook_app/services/friend_service.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class SuggestFriendBox extends StatelessWidget {
   final FriendModel friend;
@@ -29,10 +30,15 @@ class SuggestFriendBox extends StatelessWidget {
       // avatar
       Expanded(
           flex: 2,
-          child: MyImage(
-            imageUrl: friend.avatar,
-            height: 90,
-            width: 90,
+          child: GestureDetector(
+            onTap: () => {
+              context.push("/authenticated/personalPage/${friend.id}")
+            },
+            child: MyImage(
+              imageUrl: friend.avatar,
+              height: 90,
+              width: 90,
+            ),
           )),
       const SizedBox(
         width: 12,

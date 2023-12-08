@@ -73,6 +73,7 @@ class FriendService {
       final response = await postMethod(
           endpoind: "get_user_friends", body: body, headers: headers);
       final responseBody = jsonDecode(response.body);
+      debugPrint("body $responseBody");
       if (int.parse(responseBody["code"]) == 9998) {
         throw UnauthorizationException();
       }

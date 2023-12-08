@@ -1,25 +1,115 @@
 import 'package:facebook_app/models/post_model.dart';
 import 'package:facebook_app/my_widgets/my_image.dart';
+import 'package:facebook_app/services/feed_service.dart';
 import 'package:facebook_app/util/common.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
-class FeedItem extends StatelessWidget {
+class FeedItem extends StatefulWidget {
   final Post postData;
   const FeedItem({required this.postData});
+
+  @override
+  State<FeedItem> createState() => _FeedItemState();
+}
+
+class _FeedItemState extends State<FeedItem> {
+  void onClickKudosBtn(FeedService feedService) async {
+    if (widget.postData.isFelt == -1) {
+      final isSuccess = await feedService.feelPost(
+          context: context,
+          postOwnerId: 80,
+          postId: widget.postData.id,
+          feelType: 1);
+      if (isSuccess) {
+        setState(() {
+          widget.postData.isFelt = 1;
+          widget.postData.feel += 1;
+        });
+      }
+    } else if (widget.postData.isFelt == 0) {
+      final isSuccess = await feedService.feelPost(
+          context: context,
+          postOwnerId: 80,
+          postId: widget.postData.id,
+          feelType: 1);
+      if (isSuccess) {
+        setState(() {
+          widget.postData.isFelt = 1;
+        });
+      }
+    } else {
+      final isSuccess = await feedService.deleteFeelPost(
+          context: context, postId: widget.postData.id);
+
+      if (isSuccess) {
+        setState(() {
+          widget.postData.isFelt = -1;
+          widget.postData.feel -= 1;
+        });
+      }
+    }
+  }
+
+  void onClickDisapointedBtn(FeedService feedService) async {
+    if (widget.postData.isFelt == -1) {
+      final isSuccess = await feedService.feelPost(
+          context: context,
+          postOwnerId: 80,
+          postId: widget.postData.id,
+          feelType: 0);
+      if (isSuccess) {
+        setState(() {
+          widget.postData.isFelt = 0;
+          widget.postData.feel += 1;
+        });
+      }
+    } else if (widget.postData.isFelt == 1) {
+      final isSuccess = await feedService.feelPost(
+          context: context,
+          postOwnerId: 80,
+          postId: widget.postData.id,
+          feelType: 0);
+      if (isSuccess) {
+        setState(() {
+          widget.postData.isFelt = 0;
+        });
+      }
+    } else {
+      final isSuccess = await feedService.deleteFeelPost(
+          context: context, postId: widget.postData.id);
+
+      if (isSuccess) {
+        setState(() {
+          widget.postData.isFelt = -1;
+          widget.postData.feel -= 1;
+        });
+      }
+    }
+  }
+
+  void onClickMarkdBtn(FeedService feedService) async {
+    if (widget.postData.isFelt == -1) {
+    } else if (widget.postData.isFelt == 1) {
+    } else {}
+  }
+
   @override
   Widget build(BuildContext context) {
+    final FeedService feedService = FeedService(context: context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
+        // header
         postHeader(),
         const SizedBox(
           height: 20,
         ),
+        // content
         Padding(
           padding: const EdgeInsets.only(left: 10),
           child: Text(
-            postData.described,
+            widget.postData.described,
             style: TextStyle(
                 fontSize: 15,
                 color: Colors.grey[800],
@@ -30,13 +120,14 @@ class FeedItem extends StatelessWidget {
         const SizedBox(
           height: 20,
         ),
-        postData.image.isNotEmpty
-            ? MyImage(imageUrl: postData.image[0].url, height: 150, width: 150)
+        widget.postData.image.isNotEmpty
+            ? MyImage(
+                imageUrl: widget.postData.image[0].url, height: 150, width: 150)
             : Container(),
         const SizedBox(
           height: 20,
         ),
-        postFooter(),
+        postFooter(feedService),
       ],
     );
   }
@@ -56,7 +147,7 @@ class FeedItem extends StatelessWidget {
         )),
       ],
     );
-    switch (postData.isFelt) {
+    switch (widget.postData.isFelt) {
       // user haven't yet react
       case -1:
         if (numOfReact <= 0) {
@@ -125,7 +216,7 @@ class FeedItem extends StatelessWidget {
     );
   }
 
-  Widget kudosButton() {
+  Widget kudosButton(FeedService feedService) {
     return Container(
       width: 100,
       child: OutlinedButton(
@@ -134,20 +225,24 @@ class FeedItem extends StatelessWidget {
             shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50),
         )),
-        onPressed: () {},
+        onPressed: () {
+          onClickKudosBtn(feedService);
+        },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             kudosIcon(
                 bgColor: Colors.white,
-                iconColor: postData.isFelt == 1 ? Colors.blue : Colors.grey),
+                iconColor:
+                    widget.postData.isFelt == 1 ? Colors.blue : Colors.grey),
             const SizedBox(
               width: 5,
             ),
             Text(
               "Kudos",
               style: TextStyle(
-                  color: postData.isFelt == 1 ? Colors.blue : Colors.grey),
+                  color:
+                      widget.postData.isFelt == 1 ? Colors.blue : Colors.grey),
             )
           ],
         ),
@@ -155,7 +250,7 @@ class FeedItem extends StatelessWidget {
     );
   }
 
-  Widget disappointedButton() {
+  Widget disappointedButton(FeedService feedService) {
     return SizedBox(
       width: 100,
       child: OutlinedButton(
@@ -165,21 +260,23 @@ class FeedItem extends StatelessWidget {
           borderRadius: BorderRadius.circular(50),
         )),
         onPressed: () {
-          debugPrint("click");
+          onClickDisapointedBtn(feedService);
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             disappointedIcon(
                 bgColor: Colors.white,
-                iconColor: postData.isFelt == 0 ? Colors.red : Colors.grey),
+                iconColor:
+                    widget.postData.isFelt == 0 ? Colors.red : Colors.grey),
             const SizedBox(
               width: 5,
             ),
             Text(
               "Diss",
               style: TextStyle(
-                  color: postData.isFelt == 0 ? Colors.red : Colors.grey),
+                  color:
+                      widget.postData.isFelt == 0 ? Colors.red : Colors.grey),
             )
           ],
         ),
@@ -187,7 +284,7 @@ class FeedItem extends StatelessWidget {
     );
   }
 
-  Widget markButton() {
+  Widget markButton(FeedService feedService) {
     return SizedBox(
       width: 100,
       child: OutlinedButton(
@@ -195,7 +292,9 @@ class FeedItem extends StatelessWidget {
             shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50),
         )),
-        onPressed: () {},
+        onPressed: () {
+          onClickMarkdBtn(feedService);
+        },
         child: const Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -220,7 +319,8 @@ class FeedItem extends StatelessWidget {
       children: <Widget>[
         Row(
           children: [
-            MyImage(imageUrl: postData.author.avatar, height: 50, width: 50),
+            MyImage(
+                imageUrl: widget.postData.author.avatar, height: 50, width: 50),
             const SizedBox(
               width: 10,
             ),
@@ -229,7 +329,7 @@ class FeedItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  postData.author.name,
+                  widget.postData.author.name,
                   style: TextStyle(
                       color: Colors.grey[900],
                       fontSize: 18,
@@ -241,7 +341,7 @@ class FeedItem extends StatelessWidget {
                 ),
                 Text(
                   getDifferenceTime(
-                      DateTime.now(), DateTime.parse(postData.created)),
+                      DateTime.now(), DateTime.parse(widget.postData.created)),
                   style: const TextStyle(fontSize: 15, color: Colors.grey),
                 ),
               ],
@@ -264,55 +364,59 @@ class FeedItem extends StatelessWidget {
     return Container();
   }
 
-  Widget postFooter() {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 5, top: 3),
-      child: Column(
-        children: [
-          if (postData.feel >0 || postData.markComment > 0) Row(
+  Widget postFooter(FeedService feedService) {
+    return Column(
+      children: [
+        if (widget.postData.feel > 0 || widget.postData.markComment > 0)
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.only(left: 5, top: 5),
-                child: postData.feel > 0 ? Row(
-                  children: [
-                    allReactIcon(postData.feel),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    Text(
-                      "${postData.feel}",
-                      style: TextStyle(fontSize: 15, color: Colors.grey[800]),
-                    ),
-                  ],
-                ) : Container(),
+                child: widget.postData.feel > 0
+                    ? Row(
+                        children: [
+                          allReactIcon(widget.postData.feel),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            "${widget.postData.feel}",
+                            style: TextStyle(
+                                fontSize: 15, color: Colors.grey[800]),
+                          ),
+                        ],
+                      )
+                    : Container(),
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 5),
-                child:postData.markComment > 0 ? Row(
-                  children: [
-                    Text(
-                      "${postData.markComment} Marks",
-                      style: TextStyle(fontSize: 15, color: Colors.grey[800]),
-                    ),
-                  ],
-                ): Container(),
+                child: widget.postData.markComment > 0
+                    ? Row(
+                        children: [
+                          Text(
+                            "${widget.postData.markComment} Marks",
+                            style: TextStyle(
+                                fontSize: 15, color: Colors.grey[800]),
+                          ),
+                        ],
+                      )
+                    : Container(),
               )
             ],
           ),
-          const SizedBox(
-            height: 20,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              kudosButton(),
-              markButton(),
-              disappointedButton(),
-            ],
-          )
-        ],
-      ),
+        const SizedBox(
+          height: 20,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            kudosButton(feedService),
+            markButton(feedService),
+            disappointedButton(feedService),
+          ],
+        )
+      ],
     );
   }
 }

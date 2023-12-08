@@ -177,6 +177,7 @@ class _PersonalPageState extends State<PersonalPage> {
                       PersonalFriend(
                         friends: friends,
                         contextPage: context,
+                        uid: profile.id,
                       ),
                       Container(
                         height: 20,
