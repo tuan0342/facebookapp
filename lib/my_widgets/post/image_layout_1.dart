@@ -19,7 +19,7 @@ class LayoutOneImage extends StatelessWidget {
                     child: MyImage(
                       imageUrl: images[0].url,
                       width: double.infinity,
-                      height: 300,
+                      height: double.infinity,
                       shape: BoxShape.rectangle,
                       fit: BoxFit.contain,
                     ),
@@ -37,7 +37,7 @@ class LayoutOneImage extends StatelessWidget {
                 child: MyImage(
                   imageUrl: images[0].url,
                   width: double.infinity,
-                  height: 300,
+                  height: double.infinity,
                   shape: BoxShape.rectangle,
                   fit: BoxFit.cover,
                 ),
@@ -50,7 +50,7 @@ class LayoutOneImage extends StatelessWidget {
                 child: MyImage(
                   imageUrl: images[1].url,
                   width: double.infinity,
-                  height: 300,
+                  height: double.infinity,
                   shape: BoxShape.rectangle,
                   fit: BoxFit.cover,
                 ),
@@ -68,7 +68,7 @@ class LayoutOneImage extends StatelessWidget {
                 child: MyImage(
                   imageUrl: images[0].url,
                   width: double.infinity,
-                  height: 300,
+                  height: double.infinity,
                   shape: BoxShape.rectangle,
                   fit: BoxFit.cover,
                 ),
@@ -78,27 +78,37 @@ class LayoutOneImage extends StatelessWidget {
               flex: 1,
               child: Padding(
                 padding: const EdgeInsets.only(left: 2),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 2),
-                      child: MyImage(
-                        imageUrl: images[1].url,
-                        width: double.infinity,
-                        height: 150,
-                        shape: BoxShape.rectangle,
+                child: Container(
+                  height: double.infinity,
+                  width: double.infinity,
+                  child: Column(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 2),
+                          child: MyImage(
+                            imageUrl: images[1].url,
+                            width: double.infinity,
+                            height: double.infinity,
+                            shape: BoxShape.rectangle,
+                          ),
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 2),
-                      child: MyImage(
-                        imageUrl: images[2].url,
-                        width: double.infinity,
-                        height: 150,
-                        shape: BoxShape.rectangle,
+                      Expanded(
+                        flex: 1,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 2),
+                          child: MyImage(
+                            imageUrl: images[2].url,
+                            width: double.infinity,
+                            height: double.infinity,
+                            shape: BoxShape.rectangle,
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -114,7 +124,7 @@ class LayoutOneImage extends StatelessWidget {
                 child: MyImage(
                   imageUrl: images[0].url,
                   width: double.infinity,
-                  height: 300,
+                  height: double.infinity,
                   shape: BoxShape.rectangle,
                   fit: BoxFit.cover,
                 ),
@@ -124,36 +134,49 @@ class LayoutOneImage extends StatelessWidget {
               flex: 1,
               child: Padding(
                 padding: const EdgeInsets.only(left: 2),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 2),
-                      child: MyImage(
-                        imageUrl: images[1].url,
-                        width: double.infinity,
-                        height: 100,
-                        shape: BoxShape.rectangle,
+                child: Container(
+                  height: double.infinity,
+                  width: double.infinity,
+                  child: Column(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 2),
+                          child: MyImage(
+                            imageUrl: images[1].url,
+                            width: double.infinity,
+                            height: double.infinity,
+                            shape: BoxShape.rectangle,
+                          ),
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 2),
-                      child: MyImage(
-                        imageUrl: images[2].url,
-                        width: double.infinity,
-                        height: 100,
-                        shape: BoxShape.rectangle,
+                      Expanded(
+                        flex: 1,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 2),
+                          child: MyImage(
+                            imageUrl: images[2].url,
+                            width: double.infinity,
+                            height: double.infinity,
+                            shape: BoxShape.rectangle,
+                          ),
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 2),
-                      child: MyImage(
-                        imageUrl: images[3].url,
-                        width: double.infinity,
-                        height: 100,
-                        shape: BoxShape.rectangle,
+                      Expanded(
+                        flex: 1,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 2),
+                          child: MyImage(
+                            imageUrl: images[3].url,
+                            width: double.infinity,
+                            height: double.infinity,
+                            shape: BoxShape.rectangle,
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
