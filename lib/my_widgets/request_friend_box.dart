@@ -7,13 +7,12 @@ import 'package:go_router/go_router.dart';
 
 class RequestFriendBox extends StatefulWidget {
   final RequestFriendModel friend;
-  final VoidCallback onAcceptSuccess;
-  final VoidCallback onRejectSuccess;
-  const RequestFriendBox(
-      {super.key,
-      required this.friend,
-      required this.onAcceptSuccess,
-      required this.onRejectSuccess});
+  final VoidCallback onRemoveItem;
+  const RequestFriendBox({
+    super.key,
+    required this.friend,
+    required this.onRemoveItem,
+  });
 
   @override
   State<RequestFriendBox> createState() => _RequestFriendBoxState();
@@ -34,7 +33,9 @@ class _RequestFriendBoxState extends State<RequestFriendBox> {
     final success = await FriendService(context: context)
         .setAcceptFriend(widget.friend.id, 1);
     if (success) {
-      widget.onAcceptSuccess();
+      // ignore: use_build_context_synchronously
+      showSnackBar(context: context, msg: "Đã chấp nhận lời mời kết bạn");
+      widget.onRemoveItem();
     }
   }
 
@@ -140,7 +141,7 @@ class _RequestFriendBoxState extends State<RequestFriendBox> {
           ],
         ),
       ),
-      if (!widget.friend.isReject)
+      if (widget.friend.isReject)
         IconButton(
           icon: Icon(
             Icons.more_horiz,
@@ -159,8 +160,18 @@ class _RequestFriendBoxState extends State<RequestFriendBox> {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       TextButton(
-                        onPressed: () {
+                        onPressed: () async {
                           // block user
+                          final success = await FriendService(context: context)
+                              .setBlocksFriend(widget.friend.id.toString());
+                          if (success) {
+                            // ignore: use_build_context_synchronously
+                            showSnackBar(
+                                context: context,
+                                msg:
+                                    "Đã chặn tài khoản ${widget.friend.username}");
+                            widget.onRemoveItem();
+                          }
                           Navigator.pop(context);
                         },
                         child: Row(

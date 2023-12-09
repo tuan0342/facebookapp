@@ -1,10 +1,10 @@
 import 'package:facebook_app/models/friend_model.dart';
 import 'package:facebook_app/models/post_model.dart';
 import 'package:facebook_app/models/profile_model.dart';
+import 'package:facebook_app/my_widgets/personal/personal_friend.dart';
 import 'package:facebook_app/my_widgets/post/feed_item.dart';
 import 'package:facebook_app/my_widgets/my_app_bar.dart';
 import 'package:facebook_app/my_widgets/personal/personal_detail.dart';
-import 'package:facebook_app/my_widgets/personal/personal_friend.dart';
 import 'package:facebook_app/my_widgets/personal/personal_images.dart';
 import 'package:facebook_app/my_widgets/personal/personal_info.dart';
 import 'package:facebook_app/my_widgets/personal/personal_skeleton.dart';
@@ -13,7 +13,6 @@ import 'package:facebook_app/services/friend_service.dart';
 import 'package:facebook_app/services/user_service.dart';
 import 'package:flutter/material.dart';
 
-const COUNT = "2";
 
 class PersonalPage extends StatefulWidget {
   final String uid;
@@ -49,7 +48,9 @@ class _PersonalPageState extends State<PersonalPage> {
 
   final ScrollController controller = ScrollController();
   int lastId = 0;
-  int countPost = 0;
+  int indexPost = 0;
+  int countPost = 20;
+  bool isEndPosts = false;
 
   bool isEndFriend = false;
   int totalFriend = 0;
@@ -65,34 +66,48 @@ class _PersonalPageState extends State<PersonalPage> {
 
   void handleScrolling() {
     if (controller.position.pixels == controller.position.maxScrollExtent) {
-      getMoreNewFeed();
+      getNewFeed();
     }
   }
 
   void getNewFeed() async {
-    setState(() {
-      isLoadingNewFeeds = true;
-    });
+    if (!isEndPosts) {
+      setState(() {
+        isLoadingNewFeeds = true;
+      });
 
-    feeds = await FeedService(context: context).getPersonalFeeds(
-        context: context,
-        campaign_id: "1",
-        count: COUNT,
-        in_campaign: "1",
-        index: "0",
-        last_id: lastId.toString(),
-        latitude: "1.0",
-        longitude: "1.0",
-        uid: widget.uid);
+      try {
+        final data = await FeedService(context: context).getPersonalFeeds(
+            context: context,
+            campaign_id: "1",
+            count: countPost.toString(),
+            in_campaign: "1",
+            index: indexPost.toString(),
+            last_id: "0",
+            latitude: "1.0",
+            longitude: "1.0",
+            uid: widget.uid);
 
-    setState(() {
-      lastId = feeds[feeds.length - 1].id;
-      countPost = countPost + feeds.length;
-      isLoadingNewFeeds = false;
-    });
+        if (data["posts"].isEmpty) {
+          setState(() {
+            isEndPosts = true;
+          });
+        } else {
+          setState(() {
+            feeds.addAll(data["posts"]);
+            lastId = int.parse(data["lastId"]);
+            indexPost += countPost;
+          });
+        }
+      } catch (err) {
+        debugPrint("exception $err");
+      } finally {
+        setState(() {
+          isLoadingNewFeeds = false;
+        });
+      }
+    }
   }
-
-  void getMoreNewFeed() async {}
 
   void getProfile() async {
     setState(() {
@@ -174,20 +189,22 @@ class _PersonalPageState extends State<PersonalPage> {
                         profile: profile,
                         contextPage: context,
                       ),
-                      PersonalFriend(
-                        friends: friends,
-                        contextPage: context,
-                        uid: profile.id,
-                      ),
+
+                    PersonalFriend(friends: friends, contextPage: context, uid: profile.id,),
+
                       Container(
                         height: 20,
+                        width: MediaQuery.of(context).size.width,
                         margin: const EdgeInsets.only(top: 10),
                         color: const Color(0xFFc9ccd1),
                       ),
                       const SizedBox(
                         height: 10,
                       ),
-                      personalNewFeed(),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: personalNewFeed(),
+                      ),
                     ],
                   ),
           ),
@@ -205,7 +222,7 @@ class _PersonalPageState extends State<PersonalPage> {
                   height: 20,
                 ),
                 Text(
-                  'Bạn chưa đăng bài!',
+                  'Chưa có bài đăng!',
                   style: TextStyle(
                       color: Colors.black,
                       fontSize: 20,

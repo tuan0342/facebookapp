@@ -202,7 +202,6 @@ class UserService {
           isShowSnackbar: true,
           msg: "Phiên đăng nhập hết hạn");
     } catch (err) {
-      debugPrint("check get exception $err");
       // ignore: use_build_context_synchronously
       showSnackBar(
           context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau $err");

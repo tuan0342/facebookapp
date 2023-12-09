@@ -8,6 +8,7 @@ class ButtonSubmenu extends StatelessWidget {
   final String description;
   final String route;
   final WebView? webView;
+  final Color? color;
 
   const ButtonSubmenu({
     super.key, 
@@ -16,6 +17,7 @@ class ButtonSubmenu extends StatelessWidget {
     required this.description,
     required this.route,
     this.webView,
+    this.color = Colors.black,
   });
 
   @override
@@ -42,7 +44,7 @@ class ButtonSubmenu extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 13, 0, 5),
-                    child: Text(title, style: const TextStyle(color: Colors.black, fontSize: 18.0),),
+                    child: Text(title, style: TextStyle(color: color, fontSize: 18.0),),
                   ),
                   Text(description, style: const TextStyle(color: Color.fromARGB(255, 105, 105, 105)),)
                 ],

@@ -167,22 +167,11 @@ class _RequestFriendsPageState extends State<RequestFriendsPage> {
                   itemCount: requests.length,
                   itemBuilder: (context, index) => RequestFriendBox(
                     friend: requests[index],
-                    onAcceptSuccess: () {
+                    onRemoveItem: () {
                       setState(() {
                         requests.removeAt(index);
                         total -= 1;
                       });
-                      showSnackBar(
-                          context: context,
-                          msg: "Đã chấp nhận lời mời kết bạn");
-                    },
-                    onRejectSuccess: () {
-                      setState(() {
-                        requests.removeAt(index);
-                        total -= 1;
-                      });
-                      showSnackBar(
-                          context: context, msg: "Đã từ chối lời mời kết bạn");
                     },
                   ),
                 ),

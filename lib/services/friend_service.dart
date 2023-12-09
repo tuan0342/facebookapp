@@ -211,4 +211,73 @@ class FriendService {
     return false;
   }
 
+  Future<List<FriendBlock>> getBlocksList(int index, int count, String uid) async {
+    List<FriendBlock> blocksList = [];
+    try {
+      Map<String, dynamic> body = {
+        "index": index,
+        "count": count,
+      };
+
+      Map<String, String> headers = {
+        "Authorization": "Bearer ${_appService.token}",
+        'Content-Type': 'application/json',
+      };
+
+      final response = await postMethod(
+          endpoind: "get_list_blocks", body: body, headers: headers);
+      final responseBody = jsonDecode(response.body);
+      if (int.parse(responseBody["code"]) == 9998) {
+        throw UnauthorizationException();
+      }
+      if (int.parse(responseBody["code"]) == 1000) {
+        blocksList = (responseBody["data"] as List)
+            .map((e) => FriendBlock.fromJson(e))
+            .toList();
+      }
+    } on UnauthorizationException {
+      // ignore: use_build_context_synchronously
+      _authService.logOut(
+          context: context,
+          isShowSnackbar: true,
+          msg: "Phiên đăng nhập hết hạn");
+    } catch (err) {
+      debugPrint("get err $err");
+    }
+
+    return blocksList;
+  }
+
+  Future<bool> setBlocksFriend(String uid) async {
+    try {
+      Map<String, dynamic> body = {
+        "user_id": uid,
+      };
+
+      Map<String, String> headers = {
+        "Authorization": "Bearer ${_appService.token}",
+        'Content-Type': 'application/json',
+      };
+
+      final response = await postMethod(
+          endpoind: "set_block", body: body, headers: headers);
+      final responseBody = jsonDecode(response.body);
+      if (int.parse(responseBody["code"]) == 9998) {
+        throw UnauthorizationException();
+      }
+      if (int.parse(responseBody["code"]) == 1000) {
+        return true;
+      }
+    } on UnauthorizationException {
+      // ignore: use_build_context_synchronously
+      _authService.logOut(
+          context: context,
+          isShowSnackbar: true,
+          msg: "Phiên đăng nhập hết hạn");
+    } catch (err) {
+      debugPrint("get err $err");
+    }
+
+    return false;
+  }
 }
