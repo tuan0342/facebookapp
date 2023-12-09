@@ -18,7 +18,7 @@ class _RequestFriendsPageState extends State<RequestFriendsPage> {
   late ScrollController _scrollController;
   int index = 0;
   static const int count = 20;
-  List<FriendModel> requests = [];
+  List<RequestFriendModel> requests = [];
   int total = 0;
   bool isEnd = false;
   bool isLoading = false;
@@ -53,7 +53,7 @@ class _RequestFriendsPageState extends State<RequestFriendsPage> {
         });
       } else {
         setState(() {
-          requests.addAll(data["requests"]);
+          requests.addAll(data["requests"] as Iterable<RequestFriendModel>);
           total = data["total"];
         });
       }

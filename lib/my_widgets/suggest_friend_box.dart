@@ -6,22 +6,25 @@ import 'package:go_router/go_router.dart';
 
 class SuggestFriendBox extends StatelessWidget {
   final FriendModel friend;
-  final VoidCallback onAcceptSuccess;
+  final VoidCallback onSendRequestSuccess;
   final VoidCallback onRejectSuccess;
   const SuggestFriendBox(
       {super.key,
       required this.friend,
-      required this.onAcceptSuccess,
+      required this.onSendRequestSuccess,
       required this.onRejectSuccess});
 
   void _onRemoveSuggest(BuildContext context) async {
-    await FriendService(context: context)
-        .setAcceptFriend(friend.id, 0, onRejectSuccess);
+    onRejectSuccess();
   }
 
   void _onAddFriend(BuildContext context) async {
-    await FriendService(context: context)
-        .setAcceptFriend(friend.id, 1, onAcceptSuccess);
+   final  isSendRequested = await FriendService(context: context)
+        .setRequestFriend(friend.id);
+
+    if (isSendRequested) {
+
+    }
   }
 
   @override

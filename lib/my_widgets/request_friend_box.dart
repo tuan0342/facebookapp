@@ -5,8 +5,8 @@ import 'package:facebook_app/util/common.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class RequestFriendBox extends StatelessWidget {
-  final FriendModel friend;
+class RequestFriendBox extends StatefulWidget {
+  final RequestFriendModel friend;
   final VoidCallback onAcceptSuccess;
   final VoidCallback onRejectSuccess;
   const RequestFriendBox(
@@ -15,14 +15,27 @@ class RequestFriendBox extends StatelessWidget {
       required this.onAcceptSuccess,
       required this.onRejectSuccess});
 
+  @override
+  State<RequestFriendBox> createState() => _RequestFriendBoxState();
+}
+
+class _RequestFriendBoxState extends State<RequestFriendBox> {
   void _onRejectRequest(BuildContext context) async {
-    await FriendService(context: context)
-        .setAcceptFriend(friend.id, 0, onRejectSuccess);
+    final success = await FriendService(context: context)
+        .setAcceptFriend(widget.friend.id, 0);
+    if (success) {
+      setState(() {
+        widget.friend.isReject = true;
+      });
+    }
   }
 
   void _onAcceptRequest(BuildContext context) async {
-    await FriendService(context: context)
-        .setAcceptFriend(friend.id, 1, onAcceptSuccess);
+    final success = await FriendService(context: context)
+        .setAcceptFriend(widget.friend.id, 1);
+    if (success) {
+      widget.onAcceptSuccess();
+    }
   }
 
   @override
@@ -32,10 +45,12 @@ class RequestFriendBox extends StatelessWidget {
       Expanded(
           flex: 2,
           child: GestureDetector(
-              onTap: () =>
-                  {context.push("/authenticated/personalPage/${friend.id}")},
+              onTap: () => {
+                    context
+                        .push("/authenticated/personalPage/${widget.friend.id}")
+                  },
               child: MyImage(
-                imageUrl: friend.avatar,
+                imageUrl: widget.friend.avatar,
                 height: 90,
                 width: 90,
               ))),
@@ -44,76 +59,135 @@ class RequestFriendBox extends StatelessWidget {
       ),
       // info and button
       Expanded(
-          flex: 5,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              // name and time
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    friend.username,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    getDifferenceTime(
-                        DateTime.now(), DateTime.parse(friend.created)),
-                    style: const TextStyle(color: Colors.grey),
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 2,
-              ),
-              // bạn chung
-              if (friend.sameFriends > 0)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      "${friend.sameFriends} bạn chung",
-                      style: const TextStyle(color: Colors.grey),
-                    ),
-                  ],
+        flex: 5,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // name and time
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  widget.friend.username,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
-
-              const SizedBox(
-                height: 6,
-              ),
-              // button
+                Text(
+                  getDifferenceTime(
+                      DateTime.now(), DateTime.parse(widget.friend.created)),
+                  style: const TextStyle(color: Colors.grey),
+                )
+              ],
+            ),
+            const SizedBox(
+              height: 2,
+            ),
+            // bạn chung
+            if (widget.friend.sameFriends > 0)
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        _onAcceptRequest(context);
-                      },
-                      style: ElevatedButton.styleFrom(),
-                      child: const Text("Chấp nhận"),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        _onRejectRequest(context);
-                      },
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.grey[300]),
-                      child: const Text(
-                        "Từ chối",
-                        style: TextStyle(color: Colors.black),
-                      ),
-                    ),
+                  Text(
+                    "${widget.friend.sameFriends} bạn chung",
+                    style: const TextStyle(color: Colors.grey),
                   ),
                 ],
-              )
-            ],
-          ))
+              ),
+
+            const SizedBox(
+              height: 6,
+            ),
+            // button
+            widget.friend.isReject
+                ? const Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Đã gỡ lời mời kết bạn",
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    ],
+                  )
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            _onAcceptRequest(context);
+                          },
+                          style: ElevatedButton.styleFrom(),
+                          child: const Text("Chấp nhận"),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            _onRejectRequest(context);
+                          },
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.grey[300]),
+                          child: const Text(
+                            "Từ chối",
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+          ],
+        ),
+      ),
+      if (!widget.friend.isReject)
+        IconButton(
+          icon: Icon(
+            Icons.more_horiz,
+            size: 25,
+            color: Colors.grey[600],
+          ),
+          onPressed: () {
+            showModalBottomSheet(
+              context: context,
+              builder: (BuildContext context) {
+                return Container(
+                  padding: const EdgeInsets.all(10),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      TextButton(
+                        onPressed: () {
+                          // block user
+                          Navigator.pop(context);
+                        },
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.lock,
+                              size: 30,
+                              color: Colors.black,
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              "chặn ${widget.friend.username}",
+                              style: const TextStyle(
+                                  fontSize: 16, color: Colors.black),
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            );
+          },
+        ),
     ]);
   }
 }
