@@ -1,6 +1,7 @@
 import 'package:facebook_app/models/post_model.dart';
-import 'package:facebook_app/my_widgets/feed_box.dart';
 import 'package:facebook_app/my_widgets/my_text_button.dart';
+import 'package:facebook_app/my_widgets/post/feed_item.dart';
+import 'package:facebook_app/my_widgets/post/list_post.dart';
 import 'package:facebook_app/services/app_service.dart';
 import 'package:facebook_app/services/search_service.dart';
 import 'package:facebook_app/util/common.dart';
@@ -196,7 +197,7 @@ class _SearchPageState extends State<SearchPage> {
             ),
             _focus.hasFocus || result == null
                 ? recentSearches()
-                : searchResult(),
+                : ListPost(posts: result!, scrollController: _scrollController, isLoading: isLoading),
           ]),
         ),
       ),
@@ -275,28 +276,4 @@ class _SearchPageState extends State<SearchPage> {
     _keywordController.text = keyword;
   }
 
-  // Result
-  Widget searchResult() {
-    return result!.isEmpty
-        ? const Text("Không có kết quả phù hợp")
-        : Expanded(
-            child: Column(
-            children: [
-              Expanded(
-                  child: ListView.builder(
-                      controller: _scrollController,
-                      itemBuilder: (_, index) {
-                        return postItem(result![index]);
-                      },
-                      itemCount: result?.length)),
-              if (isLoading) const CircularProgressIndicator()
-            ],
-          ));
-  }
-
-  Widget postItem(Post post) {
-    return FeedBox(post: post, ontap: () {
-      debugPrint("click interactive");
-    });
-  }
 }

@@ -3,7 +3,7 @@ import 'package:facebook_app/models/image_model.dart';
 class Post {
   final int id;
   final String name;
-  List<Image> image;
+  List<ImageModel> image;
   String described;
   String created;
   int feel;
@@ -31,21 +31,21 @@ class Post {
       required this.banned});
 
   Post.fromJson(Map<String, dynamic> json)
-      : id = int.parse(json["id"]),
-        name = json["name"],
+      : id = int.parse(json["id"] ?? "0"),
+        name = json["name"] ?? "anonymous",
         image = (json["image"] as List)
-            .map((image) => Image.fromJson(image))
+            .map((image) => ImageModel.fromJson(image))
             .toList(),
-        described = json["described"],
-        created = json["created"],
-        feel = int.parse(json["feel"]),
-        markComment = int.parse(json["comment_mark"]),
-        isFelt = int.parse(json["is_felt"]),
-        state = json["state"],
+        described = json["described"] ?? "",
+        created = json["created"] ?? "",
+        feel = int.parse(json["feel"] ?? "0"),
+        markComment = int.parse(json["comment_mark"] ?? "0"),
+        isFelt = int.parse(json["is_felt"] ?? "-1"),
+        state = json["state"] ?? "",
         author = Author.fromJson(json["author"]),
-        isBlocked = int.parse(json["is_blocked"]),
-        canEdit = int.parse(json["can_edit"]),
-        banned = int.parse(json["banned"]);
+        isBlocked = int.parse(json["is_blocked"] ?? "0"),
+        canEdit = int.parse(json["can_edit"] ?? "0"),
+        banned = int.parse(json["banned"] ?? "0");
 
   Map<String, dynamic> toJson() {
     return {

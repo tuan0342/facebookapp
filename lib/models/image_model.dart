@@ -1,10 +1,10 @@
-class Image {
+class ImageModel {
   final int id;
   final String url;
 
-  const Image({required this.id, required this.url});
+  const ImageModel({required this.id, required this.url});
 
-  Image.fromJson(Map<String, dynamic> json)
+  ImageModel.fromJson(Map<String, dynamic> json)
       : id = int.parse(json["id"]),
         url = json["url"];
 

@@ -1,10 +1,10 @@
 import 'package:facebook_app/models/friend_model.dart';
 import 'package:facebook_app/models/post_model.dart';
 import 'package:facebook_app/models/profile_model.dart';
-import 'package:facebook_app/my_widgets/feed_box.dart';
+import 'package:facebook_app/my_widgets/personal/personal_friend.dart';
+import 'package:facebook_app/my_widgets/post/feed_item.dart';
 import 'package:facebook_app/my_widgets/my_app_bar.dart';
 import 'package:facebook_app/my_widgets/personal/personal_detail.dart';
-import 'package:facebook_app/my_widgets/personal/personal_friend.dart';
 import 'package:facebook_app/my_widgets/personal/personal_images.dart';
 import 'package:facebook_app/my_widgets/personal/personal_info.dart';
 import 'package:facebook_app/my_widgets/personal/personal_skeleton.dart';
@@ -12,6 +12,7 @@ import 'package:facebook_app/services/feed_service.dart';
 import 'package:facebook_app/services/friend_service.dart';
 import 'package:facebook_app/services/user_service.dart';
 import 'package:flutter/material.dart';
+
 
 class PersonalPage extends StatefulWidget {
   final String uid;
@@ -23,9 +24,21 @@ class PersonalPage extends StatefulWidget {
 
 class _PersonalPageState extends State<PersonalPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  late Profile profile = const Profile(id: "", username: "", created: "", description: "", avatar: "",
-      imageCover: "", link: "", address: "", city: "", country: "", listing: "", isFriend: "",
-      online: "", coins: "");
+  late Profile profile = const Profile(
+      id: "",
+      username: "",
+      created: "",
+      description: "",
+      avatar: "",
+      imageCover: "",
+      link: "",
+      address: "",
+      city: "",
+      country: "",
+      listing: "",
+      isFriend: "",
+      online: "",
+      coins: "");
   List<FriendModel> friends = [];
   late List<Post> feeds = [];
 
@@ -36,9 +49,9 @@ class _PersonalPageState extends State<PersonalPage> {
   final ScrollController controller = ScrollController();
   int lastId = 0;
   int indexPost = 0;
-  int countPost = 2;
+  int countPost = 20;
   bool isEndPosts = false;
-  
+
   bool isEndFriend = false;
   int totalFriend = 0;
 
@@ -58,16 +71,22 @@ class _PersonalPageState extends State<PersonalPage> {
   }
 
   void getNewFeed() async {
-    if(!isEndPosts) {
+    if (!isEndPosts) {
       setState(() {
         isLoadingNewFeeds = true;
       });
 
       try {
-        final data = await FeedService().getPersonalFeeds(context: context, campaign_id: "1", 
-            count: countPost.toString(), in_campaign: "1", 
-            index: indexPost.toString(), last_id: "0", latitude: "1.0", 
-            longitude: "1.0", uid: widget.uid);
+        final data = await FeedService(context: context).getPersonalFeeds(
+            context: context,
+            campaign_id: "1",
+            count: countPost.toString(),
+            in_campaign: "1",
+            index: indexPost.toString(),
+            last_id: "0",
+            latitude: "1.0",
+            longitude: "1.0",
+            uid: widget.uid);
 
         if (data["posts"].isEmpty) {
           setState(() {
@@ -76,7 +95,7 @@ class _PersonalPageState extends State<PersonalPage> {
         } else {
           setState(() {
             feeds.addAll(data["posts"]);
-            lastId = int.parse(data["lastId"]); 
+            lastId = int.parse(data["lastId"]);
             indexPost += countPost;
           });
         }
@@ -94,7 +113,8 @@ class _PersonalPageState extends State<PersonalPage> {
     setState(() {
       isLoadingProfile = true;
     });
-    final profile_ = await UserService().getProfile(context: context, uid: widget.uid);
+    final profile_ =
+        await UserService().getProfile(context: context, uid: widget.uid);
     setState(() {
       profile = profile_;
       isLoadingProfile = false;
@@ -148,64 +168,79 @@ class _PersonalPageState extends State<PersonalPage> {
           child: SingleChildScrollView(
             controller: controller,
             child: isLoadingProfile || isLoadingProfile || isLoadingFriend
-              ? const PersonalSkeleton()
-              : Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    PersonalImages(profile: profile, contextPage: context,),
-                    PersonalInfo(profile: profile, contextPage: context,),
+                ? const PersonalSkeleton()
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      PersonalImages(
+                        profile: profile,
+                        contextPage: context,
+                      ),
+                      PersonalInfo(
+                        profile: profile,
+                        contextPage: context,
+                      ),
+                      Container(
+                        height: 20,
+                        margin: const EdgeInsets.only(top: 10),
+                        color: const Color(0xFFc9ccd1),
+                      ),
+                      PersonalDetail(
+                        profile: profile,
+                        contextPage: context,
+                      ),
 
-                    Container(
-                      height: 20,
-                      margin: const EdgeInsets.only(top: 10),
-                      color: const Color(0xFFc9ccd1),
-                    ),
+                    PersonalFriend(friends: friends, contextPage: context, uid: profile.id,),
 
-                    PersonalDetail(profile: profile, contextPage: context,),
-                    PersonalFriend(friends: friends, contextPage: context,),
-
-                    Container(
-                      height: 20,
-                      width: MediaQuery.of(context).size.width,
-                      margin: const EdgeInsets.only(top: 10),
-                      color: const Color(0xFFc9ccd1),
-                    ),
-                    
-                    const SizedBox(height: 10,),     
-
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: personalNewFeed(),
-                    ),
-                  ],
-                ),
+                      Container(
+                        height: 20,
+                        width: MediaQuery.of(context).size.width,
+                        margin: const EdgeInsets.only(top: 10),
+                        color: const Color(0xFFc9ccd1),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: personalNewFeed(),
+                      ),
+                    ],
+                  ),
           ),
-        )
-      );
+        ));
   }
 
   Widget personalNewFeed() {
-    return feeds.isEmpty 
-      ? Container(
-        alignment: Alignment.topCenter,
-        width: MediaQuery.of(context).size.width,
-        child: const Column(
-          children: [
-            SizedBox(height: 20,),
-            Text('Chưa có bài đăng!', style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.w700),),
-            SizedBox(height: 30,)
-          ],
-        )
-      )
-      : ListView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: feeds.length,
-          itemBuilder: (context, index) => FeedBox(
-            post: feeds[index],
-            ontap: () => clickKudosButton(index),
-          ),
-        );
+    return feeds.isEmpty
+        ? Container(
+            alignment: Alignment.topCenter,
+            width: MediaQuery.of(context).size.width,
+            child: const Column(
+              children: [
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  'Chưa có bài đăng!',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700),
+                ),
+                SizedBox(
+                  height: 30,
+                )
+              ],
+            ))
+        : ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: feeds.length,
+            itemBuilder: (context, index) => FeedItem(
+              postData: feeds[index],
+            ),
+          );
   }
 
   @override

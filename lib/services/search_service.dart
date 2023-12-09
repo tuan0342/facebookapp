@@ -31,6 +31,7 @@ class SearchService {
       final response =
           await postMethod(endpoind: "search", body: body, headers: headers);
       final responseBody = jsonDecode(response.body);
+      debugPrint("response: $responseBody");
       if (int.parse(responseBody["code"]) == 9998) {
         throw UnauthorizationException();
       }

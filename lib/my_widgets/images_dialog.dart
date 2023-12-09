@@ -29,6 +29,7 @@ class _ImagesDialogState extends State<ImagesDialog> {
   }
 
   Widget dialogContent(BuildContext context) {
+    debugPrint('check ${widget.images[currentIndex]}');
     return Container(
       margin: const EdgeInsets.only(left: 0.0,right: 0.0),
       child: Stack(

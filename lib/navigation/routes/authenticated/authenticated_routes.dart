@@ -42,8 +42,8 @@ final GoRoute authenticatedRoute = GoRoute(
       path: "friends/suggests",
       builder: (context, state) => const SuggestFriendsPage()),
     GoRoute(
-      path: "friends",
-      builder: (context, state) => const UserFriendsPage()),
+      path: "friends/:uid",
+      builder: (context, state) => UserFriendsPage(uid: state.pathParameters["uid"]!)),
     GoRoute(
       path: "webViewContainer",
       builder: (context, state) {
