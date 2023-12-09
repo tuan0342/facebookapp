@@ -2,9 +2,9 @@ import 'package:facebook_app/models/image_model.dart';
 import 'package:facebook_app/my_widgets/my_image.dart';
 import 'package:flutter/material.dart';
 
-class LayoutOneImage extends StatelessWidget {
+class ListImageLayout extends StatelessWidget {
   final List<ImageModel> images;
-  const LayoutOneImage({super.key, required this.images});
+  const ListImageLayout({super.key, required this.images});
 
   Widget getLayoutByLength(int length) {
     switch (length) {

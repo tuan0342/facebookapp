@@ -1,9 +1,10 @@
 import 'package:facebook_app/models/post_model.dart';
 import 'package:facebook_app/my_widgets/my_image.dart';
-import 'package:facebook_app/my_widgets/post/image_layout_1.dart';
+import 'package:facebook_app/my_widgets/post/list_image_layout.dart';
 import 'package:facebook_app/services/feed_service.dart';
 import 'package:facebook_app/util/common.dart';
 import 'package:flutter/material.dart';
+import 'package:readmore/readmore.dart';
 
 // ignore: must_be_immutable
 class FeedItem extends StatefulWidget {
@@ -350,18 +351,20 @@ class _FeedItemState extends State<FeedItem> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          ReadMoreText(
             widget.postData.described,
-            textAlign: TextAlign.left,
             style: TextStyle(
                 fontSize: 15,
                 color: Colors.grey[800],
                 height: 1.5,
                 letterSpacing: .7),
+                trimExpandedText: "Thu gọn",
+                trimCollapsedText: "Đọc thêm",
           ),
+          const SizedBox(height: 15,),
           widget.postData.image.isNotEmpty
-              ? LayoutOneImage(images: widget.postData.image)
-              : Text("no image")
+              ? ListImageLayout(images: widget.postData.image)
+              : Container()
         ],
       ),
     );
