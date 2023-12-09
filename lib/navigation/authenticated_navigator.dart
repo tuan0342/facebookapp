@@ -102,6 +102,7 @@ class _AuthenticatedNavigatorState extends State<AuthenticatedNavigator> {
           }
           _authService.logOut(context: context, isShowSnackbar: true);
           return const LogInUnknownPage();
-        });
+        })
+    );
   }
 }
