@@ -1,5 +1,6 @@
 import 'package:facebook_app/models/post_model.dart';
 import 'package:facebook_app/my_widgets/my_image.dart';
+import 'package:facebook_app/my_widgets/post/image_layout_1.dart';
 import 'package:facebook_app/services/feed_service.dart';
 import 'package:facebook_app/util/common.dart';
 import 'package:flutter/material.dart';
@@ -106,24 +107,7 @@ class _FeedItemState extends State<FeedItem> {
           height: 20,
         ),
         // content
-        Padding(
-          padding: const EdgeInsets.only(left: 10),
-          child: Text(
-            widget.postData.described,
-            style: TextStyle(
-                fontSize: 15,
-                color: Colors.grey[800],
-                height: 1.5,
-                letterSpacing: .7),
-          ),
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        widget.postData.image.isNotEmpty
-            ? MyImage(
-                imageUrl: widget.postData.image[0].url, height: 150, width: 150)
-            : Container(),
+        postContent(),
         const SizedBox(
           height: 20,
         ),
@@ -361,7 +345,26 @@ class _FeedItemState extends State<FeedItem> {
   }
 
   Widget postContent() {
-    return Container();
+    return Padding(
+      padding: const EdgeInsets.only(left: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            widget.postData.described,
+            textAlign: TextAlign.left,
+            style: TextStyle(
+                fontSize: 15,
+                color: Colors.grey[800],
+                height: 1.5,
+                letterSpacing: .7),
+          ),
+          widget.postData.image.isNotEmpty
+              ? LayoutOneImage(images: widget.postData.image)
+              : Text("no image")
+        ],
+      ),
+    );
   }
 
   Widget postFooter(FeedService feedService) {

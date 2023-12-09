@@ -5,6 +5,7 @@ import 'package:facebook_app/my_widgets/post/list_post.dart';
 import 'package:facebook_app/pages/feed/post/add_post_page.dart';
 import 'package:facebook_app/services/feed_service.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../services/app_service.dart';
@@ -82,50 +83,57 @@ class HomePageState extends State<HomePage> {
     final _appService = Provider.of<AppService>(context, listen: false);
     return SafeArea(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              decoration: const BoxDecoration(
-                border:
-                    Border(bottom: BorderSide(color: Colors.grey, width: 1)),
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          decoration: const BoxDecoration(
+            border: Border(bottom: BorderSide(color: Colors.grey, width: 1)),
+          ),
+          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+          child: Row(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  context.push(
+                      "/authenticated/personalPage/${_appService.uidLoggedIn}");
+                },
+                child: MyImage(
+                  imageUrl: _appService.avatar,
+                  width: 50,
+                  height: 50,
+                ),
               ),
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-              child: Row(
-                children: [
-                  MyImage(
-                    imageUrl: _appService.avatar,
-                    width: 50,
-                    height: 50,
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Expanded(
-                      child: OutlinedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const NewFeed()),
-                      );
-                    },
-                    style: OutlinedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: Colors.black,
-                      shape: const StadiumBorder(),
-                    ),
-                    child: const Align(
-                        alignment: Alignment.topLeft,
-                        child: Text(
-                          "Bạn Đang Nghĩ Gì ?",
-                          style: TextStyle(color: Colors.grey, fontSize: 18),
-                        )),
-                  ))
-                ],
+              const SizedBox(
+                width: 10,
               ),
-            ),
-            ListPost(posts: posts, scrollController: _scrollController, isLoading: isLoading)
-          ],
-        ));
+              Expanded(
+                  child: OutlinedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const NewFeed()),
+                  );
+                },
+                style: OutlinedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: Colors.black,
+                  shape: const StadiumBorder(),
+                ),
+                child: const Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      "Bạn Đang Nghĩ Gì ?",
+                      style: TextStyle(color: Colors.grey, fontSize: 18),
+                    )),
+              ))
+            ],
+          ),
+        ),
+        ListPost(
+            posts: posts,
+            scrollController: _scrollController,
+            isLoading: isLoading)
+      ],
+    ));
   }
-
 }
