@@ -1,3 +1,4 @@
+import 'package:facebook_app/models/webview_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -6,13 +7,17 @@ class ButtonSubmenu extends StatelessWidget {
   final String icon;
   final String description;
   final String route;
+  final WebView? webView;
+  final Color? color;
 
   const ButtonSubmenu({
     super.key, 
     required this.title, 
     required this.icon,
     required this.description,
-    required this.route
+    required this.route,
+    this.webView,
+    this.color = Colors.black,
   });
 
   @override
@@ -20,7 +25,11 @@ class ButtonSubmenu extends StatelessWidget {
     return Container(
       child: TextButton(
         onPressed: (){
-          context.push(route);
+          if(webView == null) {
+            context.push(route);
+          } else {
+            context.push(route, extra: webView);
+          }
         }, 
         child: Row(
           children: [
@@ -35,7 +44,7 @@ class ButtonSubmenu extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 13, 0, 5),
-                    child: Text(title, style: const TextStyle(color: Colors.black, fontSize: 18.0),),
+                    child: Text(title, style: TextStyle(color: color, fontSize: 18.0),),
                   ),
                   Text(description, style: const TextStyle(color: Color.fromARGB(255, 105, 105, 105)),)
                 ],

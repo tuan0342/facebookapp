@@ -36,7 +36,7 @@ class _SettingState extends State<Setting> {
               ),
               ButtonSubmenu(title: 'Chặn', icon: 'assets/images/block_icon.png', 
                             description: 'Một khi bạn chặn ai đó, họ sẽ không xem được nội dung bài đăng và nhắn tin cho bạn.', 
-                            route: '/authenticated/menu/setting/personalInformation'
+                            route: '/authenticated/menu/setting/block'
               ),
 
               Padding(

@@ -102,7 +102,6 @@ class AuthService extends ChangeNotifier {
       // get device id
       // ignore: use_build_context_synchronously
       final body = jsonDecode(response.body);
-      debugPrint("body: $body");
       if (response.statusCode == 200) {
         final uid = body["data"]['id'];
         final token = body["data"]['token'];
@@ -114,9 +113,9 @@ class AuthService extends ChangeNotifier {
           'uid': uid,
           'token': token,
           'email': email,
-          'avatar':avatar,
-          'username':username,
-          'coins':coins,
+          'avatar': avatar,
+          'username': username,
+          'coins': coins,
           'device_id': deviceId ?? "",
         }, SetOptions(merge: true));
 
@@ -125,6 +124,10 @@ class AuthService extends ChangeNotifier {
         _appService.avatar = avatar;
         _appService.username = username;
         _appService.coins = coins;
+        _appService.email = email;
+
+        debugPrint("uid: $uid");
+        debugPrint("uid: ${_appService.uidLoggedIn}");
 
         // ignore: use_build_context_synchronously
         context.go("/authenticated");
@@ -148,17 +151,62 @@ class AuthService extends ChangeNotifier {
       bool isShowSnackbar = false,
       msg = "Tài khoản đang được đăng nhập trên thiết bị khác"}) async {
     final _appService = Provider.of<AppService>(context, listen: false);
-
-    await FirebaseMessaging.instance
-        .unsubscribeFromTopic(_appService.uidLoggedIn);
-    _appService.uidLoggedIn = '';
-    _appService.token = '';
-
-    if (isShowSnackbar) {
+    try {
+      if (isShowSnackbar) {
+        // ignore: use_build_context_synchronously
+        showSnackBar(context: context, msg: msg);
+      }
+      await FirebaseMessaging.instance
+          .unsubscribeFromTopic(_appService.uidLoggedIn)
+          .timeout(const Duration(seconds: 3));
+    } catch (err) {
+      debugPrint("get error $err");
+    } finally {
+      _appService.uidLoggedIn = '';
+      _appService.token = '';
       // ignore: use_build_context_synchronously
-      showSnackBar(context: context, msg: msg);
+      context.go("/auth");
     }
-    // ignore: use_build_context_synchronously
-    context.go("/auth");
+  }
+
+  Future<void> changePassword({
+    required BuildContext context, required String password, required String newPassword
+  }) async {
+    late AuthService _authService = Provider.of<AuthService>(context, listen: false);
+
+    try {
+      final _appService = Provider.of<AppService>(context, listen: false);
+      Map<String, dynamic> body = {
+        "password": password,
+        "new_password": newPassword,
+      };
+      Map<String, String> headers = {
+        "Authorization": "Bearer ${_appService.token}",
+        'Content-Type': 'application/json; charset=UTF-8'
+      };
+
+      final response =
+          await postMethod(endpoind: "change_password", body: body, headers: headers);
+      final responseBody = jsonDecode(response.body);
+      if (int.parse(responseBody["code"]) == 9998) {
+        throw UnauthorizationException();
+      }
+      if (response.statusCode == 200) {
+        // ignore: use_build_context_synchronously
+        showSnackBar(context: context, msg: "Đổi mật khẩu thành công");
+        // ignore: use_build_context_synchronously
+        _authService.logOut(context: context);
+      }
+    }on UnauthorizationException {
+      // ignore: use_build_context_synchronously
+      _authService.logOut(
+          context: context,
+          isShowSnackbar: true,
+          msg: "Phiên đăng nhập hết hạn");
+    }  catch (err) {
+      debugPrint("get exception $err");
+      // ignore: use_build_context_synchronously
+      showSnackBar(context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau $err");
+    }
   }
 }

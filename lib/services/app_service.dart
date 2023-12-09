@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 String LOGIN_KEY = "uid";
+String EMAIL_KEY = "email";
 String DEVICE_ID = "device_id";
 String TOKEN_KEY = "token";
 String AVATAR_KEY = "avatar";
+String COVER_IMAGE_KEY = "cover_image";
 String USERNAME_KEY = "username";
 String COINS_KEY = "coins";
 
@@ -16,9 +18,11 @@ class AppService with ChangeNotifier {
   final StreamController<bool> _uidLoggedInChange =
       StreamController<bool>.broadcast();
   String _uidLoggedIn = '';
+  String _email = '';
   String _deviceId = '';
   String _token = '';
   String _avatar = '';
+  String _coverImage = '';
   String _username = '';
   int _coins = 0;
   bool _initialized = false;
@@ -26,9 +30,11 @@ class AppService with ChangeNotifier {
   AppService(this.sharedPreferences);
 
   String get uidLoggedIn => _uidLoggedIn;
+  String get email => _email;
   String get deviceId => _deviceId;
   String get token => _token;
   String get avatar => _avatar;
+  String get coverImage => _coverImage;
   String get username => _username;
   int get coins => _coins;
   bool get initialized => _initialized;
@@ -40,6 +46,12 @@ class AppService with ChangeNotifier {
     notifyListeners();
   }
 
+  set email(String email) {
+    sharedPreferences.setString(EMAIL_KEY, email);
+    _email = email;
+    notifyListeners();
+  }
+
   set deviceId(String deviceId) {
     sharedPreferences.setString(DEVICE_ID, deviceId);
     _deviceId = deviceId;
@@ -48,21 +60,31 @@ class AppService with ChangeNotifier {
   set token(String token) {
     sharedPreferences.setString(TOKEN_KEY, token);
     _token = token;
+    notifyListeners();
   }
 
   set avatar(String avatar) {
     sharedPreferences.setString(AVATAR_KEY, avatar);
     _avatar = avatar;
+    notifyListeners();
+  }
+
+  set coverImage(String coverImage) {
+    sharedPreferences.setString(COVER_IMAGE_KEY, coverImage);
+    _coverImage = coverImage;
+    notifyListeners();
   }
 
   set username(String username) {
     sharedPreferences.setString(USERNAME_KEY, username);
     _username = username;
+    notifyListeners();
   }
 
   set coins(int coins) {
     sharedPreferences.setInt(COINS_KEY, coins);
     _coins = coins;
+    notifyListeners();
   }
 
   set initialized(bool value) {
@@ -72,9 +94,11 @@ class AppService with ChangeNotifier {
 
   Future<void> onAppStart() async {
     _uidLoggedIn = sharedPreferences.getString(LOGIN_KEY) ?? '';
+    _email = sharedPreferences.getString(EMAIL_KEY) ?? '';
     _token = sharedPreferences.getString(TOKEN_KEY) ?? '';
     _deviceId = sharedPreferences.getString(DEVICE_ID) ?? '';
     _avatar = sharedPreferences.getString(AVATAR_KEY) ?? '';
+    _coverImage = sharedPreferences.getString(COVER_IMAGE_KEY) ?? '';
     _username = sharedPreferences.getString(USERNAME_KEY) ?? '';
     _coins = sharedPreferences.getInt(COINS_KEY) ?? 0;
     _initialized = true;
