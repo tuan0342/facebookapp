@@ -3,6 +3,7 @@ import 'package:facebook_app/my_widgets/bottom_nav_bar.dart';
 import 'package:facebook_app/my_widgets/error_when_get_data_screen.dart';
 import 'package:facebook_app/my_widgets/waiting_data_screen.dart';
 import 'package:facebook_app/pages/auth/login/login_with_unknown_account.dart';
+import 'package:facebook_app/pages/authenticated/chat/chat_screen.dart';
 import 'package:facebook_app/pages/authenticated/friend/request_friends_page.dart';
 import 'package:facebook_app/pages/authenticated/home_page.dart';
 import 'package:facebook_app/pages/authenticated/menu.dart';
@@ -28,7 +29,7 @@ class _AuthenticatedNavigatorState extends State<AuthenticatedNavigator> {
   static final List<Widget> _widgetOptions = <Widget>[
     HomePage(email: "fdgdfgdfg"),
     const RequestFriendsPage(),
-    const VideoPage(),
+    const ChatScreen(),
     const NotificationPage(),
     const Menu(),
   ];
@@ -79,30 +80,13 @@ class _AuthenticatedNavigatorState extends State<AuthenticatedNavigator> {
               return const WaitingDataScreen();
             }
 
-          if (snapshot.hasData &&
-              snapshot.data!['device_id'] == _appService.deviceId) {
-            return Scaffold(
-                appBar: AppBar(
-                  title: const Text("Home Page"),
-                  actions: [
-                    IconButton(
-                        onPressed: () {
-                          _authService.logOut(context: context);
-                        },
-                        icon: const Icon(Icons.logout))
-                  ],
-                ),
-                body: Center(
-                  child: _widgetOptions.elementAt(_selectedIndex),
-                ),
-                bottomNavigationBar: BottomNavBar(
-                  onTap: _onItemTapped,
-                  index: _selectedIndex,
-                ));
-          }
-          _authService.logOut(context: context, isShowSnackbar: true);
-          return const LogInUnknownPage();
-        })
+            if (snapshot.hasData &&
+                snapshot.data!['device_id'] == _appService.deviceId) {
+              return _widgetOptions.elementAt(_selectedIndex);
+            }
+            _authService.logOut(context: context, isShowSnackbar: true);
+            return const LogInUnknownPage();
+          }),
     );
   }
 }

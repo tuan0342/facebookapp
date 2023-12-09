@@ -11,6 +11,11 @@ import 'package:facebook_app/pages/authenticated/personal_page.dart';
 import 'package:facebook_app/pages/webview/webview_container.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../pages/authenticated/chat/camera_screen.dart';
+import '../../../pages/authenticated/chat/chat_my_profile.dart';
+import '../../../pages/authenticated/chat/chat_screen.dart';
+import '../../../pages/authenticated/chat/new_conversation.dart';
+
 final GoRoute authenticatedRoute = GoRoute(
   path: '/authenticated',
   builder: (context, state) => const AuthenticatedNavigator(),
@@ -50,6 +55,18 @@ final GoRoute authenticatedRoute = GoRoute(
         WebView webView = state.extra as WebView;
         return WebViewContainer(webView: webView,);
       },
+    ),
+    GoRoute(
+      path: "takePhoto",
+      builder: (context, state) => const TakePictureScreen(),
+    ),
+    GoRoute(
+      path: "chatMyProfile",
+      builder: (context, state) => const ChatMyProfile(),
+    ),
+    GoRoute(
+      path: "newConversation",
+      builder: (context, state) => const NewConversation(),
     ),
   ],
   redirect: (context, state) {
