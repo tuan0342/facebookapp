@@ -27,8 +27,8 @@ class _RequestFriendsPageState extends State<RequestFriendsPage> {
   }
 
   void _onShowFriends(BuildContext context) async {
-    final _appService = Provider.of<AppService>(context, listen: false);
-    context.push("/authenticated/friends/${_appService.uidLoggedIn}");
+    final appService = Provider.of<AppService>(context, listen: false);
+    context.push("/authenticated/friends/${appService.uidLoggedIn}");
   }
 
   void _scrollListener() {

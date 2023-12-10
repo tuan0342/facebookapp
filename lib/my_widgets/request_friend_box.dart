@@ -34,7 +34,7 @@ class _RequestFriendBoxState extends State<RequestFriendBox> {
   }
 
   void _onAcceptRequest(BuildContext context) async {
-    final AppService _appService =
+    final AppService appService =
         Provider.of<AppService>(context, listen: false);
     final success = await FriendService(context: context)
         .setAcceptFriend(widget.friend.id, 1);
@@ -44,7 +44,7 @@ class _RequestFriendBoxState extends State<RequestFriendBox> {
           topic: widget.friend.id.toString(),
           notification: NotificationModel(
               title: "Anti facebook",
-              message: "${_appService.username} đã chấp nhận lời mời kết bạn"));
+              message: "${appService.username} đã chấp nhận lời mời kết bạn"));
       // ignore: use_build_context_synchronously
       showSnackBar(context: context, msg: "Đã chấp nhận lời mời kết bạn");
       widget.onRemoveItem();
@@ -184,6 +184,7 @@ class _RequestFriendBoxState extends State<RequestFriendBox> {
                                     "Đã chặn tài khoản ${widget.friend.username}");
                             widget.onRemoveItem();
                           }
+                          // ignore: use_build_context_synchronously
                           Navigator.pop(context);
                         },
                         child: Row(

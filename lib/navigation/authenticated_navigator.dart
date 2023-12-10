@@ -26,7 +26,7 @@ class _AuthenticatedNavigatorState extends State<AuthenticatedNavigator> {
   int _selectedIndex = 0;
 
   static final List<Widget> _widgetOptions = <Widget>[
-    HomePage(email: "fdgdfgdfg"),
+    const HomePage(),
     const RequestFriendsPage(),
     const VideoPage(),
     const NotificationPage(),
@@ -41,14 +41,14 @@ class _AuthenticatedNavigatorState extends State<AuthenticatedNavigator> {
 
   @override
   Widget build(BuildContext context) {
-    final _appService = Provider.of<AppService>(context, listen: false);
-    final _authService = Provider.of<AuthService>(context, listen: false);
-    if (_appService.subcribe.isNotEmpty &&
-        _appService.subcribe != _appService.uidLoggedIn) {
-      FirebaseMessaging.instance.unsubscribeFromTopic(_appService.subcribe);
-      _appService.subcribe = _appService.uidLoggedIn;
+    final appService = Provider.of<AppService>(context, listen: false);
+    final authService = Provider.of<AuthService>(context, listen: false);
+    if (appService.subcribe.isNotEmpty &&
+        appService.subcribe != appService.uidLoggedIn) {
+      FirebaseMessaging.instance.unsubscribeFromTopic(appService.subcribe);
+      appService.subcribe = appService.uidLoggedIn;
     }
-    FirebaseMessaging.instance.subscribeToTopic(_appService.uidLoggedIn);
+    FirebaseMessaging.instance.subscribeToTopic(appService.uidLoggedIn);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Anti Facebook"),
@@ -60,7 +60,7 @@ class _AuthenticatedNavigatorState extends State<AuthenticatedNavigator> {
               icon: const Icon(Icons.search_rounded)),
           IconButton(
               onPressed: () {
-                _authService.logOut(context: context);
+                authService.logOut(context: context);
               },
               icon: const Icon(Icons.logout))
         ],
@@ -72,7 +72,7 @@ class _AuthenticatedNavigatorState extends State<AuthenticatedNavigator> {
       body: StreamBuilder(
           stream: FirebaseFirestore.instance
               .collection('users')
-              .doc(_appService.uidLoggedIn)
+              .doc(appService.uidLoggedIn)
               .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
@@ -84,10 +84,10 @@ class _AuthenticatedNavigatorState extends State<AuthenticatedNavigator> {
             }
 
             if (snapshot.hasData &&
-                snapshot.data!['device_id'] == _appService.deviceId) {
+                snapshot.data!['device_id'] == appService.deviceId) {
               return _widgetOptions.elementAt(_selectedIndex);
             }
-            _authService.logOut(context: context, isShowSnackbar: true);
+            authService.logOut(context: context, isShowSnackbar: true);
             return const LogInUnknownPage();
           }),
     );

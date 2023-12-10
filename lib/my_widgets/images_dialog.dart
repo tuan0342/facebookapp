@@ -59,7 +59,7 @@ class _ImagesDialogState extends State<ImagesDialog> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    widget.images.isEmpty == 0
+                    widget.images.isEmpty
                         ? IconButton(
                             padding: const EdgeInsets.all(0),
                             icon: const Icon(
@@ -114,7 +114,7 @@ class _ImagesDialogState extends State<ImagesDialog> {
                                     color: Colors.black.withOpacity(0)),
                               ),
                             )),
-                    widget.images.isEmpty == 0
+                    widget.images.isEmpty
                         ? IconButton(
                             padding: const EdgeInsets.all(0),
                             icon: const Icon(

@@ -28,19 +28,19 @@ class TextFieldWidget extends StatelessWidget {
         onChanged: onChanged,
         autofocus: autoFocus,
         textInputAction: inputAction,
-        obscureText: this.isObscure,
+        obscureText: isObscure,
         maxLength: 25,
-        keyboardType: this.inputType,
-        style: Theme.of(context).textTheme.bodyText1,
+        keyboardType: inputType,
+        style: Theme.of(context).textTheme.bodyLarge,
         decoration: InputDecoration(
-            hintText: this.hint,
+            hintText: hint,
             hintStyle: Theme.of(context)
                 .textTheme
-                .bodyText1!
+                .bodyLarge!
                 .copyWith(color: hintColor),
             errorText: errorText,
             counterText: '',
-            icon: this.isIcon ? Icon(this.icon, color: iconColor) : null),
+            icon: isIcon ? Icon(icon, color: iconColor) : null),
       ),
     );
   }

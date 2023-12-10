@@ -78,7 +78,7 @@ class ListImageLayout extends StatelessWidget {
               flex: 1,
               child: Padding(
                 padding: const EdgeInsets.only(left: 2),
-                child: Container(
+                child: SizedBox(
                   height: double.infinity,
                   width: double.infinity,
                   child: Column(
@@ -134,7 +134,7 @@ class ListImageLayout extends StatelessWidget {
               flex: 1,
               child: Padding(
                 padding: const EdgeInsets.only(left: 2),
-                child: Container(
+                child: SizedBox(
                   height: double.infinity,
                   width: double.infinity,
                   child: Column(
@@ -189,7 +189,7 @@ class ListImageLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
         width: double.infinity,
         height: 300,
         child: getLayoutByLength(images.length));

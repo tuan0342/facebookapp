@@ -16,7 +16,7 @@ class ConfirmCodePage extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: MyAppBar(title: "Xác nhận tài khoản"),
+      appBar: const MyAppBar(title: "Xác nhận tài khoản"),
       body: Center(
         child: Column(
           children: [
@@ -51,7 +51,7 @@ class ConfirmCodePage extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(top: 24.0),
+                    padding: const EdgeInsets.only(top: 24.0),
                     child: MyFilledButton(title: "Xác nhận", isDisabled: false, cbFunction: nextScreen),
                   ),
                   SizedBox(
@@ -59,11 +59,11 @@ class ConfirmCodePage extends StatelessWidget {
                     child: Divider(height: 0.2, color: Colors.blueGrey[500],)
                   ),
                   Padding(
-                    padding: EdgeInsets.only(top: 0),
+                    padding: const EdgeInsets.only(top: 0),
                     child: MyFilledButton(title: "Tôi không nhận được mã", isDisabled: false, cbFunction: nextScreen),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(top: 12.0),
+                    padding: const EdgeInsets.only(top: 12.0),
                     child: MyTextButton(title: "Đăng xuất", isDisabled: false, cbFunction: nextScreen),
                   ),
                 ],

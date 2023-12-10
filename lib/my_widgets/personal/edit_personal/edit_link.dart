@@ -40,7 +40,7 @@ class _EditLinkState extends State<EditLink> {
               },
               child: Text(
                 widget.isEditLink ? 'Đặt lại' : 'Chỉnh sửa',
-                style: TextStyle(
+                style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w400,
                     color: Colors.blue),

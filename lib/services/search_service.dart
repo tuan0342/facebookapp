@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 
 class SearchService {
   final BuildContext context;
-  late AppService _appService = Provider.of<AppService>(context, listen: false);
+  late final AppService _appService = Provider.of<AppService>(context, listen: false);
   SearchService({required this.context});
 
   Future<List<Post>> search(String keyword, int index, int count) async {

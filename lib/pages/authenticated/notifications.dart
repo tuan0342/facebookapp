@@ -16,11 +16,11 @@ class NotificationPage extends StatefulWidget {
 class _NotificationPageState extends State<NotificationPage> {
   @override
   Widget build(BuildContext context) {
-    final _appService = Provider.of<AppService>(context, listen: false);
+    final appService = Provider.of<AppService>(context, listen: false);
     return StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection("topics")
-            .doc(_appService.uidLoggedIn)
+            .doc(appService.uidLoggedIn)
             .collection("notifications")
             .orderBy("createdAt", descending: true)
             .snapshots(),

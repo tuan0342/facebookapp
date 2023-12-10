@@ -22,7 +22,7 @@ class AuthService extends ChangeNotifier {
       required String email,
       required String password}) async {
     try {
-      final _appService = Provider.of<AppService>(context, listen: false);
+      final appService = Provider.of<AppService>(context, listen: false);
 
       // login to firebase
       final userCredential = await _firebaseAuth.signInWithEmailAndPassword(
@@ -36,7 +36,7 @@ class AuthService extends ChangeNotifier {
         'device_id': deviceId ?? "",
       }, SetOptions(merge: true));
 
-      _appService.uidLoggedIn = userCredential.user!.uid;
+      appService.uidLoggedIn = userCredential.user!.uid;
       // ignore: use_build_context_synchronously
       context.go("/authenticated");
     } on FirebaseAuthException catch (e) {
@@ -150,21 +150,21 @@ class AuthService extends ChangeNotifier {
       {required BuildContext context,
       bool isShowSnackbar = false,
       msg = "Tài khoản đang được đăng nhập trên thiết bị khác"}) async {
-    final _appService = Provider.of<AppService>(context, listen: false);
+    final appService = Provider.of<AppService>(context, listen: false);
     try {
       if (isShowSnackbar) {
         // ignore: use_build_context_synchronously
         showSnackBar(context: context, msg: msg);
       }
       await FirebaseMessaging.instance
-          .unsubscribeFromTopic(_appService.uidLoggedIn)
+          .unsubscribeFromTopic(appService.uidLoggedIn)
           .timeout(const Duration(seconds: 3));
-      _appService.subcribe = '';
+      appService.subcribe = '';
     } catch (err) {
       debugPrint("get error $err");
     } finally {
-      _appService.uidLoggedIn = '';
-      _appService.token = '';
+      appService.uidLoggedIn = '';
+      appService.token = '';
       // ignore: use_build_context_synchronously
       context.go("/auth");
     }
@@ -173,16 +173,16 @@ class AuthService extends ChangeNotifier {
   Future<void> changePassword({
     required BuildContext context, required String password, required String newPassword
   }) async {
-    late AuthService _authService = Provider.of<AuthService>(context, listen: false);
+    late AuthService authService = Provider.of<AuthService>(context, listen: false);
 
     try {
-      final _appService = Provider.of<AppService>(context, listen: false);
+      final appService = Provider.of<AppService>(context, listen: false);
       Map<String, dynamic> body = {
         "password": password,
         "new_password": newPassword,
       };
       Map<String, String> headers = {
-        "Authorization": "Bearer ${_appService.token}",
+        "Authorization": "Bearer ${appService.token}",
         'Content-Type': 'application/json; charset=UTF-8'
       };
 
@@ -196,11 +196,11 @@ class AuthService extends ChangeNotifier {
         // ignore: use_build_context_synchronously
         showSnackBar(context: context, msg: "Đổi mật khẩu thành công");
         // ignore: use_build_context_synchronously
-        _authService.logOut(context: context);
+        authService.logOut(context: context);
       }
     }on UnauthorizationException {
       // ignore: use_build_context_synchronously
-      _authService.logOut(
+      authService.logOut(
           context: context,
           isShowSnackbar: true,
           msg: "Phiên đăng nhập hết hạn");

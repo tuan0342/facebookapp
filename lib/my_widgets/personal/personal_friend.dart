@@ -51,7 +51,7 @@ class PersonalFriend extends StatelessWidget {
             height: 40,
             child: ElevatedButton(
               onPressed: () {
-                context.push("/authenticated/friends/${uid}");
+                context.push("/authenticated/friends/$uid");
               },
               style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFe5e6eb)),

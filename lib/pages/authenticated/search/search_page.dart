@@ -75,9 +75,9 @@ class _SearchPageState extends State<SearchPage> {
     final listKeywords = await SearchService(context: context)
         .getRecentKeywords(index: 0, count: 100, inSearchPage: true);
     Set<String> set = {};
-    listKeywords.forEach((element) {
+    for (var element in listKeywords) {
       set.add(element.keyword.trim());
-    });
+    }
     setState(() {
       keywords = set.take(20).toList();
     });
@@ -111,7 +111,7 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    final _appService = Provider.of<AppService>(context, listen: false);
+    final appService = Provider.of<AppService>(context, listen: false);
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -145,8 +145,8 @@ class _SearchPageState extends State<SearchPage> {
                         // save keyword
                         final temp = keywords;
                         temp.add(_keywordController.text);
-                        _appService.sharedPreferences.setStringList(
-                            "KEYWORDS_${_appService.uidLoggedIn}", temp);
+                        appService.sharedPreferences.setStringList(
+                            "KEYWORDS_${appService.uidLoggedIn}", temp);
                         // search
                         onSearch(context);
                       }

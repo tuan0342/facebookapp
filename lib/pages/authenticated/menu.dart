@@ -31,9 +31,9 @@ class _MenuState extends State<Menu> {
 
   @override
   Widget build(BuildContext context) {
-    late AppService _appService =
+    late AppService appService =
         Provider.of<AppService>(context, listen: false);
-    final _authService = Provider.of<AuthService>(context, listen: false);
+    final authService = Provider.of<AuthService>(context, listen: false);
 
     return SafeArea(
         child: Container(
@@ -55,7 +55,7 @@ class _MenuState extends State<Menu> {
                   ),
                   TextButton(
                     onPressed: () {
-                      context.push('/authenticated/personalPage/${_appService.uidLoggedIn}');
+                      context.push('/authenticated/personalPage/${appService.uidLoggedIn}');
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -65,7 +65,7 @@ class _MenuState extends State<Menu> {
                             child: Selector<AppService, String>(
                               selector: (_, notifier) => notifier.avatar,
                               builder: (_, value, __) => Image.network(
-                                _appService.avatar,
+                                appService.avatar,
                                 height: 50,
                                 width: 50,
                                 fit: BoxFit.cover,
@@ -109,7 +109,7 @@ class _MenuState extends State<Menu> {
                     margin: const EdgeInsets.only(top: 20.0),
                     child: ElevatedButton(
                       onPressed: () {
-                        _authService.logOut(context: context);
+                        authService.logOut(context: context);
                       },
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white),

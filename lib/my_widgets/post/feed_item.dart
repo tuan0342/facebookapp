@@ -9,7 +9,7 @@ import 'package:readmore/readmore.dart';
 // ignore: must_be_immutable
 class FeedItem extends StatefulWidget {
   final Post postData;
-  const FeedItem({required this.postData});
+  const FeedItem({super.key, required this.postData});
 
   @override
   State<FeedItem> createState() => _FeedItemState();
@@ -202,7 +202,7 @@ class _FeedItemState extends State<FeedItem> {
   }
 
   Widget kudosButton(FeedService feedService) {
-    return Container(
+    return SizedBox(
       width: 100,
       child: OutlinedButton(
         style: OutlinedButton.styleFrom(
