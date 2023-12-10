@@ -12,7 +12,8 @@ const newFirstSort = 1;
 const oldFirstSort = 2;
 
 class UserFriendsPage extends StatefulWidget {
-  const UserFriendsPage({super.key});
+  final String uid;
+  const UserFriendsPage({super.key, required this.uid});
 
   @override
   State<UserFriendsPage> createState() => _UserFriendsPageState();
@@ -34,8 +35,8 @@ class _UserFriendsPageState extends State<UserFriendsPage> {
       setState(() {
         isLoading = true;
       });
-      final data =
-          await FriendService(context: context).getFriends(index, count, appService.uidLoggedIn);
+      final data = await FriendService(context: context)
+          .getFriends(index, count, widget.uid);
 
       if (data["friends"].isEmpty) {
         setState(() {
@@ -73,6 +74,8 @@ class _UserFriendsPageState extends State<UserFriendsPage> {
     _scrollController = ScrollController();
     _scrollController.addListener(_scrollListener);
     onLoad(context);
+
+    debugPrint("uid: ${widget.uid}");
   }
 
   @override
@@ -239,14 +242,14 @@ class _UserFriendsPageState extends State<UserFriendsPage> {
             const SizedBox(
               height: 14,
             ),
-            listSuggestFriends()
+            listFriends()
           ]),
         ),
       ),
     );
   }
 
-  Widget listSuggestFriends() {
+  Widget listFriends() {
     return friends.isEmpty
         ? const Center(child: Text("Chưa có bạn bè"))
         : Expanded(

@@ -4,7 +4,7 @@ import 'package:facebook_app/my_widgets/error_when_get_data_screen.dart';
 import 'package:facebook_app/my_widgets/waiting_data_screen.dart';
 import 'package:facebook_app/pages/auth/login/login_with_unknown_account.dart';
 import 'package:facebook_app/pages/authenticated/friend/request_friends_page.dart';
-import 'package:facebook_app/pages/authenticated/home_page.dart';
+import 'package:facebook_app/pages/feed/home_page.dart';
 import 'package:facebook_app/pages/authenticated/menu.dart';
 import 'package:facebook_app/pages/authenticated/notifications.dart';
 import 'package:facebook_app/pages/authenticated/video_page.dart';

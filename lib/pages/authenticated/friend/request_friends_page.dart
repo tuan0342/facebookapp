@@ -1,9 +1,11 @@
 import 'package:facebook_app/models/friend_model.dart';
 import 'package:facebook_app/my_widgets/request_friend_box.dart';
+import 'package:facebook_app/services/app_service.dart';
 import 'package:facebook_app/services/friend_service.dart';
 import 'package:facebook_app/util/common.dart';
 import "package:flutter/material.dart";
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class RequestFriendsPage extends StatefulWidget {
   const RequestFriendsPage({super.key});
@@ -16,7 +18,7 @@ class _RequestFriendsPageState extends State<RequestFriendsPage> {
   late ScrollController _scrollController;
   int index = 0;
   static const int count = 20;
-  List<FriendModel> requests = [];
+  List<RequestFriendModel> requests = [];
   int total = 0;
   bool isEnd = false;
   bool isLoading = false;
@@ -26,7 +28,8 @@ class _RequestFriendsPageState extends State<RequestFriendsPage> {
   }
 
   void _onShowFriends(BuildContext context) async {
-    context.push("/authenticated/friends");
+    final _appService = Provider.of<AppService>(context, listen: false);
+    context.push("/authenticated/friends/${_appService.uidLoggedIn}");
   }
 
   void _scrollListener() {
@@ -50,7 +53,7 @@ class _RequestFriendsPageState extends State<RequestFriendsPage> {
         });
       } else {
         setState(() {
-          requests.addAll(data["requests"]);
+          requests.addAll(data["requests"] as Iterable<RequestFriendModel>);
           total = data["total"];
         });
       }
@@ -164,22 +167,11 @@ class _RequestFriendsPageState extends State<RequestFriendsPage> {
                   itemCount: requests.length,
                   itemBuilder: (context, index) => RequestFriendBox(
                     friend: requests[index],
-                    onAcceptSuccess: () {
+                    onRemoveItem: () {
                       setState(() {
                         requests.removeAt(index);
                         total -= 1;
                       });
-                      showSnackBar(
-                          context: context,
-                          msg: "Đã chấp nhận lời mời kết bạn");
-                    },
-                    onRejectSuccess: () {
-                      setState(() {
-                        requests.removeAt(index);
-                        total -= 1;
-                      });
-                      showSnackBar(
-                          context: context, msg: "Đã từ chối lời mời kết bạn");
                     },
                   ),
                 ),

@@ -130,18 +130,15 @@ class _SuggestFriendsPageState extends State<SuggestFriendsPage> {
                     padding: const EdgeInsets.only(bottom: 4),
                     child: SuggestFriendBox(
                       friend: suggests[index],
-                      onAcceptSuccess: () {
+                      onSendRequestSuccess: () {
                         setState(() {
                           suggests.removeAt(index);
                         });
-                        showSnackBar(
-                            context: context, msg: "Đã gửi lời mời kết bạn");
                       },
                       onRejectSuccess: () {
                         setState(() {
                           suggests.removeAt(index);
                         });
-                        showSnackBar(context: context, msg: "Đã gỡ");
                       },
                     ),
                   ),

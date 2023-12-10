@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class PersonalFriend extends StatelessWidget {
+  final String uid;
   final List<FriendModel> friends;
   final BuildContext contextPage;
-  const PersonalFriend({super.key, required this.friends, required this.contextPage});
+  const PersonalFriend({super.key, required this.friends, required this.contextPage, required this.uid});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +33,7 @@ class PersonalFriend extends StatelessWidget {
             height: 40,
             child: ElevatedButton(
               onPressed: () {
-                context.push("/authenticated/friends");
+                context.push("/authenticated/friends/${uid}");
               },
               style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFe5e6eb)),
               child: const Padding(

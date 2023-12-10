@@ -16,7 +16,7 @@ class FriendService {
   FriendService({required this.context});
 
   Future<Map<String, dynamic>> getRequests(int index, int count) async {
-    Map<String, dynamic> result = {"requests": <FriendModel>[], "total": 0};
+    Map<String, dynamic> result = {"requests": <RequestFriendModel>[], "total": 0};
     try {
       Map<String, dynamic> body = {
         "index": index,
@@ -37,7 +37,7 @@ class FriendService {
       }
       if (response.statusCode == 200) {
         result["requests"] = (responseBody["data"]["requests"] as List)
-            .map((e) => FriendModel.fromJson(e))
+            .map((e) => RequestFriendModel.fromJson(e))
             .toList();
         result["total"] = int.parse(responseBody["data"]["total"]);
       } else {
@@ -56,7 +56,8 @@ class FriendService {
     return result;
   }
 
-  Future<Map<String, dynamic>> getFriends(int index, int count, String uid) async {
+  Future<Map<String, dynamic>> getFriends(
+      int index, int count, String uid) async {
     Map<String, dynamic> result = {"friends": <FriendModel>[], "total": 0};
     try {
       Map<String, dynamic> body = {
@@ -73,6 +74,7 @@ class FriendService {
       final response = await postMethod(
           endpoind: "get_user_friends", body: body, headers: headers);
       final responseBody = jsonDecode(response.body);
+      debugPrint("body $responseBody");
       if (int.parse(responseBody["code"]) == 9998) {
         throw UnauthorizationException();
       }
@@ -132,8 +134,8 @@ class FriendService {
     return result;
   }
 
-  Future<void> setAcceptFriend(
-      int userRequestId, int isAccept, VoidCallback? onSuccess) async {
+  Future<bool> setAcceptFriend(
+      int userRequestId, int isAccept) async {
     try {
       Map<String, dynamic> body = {
         "is_accept": isAccept.toString(),
@@ -153,14 +155,7 @@ class FriendService {
       }
 
       if (response.statusCode == 200) {
-        if (onSuccess != null) {
-          onSuccess();
-        } else {
-          // ignore: use_build_context_synchronously
-          showSnackBar(
-              context: context,
-              msg: isAccept == 1 ? "Đã chấp nhận lời mời kết bạn" : "Đã từ chối lời mời kết bạn");
-        }
+        return true;
       }
     } on UnauthorizationException {
       // ignore: use_build_context_synchronously
@@ -174,9 +169,10 @@ class FriendService {
       showSnackBar(
           context: context, msg: "có lỗi xảy ra, vui lòng thử lại sau");
     }
+    return false;
   }
 
-  Future<void> setRequestFriend(int userRequestId) async {
+  Future<bool> setRequestFriend(int userRequestId) async {
     try {
       Map<String, dynamic> body = {
         "user_id": userRequestId,
@@ -190,12 +186,15 @@ class FriendService {
       final response = await postMethod(
           endpoind: "set_request_friend", body: body, headers: headers);
       final responseBody = jsonDecode(response.body);
+      debugPrint("response body: $responseBody");
+
       if (int.parse(responseBody["code"]) == 9998) {
         throw UnauthorizationException();
       }
       if (response.statusCode == 200) {
         // ignore: use_build_context_synchronously
         showSnackBar(context: context, msg: "gửi lời mởi kết bạn thành công");
+        return true;
       }
     } on UnauthorizationException {
       // ignore: use_build_context_synchronously
@@ -209,6 +208,7 @@ class FriendService {
       showSnackBar(
           context: context, msg: "có lỗi xảy ra, vui lòng thử lại sau");
     }
+    return false;
   }
 
   Future<List<FriendBlock>> getBlocksList(int index, int count, String uid) async {
@@ -248,7 +248,7 @@ class FriendService {
     return blocksList;
   }
 
-  Future<void> setBlocksFriend(String uid, String username) async {
+  Future<bool> setBlocksFriend(String uid) async {
     try {
       Map<String, dynamic> body = {
         "user_id": uid,
@@ -266,9 +266,7 @@ class FriendService {
         throw UnauthorizationException();
       }
       if (int.parse(responseBody["code"]) == 1000) {
-        // ignore: use_build_context_synchronously
-        showSnackBar(
-          context: context, msg: "Đã chặn người dùng: ${username}");
+        return true;
       }
     } on UnauthorizationException {
       // ignore: use_build_context_synchronously
@@ -279,5 +277,7 @@ class FriendService {
     } catch (err) {
       debugPrint("get err $err");
     }
+
+    return false;
   }
 }
