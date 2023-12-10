@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:facebook_app/my_widgets/my_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
@@ -7,7 +6,6 @@ import 'dart:io';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:video_player/video_player.dart';
 
 class NewFeed extends StatefulWidget {
   const NewFeed({super.key});

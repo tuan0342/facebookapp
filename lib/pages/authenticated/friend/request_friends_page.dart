@@ -2,7 +2,6 @@ import 'package:facebook_app/models/friend_model.dart';
 import 'package:facebook_app/my_widgets/request_friend_box.dart';
 import 'package:facebook_app/services/app_service.dart';
 import 'package:facebook_app/services/friend_service.dart';
-import 'package:facebook_app/util/common.dart';
 import "package:flutter/material.dart";
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';

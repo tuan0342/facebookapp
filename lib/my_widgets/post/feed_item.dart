@@ -20,7 +20,7 @@ class _FeedItemState extends State<FeedItem> {
     if (widget.postData.isFelt == -1) {
       final isSuccess = await feedService.feelPost(
           context: context,
-          postOwnerId: 80,
+          postOwnerId: widget.postData.author.id,
           postId: widget.postData.id,
           feelType: 1);
       if (isSuccess) {
@@ -32,7 +32,7 @@ class _FeedItemState extends State<FeedItem> {
     } else if (widget.postData.isFelt == 0) {
       final isSuccess = await feedService.feelPost(
           context: context,
-          postOwnerId: 80,
+          postOwnerId: widget.postData.author.id,
           postId: widget.postData.id,
           feelType: 1);
       if (isSuccess) {
@@ -358,10 +358,12 @@ class _FeedItemState extends State<FeedItem> {
                 color: Colors.grey[800],
                 height: 1.5,
                 letterSpacing: .7),
-                trimExpandedText: "Thu gọn",
-                trimCollapsedText: "Đọc thêm",
+            trimExpandedText: "Thu gọn",
+            trimCollapsedText: "Đọc thêm",
           ),
-          const SizedBox(height: 15,),
+          const SizedBox(
+            height: 15,
+          ),
           widget.postData.image.isNotEmpty
               ? ListImageLayout(images: widget.postData.image)
               : Container()

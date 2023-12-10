@@ -1,7 +1,6 @@
 import 'package:facebook_app/models/friend_model.dart';
 import 'package:facebook_app/my_widgets/suggest_friend_box.dart';
 import 'package:facebook_app/services/friend_service.dart';
-import 'package:facebook_app/util/common.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -14,7 +13,7 @@ class SuggestFriendsPage extends StatefulWidget {
 
 class _SuggestFriendsPageState extends State<SuggestFriendsPage> {
   late ScrollController _scrollController;
-  List<FriendModel> suggests = [];
+  List<SuggestFriendModel> suggests = [];
   bool isLoading = false;
   bool isEnd = false;
   int index = 0;
@@ -116,9 +115,9 @@ class _SuggestFriendsPageState extends State<SuggestFriendsPage> {
 
   Widget listSuggestFriends() {
     return suggests.isEmpty
-        ?  const Center(
-          child: Text("Chưa có gợi ý kết bạn"),
-        )
+        ? const Center(
+            child: Text("Chưa có gợi ý kết bạn"),
+          )
         : Expanded(
             child: Column(
             children: [
@@ -130,12 +129,7 @@ class _SuggestFriendsPageState extends State<SuggestFriendsPage> {
                     padding: const EdgeInsets.only(bottom: 4),
                     child: SuggestFriendBox(
                       friend: suggests[index],
-                      onSendRequestSuccess: () {
-                        setState(() {
-                          suggests.removeAt(index);
-                        });
-                      },
-                      onRejectSuccess: () {
+                      onRemove: () {
                         setState(() {
                           suggests.removeAt(index);
                         });

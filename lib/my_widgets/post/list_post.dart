@@ -6,7 +6,11 @@ class ListPost extends StatelessWidget {
   final List<Post> posts;
   final ScrollController scrollController;
   final bool isLoading;
-  const ListPost({super.key, required this.posts, required this.scrollController, required this.isLoading});
+  const ListPost(
+      {super.key,
+      required this.posts,
+      required this.scrollController,
+      required this.isLoading});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +27,10 @@ class ListPost extends StatelessWidget {
                       controller: scrollController,
                       itemBuilder: (_, index) {
                         return Container(
-                          decoration: const BoxDecoration(border: Border(bottom: BorderSide(width: 4, color: Colors.grey))),
+                          decoration: const BoxDecoration(
+                              border: Border(
+                                  bottom: BorderSide(
+                                      width: 4, color: Colors.grey))),
                           padding: const EdgeInsets.fromLTRB(10, 10, 10, 5),
                           child: FeedItem(
                             postData: posts[index],

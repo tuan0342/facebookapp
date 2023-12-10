@@ -1,6 +1,5 @@
 import 'package:facebook_app/models/post_model.dart';
 import 'package:facebook_app/my_widgets/my_text_button.dart';
-import 'package:facebook_app/my_widgets/post/feed_item.dart';
 import 'package:facebook_app/my_widgets/post/list_post.dart';
 import 'package:facebook_app/services/app_service.dart';
 import 'package:facebook_app/services/search_service.dart';

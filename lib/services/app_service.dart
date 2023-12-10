@@ -12,6 +12,7 @@ String AVATAR_KEY = "avatar";
 String COVER_IMAGE_KEY = "cover_image";
 String USERNAME_KEY = "username";
 String COINS_KEY = "coins";
+String SUBCRIBE_TOPIC = "subcribe";
 
 class AppService with ChangeNotifier {
   late final SharedPreferences sharedPreferences;
@@ -24,6 +25,7 @@ class AppService with ChangeNotifier {
   String _avatar = '';
   String _coverImage = '';
   String _username = '';
+  String _subcribe = '';
   int _coins = 0;
   bool _initialized = false;
 
@@ -37,6 +39,7 @@ class AppService with ChangeNotifier {
   String get coverImage => _coverImage;
   String get username => _username;
   int get coins => _coins;
+  String get subcribe => _subcribe;
   bool get initialized => _initialized;
   Stream<bool> get loginStateChange => _uidLoggedInChange.stream;
 
@@ -84,6 +87,12 @@ class AppService with ChangeNotifier {
   set coins(int coins) {
     sharedPreferences.setInt(COINS_KEY, coins);
     _coins = coins;
+    notifyListeners();
+  }
+
+    set subcribe(String topic) {
+    sharedPreferences.setString(SUBCRIBE_TOPIC, topic);
+    _subcribe = topic;
     notifyListeners();
   }
 

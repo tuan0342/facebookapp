@@ -7,10 +7,9 @@ class NotificationModel {
 
   Map<String, dynamic> toMap() {
     return {
-      "title":title,
-      "message":message,
+      "title": title,
+      "message": message,
       "data": data,
     };
   }
-
 }

@@ -18,37 +18,38 @@ final GoRoute authenticatedRoute = GoRoute(
     searchRoutes,
     menuRoute,
     GoRoute(
-      path: 'personalPage/:uid',
-      builder: (context, state) => PersonalPage(uid: state.pathParameters["uid"]!,),
-      routes: [
-        GoRoute(
-          path: "settingPersonalPage",
-          builder: (context, state) {
-            Profile profile = state.extra as Profile;
-            return SettingPersonalPage(profile: profile);
-            
-          }
-        ),
-        GoRoute(
-          path: "editPersonalInfoPage",
-          builder: (context, state) {
-            Profile profile = state.extra as Profile;
-            return EditPersonalInfoPage(profile: profile);
-          }
-        ),
-      ]
-    ),
+        path: 'personalPage/:uid',
+        builder: (context, state) => PersonalPage(
+              uid: state.pathParameters["uid"]!,
+            ),
+        routes: [
+          GoRoute(
+              path: "settingPersonalPage",
+              builder: (context, state) {
+                Profile profile = state.extra as Profile;
+                return SettingPersonalPage(profile: profile);
+              }),
+          GoRoute(
+              path: "editPersonalInfoPage",
+              builder: (context, state) {
+                Profile profile = state.extra as Profile;
+                return EditPersonalInfoPage(profile: profile);
+              }),
+        ]),
     GoRoute(
-      path: "friends/suggests",
-      builder: (context, state) => const SuggestFriendsPage()),
+        path: "friends/suggests",
+        builder: (context, state) => const SuggestFriendsPage()),
     GoRoute(
-      path: "friends/:uid",
-      builder: (context, state) => UserFriendsPage(uid: state.pathParameters["uid"]!)),
+        path: "friends/:uid",
+        builder: (context, state) =>
+            UserFriendsPage(uid: state.pathParameters["uid"]!)),
     GoRoute(
       path: "webViewContainer",
       builder: (context, state) {
         WebView webView = state.extra as WebView;
-        return WebViewContainer(webView: webView,);
+        return WebViewContainer(
+          webView: webView,
+        );
       },
     ),
   ],
@@ -56,4 +57,3 @@ final GoRoute authenticatedRoute = GoRoute(
     return null;
   },
 );
-

@@ -159,6 +159,7 @@ class AuthService extends ChangeNotifier {
       await FirebaseMessaging.instance
           .unsubscribeFromTopic(_appService.uidLoggedIn)
           .timeout(const Duration(seconds: 3));
+      _appService.subcribe = '';
     } catch (err) {
       debugPrint("get error $err");
     } finally {

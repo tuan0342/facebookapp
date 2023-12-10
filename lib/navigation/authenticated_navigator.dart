@@ -43,7 +43,11 @@ class _AuthenticatedNavigatorState extends State<AuthenticatedNavigator> {
   Widget build(BuildContext context) {
     final _appService = Provider.of<AppService>(context, listen: false);
     final _authService = Provider.of<AuthService>(context, listen: false);
-
+    if (_appService.subcribe.isNotEmpty &&
+        _appService.subcribe != _appService.uidLoggedIn) {
+      FirebaseMessaging.instance.unsubscribeFromTopic(_appService.subcribe);
+      _appService.subcribe = _appService.uidLoggedIn;
+    }
     FirebaseMessaging.instance.subscribeToTopic(_appService.uidLoggedIn);
     return Scaffold(
       appBar: AppBar(

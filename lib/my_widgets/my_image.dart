@@ -30,8 +30,7 @@ class MyImage extends StatelessWidget {
               height: height,
               decoration: BoxDecoration(
                   shape: shape,
-                  image: DecorationImage(
-                      image: imageProvider, fit: fit)),
+                  image: DecorationImage(image: imageProvider, fit: fit)),
             ),
         placeholder: (context, url) =>
             placeOrderImage ??
@@ -41,8 +40,8 @@ class MyImage extends StatelessWidget {
               decoration: BoxDecoration(
                   shape: shape,
                   image: DecorationImage(
-                      image:
-                          const AssetImage("assets/images/male_default_avatar.jpeg"),
+                      image: const AssetImage(
+                          "assets/images/male_default_avatar.jpeg"),
                       fit: fit)),
             ),
         errorWidget: (context, url, error) =>
@@ -53,8 +52,8 @@ class MyImage extends StatelessWidget {
               decoration: BoxDecoration(
                   shape: shape,
                   image: DecorationImage(
-                      image:
-                          const AssetImage("assets/images/male_default_avatar.jpeg"),
+                      image: const AssetImage(
+                          "assets/images/male_default_avatar.jpeg"),
                       fit: fit)),
             ));
   }

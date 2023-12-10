@@ -3,7 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class MyDropDown extends StatefulWidget {
-  const MyDropDown({super.key, required this.title, required this.iconOfTitle, required this.arrayList,});
+  const MyDropDown({
+    super.key,
+    required this.title,
+    required this.iconOfTitle,
+    required this.arrayList,
+  });
 
   final String title;
   final String iconOfTitle;
@@ -30,12 +35,18 @@ class _MyDropDownState extends State<MyDropDown> {
           child: Row(
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-                child: Image.asset(widget.iconOfTitle, height: 35, width: 35,)
-              ),
+                  padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                  child: Image.asset(
+                    widget.iconOfTitle,
+                    height: 35,
+                    width: 35,
+                  )),
               Text(
                 widget.title,
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+                style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black),
               ),
               const SizedBox(
                 width: 5,
@@ -44,11 +55,11 @@ class _MyDropDownState extends State<MyDropDown> {
               const RotatedBox(
                 quarterTurns: 1,
                 child: IconButton(
-                  icon: Icon( 
+                  icon: Icon(
                     Icons.chevron_right,
                     size: 28.0,
                     color: Colors.black54,
-                  ), 
+                  ),
                   onPressed: null,
                 ),
               ),
@@ -58,9 +69,7 @@ class _MyDropDownState extends State<MyDropDown> {
         AnimatedContainer(
           duration: const Duration(milliseconds: 300),
           height: isDropdownVisible ? getHeightOfList(widget.arrayList) : 0.0,
-          child: ListView(
-            children: getListOptions(widget.arrayList)
-          ),
+          child: ListView(children: getListOptions(widget.arrayList)),
         ),
         // ),
       ],
@@ -69,35 +78,35 @@ class _MyDropDownState extends State<MyDropDown> {
 
   List<Widget> getListOptions(List<MenuItem> array) {
     final listOption = <Widget>[];
-    for (var i=0; i< array.length; i++) {
-      listOption.add(
-        Container(
-          margin: const EdgeInsets.only(bottom: 10.0),
-          child: ElevatedButton(
-            onPressed: () {
-              context.push(array[i].route);
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white
-            ),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-              child: Row(
-                children: [
-                  Padding(
+    for (var i = 0; i < array.length; i++) {
+      listOption.add(Container(
+        margin: const EdgeInsets.only(bottom: 10.0),
+        child: ElevatedButton(
+          onPressed: () {
+            context.push(array[i].route);
+          },
+          style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+            child: Row(
+              children: [
+                Padding(
                     padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-                    child: Image.asset(array[i].icon, height: 35, width: 35,)
-                  ),
-                  Text(
-                    array[i].title, 
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black)
-                  ),
-                ],
-              ),
+                    child: Image.asset(
+                      array[i].icon,
+                      height: 35,
+                      width: 35,
+                    )),
+                Text(array[i].title,
+                    style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black)),
+              ],
             ),
           ),
-        )
-      );
+        ),
+      ));
     }
 
     return listOption;
