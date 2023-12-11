@@ -1,3 +1,4 @@
+import 'package:facebook_app/pages/authenticated/submenu/coins.dart';
 import 'package:facebook_app/pages/authenticated/submenu/setting_and_privacy/add_block_page.dart';
 import 'package:facebook_app/pages/authenticated/menu.dart';
 import 'package:facebook_app/pages/authenticated/submenu/setting_and_privacy/block_page.dart';
@@ -15,6 +16,10 @@ final GoRoute menuRoute =
     GoRoute(path: 'menu', builder: (context, state) => const Menu(), routes: [
   termRoute,
   settingRoute,
+  GoRoute(
+    path: 'coins',
+    builder: (context, state) => const Coins(),
+  ),
 ]);
 
 final GoRoute termRoute = GoRoute(

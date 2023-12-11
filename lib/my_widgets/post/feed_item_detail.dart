@@ -164,7 +164,8 @@ class _FeedItemDetailState extends State<FeedItemDetail> {
               foregroundColor: Colors.black,
             ),
             body: SafeArea(
-              child: Padding(
+              child: Container(
+                color: Colors.grey[200],
                 padding: const EdgeInsets.all(10.0),
                 child: SingleChildScrollView(
                   child: Column(
@@ -408,82 +409,87 @@ class _FeedItemDetailState extends State<FeedItemDetail> {
   Widget postFooter(FeedService feedService) {
     return Column(
       children: [
-        if (postDetail!.kudos > 0 ||
-            postDetail!.disapointed > 0 ||
-            postDetail!.fake > 0 ||
-            postDetail!.trust > 0)
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(left: 5, top: 5),
-                child: postDetail!.kudos > 0 || postDetail!.disapointed > 0
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          if (postDetail!.kudos > 0)
-                            SizedBox(
-                              child: Row(children: [
-                                kudosIcon(),
-                                const SizedBox(
-                                  width: 3,
+        postDetail!.kudos > 0 ||
+                postDetail!.disapointed > 0 ||
+                postDetail!.fake > 0 ||
+                postDetail!.trust > 0
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(left: 5, top: 5),
+                    child: postDetail!.kudos > 0 || postDetail!.disapointed > 0
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              if (postDetail!.kudos > 0)
+                                SizedBox(
+                                  child: Row(children: [
+                                    kudosIcon(),
+                                    const SizedBox(
+                                      width: 3,
+                                    ),
+                                    Text(
+                                      "${postDetail!.kudos}",
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color: Colors.grey[800]),
+                                    ),
+                                    const SizedBox(
+                                      width: 6,
+                                    )
+                                  ]),
                                 ),
-                                Text(
-                                  "${postDetail!.kudos}",
-                                  style: TextStyle(
-                                      fontSize: 15, color: Colors.grey[800]),
-                                ),
-                                const SizedBox(
-                                  width: 6,
+                              if (postDetail!.disapointed > 0)
+                                SizedBox(
+                                  child: Row(children: [
+                                    disappointedIcon(),
+                                    const SizedBox(
+                                      width: 3,
+                                    ),
+                                    Text(
+                                      "${postDetail!.disapointed}",
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color: Colors.grey[800]),
+                                    ),
+                                  ]),
                                 )
-                              ]),
-                            ),
-                          if (postDetail!.kudos > 0)
-                            SizedBox(
-                              child: Row(children: [
-                                disappointedIcon(),
-                                const SizedBox(
-                                  width: 3,
-                                ),
+                            ],
+                          )
+                        : Container(),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 5),
+                    child: postDetail!.fake > 0 || postDetail!.trust > 0
+                        ? Row(
+                            children: [
+                              if (postDetail!.fake > 0)
                                 Text(
-                                  "${postDetail!.disapointed}",
+                                  "${postDetail!.fake} Fake",
                                   style: TextStyle(
                                       fontSize: 15, color: Colors.grey[800]),
                                 ),
-                              ]),
-                            )
-                        ],
-                      )
-                    : Container(),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 5),
-                child: postDetail!.fake >= 0 || postDetail!.trust >= 0
-                    ? Row(
-                        children: [
-                          if (postDetail!.fake >= 0)
-                            Text(
-                              "${postDetail!.fake} Fake",
-                              style: TextStyle(
-                                  fontSize: 15, color: Colors.grey[800]),
-                            ),
-                          const SizedBox(
-                            width: 6,
-                          ),
-                          if (postDetail!.trust >= 0)
-                            Text(
-                              "${postDetail!.trust} Trust",
-                              style: TextStyle(
-                                  fontSize: 15, color: Colors.grey[800]),
-                            ),
-                        ],
-                      )
-                    : Container(),
+                              const SizedBox(
+                                width: 6,
+                              ),
+                              if (postDetail!.trust > 0)
+                                Text(
+                                  "${postDetail!.trust} Trust",
+                                  style: TextStyle(
+                                      fontSize: 15, color: Colors.grey[800]),
+                                ),
+                            ],
+                          )
+                        : Container(),
+                  )
+                ],
               )
-            ],
-          ),
+            : const SizedBox(
+                height: 25,
+              ),
         const SizedBox(
-          height: 20,
+          height: 10,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
