@@ -22,6 +22,8 @@ class _MyDropDownState extends State<MyDropDown> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         TextButton(
+          style: TextButton.styleFrom(
+            padding: const EdgeInsets.only(top: 3, bottom: 3),),
           onPressed: () {
             setState(() {
               isDropdownVisible = !isDropdownVisible;

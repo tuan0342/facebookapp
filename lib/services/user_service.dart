@@ -207,5 +207,50 @@ class UserService {
           context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau $err");
     }
   }
+
+  Future<void> buyCoins({required BuildContext context, required String coins}) async {
+
+    late AuthService _authService =
+        Provider.of<AuthService>(context, listen: false);
+    try {
+      final _appService = Provider.of<AppService>(context, listen: false);
+
+      Map<String, dynamic> body = {
+        "code": "123456",
+        "coins": int.parse(coins),
+      };
+      Map<String, String> headers = {
+        "Authorization": "Bearer ${_appService.token}",
+        'Content-Type': 'application/json'
+      };
+
+      final response = await postMethod(
+          endpoind: "settings/buy_coins", body: body, headers: headers);
+      final responseBody = jsonDecode(response.body);
+
+      if (int.parse(responseBody["code"]) == 9998) {
+        throw UnauthorizationException();
+      }
+      if (int.parse(responseBody["code"]) == 1000) {
+        final result = responseBody["data"];
+        _appService.coins = result["coins"];
+        // ignore: use_build_context_synchronously
+        showSnackBar(context: context, msg: "Nạp coins thành công");
+        // ignore: use_build_context_synchronously
+        context.go('/authenticated');
+      }
+    } on UnauthorizationException {
+      // ignore: use_build_context_synchronously
+      _authService.logOut(
+          context: context,
+          isShowSnackbar: true,
+          msg: "Phiên đăng nhập hết hạn");
+    } catch (err) {
+      debugPrint("get exception $err");
+      // ignore: use_build_context_synchronously
+      showSnackBar(
+          context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau $err");
+    }
+  }  
 }
 
