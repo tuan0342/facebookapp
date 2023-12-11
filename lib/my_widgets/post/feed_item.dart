@@ -5,6 +5,7 @@ import 'package:facebook_app/services/feed_service.dart';
 import 'package:facebook_app/util/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:popover/popover.dart';
 import 'package:readmore/readmore.dart';
 
@@ -69,7 +70,7 @@ class _FeedItemState extends State<FeedItem> {
     if (widget.postData.isFelt == -1) {
       final isSuccess = await feedService.feelPost(
           context: context,
-          postOwnerId: 80,
+          postOwnerId: widget.postData.author.id,
           postId: widget.postData.id,
           feelType: 0);
       if (isSuccess) {
@@ -81,7 +82,7 @@ class _FeedItemState extends State<FeedItem> {
     } else if (widget.postData.isFelt == 1) {
       final isSuccess = await feedService.feelPost(
           context: context,
-          postOwnerId: 80,
+          postOwnerId: widget.postData.author.id,
           postId: widget.postData.id,
           feelType: 0);
       if (isSuccess) {
@@ -332,8 +333,16 @@ class _FeedItemState extends State<FeedItem> {
       children: <Widget>[
         Row(
           children: [
-            MyImage(
-                imageUrl: widget.postData.author.avatar, height: 50, width: 50),
+            GestureDetector(
+              onTap: () {
+                context.push(
+                    "/authenticated/personalPage/${widget.postData.author.id}");
+              },
+              child: MyImage(
+                  imageUrl: widget.postData.author.avatar,
+                  height: 50,
+                  width: 50),
+            ),
             const SizedBox(
               width: 10,
             ),

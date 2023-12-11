@@ -115,7 +115,7 @@ class _SearchPageState extends State<SearchPage> {
     return Scaffold(
       body: SafeArea(
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          padding: const EdgeInsets.symmetric(vertical: 10),
           child: Column(children: [
             Padding(
               padding: const EdgeInsets.only(bottom: 3),
@@ -196,7 +196,10 @@ class _SearchPageState extends State<SearchPage> {
             ),
             _focus.hasFocus || result == null
                 ? recentSearches()
-                : ListPost(posts: result!, scrollController: _scrollController, isLoading: isLoading),
+                : ListPost(
+                    posts: result!,
+                    scrollController: _scrollController,
+                    isLoading: isLoading),
           ]),
         ),
       ),
@@ -206,37 +209,40 @@ class _SearchPageState extends State<SearchPage> {
   // Widget show tìm kiếm gần đây
   Widget recentSearches() {
     return Expanded(
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              GestureDetector(
-                  child: const Text(
-                "Tìm kiếm gần đây",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-              )),
-              MyTextButton(
-                cbFunction: () {
-                  onShowSearchLogs(context);
-                },
-                title: "Chỉnh sửa",
-                textStyle: const TextStyle(fontSize: 20),
-                style: TextButton.styleFrom(
-                  padding: const EdgeInsets.all(0),
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                GestureDetector(
+                    child: const Text(
+                  "Tìm kiếm gần đây",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                )),
+                MyTextButton(
+                  cbFunction: () {
+                    onShowSearchLogs(context);
+                  },
+                  title: "Chỉnh sửa",
+                  textStyle: const TextStyle(fontSize: 20),
+                  style: TextButton.styleFrom(
+                    padding: const EdgeInsets.all(0),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
                 ),
-              ),
-            ],
-          ),
-          const Divider(
-            color: Colors.grey,
-          ),
-          Expanded(
-              child: ListView(
-            children: keywords.map((e) => recentSearchesItem(e)).toList(),
-          )),
-        ],
+              ],
+            ),
+            const Divider(
+              color: Colors.grey,
+            ),
+            Expanded(
+                child: ListView(
+              children: keywords.map((e) => recentSearchesItem(e)).toList(),
+            )),
+          ],
+        ),
       ),
     );
   }
@@ -274,5 +280,4 @@ class _SearchPageState extends State<SearchPage> {
   void handleTapRecentSearchItem(String keyword) async {
     _keywordController.text = keyword;
   }
-
 }

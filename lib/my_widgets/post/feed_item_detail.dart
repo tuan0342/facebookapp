@@ -4,6 +4,7 @@ import 'package:facebook_app/my_widgets/post/list_image_layout.dart';
 import 'package:facebook_app/services/feed_service.dart';
 import 'package:facebook_app/util/common.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 // ignore: must_be_immutable
 class FeedItemDetail extends StatefulWidget {
@@ -331,7 +332,15 @@ class _FeedItemDetailState extends State<FeedItemDetail> {
       children: <Widget>[
         Row(
           children: [
-            MyImage(imageUrl: postDetail!.author.avatar, height: 50, width: 50),
+            GestureDetector(
+                onTap: () {
+                  context.push(
+                      "/authenticated/personalPage/${postDetail!.author.id}");
+                },
+                child: MyImage(
+                    imageUrl: postDetail!.author.avatar,
+                    height: 50,
+                    width: 50)),
             const SizedBox(
               width: 10,
             ),

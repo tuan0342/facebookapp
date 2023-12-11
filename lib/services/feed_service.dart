@@ -200,20 +200,22 @@ class FeedService {
       }
       if (int.parse(responseBody["code"]) == 1000) {
         // send noti
-        if (feelType == 1) {
-          notificationService.sendNotificationToTopic(
-              topic: postOwnerId.toString(),
-              notification: NotificationModel(
-                  title: "Anti Facebook",
-                  message:
-                      "${appService.username} đã bày tỏ cảm xúc kudos vào bài viết của bạn"));
-        } else {
-          notificationService.sendNotificationToTopic(
-              topic: postOwnerId.toString(),
-              notification: NotificationModel(
-                  title: "Anti Facebook",
-                  message:
-                      "${appService.username} đã bày tỏ cảm xúc disapointed vào bài viết của bạn"));
+        if (postOwnerId != int.parse(_appService.uidLoggedIn)) {
+          if (feelType == 1) {
+            notificationService.sendNotificationToTopic(
+                topic: postOwnerId.toString(),
+                notification: NotificationModel(
+                    title: "Anti Facebook",
+                    message:
+                        "${appService.username} đã bày tỏ cảm xúc kudos vào bài viết của bạn"));
+          } else {
+            notificationService.sendNotificationToTopic(
+                topic: postOwnerId.toString(),
+                notification: NotificationModel(
+                    title: "Anti Facebook",
+                    message:
+                        "${appService.username} đã bày tỏ cảm xúc disapointed vào bài viết của bạn"));
+          }
         }
         return true;
       }
