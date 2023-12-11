@@ -4,56 +4,78 @@ import 'package:facebook_app/my_widgets/post/list_image_layout.dart';
 import 'package:facebook_app/services/feed_service.dart';
 import 'package:facebook_app/util/common.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:popover/popover.dart';
-import 'package:readmore/readmore.dart';
 
 // ignore: must_be_immutable
-class FeedItem extends StatefulWidget {
-  final Post postData;
-  const FeedItem({super.key, required this.postData});
+class FeedItemDetail extends StatefulWidget {
+  final String postId;
+  const FeedItemDetail({super.key, required this.postId});
 
   @override
-  State<FeedItem> createState() => _FeedItemState();
+  State<FeedItemDetail> createState() => _FeedItemDetailState();
 }
 
-class _FeedItemState extends State<FeedItem> {
+class _FeedItemDetailState extends State<FeedItemDetail> {
+  PostDetailModel? postDetail;
   bool isLoading = false;
+
+  void getPostDetail() async {
+    setState(() {
+      isLoading = true;
+    });
+    final post = await FeedService(context: context)
+        .getPost(postId: int.parse(widget.postId));
+
+    if (post != null) {
+      setState(() {
+        postDetail = post;
+      });
+    } else {
+      // ignore: use_build_context_synchronously
+      showSnackBar(
+          context: context, msg: "Có lỗi xảy ra khi lấy thông tin bài viết");
+    }
+    setState(() {
+      isLoading = false;
+    });
+  }
+
   void onClickKudosBtn(FeedService feedService) async {
     setState(() {
       isLoading = true;
     });
-    if (widget.postData.isFelt == -1) {
+    if (postDetail!.isFelt == -1) {
       final isSuccess = await feedService.feelPost(
           context: context,
-          postOwnerId: widget.postData.author.id,
-          postId: widget.postData.id,
+          postOwnerId: postDetail!.author.id,
+          postId: postDetail!.id,
           feelType: 1);
       if (isSuccess) {
         setState(() {
-          widget.postData.isFelt = 1;
-          widget.postData.feel += 1;
+          postDetail!.isFelt = 1;
+          postDetail!.kudos += 1;
         });
       }
-    } else if (widget.postData.isFelt == 0) {
+    } else if (postDetail!.isFelt == 0) {
       final isSuccess = await feedService.feelPost(
           context: context,
-          postOwnerId: widget.postData.author.id,
-          postId: widget.postData.id,
+          postOwnerId: postDetail!.author.id,
+          postId: postDetail!.id,
           feelType: 1);
       if (isSuccess) {
         setState(() {
-          widget.postData.isFelt = 1;
+          postDetail!.isFelt = 1;
+          postDetail!.kudos += 1;
+          postDetail!.disapointed -= 1;
         });
       }
     } else {
       final isSuccess = await feedService.deleteFeelPost(
-          context: context, postId: widget.postData.id);
+          context: context, postId: postDetail!.id);
 
       if (isSuccess) {
         setState(() {
-          widget.postData.isFelt = -1;
-          widget.postData.feel -= 1;
+          postDetail!.isFelt = -1;
+          postDetail!.kudos -= 1;
         });
       }
     }
@@ -66,37 +88,39 @@ class _FeedItemState extends State<FeedItem> {
     setState(() {
       isLoading = true;
     });
-    if (widget.postData.isFelt == -1) {
+    if (postDetail!.isFelt == -1) {
       final isSuccess = await feedService.feelPost(
           context: context,
-          postOwnerId: 80,
-          postId: widget.postData.id,
+          postOwnerId: postDetail!.author.id,
+          postId: postDetail!.id,
           feelType: 0);
       if (isSuccess) {
         setState(() {
-          widget.postData.isFelt = 0;
-          widget.postData.feel += 1;
+          postDetail!.isFelt = 0;
+          postDetail!.disapointed += 1;
         });
       }
-    } else if (widget.postData.isFelt == 1) {
+    } else if (postDetail!.isFelt == 1) {
       final isSuccess = await feedService.feelPost(
           context: context,
-          postOwnerId: 80,
-          postId: widget.postData.id,
+          postOwnerId: postDetail!.author.id,
+          postId: postDetail!.id,
           feelType: 0);
       if (isSuccess) {
         setState(() {
-          widget.postData.isFelt = 0;
+          postDetail!.isFelt = 0;
+          postDetail!.disapointed += 1;
+          postDetail!.kudos -= 1;
         });
       }
     } else {
       final isSuccess = await feedService.deleteFeelPost(
-          context: context, postId: widget.postData.id);
+          context: context, postId: postDetail!.id);
 
       if (isSuccess) {
         setState(() {
-          widget.postData.isFelt = -1;
-          widget.postData.feel -= 1;
+          postDetail!.isFelt = -1;
+          postDetail!.disapointed -= 1;
         });
       }
     }
@@ -109,81 +133,60 @@ class _FeedItemState extends State<FeedItem> {
     setState(() {
       isLoading = true;
     });
-    if (widget.postData.isFelt == -1) {
-    } else if (widget.postData.isFelt == 1) {
-    } else {}
+    // if (postDetail.isFelt == -1) {
+    // } else if (postDetail.isFelt == 1) {
+    // } else {}
     setState(() {
       isLoading = false;
     });
   }
 
   @override
-  Widget build(BuildContext context) {
-    final FeedService feedService = FeedService(context: context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        // header
-        postHeader(),
-        const SizedBox(
-          height: 20,
-        ),
-        // content
-        postContent(),
-        const SizedBox(
-          height: 20,
-        ),
-        postFooter(feedService),
-      ],
-    );
+  void initState() {
+    super.initState();
+    getPostDetail();
   }
 
-  Widget allReactIcon(int numOfReact) {
-    final multiFeelIcon = Stack(
-      children: [
-        Positioned(left: 13, child: disappointedIcon()),
-        Positioned(
-            child: Row(
-          children: [
-            kudosIcon(),
-            const SizedBox(
-              width: 13,
-            )
-          ],
-        )),
-      ],
-    );
-    switch (widget.postData.isFelt) {
-      // user haven't yet react
-      case -1:
-        if (numOfReact <= 0) {
-          return Container();
-        } else if (numOfReact == 1) {
-          return kudosIcon();
-        } else {
-          return multiFeelIcon;
-        }
-      // user disapointed
-      case 0:
-        if (numOfReact <= 0) {
-          return Container();
-        } else if (numOfReact == 1) {
-          return disappointedIcon();
-        } else {
-          return multiFeelIcon;
-        }
-      // user kudos
-      case 1:
-        if (numOfReact <= 0) {
-          return Container();
-        } else if (numOfReact == 1) {
-          return kudosIcon();
-        } else {
-          return multiFeelIcon;
-        }
-      default:
-        return Container();
-    }
+  @override
+  Widget build(BuildContext context) {
+    final FeedService feedService = FeedService(context: context);
+    return postDetail == null
+        ? Scaffold(
+            appBar: AppBar(),
+          )
+        : Scaffold(
+            appBar: AppBar(
+              title: Text(
+                postDetail!.author.name,
+                style: const TextStyle(color: Colors.black),
+              ),
+              backgroundColor: Colors.white,
+              foregroundColor: Colors.black,
+            ),
+            body: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      // header
+                      postHeader(),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      // content
+                      postContent(),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      postFooter(feedService),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
   }
 
   Widget kudosIcon(
@@ -234,7 +237,6 @@ class _FeedItemState extends State<FeedItem> {
         onPressed: isLoading
             ? null
             : () {
-                debugPrint("click kudos");
                 onClickKudosBtn(feedService);
               },
         child: Row(
@@ -242,16 +244,14 @@ class _FeedItemState extends State<FeedItem> {
           children: <Widget>[
             kudosIcon(
                 bgColor: Colors.white,
-                iconColor:
-                    widget.postData.isFelt == 1 ? Colors.blue : Colors.grey),
+                iconColor: postDetail!.isFelt == 1 ? Colors.blue : Colors.grey),
             const SizedBox(
               width: 5,
             ),
             Text(
               "Kudos",
               style: TextStyle(
-                  color:
-                      widget.postData.isFelt == 1 ? Colors.blue : Colors.grey),
+                  color: postDetail!.isFelt == 1 ? Colors.blue : Colors.grey),
             )
           ],
         ),
@@ -278,16 +278,14 @@ class _FeedItemState extends State<FeedItem> {
           children: <Widget>[
             disappointedIcon(
                 bgColor: Colors.white,
-                iconColor:
-                    widget.postData.isFelt == 0 ? Colors.red : Colors.grey),
+                iconColor: postDetail!.isFelt == 0 ? Colors.red : Colors.grey),
             const SizedBox(
               width: 5,
             ),
             Text(
               "Diss",
               style: TextStyle(
-                  color:
-                      widget.postData.isFelt == 0 ? Colors.red : Colors.grey),
+                  color: postDetail!.isFelt == 0 ? Colors.red : Colors.grey),
             )
           ],
         ),
@@ -332,8 +330,7 @@ class _FeedItemState extends State<FeedItem> {
       children: <Widget>[
         Row(
           children: [
-            MyImage(
-                imageUrl: widget.postData.author.avatar, height: 50, width: 50),
+            MyImage(imageUrl: postDetail!.author.avatar, height: 50, width: 50),
             const SizedBox(
               width: 10,
             ),
@@ -342,7 +339,7 @@ class _FeedItemState extends State<FeedItem> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  widget.postData.author.name,
+                  postDetail!.author.name,
                   style: TextStyle(
                       color: Colors.grey[900],
                       fontSize: 18,
@@ -354,7 +351,7 @@ class _FeedItemState extends State<FeedItem> {
                 ),
                 Text(
                   getDifferenceTime(
-                      DateTime.now(), DateTime.parse(widget.postData.created)),
+                      DateTime.now(), DateTime.parse(postDetail!.created)),
                   style: const TextStyle(fontSize: 15, color: Colors.grey),
                 ),
               ],
@@ -374,46 +371,36 @@ class _FeedItemState extends State<FeedItem> {
   }
 
   Widget postContent() {
-    return GestureDetector(
-      onLongPress: () {
-        showPopover(
-            direction: PopoverDirection.top,
-            context: context,
-            bodyBuilder: (context) => TextButton(
-                onPressed: () {
-                  Clipboard.setData(
-                      ClipboardData(text: widget.postData.described));
-                  Navigator.pop(context);
-                },
-                child: const Text("Copy")));
-      },
-      child: Padding(
-        padding: const EdgeInsets.only(left: 10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ReadMoreText(
-              widget.postData.described,
-              style: TextStyle(
-                  fontSize: 15,
-                  color: Colors.grey[800],
-                  height: 1.5,
-                  letterSpacing: .7),
-              trimExpandedText: "Thu gọn",
-              trimCollapsedText: "Đọc thêm",
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            widget.postData.image.isNotEmpty
-                ? ListImageLayout(
-                    fullHeight: 300,
-                    images: widget.postData.image,
-                    postId: widget.postData.id,
-                  )
-                : Container()
-          ],
-        ),
+    return Padding(
+      padding: const EdgeInsets.only(left: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            postDetail!.described,
+            style: TextStyle(
+                fontSize: 15,
+                color: Colors.grey[800],
+                height: 1.5,
+                letterSpacing: .7),
+          ),
+          const SizedBox(
+            height: 15,
+          ),
+          postDetail?.image.isNotEmpty == true
+              ? ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemBuilder: ((context, index) => Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5.0),
+                        child: ListImageLayout(
+                            images: [postDetail!.image[index]],
+                            postId: postDetail!.id),
+                      )),
+                  itemCount: postDetail!.image.length,
+                )
+              : Container()
+        ],
       ),
     );
   }
@@ -421,38 +408,74 @@ class _FeedItemState extends State<FeedItem> {
   Widget postFooter(FeedService feedService) {
     return Column(
       children: [
-        if (widget.postData.feel > 0 || widget.postData.markComment > 0)
+        if (postDetail!.kudos > 0 ||
+            postDetail!.disapointed > 0 ||
+            postDetail!.fake > 0 ||
+            postDetail!.trust > 0)
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.only(left: 5, top: 5),
-                child: widget.postData.feel > 0
+                child: postDetail!.kudos > 0 || postDetail!.disapointed > 0
                     ? Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          allReactIcon(widget.postData.feel),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          Text(
-                            "${widget.postData.feel}",
-                            style: TextStyle(
-                                fontSize: 15, color: Colors.grey[800]),
-                          ),
+                          if (postDetail!.kudos > 0)
+                            SizedBox(
+                              child: Row(children: [
+                                kudosIcon(),
+                                const SizedBox(
+                                  width: 3,
+                                ),
+                                Text(
+                                  "${postDetail!.kudos}",
+                                  style: TextStyle(
+                                      fontSize: 15, color: Colors.grey[800]),
+                                ),
+                                const SizedBox(
+                                  width: 6,
+                                )
+                              ]),
+                            ),
+                          if (postDetail!.kudos > 0)
+                            SizedBox(
+                              child: Row(children: [
+                                disappointedIcon(),
+                                const SizedBox(
+                                  width: 3,
+                                ),
+                                Text(
+                                  "${postDetail!.disapointed}",
+                                  style: TextStyle(
+                                      fontSize: 15, color: Colors.grey[800]),
+                                ),
+                              ]),
+                            )
                         ],
                       )
                     : Container(),
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 5),
-                child: widget.postData.markComment > 0
+                child: postDetail!.fake >= 0 || postDetail!.trust >= 0
                     ? Row(
                         children: [
-                          Text(
-                            "${widget.postData.markComment} Marks",
-                            style: TextStyle(
-                                fontSize: 15, color: Colors.grey[800]),
+                          if (postDetail!.fake >= 0)
+                            Text(
+                              "${postDetail!.fake} Fake",
+                              style: TextStyle(
+                                  fontSize: 15, color: Colors.grey[800]),
+                            ),
+                          const SizedBox(
+                            width: 6,
                           ),
+                          if (postDetail!.trust >= 0)
+                            Text(
+                              "${postDetail!.trust} Trust",
+                              style: TextStyle(
+                                  fontSize: 15, color: Colors.grey[800]),
+                            ),
                         ],
                       )
                     : Container(),

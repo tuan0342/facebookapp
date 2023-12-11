@@ -115,7 +115,8 @@ class _EditAvatarState extends State<EditAvatar> {
             minWidth: 140,
             child: TextButton(
               onPressed: () {
-                showPopupList(context, [widget.fileAvatar.path]);
+                showPopupList(
+                    context: context, images: [widget.fileAvatar.path]);
               },
               child: CachedNetworkImage(
                   imageUrl: widget.profile.avatar,

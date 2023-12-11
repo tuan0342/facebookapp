@@ -118,7 +118,8 @@ class _EditCoverState extends State<EditCover> {
             minWidth: MediaQuery.of(context).size.width - 20,
             child: TextButton(
               onPressed: () {
-                showPopupList(context, [widget.fileCover.path]);
+                showPopupList(
+                    context: context, images: [widget.fileCover.path]);
               },
               child: CachedNetworkImage(
                   imageUrl: widget.profile.imageCover,

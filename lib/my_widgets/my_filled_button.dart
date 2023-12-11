@@ -7,7 +7,7 @@ class MyFilledButton extends StatelessWidget {
   final VoidCallback? cbFunction;
   final ButtonStyle? style;
 
-  MyFilledButton(
+  const MyFilledButton(
       {super.key,
       required this.isDisabled,
       this.title = "",

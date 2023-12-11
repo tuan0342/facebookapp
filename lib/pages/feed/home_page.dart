@@ -40,7 +40,6 @@ class HomePageState extends State<HomePage> {
         final fetchData = await FeedService(context: context)
             .getFeeds(index: index, count: count);
 
-        debugPrint("fetch: $fetchData");
         if (fetchData.isEmpty) {
           setState(() {
             isEnd = true;

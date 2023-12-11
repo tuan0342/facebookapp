@@ -1,5 +1,6 @@
 import 'package:facebook_app/models/profile_model.dart';
 import 'package:facebook_app/models/webview_model.dart';
+import 'package:facebook_app/my_widgets/post/feed_item_detail.dart';
 import 'package:facebook_app/navigation/authenticated_navigator.dart';
 import 'package:facebook_app/navigation/routes/authenticated/submenu_route.dart';
 import 'package:facebook_app/navigation/routes/authenticated/search_routes.dart';
@@ -52,6 +53,10 @@ final GoRoute authenticatedRoute = GoRoute(
         );
       },
     ),
+    GoRoute(
+        path: "postDetail/:id",
+        builder: (context, state) =>
+            FeedItemDetail(postId: state.pathParameters["id"]!)),
   ],
   redirect: (context, state) {
     return null;
