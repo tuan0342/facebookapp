@@ -134,3 +134,5 @@ flutter:
     - assets/images/img.png
     - assets/images/af_logo.png
     - assets/images/globe-solid.svg
+    - assets/images/card.png
+    - assets/images/card_outline.png

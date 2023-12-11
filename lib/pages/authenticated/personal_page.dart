@@ -190,7 +190,7 @@ class _PersonalPageState extends State<PersonalPage> {
                         contextPage: context,
                       ),
 
-                    PersonalFriend(friends: friends, contextPage: context, uid: profile.id,),
+                      PersonalFriend(friends: friends, contextPage: context, uid: profile.id,),
 
                       Container(
                         height: 20,
@@ -201,10 +201,7 @@ class _PersonalPageState extends State<PersonalPage> {
                       const SizedBox(
                         height: 10,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: personalNewFeed(),
-                      ),
+                      personalNewFeed(),
                     ],
                   ),
           ),
@@ -237,9 +234,14 @@ class _PersonalPageState extends State<PersonalPage> {
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             itemCount: feeds.length,
-            itemBuilder: (context, index) => FeedItem(
-              postData: feeds[index],
-            ),
+            itemBuilder: (context, index) =>Container(
+                            decoration: const BoxDecoration(border: Border(bottom: BorderSide(width: 4, color: Colors.grey))),
+                            padding: const EdgeInsets.fromLTRB(10, 10, 10, 5),
+                            child: FeedItem(
+                              postData: feeds[index],
+                            ),
+                          ),
+            
           );
   }
 

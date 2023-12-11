@@ -1,11 +1,6 @@
+import 'package:facebook_app/pages/authenticated/submenu/coins.dart';
 import 'package:facebook_app/pages/authenticated/submenu/setting_and_privacy/add_block_page.dart';
 import 'package:facebook_app/pages/authenticated/menu.dart';
-import 'package:facebook_app/pages/authenticated/submenu/setting_and_privacy/block_page.dart';
-import 'package:facebook_app/pages/authenticated/submenu/setting_and_privacy/login_security.dart';
-import 'package:facebook_app/pages/authenticated/submenu/setting_and_privacy/login_security_change_password.dart';
-import 'package:facebook_app/pages/authenticated/submenu/setting_and_privacy/personal_information.dart';
-import 'package:facebook_app/pages/authenticated/submenu/setting_and_privacy/personal_name.dart';
-import 'package:facebook_app/pages/authenticated/submenu/term_and_policies/policy_and_privacy.dart';
 import 'package:facebook_app/pages/authenticated/submenu/setting_and_privacy/block_page.dart';
 import 'package:facebook_app/pages/authenticated/submenu/setting_and_privacy/login_security.dart';
 import 'package:facebook_app/pages/authenticated/submenu/setting_and_privacy/login_security_change_password.dart';
@@ -15,7 +10,6 @@ import 'package:facebook_app/pages/authenticated/submenu/term_and_policies/polic
 import 'package:facebook_app/pages/authenticated/submenu/setting.dart';
 import 'package:facebook_app/pages/authenticated/submenu/term_and_policies.dart';
 import 'package:facebook_app/pages/authenticated/submenu/term_and_policies/terms_of_service.dart';
-import 'package:facebook_app/pages/authenticated/submenu/term_and_policies/terms_of_service.dart';
 import 'package:go_router/go_router.dart';
 
 final GoRoute menuRoute = GoRoute(
@@ -24,6 +18,10 @@ final GoRoute menuRoute = GoRoute(
   routes: [
     termRoute,
     settingRoute,
+    GoRoute(
+      path: 'coins',
+      builder: (context, state) => const Coins(),
+    ),
   ]
 );
 
