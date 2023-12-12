@@ -13,7 +13,6 @@ import 'package:facebook_app/services/friend_service.dart';
 import 'package:facebook_app/services/user_service.dart';
 import 'package:flutter/material.dart';
 
-
 class PersonalPage extends StatefulWidget {
   final String uid;
   const PersonalPage({super.key, required this.uid});
@@ -189,9 +188,11 @@ class _PersonalPageState extends State<PersonalPage> {
                         profile: profile,
                         contextPage: context,
                       ),
-
-                      PersonalFriend(friends: friends, contextPage: context, uid: profile.id,),
-
+                      PersonalFriend(
+                        friends: friends,
+                        contextPage: context,
+                        uid: profile.id,
+                      ),
                       Container(
                         height: 20,
                         width: MediaQuery.of(context).size.width,
@@ -234,14 +235,15 @@ class _PersonalPageState extends State<PersonalPage> {
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             itemCount: feeds.length,
-            itemBuilder: (context, index) =>Container(
-                            decoration: const BoxDecoration(border: Border(bottom: BorderSide(width: 4, color: Colors.grey))),
-                            padding: const EdgeInsets.fromLTRB(10, 10, 10, 5),
-                            child: FeedItem(
-                              postData: feeds[index],
-                            ),
-                          ),
-            
+            itemBuilder: (context, index) => Container(
+              decoration: const BoxDecoration(
+                  border:
+                      Border(bottom: BorderSide(width: 4, color: Colors.grey))),
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 5),
+              child: FeedItem(
+                postData: feeds[index],
+              ),
+            ),
           );
   }
 

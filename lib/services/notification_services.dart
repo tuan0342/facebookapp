@@ -166,7 +166,7 @@ class NotificationServices extends ChangeNotifier {
       required NotificationModel notification}) async {
     try {
       final body = {
-        'to': '/topics/${topic}',
+        'to': '/topics/$topic',
         'priority': priority ?? 'high',
         'notification': {
           'title': notification.title,

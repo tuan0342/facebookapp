@@ -263,6 +263,11 @@ class _UserFriendsPageState extends State<UserFriendsPage> {
                     padding: const EdgeInsets.only(bottom: 4),
                     child: FriendBox(
                       friend: friends[index],
+                      onRemove: () {
+                        setState(() {
+                          friends.removeAt(index);
+                        });
+                      },
                     ),
                   ),
                 ),

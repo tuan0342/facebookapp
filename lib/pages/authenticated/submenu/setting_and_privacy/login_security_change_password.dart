@@ -19,7 +19,7 @@ class _LoginSecurityChangePasswordState extends State<LoginSecurityChangePasswor
 
   @override
   Widget build(BuildContext context) {
-    late AuthService _authService = Provider.of<AuthService>(context, listen: false);
+    late AuthService authService = Provider.of<AuthService>(context, listen: false);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -123,7 +123,7 @@ class _LoginSecurityChangePasswordState extends State<LoginSecurityChangePasswor
                   title: "Lưu thay đổi",
                   cbFunction: (){
                     if (_formKey.currentState!.validate()) {
-                      _authService.changePassword(context: context, password: passWordController.text, 
+                      authService.changePassword(context: context, password: passWordController.text, 
                         newPassword: newPasswordController.text);
                     }
                   },

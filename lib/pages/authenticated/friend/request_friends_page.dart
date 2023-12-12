@@ -2,7 +2,6 @@ import 'package:facebook_app/models/friend_model.dart';
 import 'package:facebook_app/my_widgets/request_friend_box.dart';
 import 'package:facebook_app/services/app_service.dart';
 import 'package:facebook_app/services/friend_service.dart';
-import 'package:facebook_app/util/common.dart';
 import "package:flutter/material.dart";
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -28,8 +27,8 @@ class _RequestFriendsPageState extends State<RequestFriendsPage> {
   }
 
   void _onShowFriends(BuildContext context) async {
-    final _appService = Provider.of<AppService>(context, listen: false);
-    context.push("/authenticated/friends/${_appService.uidLoggedIn}");
+    final appService = Provider.of<AppService>(context, listen: false);
+    context.push("/authenticated/friends/${appService.uidLoggedIn}");
   }
 
   void _scrollListener() {

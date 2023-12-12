@@ -29,56 +29,13 @@ class FeedService {
       markComment: 0,
       isFelt: -1,
       state: "Not Hyped",
-      author: Author(
+      author: const Author(
           id: 1,
           name: "Nguyễn Khánh Duy",
           avatar:
-              "https://it4788.catan.io.vn/files/avatar-1700472905228-894880239.jpg"),
-      canEdit: 1,
-      banned: 0,
-      isBlocked: 0,
-    ),
-    Post(
-      id: 1,
-      name: "",
-      image: [const ImageModel(id: 1, url: "")],
-      described: "",
-      created: "2023-11-16T07:37:51.804Z",
-      feel: 0,
-      markComment: 1,
-      isFelt: 1,
-      state: "Not Hyped",
-      author: Author(id: 1, name: "Nguyễn Khánh Duy", avatar: ""),
-      canEdit: 1,
-      banned: 0,
-      isBlocked: 0,
-    ),
-    Post(
-      id: 1,
-      name: "",
-      image: [const ImageModel(id: 1, url: "")],
-      described: "",
-      created: "2023-11-16T07:37:51.804Z",
-      feel: 1,
-      markComment: 0,
-      isFelt: 0,
-      state: "Not Hyped",
-      author: Author(id: 1, name: "Nguyễn Khánh Duy", avatar: ""),
-      canEdit: 1,
-      banned: 0,
-      isBlocked: 0,
-    ),
-    Post(
-      id: 1,
-      name: "",
-      image: [const ImageModel(id: 1, url: "")],
-      described: "",
-      created: "2023-11-16T07:37:51.804Z",
-      feel: 10,
-      markComment: 0,
-      isFelt: 0,
-      state: "Not Hyped",
-      author: Author(id: 1, name: "Nguyễn Khánh Duy", avatar: ""),
+              "https://it4788.catan.io.vn/files/avatar-1700472905228-894880239.jpg",
+          coins: 0,
+          listing: []),
       canEdit: 1,
       banned: 0,
       isBlocked: 0,
@@ -219,9 +176,9 @@ class FeedService {
       required int postId,
       required int postOwnerId,
       required int feelType}) async {
-    final _appService = Provider.of<AppService>(context, listen: false);
-    final _authService = Provider.of<AuthService>(context, listen: false);
-    final _notificationService =
+    final appService = Provider.of<AppService>(context, listen: false);
+    final authService = Provider.of<AuthService>(context, listen: false);
+    final notificationService =
         Provider.of<NotificationServices>(context, listen: false);
     try {
       Map<String, dynamic> body = {
@@ -230,38 +187,41 @@ class FeedService {
       };
 
       Map<String, String> headers = {
-        "Authorization": "Bearer ${_appService.token}",
+        "Authorization": "Bearer ${appService.token}",
         'Content-Type': 'application/json'
       };
 
       final response =
           await postMethod(endpoind: "feel", body: body, headers: headers);
       final responseBody = jsonDecode(response.body);
+      debugPrint("response data: $responseBody");
       if (int.parse(responseBody["code"]) == 9998) {
         throw UnauthorizationException();
       }
       if (int.parse(responseBody["code"]) == 1000) {
         // send noti
-        if (feelType == 1) {
-          _notificationService.sendNotificationToTopic(
-              topic: postOwnerId.toString(),
-              notification: NotificationModel(
-                  title: "Anti Facebook",
-                  message:
-                      "${_appService.username} đã bày tỏ cảm xúc kudos vào bài viết của bạn"));
-        } else {
-          _notificationService.sendNotificationToTopic(
-              topic: postOwnerId.toString(),
-              notification: NotificationModel(
-                  title: "Anti Facebook",
-                  message:
-                      "${_appService.username} đã bày tỏ cảm xúc disapointed vào bài viết của bạn"));
+        if (postOwnerId != int.parse(_appService.uidLoggedIn)) {
+          if (feelType == 1) {
+            notificationService.sendNotificationToTopic(
+                topic: postOwnerId.toString(),
+                notification: NotificationModel(
+                    title: "Anti Facebook",
+                    message:
+                        "${appService.username} đã bày tỏ cảm xúc kudos vào bài viết của bạn"));
+          } else {
+            notificationService.sendNotificationToTopic(
+                topic: postOwnerId.toString(),
+                notification: NotificationModel(
+                    title: "Anti Facebook",
+                    message:
+                        "${appService.username} đã bày tỏ cảm xúc disapointed vào bài viết của bạn"));
+          }
         }
         return true;
       }
     } on UnauthorizationException {
       // ignore: use_build_context_synchronously
-      _authService.logOut(
+      authService.logOut(
           context: context,
           isShowSnackbar: true,
           msg: "Phiên đăng nhập hết hạn");
@@ -277,8 +237,8 @@ class FeedService {
 
   Future<bool> deleteFeelPost(
       {required BuildContext context, required int postId}) async {
-    final _appService = Provider.of<AppService>(context, listen: false);
-    final _authService = Provider.of<AuthService>(context, listen: false);
+    final appService = Provider.of<AppService>(context, listen: false);
+    final authService = Provider.of<AuthService>(context, listen: false);
 
     try {
       Map<String, dynamic> body = {
@@ -286,7 +246,7 @@ class FeedService {
       };
 
       Map<String, String> headers = {
-        "Authorization": "Bearer ${_appService.token}",
+        "Authorization": "Bearer ${appService.token}",
         'Content-Type': 'application/json'
       };
 
@@ -301,7 +261,7 @@ class FeedService {
       }
     } on UnauthorizationException {
       // ignore: use_build_context_synchronously
-      _authService.logOut(
+      authService.logOut(
           context: context,
           isShowSnackbar: true,
           msg: "Phiên đăng nhập hết hạn");
@@ -317,8 +277,8 @@ class FeedService {
 
   Future<bool> getListFeel(
       {required BuildContext context, required int postId}) async {
-    final _appService = Provider.of<AppService>(context, listen: false);
-    final _authService = Provider.of<AuthService>(context, listen: false);
+    final appService = Provider.of<AppService>(context, listen: false);
+    final authService = Provider.of<AuthService>(context, listen: false);
 
     try {
       Map<String, dynamic> body = {
@@ -326,7 +286,7 @@ class FeedService {
       };
 
       Map<String, String> headers = {
-        "Authorization": "Bearer ${_appService.token}",
+        "Authorization": "Bearer ${appService.token}",
         'Content-Type': 'application/json'
       };
 
@@ -341,7 +301,7 @@ class FeedService {
       }
     } on UnauthorizationException {
       // ignore: use_build_context_synchronously
-      _authService.logOut(
+      authService.logOut(
           context: context,
           isShowSnackbar: true,
           msg: "Phiên đăng nhập hết hạn");
@@ -353,5 +313,44 @@ class FeedService {
     }
 
     return false;
+  }
+
+  Future<PostDetailModel?> getPost({required int postId}) async {
+    final appService = Provider.of<AppService>(context, listen: false);
+    final authService = Provider.of<AuthService>(context, listen: false);
+    try {
+      Map<String, dynamic> body = {
+        "id": postId,
+      };
+
+      Map<String, String> headers = {
+        "Authorization": "Bearer ${appService.token}",
+        'Content-Type': 'application/json'
+      };
+
+      final response =
+          await postMethod(endpoind: "get_post", body: body, headers: headers);
+      final responseBody = jsonDecode(response.body);
+      debugPrint("body: $responseBody");
+      if (int.parse(responseBody["code"]) == 9998) {
+        throw UnauthorizationException();
+      }
+      if (int.parse(responseBody["code"]) == 1000) {
+        return PostDetailModel.fromJson(responseBody["data"]);
+      }
+    } on UnauthorizationException {
+      // ignore: use_build_context_synchronously
+      authService.logOut(
+          context: context,
+          isShowSnackbar: true,
+          msg: "Phiên đăng nhập hết hạn");
+    } catch (e) {
+      debugPrint("get error $e");
+      // ignore: use_build_context_synchronously
+      showSnackBar(
+          context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau $e");
+    }
+
+    return null;
   }
 }

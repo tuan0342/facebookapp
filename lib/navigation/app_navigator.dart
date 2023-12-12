@@ -1,4 +1,3 @@
-
 import 'package:facebook_app/navigation/routes/app_router.dart';
 import 'package:facebook_app/services/app_service.dart';
 import 'package:facebook_app/services/auth_service.dart';
@@ -52,7 +51,8 @@ class _AppNavigatorState extends State<AppNavigator> {
         ChangeNotifierProvider<AppService>(create: (context) => appService),
         Provider<AppRouter>(create: (context) => AppRouter(appService)),
         ListenableProvider<AuthService>(create: (context) => AuthService()),
-        ListenableProvider<NotificationServices>(create: (context) => notificationServices),
+        ListenableProvider<NotificationServices>(
+            create: (context) => notificationServices),
       ],
       child: Builder(
         builder: (context) {

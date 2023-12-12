@@ -93,7 +93,7 @@ class _VerifyAccountPageState extends State<VerifyAccountPage> {
                   const Text("Code của bạn: "),
                   Text(
                     verifyCode,
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   )
                 ],
               ),

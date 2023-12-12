@@ -4,14 +4,24 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-String LOGIN_KEY = "uid";
-String EMAIL_KEY = "email";
-String DEVICE_ID = "device_id";
-String TOKEN_KEY = "token";
-String AVATAR_KEY = "avatar";
-String COVER_IMAGE_KEY = "cover_image";
-String USERNAME_KEY = "username";
-String COINS_KEY = "coins";
+// ignore: constant_identifier_names
+const String LOGIN_KEY = "uid";
+// ignore: constant_identifier_names
+const String EMAIL_KEY = "email";
+// ignore: constant_identifier_names
+const String DEVICE_ID = "device_id";
+// ignore: constant_identifier_names
+const String TOKEN_KEY = "token";
+// ignore: constant_identifier_names
+const String AVATAR_KEY = "avatar";
+// ignore: constant_identifier_names
+const String COVER_IMAGE_KEY = "cover_image";
+// ignore: constant_identifier_names
+const String USERNAME_KEY = "username";
+// ignore: constant_identifier_names
+const String COINS_KEY = "coins";
+// ignore: constant_identifier_names
+const String SUBCRIBE_TOPIC = "subcribe";
 
 class AppService with ChangeNotifier {
   late final SharedPreferences sharedPreferences;
@@ -24,6 +34,7 @@ class AppService with ChangeNotifier {
   String _avatar = '';
   String _coverImage = '';
   String _username = '';
+  String _subcribe = '';
   int _coins = 0;
   bool _initialized = false;
 
@@ -37,6 +48,7 @@ class AppService with ChangeNotifier {
   String get coverImage => _coverImage;
   String get username => _username;
   int get coins => _coins;
+  String get subcribe => _subcribe;
   bool get initialized => _initialized;
   Stream<bool> get loginStateChange => _uidLoggedInChange.stream;
 
@@ -87,6 +99,12 @@ class AppService with ChangeNotifier {
     notifyListeners();
   }
 
+    set subcribe(String topic) {
+    sharedPreferences.setString(SUBCRIBE_TOPIC, topic);
+    _subcribe = topic;
+    notifyListeners();
+  }
+
   set initialized(bool value) {
     _initialized = value;
     notifyListeners();
@@ -103,7 +121,7 @@ class AppService with ChangeNotifier {
     _coins = sharedPreferences.getInt(COINS_KEY) ?? 0;
     _initialized = true;
     // solve exception setState or markBuild during build
-    Future.delayed(Duration(seconds: 1), () {
+    Future.delayed(const Duration(seconds: 1), () {
       notifyListeners();
     });
   }

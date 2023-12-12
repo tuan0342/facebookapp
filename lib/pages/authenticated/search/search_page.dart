@@ -1,6 +1,5 @@
 import 'package:facebook_app/models/post_model.dart';
 import 'package:facebook_app/my_widgets/my_text_button.dart';
-import 'package:facebook_app/my_widgets/post/feed_item.dart';
 import 'package:facebook_app/my_widgets/post/list_post.dart';
 import 'package:facebook_app/services/app_service.dart';
 import 'package:facebook_app/services/search_service.dart';
@@ -76,9 +75,9 @@ class _SearchPageState extends State<SearchPage> {
     final listKeywords = await SearchService(context: context)
         .getRecentKeywords(index: 0, count: 100, inSearchPage: true);
     Set<String> set = {};
-    listKeywords.forEach((element) {
+    for (var element in listKeywords) {
       set.add(element.keyword.trim());
-    });
+    }
     setState(() {
       keywords = set.take(20).toList();
     });
@@ -112,11 +111,11 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    final _appService = Provider.of<AppService>(context, listen: false);
+    final appService = Provider.of<AppService>(context, listen: false);
     return Scaffold(
       body: SafeArea(
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          padding: const EdgeInsets.symmetric(vertical: 10),
           child: Column(children: [
             Padding(
               padding: const EdgeInsets.only(bottom: 3),
@@ -146,8 +145,8 @@ class _SearchPageState extends State<SearchPage> {
                         // save keyword
                         final temp = keywords;
                         temp.add(_keywordController.text);
-                        _appService.sharedPreferences.setStringList(
-                            "KEYWORDS_${_appService.uidLoggedIn}", temp);
+                        appService.sharedPreferences.setStringList(
+                            "KEYWORDS_${appService.uidLoggedIn}", temp);
                         // search
                         onSearch(context);
                       }
@@ -197,7 +196,10 @@ class _SearchPageState extends State<SearchPage> {
             ),
             _focus.hasFocus || result == null
                 ? recentSearches()
-                : ListPost(posts: result!, scrollController: _scrollController, isLoading: isLoading),
+                : ListPost(
+                    posts: result!,
+                    scrollController: _scrollController,
+                    isLoading: isLoading),
           ]),
         ),
       ),
@@ -207,37 +209,40 @@ class _SearchPageState extends State<SearchPage> {
   // Widget show tìm kiếm gần đây
   Widget recentSearches() {
     return Expanded(
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              GestureDetector(
-                  child: const Text(
-                "Tìm kiếm gần đây",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-              )),
-              MyTextButton(
-                cbFunction: () {
-                  onShowSearchLogs(context);
-                },
-                title: "Chỉnh sửa",
-                textStyle: const TextStyle(fontSize: 20),
-                style: TextButton.styleFrom(
-                  padding: const EdgeInsets.all(0),
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                GestureDetector(
+                    child: const Text(
+                  "Tìm kiếm gần đây",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                )),
+                MyTextButton(
+                  cbFunction: () {
+                    onShowSearchLogs(context);
+                  },
+                  title: "Chỉnh sửa",
+                  textStyle: const TextStyle(fontSize: 20),
+                  style: TextButton.styleFrom(
+                    padding: const EdgeInsets.all(0),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
                 ),
-              ),
-            ],
-          ),
-          const Divider(
-            color: Colors.grey,
-          ),
-          Expanded(
-              child: ListView(
-            children: keywords.map((e) => recentSearchesItem(e)).toList(),
-          )),
-        ],
+              ],
+            ),
+            const Divider(
+              color: Colors.grey,
+            ),
+            Expanded(
+                child: ListView(
+              children: keywords.map((e) => recentSearchesItem(e)).toList(),
+            )),
+          ],
+        ),
       ),
     );
   }
@@ -275,5 +280,4 @@ class _SearchPageState extends State<SearchPage> {
   void handleTapRecentSearchItem(String keyword) async {
     _keywordController.text = keyword;
   }
-
 }

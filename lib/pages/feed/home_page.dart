@@ -1,5 +1,4 @@
 import 'package:facebook_app/models/post_model.dart';
-import 'package:facebook_app/my_widgets/post/feed_item.dart';
 import 'package:facebook_app/my_widgets/my_image.dart';
 import 'package:facebook_app/my_widgets/post/list_post.dart';
 import 'package:facebook_app/pages/feed/post/add_post_page.dart';
@@ -11,8 +10,7 @@ import 'package:provider/provider.dart';
 import '../../services/app_service.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({super.key, required this.email});
-  final String email;
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() {
@@ -42,7 +40,6 @@ class HomePageState extends State<HomePage> {
         final fetchData = await FeedService(context: context)
             .getFeeds(index: index, count: count);
 
-        debugPrint("fetch: $fetchData");
         if (fetchData.isEmpty) {
           setState(() {
             isEnd = true;
@@ -80,7 +77,7 @@ class HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final _appService = Provider.of<AppService>(context, listen: false);
+    final appService = Provider.of<AppService>(context, listen: false);
     return SafeArea(
         child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,10 +92,10 @@ class HomePageState extends State<HomePage> {
               GestureDetector(
                 onTap: () {
                   context.push(
-                      "/authenticated/personalPage/${_appService.uidLoggedIn}");
+                      "/authenticated/personalPage/${appService.uidLoggedIn}");
                 },
                 child: MyImage(
-                  imageUrl: _appService.avatar,
+                  imageUrl: appService.avatar,
                   width: 50,
                   height: 50,
                 ),

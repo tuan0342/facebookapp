@@ -6,7 +6,13 @@ class MyEditText extends StatelessWidget {
   final String? hintText;
   final String? errorText;
 
-  const MyEditText({super.key, required this.isDisabled, required this.labelText, this.hintText, this.errorText,});
+  const MyEditText({
+    super.key,
+    required this.isDisabled,
+    required this.labelText,
+    this.hintText,
+    this.errorText,
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -20,9 +20,9 @@ class JoinFacebookPage extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: MyAppBar(title: "Tạo tài khoản"),
+      appBar: const MyAppBar(title: "Tạo tài khoản"),
       body: Padding(
-        padding: EdgeInsets.only(left: 16.0, right: 16.0),
+        padding: const EdgeInsets.only(left: 16.0, right: 16.0),
         child: Center(
           child: Column(
             children: [
@@ -39,7 +39,7 @@ class JoinFacebookPage extends StatelessWidget {
                       child: MyText(title: "Chúng tôi sẽ giúp bạn tạo tài khoản mới sau vài bước dễ dàng.", type: "label", ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(top: 16.0),
+                      padding: const EdgeInsets.only(top: 16.0),
                       child: MyFilledButton(isDisabled: false, title: "Tiếp", cbFunction: nextScreen),
                     ),
                   ],

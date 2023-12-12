@@ -1,9 +1,13 @@
 import 'package:facebook_app/models/friend_model.dart';
+import 'package:facebook_app/models/notification_model.dart';
 import 'package:facebook_app/my_widgets/my_image.dart';
+import 'package:facebook_app/services/app_service.dart';
 import 'package:facebook_app/services/friend_service.dart';
+import 'package:facebook_app/services/notification_services.dart';
 import 'package:facebook_app/util/common.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class RequestFriendBox extends StatefulWidget {
   final RequestFriendModel friend;
@@ -30,9 +34,17 @@ class _RequestFriendBoxState extends State<RequestFriendBox> {
   }
 
   void _onAcceptRequest(BuildContext context) async {
+    final AppService appService =
+        Provider.of<AppService>(context, listen: false);
     final success = await FriendService(context: context)
         .setAcceptFriend(widget.friend.id, 1);
     if (success) {
+      // send noti
+      NotificationServices().sendNotificationToTopic(
+          topic: widget.friend.id.toString(),
+          notification: NotificationModel(
+              title: "Anti facebook",
+              message: "${appService.username} đã chấp nhận lời mời kết bạn"));
       // ignore: use_build_context_synchronously
       showSnackBar(context: context, msg: "Đã chấp nhận lời mời kết bạn");
       widget.onRemoveItem();
@@ -172,6 +184,7 @@ class _RequestFriendBoxState extends State<RequestFriendBox> {
                                     "Đã chặn tài khoản ${widget.friend.username}");
                             widget.onRemoveItem();
                           }
+                          // ignore: use_build_context_synchronously
                           Navigator.pop(context);
                         },
                         child: Row(
