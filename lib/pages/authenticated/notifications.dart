@@ -43,30 +43,27 @@ class _NotificationPageState extends State<NotificationPage> {
           }
 
           return SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(12, 12, 12, 0),
+                  child: Text(
                     "Notifications",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                   ),
-                  const SizedBox(
-                    height: 20,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Expanded(
+                  child: ListView(
+                    children: snapshot.data!.docs
+                        .map((doc) => _buildNotiItem(doc))
+                        .toList(),
                   ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: ListView(
-                        children: snapshot.data!.docs
-                            .map((doc) => _buildNotiItem(doc))
-                            .toList(),
-                      ),
-                    ),
-                  )
-                ],
-              ),
+                )
+              ],
             ),
           );
         }));
@@ -84,7 +81,10 @@ class _NotificationPageState extends State<NotificationPage> {
         }
       },
       child: Container(
-        padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+        padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+        color: data["seen"]
+            ? Colors.white
+            : const Color.fromARGB(255, 186, 232, 254),
         child: Row(
           children: [
             Expanded(
