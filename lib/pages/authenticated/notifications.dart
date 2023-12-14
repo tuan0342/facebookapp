@@ -78,8 +78,10 @@ class _NotificationPageState extends State<NotificationPage> {
     return GestureDetector(
       onTap: () {
         handleClickNotification(data);
-        notificationService.handleClickNotification(
-            topic: appService.uidLoggedIn, messageId: doc.id);
+        if (!data["seen"]) {
+          notificationService.handleClickNotification(
+              topic: appService.uidLoggedIn, messageId: doc.id);
+        }
       },
       child: Container(
         padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
