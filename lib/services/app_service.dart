@@ -99,7 +99,7 @@ class AppService with ChangeNotifier {
     notifyListeners();
   }
 
-    set subcribe(String topic) {
+  set subcribe(String topic) {
     sharedPreferences.setString(SUBCRIBE_TOPIC, topic);
     _subcribe = topic;
     notifyListeners();

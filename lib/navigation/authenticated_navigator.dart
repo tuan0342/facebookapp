@@ -16,14 +16,15 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class AuthenticatedNavigator extends StatefulWidget {
-  const AuthenticatedNavigator({super.key});
+  final int selected;
+  const AuthenticatedNavigator({super.key, this.selected = 0});
 
   @override
   State<AuthenticatedNavigator> createState() => _AuthenticatedNavigatorState();
 }
 
 class _AuthenticatedNavigatorState extends State<AuthenticatedNavigator> {
-  int _selectedIndex = 0;
+  late int _selectedIndex;
 
   static final List<Widget> _widgetOptions = <Widget>[
     const HomePage(),
@@ -32,6 +33,13 @@ class _AuthenticatedNavigatorState extends State<AuthenticatedNavigator> {
     const NotificationPage(),
     const Menu(),
   ];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _selectedIndex = widget.selected;
+  }
 
   void _onItemTapped(int index) {
     setState(() {

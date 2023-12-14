@@ -1,5 +1,5 @@
 import 'package:facebook_app/models/friend_model.dart';
-import 'package:facebook_app/my_widgets/friend_box.dart';
+import 'package:facebook_app/my_widgets/friend/friend_box.dart';
 import 'package:facebook_app/my_widgets/my_text_button.dart';
 import 'package:facebook_app/services/app_service.dart';
 import 'package:facebook_app/services/friend_service.dart';
@@ -74,8 +74,6 @@ class _UserFriendsPageState extends State<UserFriendsPage> {
     _scrollController = ScrollController();
     _scrollController.addListener(_scrollListener);
     onLoad(context);
-
-    debugPrint("uid: ${widget.uid}");
   }
 
   @override

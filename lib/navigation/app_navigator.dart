@@ -32,9 +32,6 @@ class _AppNavigatorState extends State<AppNavigator> {
     notificationServices.requestNotificationPermission();
     notificationServices.firebaseInit(context);
     notificationServices.setupInteractMessage(context);
-    // notificationServices.getDeviceToken().then((value) {
-    //   debugPrint("divice token: $value");
-    // });
     super.initState();
   }
 
@@ -56,11 +53,10 @@ class _AppNavigatorState extends State<AppNavigator> {
       ],
       child: Builder(
         builder: (context) {
-          final GoRouter goRouter =
-              Provider.of<AppRouter>(context, listen: false).router;
+          final appRouter = Provider.of<AppRouter>(context, listen: false);
           return MaterialApp.router(
             title: "Facebook app",
-            routerConfig: goRouter,
+            routerConfig: appRouter.router,
             debugShowCheckedModeBanner: false,
           );
         },
