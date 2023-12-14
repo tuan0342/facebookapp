@@ -8,7 +8,7 @@ import 'package:facebook_app/pages/authenticated/friend/request_friends_page.dar
 import 'package:facebook_app/pages/authenticated/home_page.dart';
 import 'package:facebook_app/pages/authenticated/menu.dart';
 import 'package:facebook_app/pages/authenticated/notifications.dart';
-import 'package:facebook_app/pages/authenticated/video_page.dart';
+import 'package:facebook_app/pages/authenticated/video/video_page.dart';
 import 'package:facebook_app/services/app_service.dart';
 import 'package:facebook_app/services/auth_service.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -29,7 +29,7 @@ class _AuthenticatedNavigatorState extends State<AuthenticatedNavigator> {
   static final List<Widget> _widgetOptions = <Widget>[
     HomePage(email: "fdgdfgdfg"),
     const RequestFriendsPage(),
-    const ChatScreen(),
+    const VideoPage(),
     const NotificationPage(),
     const Menu(),
   ];
@@ -47,21 +47,6 @@ class _AuthenticatedNavigatorState extends State<AuthenticatedNavigator> {
 
     FirebaseMessaging.instance.subscribeToTopic(_appService.uidLoggedIn);
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Anti Facebook"),
-        actions: [
-          IconButton(
-              onPressed: () {
-                context.push("/authenticated/search");
-              },
-              icon: const Icon(Icons.search_rounded)),
-          IconButton(
-              onPressed: () {
-                _authService.logOut(context: context);
-              },
-              icon: const Icon(Icons.logout))
-        ],
-      ),
       bottomNavigationBar: BottomNavBar(
         onTap: _onItemTapped,
         index: _selectedIndex,
