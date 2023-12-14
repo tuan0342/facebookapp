@@ -194,7 +194,7 @@ class FeedService {
       final response =
           await postMethod(endpoind: "feel", body: body, headers: headers);
       final responseBody = jsonDecode(response.body);
-      debugPrint("response data: $responseBody");
+
       if (int.parse(responseBody["code"]) == 9998) {
         throw UnauthorizationException();
       }
@@ -203,18 +203,23 @@ class FeedService {
         if (postOwnerId != int.parse(_appService.uidLoggedIn)) {
           if (feelType == 1) {
             notificationService.sendNotificationToTopic(
-                topic: postOwnerId.toString(),
-                notification: NotificationModel(
-                    title: "Anti Facebook",
-                    message:
-                        "${appService.username} đã bày tỏ cảm xúc kudos vào bài viết của bạn"));
+              // topic: postOwnerId.toString(),
+              topic: postOwnerId.toString(),
+              notification: NotificationModel(
+                  title: "Anti Facebook",
+                  message:
+                      "${appService.username} đã bày tỏ cảm xúc kudos vào bài viết của bạn",
+                  data: InteractPostNotiModel(postId: postId).toMap()),
+            );
           } else {
             notificationService.sendNotificationToTopic(
+                // topic: postOwnerId.toString(),
                 topic: postOwnerId.toString(),
                 notification: NotificationModel(
                     title: "Anti Facebook",
                     message:
-                        "${appService.username} đã bày tỏ cảm xúc disapointed vào bài viết của bạn"));
+                        "${appService.username} đã bày tỏ cảm xúc disapointed vào bài viết của bạn",
+                    data: InteractPostNotiModel(postId: postId).toMap()));
           }
         }
         return true;
@@ -331,7 +336,7 @@ class FeedService {
       final response =
           await postMethod(endpoind: "get_post", body: body, headers: headers);
       final responseBody = jsonDecode(response.body);
-      debugPrint("body: $responseBody");
+
       if (int.parse(responseBody["code"]) == 9998) {
         throw UnauthorizationException();
       }

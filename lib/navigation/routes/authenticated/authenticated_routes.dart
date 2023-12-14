@@ -10,11 +10,11 @@ import 'package:facebook_app/pages/authenticated/friend/suggest_friends_page.dar
 import 'package:facebook_app/pages/authenticated/friend/user_friends_page.dart';
 import 'package:facebook_app/pages/authenticated/personal_page.dart';
 import 'package:facebook_app/pages/webview/webview_container.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 final GoRoute authenticatedRoute = GoRoute(
   path: '/authenticated',
-  builder: (context, state) => const AuthenticatedNavigator(),
   routes: [
     searchRoutes,
     menuRoute,
@@ -57,6 +57,20 @@ final GoRoute authenticatedRoute = GoRoute(
         path: "postDetail/:id",
         builder: (context, state) =>
             FeedItemDetail(postId: state.pathParameters["id"]!)),
+    GoRoute(
+      path: ":index",
+      builder: (context, state) {
+        late int index;
+        if (state.pathParameters["index"] == null) {
+          index = 0;
+        } else {
+          index = int.parse(state.pathParameters["index"]!);
+        }
+        return AuthenticatedNavigator(
+          selected: index,
+        );
+      },
+    )
   ],
   redirect: (context, state) {
     return null;

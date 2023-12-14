@@ -224,7 +224,6 @@ class PersonalImages extends StatelessWidget {
               images: images,
               index: 0,
             ));
-    debugPrint(result);
   }
 
   Future<void> getAvatarImage(ImageSource source, BuildContext context) async {

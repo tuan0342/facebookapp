@@ -57,3 +57,22 @@ void showPopupList(
           ));
   debugPrint(result);
 }
+
+const String INTERACTPOST = "interact post";
+const String ACCEPTFRIEND = "accept friend";
+const String REQUESTFRIEND = "request friend";
+
+String? mapNotiDataToStringRoute(Map<String, dynamic> map) {
+  switch (map["type"]) {
+    case INTERACTPOST:
+      final postId = map["postId"];
+      return "/authenticated/postDetail/$postId";
+    case ACCEPTFRIEND:
+      final uid = map["friendId"];
+      return "/authenticated/friends/$uid";
+    case REQUESTFRIEND:
+      return "/authenticated/1";
+    default:
+      return null;
+  }
+}
