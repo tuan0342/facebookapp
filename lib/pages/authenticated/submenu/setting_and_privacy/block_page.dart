@@ -65,10 +65,10 @@ class _BlockPageState extends State<BlockPage> {
 
   Future refresh() async {
     setState(() {
+      friendBlock = [];
       isLoading = false;
       isEnd = false;
       index = 0;
-      friendBlock = [];
     });
     onLoad(context);
   }
@@ -105,7 +105,8 @@ class _BlockPageState extends State<BlockPage> {
                           padding: EdgeInsets.zero,
                         ),
                         onPressed: (){
-                          context.push('/authenticated/menu/setting/block/addBlock');
+                          context.push('/authenticated/menu/setting/block/addBlock')
+                            .then((value) => refresh());
                         }, 
                         child: Row(
                           children: [
@@ -125,6 +126,8 @@ class _BlockPageState extends State<BlockPage> {
                     const SizedBox(height: 20,),
 
                     blocksList(),
+
+                    const SizedBox(height: 50,),
                   ],
                 ),
               ),
@@ -148,6 +151,7 @@ class _BlockPageState extends State<BlockPage> {
                   padding: const EdgeInsets.only(bottom: 4),
                   child: FriendBlockItem(
                     friend: friendBlock[index],
+                    refreshBlock: refresh,
                   ),
                 ),
               ),

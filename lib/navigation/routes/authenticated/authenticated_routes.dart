@@ -10,7 +10,6 @@ import 'package:facebook_app/pages/authenticated/friend/suggest_friends_page.dar
 import 'package:facebook_app/pages/authenticated/friend/user_friends_page.dart';
 import 'package:facebook_app/pages/authenticated/personal_page.dart';
 import 'package:facebook_app/pages/webview/webview_container.dart';
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 final GoRoute authenticatedRoute = GoRoute(

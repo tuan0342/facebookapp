@@ -9,8 +9,9 @@ class PersonalFriend extends StatelessWidget {
   final String uid;
   final List<FriendModel> friends;
   final BuildContext contextPage;
+  final VoidCallback refreshFriend;
   const PersonalFriend({super.key, required this.friends, required this.contextPage, 
-    required this.uid, required this.profile});
+    required this.uid, required this.profile, required this.refreshFriend});
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +32,8 @@ class PersonalFriend extends StatelessWidget {
             children: friends
                 .map((friend) => FriendItem(
                       friend: friend,
+                      refreshFriend: refreshFriend,
+                      contextPage: contextPage,
                     ))
                 .toList(),
           ),

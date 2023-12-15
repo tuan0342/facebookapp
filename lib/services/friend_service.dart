@@ -366,6 +366,39 @@ class FriendService {
     return false;
   }
 
+  Future<bool> setUnblocksFriend(String uid) async {
+    try {
+      Map<String, dynamic> body = {
+        "user_id": uid,
+      };
+
+      Map<String, String> headers = {
+        "Authorization": "Bearer ${_appService.token}",
+        'Content-Type': 'application/json',
+      };
+
+      final response =
+          await postMethod(endpoind: "unblock", body: body, headers: headers);
+      final responseBody = jsonDecode(response.body);
+      if (int.parse(responseBody["code"]) == 9998) {
+        throw UnauthorizationException();
+      }
+      if (int.parse(responseBody["code"]) == 1000) {
+        return true;
+      }
+    } on UnauthorizationException {
+      // ignore: use_build_context_synchronously
+      _authService.logOut(
+          context: context,
+          isShowSnackbar: true,
+          msg: "Phiên đăng nhập hết hạn");
+    } catch (err) {
+      debugPrint("get err $err");
+    }
+
+    return false;
+  }
+
   Future<bool> unfriend(int userRequestId) async {
     try {
       Map<String, dynamic> body = {

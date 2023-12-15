@@ -149,6 +149,8 @@ class _SuggestFriendsPageState extends State<SuggestFriendsPage> {
                           suggests.removeAt(index);
                         });
                       },
+                      refresh: refresh,
+                      contextPage: context,
                     ),
                   ),
                 ),

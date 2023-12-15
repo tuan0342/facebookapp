@@ -28,8 +28,8 @@ class _PersonalPageState extends State<PersonalPage> {
       username: "",
       created: "",
       description: "",
-      avatar: "",
-      imageCover: "",
+      avatar: "https://t4.ftcdn.net/jpg/05/49/98/39/360_F_549983970_bRCkYfk0P6PP5fKbMhZMIb07mCJ6esXL.jpg",
+      imageCover: "https://t4.ftcdn.net/jpg/05/49/98/39/360_F_549983970_bRCkYfk0P6PP5fKbMhZMIb07mCJ6esXL.jpg",
       link: "",
       address: "",
       city: "",
@@ -72,7 +72,7 @@ class _PersonalPageState extends State<PersonalPage> {
 
   void getNewFeed() async {
     if (!isEndPosts) {
-      setState(() {
+      setStateIfMounted(() {
         isLoadingNewFeeds = true;
       });
 
@@ -89,11 +89,11 @@ class _PersonalPageState extends State<PersonalPage> {
             uid: widget.uid);
 
         if (data["posts"].isEmpty) {
-          setState(() {
+          setStateIfMounted(() {
             isEndPosts = true;
           });
         } else {
-          setState(() {
+          setStateIfMounted(() {
             feeds.addAll(data["posts"]);
             lastId = int.parse(data["lastId"]);
             indexPost += countPost;
@@ -102,7 +102,7 @@ class _PersonalPageState extends State<PersonalPage> {
       } catch (err) {
         debugPrint("exception $err");
       } finally {
-        setState(() {
+        setStateIfMounted(() {
           isLoadingNewFeeds = false;
         });
       }
@@ -110,19 +110,19 @@ class _PersonalPageState extends State<PersonalPage> {
   }
 
   void getProfile() async {
-    setState(() {
+    setStateIfMounted(() {
       isLoadingProfile = true;
     });
     final profile_ =
         await UserService().getProfile(context: context, uid: widget.uid);
-    setState(() {
+    setStateIfMounted(() {
       profile = profile_;
       isLoadingProfile = false;
     });
   }
 
   void clickKudosButton(int index) {
-    setState(() {
+    setStateIfMounted(() {
       if (feeds[index].isFelt == 0) {
         feeds[index].feel += 1;
         feeds[index].isFelt = 1;
@@ -135,30 +135,37 @@ class _PersonalPageState extends State<PersonalPage> {
 
   void onLoadFriend(BuildContext context) async {
     if (!isEndFriend) {
-      setState(() {
+      setStateIfMounted(() {
         isLoadingFriend = true;
       });
       final data =
           await FriendService(context: context).getFriends(0, 6, widget.uid);
 
       if (data["friends"].isEmpty) {
-        setState(() {
+        setStateIfMounted(() {
           isEndFriend = true;
         });
       } else {
-        setState(() {
+        setStateIfMounted(() {
           friends.addAll(data["friends"]);
         });
       }
 
-      setState(() {
+      setStateIfMounted(() {
         isLoadingFriend = false;
       });
     }
   }
 
-  void changeIsFriend() {
-    getProfile();
+  Future refreshFriend() async{
+    setStateIfMounted(() {
+      friends = [];
+    });
+    onLoadFriend(context);
+  }
+
+  void setStateIfMounted(f) {
+    if (mounted) setState(f);
   }
 
   @override
@@ -183,7 +190,6 @@ class _PersonalPageState extends State<PersonalPage> {
                       PersonalInfo(
                         profile: profile,
                         contextPage: context,
-                        changeIsFriend: changeIsFriend,
                       ),
                       Container(
                         height: 20,
@@ -196,7 +202,7 @@ class _PersonalPageState extends State<PersonalPage> {
                       ),
 
                       PersonalFriend(friends: friends, contextPage: context, 
-                        uid: profile.id, profile: profile,),
+                        uid: profile.id, profile: profile, refreshFriend: refreshFriend,),
 
                       Container(
                         height: 20,
