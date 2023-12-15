@@ -53,6 +53,7 @@ class _UserFriendsPageState extends State<UserFriendsPage> {
                 DateTime.parse(a.created).compareTo(DateTime.parse(b.created)));
           }
           total = data["total"];
+          index = index + count;
         });
       }
 

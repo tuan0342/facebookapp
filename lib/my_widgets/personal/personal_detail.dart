@@ -71,20 +71,20 @@ class PersonalDetail extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 10),
-        Visibility(
-          visible: profile.listing.isNotEmpty,
-          child: Row(
-            children: [
-              const Icon(Icons.rss_feed, color: Colors.black54, size: 26),
-              const SizedBox(width: 10),
-              Flexible(
-                  child: Text(
-                'Có ${profile.listing} người theo dõi',
-                style: const TextStyle(fontSize: 18),
-              )),
-            ],
-          ),
-        ),
+        // Visibility(
+        //   visible: profile.listing.isNotEmpty,
+        //   child: Row(
+        //     children: [
+        //       const Icon(Icons.rss_feed, color: Colors.black54, size: 26),
+        //       const SizedBox(width: 10),
+        //       Flexible(
+        //           child: Text(
+        //         'Có ${profile.listing} người theo dõi',
+        //         style: const TextStyle(fontSize: 18),
+        //       )),
+        //     ],
+        //   ),
+        // ),
       ]),
     );
   }

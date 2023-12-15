@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:facebook_app/models/menu_model.dart';
 import 'package:facebook_app/my_widgets/my_dropdown.dart';
+import 'package:facebook_app/my_widgets/my_image.dart';
 import 'package:facebook_app/services/app_service.dart';
 import 'package:facebook_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
@@ -70,7 +71,7 @@ class _MenuState extends State<Menu> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          ClipRRect(
+                          appService.avatar.isNotEmpty ? ClipRRect(
                               borderRadius: BorderRadius.circular(90),
                               child: Selector<AppService, String>(
                                 selector: (_, notifier) => notifier.avatar,
@@ -80,7 +81,11 @@ class _MenuState extends State<Menu> {
                                   width: 50,
                                   fit: BoxFit.cover,
                                 ),
-                              )),
+                              )) 
+                          : MyImage(
+                              imageUrl: appService.avatar,
+                              height: 50,
+                              width: 50),
                           const SizedBox(
                             width: 12,
                           ),

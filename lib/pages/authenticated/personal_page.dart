@@ -64,7 +64,8 @@ class _PersonalPageState extends State<PersonalPage> {
   }
 
   void handleScrolling() {
-    if (controller.position.pixels == controller.position.maxScrollExtent) {
+    // if (controller.position.pixels == controller.position.maxScrollExtent) {
+    if (controller.position.extentAfter == 0) {
       getNewFeed();
     }
   }
@@ -156,6 +157,10 @@ class _PersonalPageState extends State<PersonalPage> {
     }
   }
 
+  void changeIsFriend() {
+    getProfile();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -178,6 +183,7 @@ class _PersonalPageState extends State<PersonalPage> {
                       PersonalInfo(
                         profile: profile,
                         contextPage: context,
+                        changeIsFriend: changeIsFriend,
                       ),
                       Container(
                         height: 20,
@@ -188,11 +194,10 @@ class _PersonalPageState extends State<PersonalPage> {
                         profile: profile,
                         contextPage: context,
                       ),
-                      PersonalFriend(
-                        friends: friends,
-                        contextPage: context,
-                        uid: profile.id,
-                      ),
+
+                      PersonalFriend(friends: friends, contextPage: context, 
+                        uid: profile.id, profile: profile,),
+
                       Container(
                         height: 20,
                         width: MediaQuery.of(context).size.width,
@@ -231,20 +236,45 @@ class _PersonalPageState extends State<PersonalPage> {
                 )
               ],
             ))
-        : ListView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            itemCount: feeds.length,
-            itemBuilder: (context, index) => Container(
-              decoration: const BoxDecoration(
-                  border:
-                      Border(bottom: BorderSide(width: 4, color: Colors.grey))),
-              padding: const EdgeInsets.fromLTRB(10, 10, 10, 5),
-              child: FeedItem(
-                postData: feeds[index],
-              ),
+        : Column(
+          children: [
+            ListView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: feeds.length,
+              itemBuilder: (context, index) =>Container(
+                              decoration: const BoxDecoration(border: Border(bottom: BorderSide(width: 4, color: Colors.grey))),
+                              padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
+                              child: FeedItem(
+                                postData: feeds[index],
+                              ),
+                            ),
+              
             ),
-          );
+            if (isLoadingNewFeeds) const Padding(padding: EdgeInsets.only(top: 20), child: CircularProgressIndicator()),
+            Container(
+              alignment: Alignment.topCenter,
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    isEndPosts ? 'Hết bài đăng!' : '',
+                    style: const  TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700),
+                  ),
+                  const SizedBox(
+                    height: 100,
+                  )
+                ],
+              )
+            )
+          ],
+        );
   }
 
   @override

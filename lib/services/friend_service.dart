@@ -352,4 +352,41 @@ class FriendService {
 
     return false;
   }
+
+  Future<bool> unfriend(int userRequestId) async {
+    try {
+      Map<String, dynamic> body = {
+        "user_id": userRequestId,
+      };
+
+      Map<String, String> headers = {
+        "Authorization": "Bearer ${_appService.token}",
+        'Content-Type': 'application/json; charset=UTF-8',
+      };
+
+      final response = await postMethod(
+          endpoind: "unfriend", body: body, headers: headers);
+      final responseBody = jsonDecode(response.body);
+      debugPrint("response body: $responseBody");
+
+      if (int.parse(responseBody["code"]) == 9998) {
+        throw UnauthorizationException();
+      }
+      if (int.parse(responseBody["code"]) == 1000) {
+        return true;
+      }
+    } on UnauthorizationException {
+      // ignore: use_build_context_synchronously
+      _authService.logOut(
+          context: context,
+          isShowSnackbar: true,
+          msg: "Phiên đăng nhập hết hạn");
+    } catch (err) {
+      debugPrint("get err $err");
+      // ignore: use_build_context_synchronously
+      showSnackBar(
+          context: context, msg: "có lỗi xảy ra, vui lòng thử lại sau");
+    }
+    return false;
+  }
 }

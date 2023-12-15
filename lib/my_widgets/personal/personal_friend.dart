@@ -1,17 +1,16 @@
 import 'package:facebook_app/models/friend_model.dart';
+import 'package:facebook_app/models/profile_model.dart';
 import 'package:facebook_app/my_widgets/friend/friend_item.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class PersonalFriend extends StatelessWidget {
+  final Profile profile;
   final String uid;
   final List<FriendModel> friends;
   final BuildContext contextPage;
-  const PersonalFriend(
-      {super.key,
-      required this.friends,
-      required this.contextPage,
-      required this.uid});
+  const PersonalFriend({super.key, required this.friends, required this.contextPage, 
+    required this.uid, required this.profile});
 
   @override
   Widget build(BuildContext context) {
@@ -20,23 +19,12 @@ class PersonalFriend extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(
-            height: 20,
-          ),
-          const Text(
-            'Bạn bè',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          Text(
-            '${friends.length} người bạn',
-            style: const TextStyle(fontSize: 18, color: Colors.black54),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
+          const SizedBox(height: 20,),
+          const Text('Bạn bè', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),),
+          const SizedBox(height: 5,),
+          Text('${profile.listing} người bạn', style: const TextStyle(fontSize: 18, color: Colors.black54),),
+
+          const SizedBox(height: 20,),
           Wrap(
             direction: Axis.horizontal,
             spacing: 9,
