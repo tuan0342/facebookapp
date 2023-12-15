@@ -1,5 +1,5 @@
 import 'package:facebook_app/models/friend_model.dart';
-import 'package:facebook_app/my_widgets/suggest_friend_box.dart';
+import 'package:facebook_app/my_widgets/friend/suggest_friend_box.dart';
 import 'package:facebook_app/services/friend_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';

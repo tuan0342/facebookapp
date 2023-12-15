@@ -38,7 +38,7 @@ class AuthService extends ChangeNotifier {
 
       appService.uidLoggedIn = userCredential.user!.uid;
       // ignore: use_build_context_synchronously
-      context.go("/authenticated");
+      context.go("/authenticated/0");
     } on FirebaseAuthException catch (e) {
       if (e.code == 'INVALID_LOGIN_CREDENTIALS') {
         // ignore: use_build_context_synchronously
@@ -130,7 +130,7 @@ class AuthService extends ChangeNotifier {
         debugPrint("uid: ${_appService.uidLoggedIn}");
 
         // ignore: use_build_context_synchronously
-        context.go("/authenticated");
+        context.go("/authenticated/0");
         // ignore: use_build_context_synchronously
         showSnackBar(context: context, msg: 'Đăng nhập thành công');
       } else {
@@ -170,10 +170,12 @@ class AuthService extends ChangeNotifier {
     }
   }
 
-  Future<void> changePassword({
-    required BuildContext context, required String password, required String newPassword
-  }) async {
-    late AuthService authService = Provider.of<AuthService>(context, listen: false);
+  Future<void> changePassword(
+      {required BuildContext context,
+      required String password,
+      required String newPassword}) async {
+    late AuthService authService =
+        Provider.of<AuthService>(context, listen: false);
 
     try {
       final appService = Provider.of<AppService>(context, listen: false);
@@ -186,8 +188,8 @@ class AuthService extends ChangeNotifier {
         'Content-Type': 'application/json; charset=UTF-8'
       };
 
-      final response =
-          await postMethod(endpoind: "change_password", body: body, headers: headers);
+      final response = await postMethod(
+          endpoind: "change_password", body: body, headers: headers);
       final responseBody = jsonDecode(response.body);
       if (int.parse(responseBody["code"]) == 9998) {
         throw UnauthorizationException();
@@ -198,16 +200,17 @@ class AuthService extends ChangeNotifier {
         // ignore: use_build_context_synchronously
         authService.logOut(context: context);
       }
-    }on UnauthorizationException {
+    } on UnauthorizationException {
       // ignore: use_build_context_synchronously
       authService.logOut(
           context: context,
           isShowSnackbar: true,
           msg: "Phiên đăng nhập hết hạn");
-    }  catch (err) {
+    } catch (err) {
       debugPrint("get exception $err");
       // ignore: use_build_context_synchronously
-      showSnackBar(context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau $err");
+      showSnackBar(
+          context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau $err");
     }
   }
 }

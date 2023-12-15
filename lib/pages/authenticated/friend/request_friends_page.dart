@@ -1,5 +1,5 @@
 import 'package:facebook_app/models/friend_model.dart';
-import 'package:facebook_app/my_widgets/request_friend_box.dart';
+import 'package:facebook_app/my_widgets/friend/request_friend_box.dart';
 import 'package:facebook_app/services/app_service.dart';
 import 'package:facebook_app/services/friend_service.dart';
 import "package:flutter/material.dart";
@@ -45,7 +45,6 @@ class _RequestFriendsPageState extends State<RequestFriendsPage> {
       final data =
           await FriendService(context: context).getRequests(index, count);
 
-      debugPrint("data: $data");
       if (data["requests"].isEmpty) {
         setState(() {
           isEnd = true;

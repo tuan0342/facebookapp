@@ -102,20 +102,47 @@ class FriendBox extends StatelessWidget {
                                 ),
                                 TextButton(
                                   onPressed: () async {
-                                    // block user
-                                    final success = await FriendService(
-                                            context: context)
-                                        .setBlocksFriend(friend.id.toString());
-                                    if (success) {
-                                      // ignore: use_build_context_synchronously
-                                      showSnackBar(
-                                          context: context,
-                                          msg:
-                                              "Đã chặn tài khoản ${friend.username}");
-                                      onRemove();
-                                    }
-                                    // ignore: use_build_context_synchronously
-                                    Navigator.pop(context);
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          AlertDialog(
+                                        title: Text(
+                                            "xác nhận chặn ${friend.username}"),
+                                        // content: const Text(
+                                        //     'AlertDialog description'),
+                                        actions: <Widget>[
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Text('Cancel'),
+                                          ),
+                                          TextButton(
+                                            onPressed: () async {
+                                              // block user
+                                              final success =
+                                                  await FriendService(
+                                                          context: context)
+                                                      .setBlocksFriend(
+                                                          friend.id.toString());
+                                              if (success) {
+                                                // ignore: use_build_context_synchronously
+                                                showSnackBar(
+                                                    context: context,
+                                                    msg:
+                                                        "Đã chặn tài khoản ${friend.username}");
+                                                onRemove();
+                                              }
+                                              // ignore: use_build_context_synchronously
+                                              Navigator.pop(context);
+                                              // ignore: use_build_context_synchronously
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Text('OK'),
+                                          ),
+                                        ],
+                                      ),
+                                    );
                                   },
                                   child: Row(
                                     children: [
@@ -137,20 +164,46 @@ class FriendBox extends StatelessWidget {
                                 ),
                                 TextButton(
                                   onPressed: () async {
-                                    // block user
-                                    final success =
-                                        await FriendService(context: context)
-                                            .unFriend(friend.id);
-                                    if (success) {
-                                      // ignore: use_build_context_synchronously
-                                      showSnackBar(
-                                          context: context,
-                                          msg:
-                                              "Đã hủy kết bạn với ${friend.username}");
-                                      onRemove();
-                                    }
-                                    // ignore: use_build_context_synchronously
-                                    Navigator.pop(context);
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          AlertDialog(
+                                        title: Text(
+                                            "xác nhận chặn ${friend.username}"),
+                                        // content: const Text(
+                                        //     'AlertDialog description'),
+                                        actions: <Widget>[
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Text('Cancel'),
+                                          ),
+                                          TextButton(
+                                            onPressed: () async {
+                                              // block user
+                                              final success =
+                                                  await FriendService(
+                                                          context: context)
+                                                      .unFriend(friend.id);
+                                              if (success) {
+                                                // ignore: use_build_context_synchronously
+                                                showSnackBar(
+                                                    context: context,
+                                                    msg:
+                                                        "Đã hủy kết bạn với ${friend.username}");
+                                                onRemove();
+                                              }
+                                              // ignore: use_build_context_synchronously
+                                              Navigator.pop(context);
+                                              // ignore: use_build_context_synchronously
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Text('OK'),
+                                          ),
+                                        ],
+                                      ),
+                                    );
                                   },
                                   child: Row(
                                     children: [

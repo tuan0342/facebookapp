@@ -235,7 +235,6 @@ class _FeedItemState extends State<FeedItem> {
         onPressed: isLoading
             ? null
             : () {
-                debugPrint("click kudos");
                 onClickKudosBtn(feedService);
               },
         child: Row(
