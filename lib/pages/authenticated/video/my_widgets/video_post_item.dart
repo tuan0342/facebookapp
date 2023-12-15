@@ -122,7 +122,7 @@ class VideoPostItem extends StatelessWidget {
             child: Container(
               color: Colors.black, // Placeholder color for the video
               child: Center(
-                  child: MyVideoPlayer(videoUrl: videoPost.video.url, isInView: isInView)
+                  child: MyVideoPlayer(videoUrl: videoPost.video.url, isInView: isInView, videoPost: videoPost,)
               ),
             ),
           ),

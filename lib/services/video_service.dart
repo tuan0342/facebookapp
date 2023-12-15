@@ -19,7 +19,7 @@ class VideoService {
     Map<String, dynamic> result = {"posts": <VideoPost>[], "total": 0};
     try {
       Map<String, dynamic> body = {
-        "user_id": 101,
+        "user_id": 1,
         "in_campaign": 1,
         "campaign_id": 1,
         "latitude": 1.0,
@@ -37,7 +37,6 @@ class VideoService {
       final response = await postMethod(
           endpoind: "get_list_videos", body: body, headers: headers);
       final responseBody = jsonDecode(response.body);
-
       if (int.parse(responseBody["code"]) == 9998) {
         throw UnauthorizationException();
       }
