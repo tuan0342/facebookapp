@@ -27,6 +27,7 @@ class _EditAvatarState extends State<EditAvatar> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('>>> >>> FIle: ${widget.fileAvatar}');
     return Column(
       children: [
         Row(
@@ -151,12 +152,20 @@ class _EditAvatarState extends State<EditAvatar> {
                   errorWidget: (context, url, error) => Container(
                         height: 140,
                         width: 140,
-                        decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                                image: AssetImage(
-                                    "assets/images/male_default_avatar.jpeg"),
-                                fit: BoxFit.cover)),
+                        decoration: widget.fileAvatar.path == '' 
+                            ? const BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    image: AssetImage(
+                                        "assets/images/male_default_avatar.jpeg"),
+                                    fit: BoxFit.cover)
+                                )
+                            : BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    image: FileImage(widget.fileAvatar),
+                                    fit: BoxFit.cover),
+                              ),
                       )),
             )),
         const SizedBox(

@@ -53,6 +53,7 @@ class _UserFriendsPageState extends State<UserFriendsPage> {
                 DateTime.parse(a.created).compareTo(DateTime.parse(b.created)));
           }
           total = data["total"];
+          index = index + count;
         });
       }
 
@@ -73,6 +74,16 @@ class _UserFriendsPageState extends State<UserFriendsPage> {
     super.initState();
     _scrollController = ScrollController();
     _scrollController.addListener(_scrollListener);
+    onLoad(context);
+  }
+
+  Future refresh() async {
+    setState(() {
+      isLoading = false;
+      isEnd = false;
+      index = 0;
+      friends = [];
+    });
     onLoad(context);
   }
 
@@ -266,6 +277,7 @@ class _UserFriendsPageState extends State<UserFriendsPage> {
                           friends.removeAt(index);
                         });
                       },
+                      refresh: refresh,
                     ),
                   ),
                 ),

@@ -8,8 +8,11 @@ import 'package:go_router/go_router.dart';
 class SuggestFriendBox extends StatefulWidget {
   final SuggestFriendModel friend;
   final VoidCallback onRemove;
+  final VoidCallback refresh;
+  final BuildContext contextPage;
   const SuggestFriendBox(
-      {super.key, required this.friend, required this.onRemove});
+      {super.key, required this.friend, required this.onRemove, 
+      required this.refresh, required this.contextPage});
 
   @override
   State<SuggestFriendBox> createState() => _SuggestFriendBoxState();
@@ -55,7 +58,8 @@ class _SuggestFriendBoxState extends State<SuggestFriendBox> {
           flex: 2,
           child: GestureDetector(
             onTap: () => {
-              context.push("/authenticated/personalPage/${widget.friend.id}")
+              context.push('/authenticated/personalPage/${widget.friend.id}')
+                .then((value) {widget.refresh();})
             },
             child: MyImage(
               imageUrl: widget.friend.avatar,

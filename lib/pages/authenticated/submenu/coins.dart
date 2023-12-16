@@ -17,12 +17,11 @@ class Coins extends StatefulWidget {
 class _CoinsState extends State<Coins> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController coinsController = TextEditingController(); 
-  TextEditingController textController = TextEditingController();
-  late AppService _appService =
-        Provider.of<AppService>(context, listen: false);
 
   @override
   Widget build(BuildContext context) {
+    final AppService _appService = Provider.of<AppService>(context, listen: false);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: const MyAppBar(title: "Quản lý coins"),

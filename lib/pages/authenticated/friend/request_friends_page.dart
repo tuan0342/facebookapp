@@ -71,6 +71,13 @@ class _RequestFriendsPageState extends State<RequestFriendsPage> {
   }
 
   @override
+  void setState(fn) {
+    if(mounted) {
+      super.setState(fn);
+    }
+  }
+
+  @override
   void dispose() {
     _scrollController.removeListener(_scrollListener);
     super.dispose();

@@ -53,75 +53,70 @@ class _EditDetailState extends State<EditDetail> {
         const SizedBox(
           height: 20,
         ),
-        Visibility(
-          visible: widget.profile.address.isNotEmpty,
-          child: Row(
-            children: [
-              const Icon(Icons.location_on, color: Colors.black54, size: 28),
-              const SizedBox(
-                width: 10,
-              ),
-              widget.isEditDetail
-                  ? SizedBox(
-                      width: MediaQuery.of(context).size.width - 80,
-                      height: 40,
-                      child: TextFormField(
-                        controller: widget.addressController,
-                        keyboardType: TextInputType.text,
-                        decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            contentPadding:
-                                EdgeInsets.symmetric(horizontal: 8.0),
-                            labelText: "Nhập địa chỉ"),
-                        validator: (value) {
-                          return null;
-                        },
-                      ),
-                    )
-                  : Flexible(
-                      child: Text(
-                      'Đến từ ${widget.profile.address}',
-                      style: const TextStyle(fontSize: 18),
-                    )),
-            ],
-          ),
+        Row(
+          children: [
+            const Icon(Icons.location_on, color: Colors.black54, size: 28),
+            const SizedBox(
+              width: 10,
+            ),
+            widget.isEditDetail
+                ? SizedBox(
+                    width: MediaQuery.of(context).size.width - 80,
+                    height: 40,
+                    child: TextFormField(
+                      controller: widget.addressController,
+                      keyboardType: TextInputType.text,
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          contentPadding:
+                              EdgeInsets.symmetric(horizontal: 8.0),
+                          labelText: "Nhập địa chỉ"),
+                      validator: (value) {
+                        return null;
+                      },
+                    ),
+                  )
+                : Flexible(
+                    child: Text(
+                    widget.profile.address,
+                    style: const TextStyle(fontSize: 18),
+                  )),
+          ],
         ),
         const SizedBox(
           height: 15,
         ),
-        Visibility(
-          visible: widget.profile.city.isNotEmpty,
-          child: Row(
-            children: [
-              const Icon(Icons.home, color: Colors.black54, size: 28),
-              const SizedBox(
-                width: 10,
-              ),
-              widget.isEditDetail
-                  ? SizedBox(
-                      width: MediaQuery.of(context).size.width - 80,
-                      height: 40,
-                      child: TextFormField(
-                        controller: widget.cityController,
-                        keyboardType: TextInputType.text,
-                        decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            contentPadding:
-                                EdgeInsets.symmetric(horizontal: 8.0),
-                            labelText: "Nhập thành phố"),
-                        validator: (value) {
-                          return null;
-                        },
-                      ),
-                    )
-                  : Flexible(
-                      child: Text(
-                      'Sống tại ${widget.profile.city}',
-                      style: const TextStyle(fontSize: 18),
-                    )),
-            ],
-          ),
+        Row(
+          children: [
+            const Icon(Icons.home, color: Colors.black54, size: 28),
+            const SizedBox(
+              width: 10,
+            ),
+            widget.isEditDetail
+                ? SizedBox(
+                    width: MediaQuery.of(context).size.width - 80,
+                    height: 40,
+                    child: TextFormField(
+                      controller: widget.cityController,
+                      keyboardType: TextInputType.text,
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          contentPadding:
+                              EdgeInsets.symmetric(horizontal: 8.0),
+                          labelText: "Nhập thành phố"),
+                      validator: (value) {
+                        return null;
+                      },
+                    ),
+                  )
+                : Flexible(
+                    child: Text(
+                    widget.profile.city,
+                    style: const TextStyle(fontSize: 18),
+                  )),
+          ],
         ),
+        
         const SizedBox(
           height: 15,
         ),

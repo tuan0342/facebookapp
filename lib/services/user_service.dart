@@ -50,7 +50,7 @@ class UserService {
       if (int.parse(responseBody["code"]) == 1000) {
         final result = responseBody["data"];
         profile = Profile.fromJson(result);
-        appService.coverImage = profile.imageCover;
+        if(profile.id == appService.uidLoggedIn) appService.coverImage = profile.imageCover;
       }
     } on UnauthorizationException {
       // ignore: use_build_context_synchronously

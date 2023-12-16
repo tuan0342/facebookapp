@@ -218,7 +218,7 @@ class PersonalImages extends StatelessWidget {
   }
 
   void _showPopupList(BuildContext context, List<String> images) async {
-    final result = await showDialog(
+    await showDialog(
         context: context,
         builder: (_) => ImagesDialog(
               images: images,

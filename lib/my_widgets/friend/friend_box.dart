@@ -8,10 +8,12 @@ import 'package:go_router/go_router.dart';
 class FriendBox extends StatelessWidget {
   final FriendModel friend;
   final VoidCallback onRemove;
+  final VoidCallback refresh;
   const FriendBox({
     super.key,
     required this.friend,
     required this.onRemove,
+    required this.refresh,
   });
 
   @override
@@ -22,7 +24,8 @@ class FriendBox extends StatelessWidget {
           flex: 2,
           child: GestureDetector(
             onTap: () =>
-                {context.push("/authenticated/personalPage/${friend.id}")},
+                {context.push("/authenticated/personalPage/${friend.id}")
+                  .then((value) => refresh())},
             child: MyImage(
               imageUrl: friend.avatar,
               height: 90,
