@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:facebook_app/models/friend_model.dart';
 import 'package:facebook_app/models/post_model.dart';
 import 'package:facebook_app/models/search_log_model.dart';
 import 'package:facebook_app/rest_api/rest_api.dart';
@@ -50,6 +51,47 @@ class SearchService {
       debugPrint("get exception $err");
     }
     return posts;
+  }
+
+  Future<List<SuggestFriendModel>> searchUser(
+    String keyword, int index, int count) async {
+    List<SuggestFriendModel> result = [];
+    try {
+      Map<String, dynamic> body = {
+        "keyword": keyword,
+        "index": index,
+        "count": count,
+      };
+
+      Map<String, String> headers = {
+        "Authorization": "Bearer ${_appService.token}",
+        'Content-Type': 'application/json; charset=UTF-8',
+      };
+      debugPrint('bcd in search service: -- body ${body}');
+
+      final response = await postMethod(
+          endpoind: "search_user", body: body, headers: headers);
+      final responseBody = jsonDecode(response.body);
+      if (int.parse(responseBody["code"]) == 9998) {
+        throw UnauthorizationException();
+      }
+      debugPrint('bcd in search service: -- responseBody ${responseBody}');
+      if (response.statusCode == 200) {
+        result = (responseBody["data"] as List)
+            .map((e) => SuggestFriendModel.fromJson(e))
+            .toList();
+      }
+    } on UnauthorizationException {
+      // ignore: use_build_context_synchronously
+      Provider.of<AuthService>(context, listen: false).logOut(
+          context: context,
+          isShowSnackbar: true,
+          msg: "Phiên đăng nhập hết hạn");
+    } catch (err) {
+      debugPrint("get err $err");
+    }
+
+    return result;
   }
 
   Future<List<SearchLogModel>> getRecentKeywords(

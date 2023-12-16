@@ -84,9 +84,9 @@ class HomePageState extends State<HomePage> {
       children: [
         Container(
           decoration: const BoxDecoration(
-            border: Border(bottom: BorderSide(color: Colors.grey, width: 1)),
+            border: Border(bottom: BorderSide(color: Color(0xFFc9ccd1), width: 5)),
           ),
-          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+          padding: const EdgeInsets.symmetric(vertical: 9, horizontal: 10),
           child: Row(
             children: [
               GestureDetector(
@@ -96,8 +96,8 @@ class HomePageState extends State<HomePage> {
                 },
                 child: MyImage(
                   imageUrl: appService.avatar,
-                  width: 50,
-                  height: 50,
+                  width: 40,
+                  height: 40,
                 ),
               ),
               const SizedBox(
@@ -119,8 +119,8 @@ class HomePageState extends State<HomePage> {
                 child: const Align(
                     alignment: Alignment.topLeft,
                     child: Text(
-                      "Bạn Đang Nghĩ Gì ?",
-                      style: TextStyle(color: Colors.grey, fontSize: 18),
+                      "Bạn đang nghĩ gì?",
+                      style: TextStyle(color: Colors.black87, fontSize: 16, fontWeight: FontWeight.w400),
                     )),
               ))
             ],
