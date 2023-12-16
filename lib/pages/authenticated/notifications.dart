@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facebook_app/my_widgets/error_when_get_data_screen.dart';
 import 'package:facebook_app/my_widgets/waiting_data_screen.dart';

@@ -26,7 +26,7 @@ class PersonalFriend extends StatelessWidget {
           Text('${profile.listing} người bạn', style: const TextStyle(fontSize: 18, color: Colors.black54),),
 
           const SizedBox(height: 20,),
-          Wrap(
+          friends.isNotEmpty ? Wrap(
             direction: Axis.horizontal,
             spacing: 9,
             children: friends
@@ -36,13 +36,14 @@ class PersonalFriend extends StatelessWidget {
                       contextPage: contextPage,
                     ))
                 .toList(),
-          ),
+          ) : const SizedBox(),
           Container(
             margin: const EdgeInsets.only(top: 10.0),
             height: 40,
             child: ElevatedButton(
               onPressed: () {
-                context.push("/authenticated/friends/$uid");
+                context.push("/authenticated/friends/$uid")
+                  .then((value) => refreshFriend());
               },
               style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFe5e6eb)),

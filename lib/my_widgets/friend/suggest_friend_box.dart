@@ -59,11 +59,7 @@ class _SuggestFriendBoxState extends State<SuggestFriendBox> {
           child: GestureDetector(
             onTap: () => {
               context.push('/authenticated/personalPage/${widget.friend.id}')
-              // context.push('/authenticated/friends/180')
-                // .then((value) {widget.refresh();})
-                .then((value){
-                  debugPrint('check refresh');
-                })
+                .then((value) {widget.refresh();})
             },
             child: MyImage(
               imageUrl: widget.friend.avatar,

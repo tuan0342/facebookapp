@@ -77,6 +77,16 @@ class _UserFriendsPageState extends State<UserFriendsPage> {
     onLoad(context);
   }
 
+  Future refresh() async {
+    setState(() {
+      isLoading = false;
+      isEnd = false;
+      index = 0;
+      friends = [];
+    });
+    onLoad(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -267,6 +277,7 @@ class _UserFriendsPageState extends State<UserFriendsPage> {
                           friends.removeAt(index);
                         });
                       },
+                      refresh: refresh,
                     ),
                   ),
                 ),

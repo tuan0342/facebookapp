@@ -23,11 +23,16 @@ class _PersonalInfoState extends State<PersonalInfo> {
   @override
   void initState() {
     super.initState();
-    setState(() {
-      if(widget.profile.isFriend == '0') isSendRequest = false;
-      if(widget.profile.isFriend == '1') isSendRequest = true;
-      if(widget.profile.isFriend == '2') isSendRequest = true;
-    });
+    if(widget.profile.isFriend == '0') isSendRequest = false;
+    if(widget.profile.isFriend == '1') isSendRequest = true;
+    if(widget.profile.isFriend == '2') isSendRequest = true;
+  }
+
+  @override
+  void setState(fn) {
+    if(mounted) {
+      super.setState(fn);
+    }
   }
 
   void onAddFriend(BuildContext context) async {
@@ -86,7 +91,6 @@ class _PersonalInfoState extends State<PersonalInfo> {
         if (!mounted) return;
         widget.contextPage.pop(context);
       }
-      // context.pushReplacement("/authenticated/personalPage/${appService.uidLoggedIn}");
     }
 
     return  Row(

@@ -18,7 +18,7 @@ final GoRoute authenticatedRoute = GoRoute(
     searchRoutes,
     menuRoute,
     GoRoute(
-        path: 'personalPage/:uid',
+        path: "personalPage/:uid",
         builder: (context, state) => PersonalPage(
               uid: state.pathParameters["uid"]!,
             ),

@@ -23,7 +23,7 @@ class PersonalPage extends StatefulWidget {
 
 class _PersonalPageState extends State<PersonalPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  late Profile profile = const Profile(
+  Profile profile = const Profile(
       id: "",
       username: "",
       created: "",
@@ -39,26 +39,26 @@ class _PersonalPageState extends State<PersonalPage> {
       online: "",
       coins: "");
   List<FriendModel> friends = [];
-  late List<Post> feeds = [];
+  List<Post> feeds = [];
 
   bool isLoadingProfile = false;
   bool isLoadingFriend = false;
   bool isLoadingNewFeeds = false;
 
-  final ScrollController controller = ScrollController();
-  int lastId = 0;
+  late ScrollController controller;
+  // int lastId = 0;
   int indexPost = 0;
   int countPost = 20;
   bool isEndPosts = false;
 
-  bool isEndFriend = false;
   int totalFriend = 0;
 
   @override
   void initState() {
     super.initState();
-    getProfile();
+    controller = ScrollController();
     controller.addListener(handleScrolling);
+    getProfile();
     getNewFeed();
     onLoadFriend(context);
   }
@@ -95,7 +95,7 @@ class _PersonalPageState extends State<PersonalPage> {
         } else {
           setStateIfMounted(() {
             feeds.addAll(data["posts"]);
-            lastId = int.parse(data["lastId"]);
+            // lastId = int.parse(data["lastId"]);
             indexPost += countPost;
           });
         }
@@ -121,40 +121,20 @@ class _PersonalPageState extends State<PersonalPage> {
     });
   }
 
-  void clickKudosButton(int index) {
-    setStateIfMounted(() {
-      if (feeds[index].isFelt == 0) {
-        feeds[index].feel += 1;
-        feeds[index].isFelt = 1;
-      } else {
-        feeds[index].feel -= 1;
-        feeds[index].isFelt = 0;
-      }
-    });
-  }
-
   void onLoadFriend(BuildContext context) async {
-    if (!isEndFriend) {
-      setStateIfMounted(() {
-        isLoadingFriend = true;
-      });
-      final data =
-          await FriendService(context: context).getFriends(0, 6, widget.uid);
+    setStateIfMounted(() {
+      isLoadingFriend = true;
+    });
+    final data =
+        await FriendService(context: context).getFriends(0, 6, widget.uid);
 
-      if (data["friends"].isEmpty) {
-        setStateIfMounted(() {
-          isEndFriend = true;
-        });
-      } else {
-        setStateIfMounted(() {
-          friends.addAll(data["friends"]);
-        });
-      }
+    setStateIfMounted(() {
+      friends.addAll(data["friends"]);
+    });
 
-      setStateIfMounted(() {
-        isLoadingFriend = false;
-      });
-    }
+    setStateIfMounted(() {
+      isLoadingFriend = false;
+    });
   }
 
   Future refreshFriend() async{
