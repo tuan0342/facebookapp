@@ -14,6 +14,7 @@ class WebViewContainer extends StatefulWidget {
 class _WebViewContainerState extends State<WebViewContainer> {
   late String uriOfWebView;
   var controller;
+  var loadingPercentage = 0;
 
   @override
   void initState() {
@@ -21,6 +22,25 @@ class _WebViewContainerState extends State<WebViewContainer> {
     uriOfWebView = widget.webView.uri;
     controller = WebViewController()
                     ..setJavaScriptMode(JavaScriptMode.disabled)
+                    ..setNavigationDelegate(
+                      NavigationDelegate(
+                        onPageStarted: (String url) {
+                          setState(() {
+                            loadingPercentage = 0;
+                          });
+                        },
+                        onProgress: (int progress) {
+                          setState(() {
+                            loadingPercentage = progress;
+                          });
+                        },
+                        onPageFinished: (String url) {
+                          setState(() {
+                            loadingPercentage = 100;
+                          });
+                        },
+                      )
+                    )
                     ..loadRequest(Uri.parse(uriOfWebView));
   }
 
@@ -29,9 +49,17 @@ class _WebViewContainerState extends State<WebViewContainer> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: MyAppBar(title: widget.webView.titleOfAppBar),
-      body: SafeArea(
-        child: WebViewWidget(controller: controller)
-      ),
+      body: Stack(
+          children: [
+            WebViewWidget(
+              controller: controller,
+            ),
+            if (loadingPercentage < 100)
+              LinearProgressIndicator(
+                value: loadingPercentage / 100.0,
+              ),
+          ],
+        )
     );
   }
 }

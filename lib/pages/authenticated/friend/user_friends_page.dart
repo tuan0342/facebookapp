@@ -1,22 +1,26 @@
 import 'package:facebook_app/models/friend_model.dart';
 import 'package:facebook_app/my_widgets/friend_box.dart';
 import 'package:facebook_app/my_widgets/my_text_button.dart';
+import 'package:facebook_app/services/app_service.dart';
 import 'package:facebook_app/services/friend_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 const defaultSort = 0;
 const newFirstSort = 1;
 const oldFirstSort = 2;
 
 class UserFriendsPage extends StatefulWidget {
-  const UserFriendsPage({super.key});
+  final String uid;
+  const UserFriendsPage({super.key, required this.uid});
 
   @override
   State<UserFriendsPage> createState() => _UserFriendsPageState();
 }
 
 class _UserFriendsPageState extends State<UserFriendsPage> {
+  late AppService appService = Provider.of<AppService>(context, listen: false);
   late ScrollController _scrollController;
   List<FriendModel> friends = [];
   bool isLoading = false;
@@ -31,8 +35,8 @@ class _UserFriendsPageState extends State<UserFriendsPage> {
       setState(() {
         isLoading = true;
       });
-      final data =
-          await FriendService(context: context).getFriends(index, count);
+      final data = await FriendService(context: context)
+          .getFriends(index, count, widget.uid);
 
       if (data["friends"].isEmpty) {
         setState(() {
@@ -70,6 +74,8 @@ class _UserFriendsPageState extends State<UserFriendsPage> {
     _scrollController = ScrollController();
     _scrollController.addListener(_scrollListener);
     onLoad(context);
+
+    debugPrint("uid: ${widget.uid}");
   }
 
   @override
@@ -236,14 +242,14 @@ class _UserFriendsPageState extends State<UserFriendsPage> {
             const SizedBox(
               height: 14,
             ),
-            listSuggestFriends()
+            listFriends()
           ]),
         ),
       ),
     );
   }
 
-  Widget listSuggestFriends() {
+  Widget listFriends() {
     return friends.isEmpty
         ? const Center(child: Text("Chưa có bạn bè"))
         : Expanded(

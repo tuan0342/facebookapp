@@ -43,47 +43,8 @@ class _ListImagePageState extends State<ListImage>  {
                   itemBuilder: (BuildContext context, int index) {
                     return Center(
                         child: kIsWeb
-                            ? Stack(
-                          children: <Widget>[
-                            Container(
-                              child: Image.network(
-                                  selectedImages[index].path),
-                            ),
-                            Positioned(
-                              top: 0,
-                              right: 0,
-                              child: GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    selectedImages.removeAt(index);
-                                  });
-                                },
-                                child: const Icon(Icons.close,
-                                    color: Colors.black),
-                              ),
-                            ),
-                          ],
-                        )
-                            : Stack(
-                          children: <Widget>[
-                            Container(
-                                child: Image.file(
-                                    selectedImages[index])),
-                            Positioned(
-                              top: 0,
-                              right: 0,
-                              child: GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    selectedImages.removeAt(index);
-                                  });
-                                },
-                                child: const Icon(Icons.close,
-                                    color: Colors.black),
-                              ),
-                            ),
-                          ],
-                        ),);
+                            ? Image.network(selectedImages[index].path)
+                            : Image.file(selectedImages[index]));
                   },
                 ),
               ),

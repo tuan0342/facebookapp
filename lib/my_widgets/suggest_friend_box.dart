@@ -2,25 +2,29 @@ import 'package:facebook_app/models/friend_model.dart';
 import 'package:facebook_app/my_widgets/my_image.dart';
 import 'package:facebook_app/services/friend_service.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class SuggestFriendBox extends StatelessWidget {
   final FriendModel friend;
-  final VoidCallback onAcceptSuccess;
+  final VoidCallback onSendRequestSuccess;
   final VoidCallback onRejectSuccess;
   const SuggestFriendBox(
       {super.key,
       required this.friend,
-      required this.onAcceptSuccess,
+      required this.onSendRequestSuccess,
       required this.onRejectSuccess});
 
   void _onRemoveSuggest(BuildContext context) async {
-    await FriendService(context: context)
-        .setAcceptFriend(friend.id, 0, onRejectSuccess);
+    onRejectSuccess();
   }
 
   void _onAddFriend(BuildContext context) async {
-    await FriendService(context: context)
-        .setAcceptFriend(friend.id, 1, onAcceptSuccess);
+   final  isSendRequested = await FriendService(context: context)
+        .setRequestFriend(friend.id);
+
+    if (isSendRequested) {
+
+    }
   }
 
   @override
@@ -29,10 +33,15 @@ class SuggestFriendBox extends StatelessWidget {
       // avatar
       Expanded(
           flex: 2,
-          child: MyImage(
-            imageUrl: friend.avatar,
-            height: 90,
-            width: 90,
+          child: GestureDetector(
+            onTap: () => {
+              context.push("/authenticated/personalPage/${friend.id}")
+            },
+            child: MyImage(
+              imageUrl: friend.avatar,
+              height: 90,
+              width: 90,
+            ),
           )),
       const SizedBox(
         width: 12,

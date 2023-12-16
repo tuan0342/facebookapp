@@ -1,6 +1,8 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:facebook_app/services/feed_service.dart';
 import 'package:flutter/foundation.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../../services/app_service.dart';
 import 'dart:io';
@@ -23,41 +25,34 @@ class _NewFeedState extends State<PostPage> {
   List<File> selectedImages = [];
   final picker = ImagePicker();
 
-   // VideoPlayerController _controller;
-   // Future<void>   _initializeVideoPlayerFuture;
-   // File videoFile;
+  VideoPlayerController? _controller;
+  Future<void>? _initializeVideoPlayerFuture;
+  late File videofile = File('');
 
-  TextEditingController described = TextEditingController();
-  String status = "";
 
+  void initstate() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // ensure disposing of the videoplayercontroller to free up resources.
+    _controller?.dispose();
+    super.dispose();
+  }
+
+  TextEditingController describedController = TextEditingController();
+
+  String status = "Hyped";
   bool addImage = false;
-
-  // @override
-  // void initState() {
-  //   // Create and store the VideoPlayerController. The VideoPlayerController
-  //   // offers several different constructors to play videos from assets, files,
-  //   super.initState();
-  // }
-  //
-  // @override
-  // void dispose() {
-  //   // Ensure disposing of the VideoPlayerController to free up resources.
-  //   _controller.dispose();
-  //
-  //   super.dispose();
-  // }
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
-    final _appService = Provider.of<AppService>(context, listen: false);
+    final appService = Provider.of<AppService>(context, listen: false);
     return Scaffold(
       body: SafeArea(
         child: Container(
-          padding: EdgeInsets.all(5),
+          padding: const EdgeInsets.all(5),
           child: Column(
             children: [
               Container(
@@ -120,7 +115,8 @@ class _NewFeedState extends State<PostPage> {
                                                     mainAxisAlignment:
                                                     MainAxisAlignment.start,
                                                     crossAxisAlignment:
-                                                    CrossAxisAlignment.start,                                                    children: [
+                                                    CrossAxisAlignment.start,
+                                                    children: [
                                                     Text(
                                                       "Lưu làm bản nháp",
                                                       style: TextStyle(
@@ -144,9 +140,7 @@ class _NewFeedState extends State<PostPage> {
                                           ),
                                           TextButton(
                                             onPressed: () {
-                                              Navigator.pop(context);
-                                              Navigator.pop(context);
-
+                                              context.go('/authenticated');
                                             },
                                             child: Row(
                                               children: [
@@ -225,11 +219,12 @@ class _NewFeedState extends State<PostPage> {
                     ),
                     OutlinedButton(
                       onPressed: () {
-                        pushPost();
+                        this.describedController.text != "" ? addPost(context) : null;
                       },
                       child: const Text(
                         "ĐĂNG",
-                        style: const TextStyle(color: Colors.black),
+                        style: TextStyle(
+                            color: Colors.black),
                       ),
                       style: OutlinedButton.styleFrom(side: BorderSide.none),
                     ),
@@ -240,18 +235,18 @@ class _NewFeedState extends State<PostPage> {
                   child: Row(
                 children: [
                   CachedNetworkImage(
-                    imageUrl: _appService.avatar,
+                    imageUrl: appService.avatar,
                     imageBuilder: (context, imageProvider) => Container(
-                      width: 100,
-                      height: 100,
+                      width: 80,
+                      height: 80,
                       decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           image: DecorationImage(
                               image: imageProvider, fit: BoxFit.cover)),
                     ),
                     placeholder: (context, url) => Container(
-                      height: 100,
-                      width: 100,
+                      height: 80,
+                      width: 80,
                       decoration: const BoxDecoration(
                           shape: BoxShape.circle,
                           image: DecorationImage(
@@ -260,8 +255,8 @@ class _NewFeedState extends State<PostPage> {
                               fit: BoxFit.cover)),
                     ),
                     errorWidget: (context, url, error) => Container(
-                      height: 100,
-                      width: 100,
+                      height: 80,
+                      width: 80,
                       decoration: const BoxDecoration(
                           shape: BoxShape.circle,
                           image: DecorationImage(
@@ -272,17 +267,23 @@ class _NewFeedState extends State<PostPage> {
                   ),
                   Column(
                     children: <Widget>[
-                      Text(
-                        _appService.username,
-                        style: TextStyle(
-                          color: Colors.grey[900],
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 1,
+                      Container(
+                        padding:EdgeInsets.only(top: 10),
+                        child: Text(
+                          appService.username,
+                          style: TextStyle(
+                            color: Colors.grey[900],
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1,
+                          ),
                         ),
                       ),
                       OutlinedButton(
                           onPressed: () {},
+                          style: OutlinedButton.styleFrom(
+                            side: BorderSide.none
+                          ),
                           child: const Row(
                             children: [
                               Icon(Icons.circle_rounded),
@@ -296,10 +297,10 @@ class _NewFeedState extends State<PostPage> {
               Container(
                 padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
                 child: TextField(
-                  controller: described,
+                  controller: describedController,
                   decoration: InputDecoration(
                       border: InputBorder.none, 
-                      hintText: this.selectedImages.isEmpty ? "Bạn đang nghĩ gì?" : "Hãy nói gì đó về bức ảnh này" ),
+                      hintText: this.selectedImages.isEmpty && this.videofile.path == '' ? "Bạn đang nghĩ gì?" : this.selectedImages.isNotEmpty ? "Hãy nói gì đó về bức ảnh này" : "Hãy nói gì đó về video này"),
                   style: TextStyle(fontSize: 24),
                 ),
               ),
@@ -364,36 +365,34 @@ class _NewFeedState extends State<PostPage> {
                         ),
                 ),
               ) :
-            //   Container(
-            //     child: Column(
-            //       children: <Widget>[
-            //     Visibility(
-            //     visible: _controller != null,
-            //       child: FutureBuilder(
-            //         future: _initializeVideoPlayerFuture,
-            //         builder: (context, snapshot) {
-            //           if (snapshot.connectionState == ConnectionState.done) {
-            //             // If the VideoPlayerController has finished initialization, use
-            //             // the data it provides to limit the aspect ratio of the video.
-            //             return AspectRatio(
-            //               aspectRatio: _controller.value.aspectRatio,
-            //               // Use the VideoPlayer widget to display the video.
-            //               child: VideoPlayer(_controller),
-            //             );
-            //           } else {
-            //             // If the VideoPlayerController is still initializing, show a
-            //             // loading spinner.
-            //             return Center(child: CircularProgressIndicator());
-            //           }
-            //         },
-            //       ),
-            //
-            //     ),
-            //     ]
-            //   ),
-            // )
-              Container()
+              Container(
+                child: Column(
+                  children: <Widget>[
+                    Visibility(
+                      visible: _controller != null,
+                      child: FutureBuilder(
+                        future: _initializeVideoPlayerFuture,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState == ConnectionState.done) {
+                            // If the VideoPlayerController has finished initialization, use
+                            // the data it provides to limit the aspect ratio of the video.
+                            return AspectRatio(
+                              aspectRatio: _controller!.value.aspectRatio,
+                              // Use the VideoPlayer widget to display the video.
+                              child: VideoPlayer(_controller!),
+                            );
+                          } else {
+                            // If the VideoPlayerController is still initializing, show a
+                            // loading spinner.
+                            return Center(child: CircularProgressIndicator());
+                          }
+                        },
+                      ),
+                    ),
 
+                  ],
+                ),
+            ),
             ],
           ),
         ),
@@ -409,8 +408,8 @@ class _NewFeedState extends State<PostPage> {
         ),
         IconButton(
             onPressed: () {
-              addImage = true;
               getImages();
+              if (selectedImages.isNotEmpty) addImage = true;
             },
             icon:const Icon(
               Icons.image,
@@ -418,8 +417,8 @@ class _NewFeedState extends State<PostPage> {
             )),
         IconButton(
             onPressed: () {
-              addImage = false;
-              // getVideo();
+              getVideo();
+              if (videofile.path != '') addImage = false;
             },
             icon:const Icon(
               Icons.video_collection,
@@ -452,22 +451,31 @@ class _NewFeedState extends State<PostPage> {
     );
   }
 
-  // Future getVideo() async {
-  //   Future<File> _videoFile = await ImagePicker().pickVideo(source: ImageSource.gallery) as Future<File>;
-  //   _videoFile.then((file) async {
-  //     setState(() {
-  //       videoFile = file;
-  //       _controller = VideoPlayerController.file(videoFile);
-  //
-  //       // Initialize the controller and store the Future for later use.
-  //       _initializeVideoPlayerFuture = _controller.initialize();
-  //       // Use the controller to loop the video.
-  //       _controller.setLooping(true);
-  //     });
-  //   });
-  // }
+  Future getVideo() async {
+    Future<File> _videofile =
+    ImagePicker().pickVideo(source: ImageSource.gallery) as Future<File>;
+    _videofile.then((file) async {
+      setState(() {
+        videofile = file;
+        _controller = VideoPlayerController.file(videofile);
 
-  void pushPost() {
+        // initialize the controller and store the future for later use.
+        _initializeVideoPlayerFuture  = _controller!.initialize();
 
+        // use the controller to loop the video.
+        _controller?.setLooping(true);
+      });
+    });
   }
+
+  void addPost(BuildContext context) async{
+     await FeedService(context: context).addPost(
+      context: context,
+      imageList: selectedImages,
+      video: null,
+      described: describedController.text,
+      status: status,
+    );
+  }
+
 }

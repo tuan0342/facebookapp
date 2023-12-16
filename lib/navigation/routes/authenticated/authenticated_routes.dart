@@ -8,6 +8,7 @@ import 'package:facebook_app/pages/authenticated/personal/setting_personal_page.
 import 'package:facebook_app/pages/authenticated/friend/suggest_friends_page.dart';
 import 'package:facebook_app/pages/authenticated/friend/user_friends_page.dart';
 import 'package:facebook_app/pages/authenticated/personal_page.dart';
+import 'package:facebook_app/pages/feed/post/add_post.dart';
 import 'package:facebook_app/pages/webview/webview_container.dart';
 import 'package:go_router/go_router.dart';
 
@@ -18,8 +19,8 @@ final GoRoute authenticatedRoute = GoRoute(
     searchRoutes,
     menuRoute,
     GoRoute(
-      path: 'personalPage',
-      builder: (context, state) => const PersonalPage(),
+      path: 'personalPage/:uid',
+      builder: (context, state) => PersonalPage(uid: state.pathParameters["uid"]!,),
       routes: [
         GoRoute(
           path: "settingPersonalPage",
@@ -39,11 +40,15 @@ final GoRoute authenticatedRoute = GoRoute(
       ]
     ),
     GoRoute(
+        path: 'addPost',
+        builder: (context, state) => const PostPage(),
+    ),
+    GoRoute(
       path: "friends/suggests",
       builder: (context, state) => const SuggestFriendsPage()),
     GoRoute(
-      path: "friends",
-      builder: (context, state) => const UserFriendsPage()),
+      path: "friends/:uid",
+      builder: (context, state) => UserFriendsPage(uid: state.pathParameters["uid"]!)),
     GoRoute(
       path: "webViewContainer",
       builder: (context, state) {
