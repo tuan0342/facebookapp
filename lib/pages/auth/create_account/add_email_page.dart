@@ -17,7 +17,7 @@ class AddEmailPage extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: MyAppBar(title: "Địa chỉ Email"),
+      appBar: const MyAppBar(title: "Địa chỉ Email"),
       body: Center(
         child: Column(
           children: [
@@ -38,7 +38,7 @@ class AddEmailPage extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(top: 36.0),
+                    padding: const EdgeInsets.only(top: 36.0),
                     child: MyFilledButton(title: "Tiếp", isDisabled: false, cbFunction: nextScreen),
                   ),
                 ],

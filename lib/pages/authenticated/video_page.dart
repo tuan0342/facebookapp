@@ -13,12 +13,12 @@ class VideoPage extends StatefulWidget {
 class _VideoPageState extends State<VideoPage> {
   @override
   Widget build(BuildContext context) {
-    final NotificationServices _notificationService =
+    final NotificationServices notificationService =
         Provider.of<NotificationServices>(context, listen: false);
     return SafeArea(
         child: ElevatedButton(
       onPressed: () {
-        _notificationService.sendNotificationToTopic(
+        notificationService.sendNotificationToTopic(
             topic: "180",
             notification: NotificationModel(
                 title: "new message", message: "Send to Tuấn"));

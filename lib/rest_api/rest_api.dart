@@ -5,7 +5,6 @@ import "package:facebook_app/util/common.dart";
 import "package:flutter/material.dart";
 import "package:http/http.dart" as http;
 import 'package:http_parser/http_parser.dart';
-import "package:path/path.dart";
 
 class ApiFailException implements Exception {}
 

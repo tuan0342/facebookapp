@@ -6,6 +6,7 @@ class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _SplashScreenState createState() => _SplashScreenState();
 }
 
@@ -34,7 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
         Image.asset(
           "assets/images/af_logo.png",
           height: 200,
-          width: 100,
+          width: 200,
         ),
         const CircularProgressIndicator()
       ])),

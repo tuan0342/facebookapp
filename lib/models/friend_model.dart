@@ -55,3 +55,39 @@ class FriendBlock {
     };
   }
 }
+
+class RequestFriendModel extends FriendModel {
+  bool isReject = false;
+  RequestFriendModel(
+      {required super.id,
+      required super.username,
+      required super.avatar,
+      required super.sameFriends,
+      required super.created});
+
+  factory RequestFriendModel.fromJson(Map<String, dynamic> json) =>
+      RequestFriendModel(
+          id: int.parse(json["id"] ?? 0),
+          username: json["username"] ?? "",
+          avatar: json["avatar"] ?? "",
+          sameFriends: int.parse(json["same_friends"] ?? 0),
+          created: json["created"] ?? "");
+}
+
+class SuggestFriendModel extends FriendModel {
+  bool isSendRequest = false;
+  SuggestFriendModel(
+      {required super.id,
+      required super.username,
+      required super.avatar,
+      required super.sameFriends,
+      required super.created});
+
+  factory SuggestFriendModel.fromJson(Map<String, dynamic> json) =>
+      SuggestFriendModel(
+          id: int.parse(json["id"] ?? 0),
+          username: json["username"] ?? "",
+          avatar: json["avatar"] ?? "",
+          sameFriends: int.parse(json["same_friends"] ?? 0),
+          created: json["created"] ?? "");
+}

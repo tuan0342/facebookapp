@@ -24,9 +24,10 @@ class MyTextButton extends StatelessWidget {
           : () {
               cbFunction?.call();
             },
-      style: style ?? TextButton.styleFrom(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      ),
+      style: style ??
+          TextButton.styleFrom(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          ),
       child: MyText(
         title: title,
         type: "buttonLabel",
