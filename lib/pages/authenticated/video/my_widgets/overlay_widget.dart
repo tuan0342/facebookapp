@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
@@ -84,18 +86,26 @@ class _OverLayState extends State<OverLayWidget> {
               onDragEnd: (details) {},
               feedback: Container(
                 width: 160, // Adjust width as needed
-                height: 90, // Adjust height as needed
-                child: Center(
+                height: 90,
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
                     child: VideoPlayer(videoPlayerProvider.curController)
-                ), // Adjust color as needed
+                ),// Adjust color as needed
               ),
               childWhenDragging: Container(),
               child: Container(
                 width: 160,
                 height: 90,
-                child: Center(
-                    child: VideoPlayer(videoPlayerProvider.curController)
-                ),
+                child: InkWell(
+                    onTap: () {
+                      videoPlayerProvider.setIsPlayMiniVideo(false);
+                      context.push("/authenticated/fullScreenVideo");
+                    },
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: VideoPlayer(videoPlayerProvider.curController)
+                  ),
+                )
               ),
             ),
           )

@@ -1,18 +1,13 @@
 import 'dart:async';
 
-import 'package:facebook_app/models/notification_model.dart';
 import 'package:facebook_app/models/video_post_model.dart';
 import 'package:facebook_app/pages/authenticated/video/my_widgets/overlay_widget.dart';
 import 'package:facebook_app/pages/authenticated/video/my_widgets/video_post_item.dart';
-import 'package:facebook_app/services/notification_services.dart';
 import 'package:facebook_app/services/video_service.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:inview_notifier_list/inview_notifier_list.dart';
-import 'package:provider/provider.dart';
-import 'package:video_player/video_player.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
-import '../../../services/video_player_provider.dart';
 
 class VideoPage extends StatefulWidget {
   const VideoPage({super.key});
@@ -21,29 +16,67 @@ class VideoPage extends StatefulWidget {
   State<VideoPage> createState() => _VideoPageState();
 }
 
-class _VideoPageState extends State<VideoPage> {
-  bool isLoadingVideos = false;
+class _VideoPageState extends State<VideoPage>  {
+  bool  isLoadingVideos= true;
   List<VideoPost> videoPosts = [];
+  String lastId = "0";
+  final _scrollController = ScrollController();
 
   void getVideoPosts() async {
     setState(() {
       isLoadingVideos = true;
     });
-    final videos = await VideoService(context: context).getVideoPost();
+    final result = await VideoService(context: context).getVideoPost(lastId);
+
     setState(() {
-      videoPosts = videos["posts"];
+      videoPosts = result["posts"];
+      lastId = result["last_id"];
       isLoadingVideos = false;
     });
   }
-  void _onShowFullScreen(BuildContext context) async {
-    context.push("/authenticated/fullScreenVideo");
+  void _onShowSearchScreen(BuildContext context) async {
+    // context.push("/authenticated/"); ??
   }
 
   @override
   void initState() {
     super.initState();
     getVideoPosts();
+    _scrollController.addListener(_loadMore);
   }
+
+  @override
+  void didUpdateWidget(VideoPage oldWidget) {
+    print(oldWidget);
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _pullRefresh() async {
+    setState(() {
+      videoPosts = [];
+      lastId = "0";
+    });
+    getVideoPosts();
+  }
+
+  Future<void> _loadMore() async {
+    print("loadMore");
+    if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+      final result = await VideoService(context: context).getVideoPost(lastId);
+
+      setState(() {
+        videoPosts.insertAll(videoPosts.length, result["posts"]);
+        lastId = result["last_id"];
+      });
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +87,7 @@ class _VideoPageState extends State<VideoPage> {
             Column(
               children: [
                 Container(
-                  padding: EdgeInsets.all(16),
+                  padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
                   width: double.infinity,
                   decoration: const BoxDecoration(
                     color: Colors.white,
@@ -62,37 +95,113 @@ class _VideoPageState extends State<VideoPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Expanded(child: Text("Watch", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),)),
+                      const Expanded(child: Text("Watch", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),)),
                       SizedBox(
                         width: 32,
                         height: 32,
                         child: InkWell(
                           onTap: () {
-                            _onShowFullScreen(context);
+                            _onShowSearchScreen(context);
                           },
-                          child: Icon(Icons.search),
+                          child: const Icon(Icons.search),
                         ),
                       )
                     ],
                   ),
                 ),
-                const SizedBox(height: 12),
-                if (videoPosts.isNotEmpty) Expanded(
-                  child: InViewNotifierList(
-                    isInViewPortCondition: (double deltaTop, double deltaBottom, double viewPortDimension) {
-                      return deltaTop < (0.5 * viewPortDimension) && deltaBottom > (0.5 * viewPortDimension);
-                    },
-                    itemCount: videoPosts.length,
-                    builder: (BuildContext context, int index) {
-                      return InViewNotifierWidget(
-                          id: "$index",
-                          builder: (BuildContext context, bool isInView, Widget? child) {
-                            return VideoPostItem(videoPost: videoPosts.elementAt(index), isInView: isInView);
-                          }
-                      );
-                    },
+                if (!isLoadingVideos) Expanded(
+                  child: RefreshIndicator(
+                    onRefresh: _pullRefresh,
+                    child: InViewNotifierList(
+                      controller: _scrollController,
+                      isInViewPortCondition: (double deltaTop, double deltaBottom, double viewPortDimension) {
+                        return deltaTop < (0.5 * viewPortDimension) && deltaBottom > (0.5 * viewPortDimension);
+                      },
+                      itemCount: videoPosts.length,
+                      builder: (BuildContext context, int index) {
+                        return InViewNotifierWidget(
+                            id: "$index",
+                            builder: (BuildContext context, bool isInView, Widget? child) {
+                              return VideoPostItem(videoPost: videoPosts.elementAt(index), isInView: isInView, index: index,);
+                            }
+                        );
+                      },
+                    ),
                   ),
-                ),
+                )
+                else
+                  Expanded(
+                    child: Skeletonizer(
+                      child:
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: 2,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              color: Colors.white,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Container(
+                                    height: 6,
+                                    width: double.infinity,
+                                    color: Colors.black12,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(12),
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              width: 44,
+                                              height: 44,
+                                              child: const Icon(Icons.add, size: 44,)
+                                            ),
+                                            const SizedBox(width: 8,),
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Container(
+                                                    width: 80,
+                                                    height: 12,
+                                                    color: Colors.black26,
+                                                  ),
+                                                  const SizedBox(height: 8,),
+                                                  Container(
+                                                    width: 50,
+                                                    height: 8,
+                                                    color: Colors.black26,
+                                                  ),
+                                                ],
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(height: 28,),
+                                  AspectRatio(
+                                    aspectRatio: 4 / 3,
+                                    child: Container(
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                      color: Colors.white12,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 40,)
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    )
+                    ,
+                  )
               ],
             ), // Display the provided background or an empty container
             const OverLayWidget(),

@@ -15,8 +15,8 @@ class VideoService {
     Provider.of<AuthService>(context, listen: false);
     VideoService({required this.context});
 
-  Future<Map<String, dynamic>> getVideoPost() async {
-    Map<String, dynamic> result = {"posts": <VideoPost>[], "total": 0};
+  Future<Map<String, dynamic>> getVideoPost(String lastId, {String count = "10" }) async {
+    Map<String, dynamic> result = {"posts": <VideoPost>[], "last_id": 0};
     try {
       Map<String, dynamic> body = {
         "user_id": 1,
@@ -24,9 +24,9 @@ class VideoService {
         "campaign_id": 1,
         "latitude": 1.0,
         "longitude": 1.0,
-        "last_id": 0,
+        "last_id": lastId,
         "index": 0,
-        "count": 10,
+        "count": count,
       };
 
       Map<String, String> headers = {
@@ -44,6 +44,7 @@ class VideoService {
         result["posts"] = (responseBody["data"]["post"] as List)
             .map((e) => VideoPost.fromJson(e))
             .toList();
+        result["last_id"] = responseBody["data"]["last_id"] != "undefined" ? responseBody["data"]["last_id"] : null;
       } else {
         throw ApiFailException();
       }

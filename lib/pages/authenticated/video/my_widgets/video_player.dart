@@ -10,27 +10,27 @@ class MyVideoPlayer extends StatefulWidget {
   final String videoUrl;
   final bool isInView;
   final VideoPost videoPost;
-  const MyVideoPlayer({super.key, required this.videoUrl, required this.isInView, required this.videoPost});
+  final int index;
+  const MyVideoPlayer({super.key, required this.videoUrl, required this.isInView, required this.videoPost, required this.index});
 
   @override
   _MyVideoPlayerState createState() => _MyVideoPlayerState();
 }
 
-class _MyVideoPlayerState extends State<MyVideoPlayer> {
+class _MyVideoPlayerState extends State<MyVideoPlayer> with AutomaticKeepAliveClientMixin {
   late VideoPlayerController _controller;
   bool _isInView = false;
-  late final VideoPlayerProvider videoProvider;
+  bool isInitialized = false;
+  bool shouldKeepAlive = false;
 
   @override
   void initState() {
     super.initState();
-    videoProvider = Provider.of<VideoPlayerProvider>(context, listen: false);
     _controller = VideoPlayerController.networkUrl(Uri.parse(widget.videoUrl))
       ..initialize().then((_) {
-        _isInView = widget.isInView;
-        if (widget.isInView) {
-          _controller.play();
-        }
+        setState(() {
+          isInitialized = true;
+        });
       });
   }
 
@@ -41,12 +41,10 @@ class _MyVideoPlayerState extends State<MyVideoPlayer> {
       setState(() {
         _isInView = true;
       });
-      _controller.play();
     } else {
       setState(() {
         _isInView = false;
       });
-      _controller.pause();
     }
   }
 
@@ -54,8 +52,6 @@ class _MyVideoPlayerState extends State<MyVideoPlayer> {
   void onDispose() {
     _controller.pause();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -74,56 +70,63 @@ class _MyVideoPlayerState extends State<MyVideoPlayer> {
         } else {
           _controller.setVolume(1.0);
         }
+        if (!videoPlayerProvider.isPlayMiniVideo) {
+          if (widget.isInView || !videoPlayerProvider.isIsInitialize) {
+            _controller.play();
+            videoPlayerProvider.setController(_controller);
+            videoPlayerProvider.setVideoPost(widget.videoPost);
+          } else {
+            _controller.pause();
+          }
+        }
 
-      return Center(
-        child: _controller.value.isInitialized
-            ? AspectRatio(
-            aspectRatio: _controller.value.aspectRatio,
-            child: Stack(
-              children: [
-                InkWell(
-                  onTap: () {
-                    videoPlayerProvider.setController(_controller);
-                    videoPlayerProvider.setVideoPost(widget.videoPost);
-                    videoPlayerProvider.setIsPlayMiniVideo(false);
-                    context.push("/authenticated/fullScreenVideo");
-                  },
-                  child: videoPlayerProvider.isPlayMiniVideo
-                    ? const Center(child: Text("Đang phát", style: TextStyle(color: Colors.white, fontSize: 16),),)
-                    : VideoPlayer(_controller)
-                ),
-                Positioned(
-                  bottom: 16,
-                  right: 16,
-                  child: InkWell(
-                      onTap: () {
-                        changeStateAudio();
-                      },
-                      child: videoPlayerProvider.isMute
-                          ? const Icon(
-                        Icons.volume_mute_rounded, color: Colors.white,)
-                          : const Icon(
-                        Icons.volume_up_rounded, color: Colors.white,)
+      return isInitialized
+            ? Stack(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    alignment: Alignment.center,
+                    child: AspectRatio(
+                      aspectRatio: _controller.value.aspectRatio,
+                      child: InkWell(
+                        onTap: () {
+                          videoPlayerProvider.setController(_controller);
+                          videoPlayerProvider.unmute();
+                          videoPlayerProvider.setVideoPost(widget.videoPost);
+                          videoPlayerProvider.setIsPlayMiniVideo(false);
+                          context.push("/authenticated/fullScreenVideo").then((value) {
+                            if (value != null) {
+                              setState(() {
+                                shouldKeepAlive = true;
+                              });
+                              updateKeepAlive();
+                            }
+                          });
+                        },
+                        child: videoPlayerProvider.isPlayMiniVideo
+                            ? const Center(child: Text("Đang phát", style: TextStyle(color: Colors.white, fontSize: 16),),)
+                            : VideoPlayer(_controller),
+                      ),
+                    ),
                   ),
-                )
-              ],
-            )
-        )
-            : Container(),
-      );
+                  Positioned(
+                    bottom: 24,
+                    right: 24,
+                    child: InkWell(
+                        onTap: () {
+                          changeStateAudio();
+                        },
+                        child: videoPlayerProvider.isMute
+                            ? const Icon(
+                          Icons.volume_mute_rounded, color: Colors.white,)
+                            : const Icon(
+                          Icons.volume_up_rounded, color: Colors.white,)
+                    ),
+                  ),
+                ],
+              )
+            : Container();
     });
-        // floatingActionButton: FloatingActionButton(
-        //   onPressed: () {
-        //     setState(() {
-        //       _controller.value.isPlaying
-        //           ? _controller.pause()
-        //           : _controller.play();
-        //     });
-        //   },
-        //   child: Icon(
-        //     _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
-        //   ),
-        // ),
   }
 
   @override
@@ -131,4 +134,7 @@ class _MyVideoPlayerState extends State<MyVideoPlayer> {
     super.dispose();
     _controller.dispose();
   }
+
+  @override
+  bool get wantKeepAlive => shouldKeepAlive;
 }

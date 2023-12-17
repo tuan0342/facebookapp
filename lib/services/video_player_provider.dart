@@ -3,8 +3,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPlayerProvider extends ChangeNotifier {
+  bool _isInVideoTab = false;
+  bool get isInVideoTab => _isInVideoTab;
+
   bool _isMute = true;
   bool get isMute => _isMute;
+
+  bool _isIsInitialize = false;
+  bool get isIsInitialize => _isIsInitialize;
 
   late VideoPost _videopost;
   VideoPost get curVideoPost => _videopost;
@@ -14,6 +20,20 @@ class VideoPlayerProvider extends ChangeNotifier {
 
   bool _isPlayMiniVideo = false;
   bool get isPlayMiniVideo => _isPlayMiniVideo;
+
+  List<VideoPost> _videoPosts = [];
+  List<VideoPost> get videoPosts => _videoPosts;
+
+  void setIsInVideoPage(value) {
+    _isInVideoTab = value;
+    if (_isIsInitialize) {
+      if (value == true) {
+        curController.play();
+      } else {
+        curController.pause();
+      }
+    }
+  }
 
   void mute() {
     _isMute = true;
@@ -26,7 +46,9 @@ class VideoPlayerProvider extends ChangeNotifier {
   }
 
   void setController(VideoPlayerController controller) {
+    print("setController");
     _controller = controller;
+    _isIsInitialize = true;
     notifyListeners();
   }
 
@@ -37,5 +59,9 @@ class VideoPlayerProvider extends ChangeNotifier {
   void setIsPlayMiniVideo(bool value) {
     _isPlayMiniVideo = value;
     notifyListeners();
+  }
+
+  void setVideoPosts(List<VideoPost> videoPosts) {
+    _videoPosts = videoPosts;
   }
 }

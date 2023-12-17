@@ -11,6 +11,7 @@ import 'package:facebook_app/pages/authenticated/notifications.dart';
 import 'package:facebook_app/pages/authenticated/video/video_page.dart';
 import 'package:facebook_app/services/app_service.dart';
 import 'package:facebook_app/services/auth_service.dart';
+import 'package:facebook_app/services/video_player_provider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -44,11 +45,19 @@ class _AuthenticatedNavigatorState extends State<AuthenticatedNavigator> {
   Widget build(BuildContext context) {
     final _appService = Provider.of<AppService>(context, listen: false);
     final _authService = Provider.of<AuthService>(context, listen: false);
+    final _videoPlayerProvider = Provider.of<VideoPlayerProvider>(context, listen: false);
 
     FirebaseMessaging.instance.subscribeToTopic(_appService.uidLoggedIn);
     return Scaffold(
       bottomNavigationBar: BottomNavBar(
-        onTap: _onItemTapped,
+        onTap: (index) {
+          _onItemTapped(index);
+          if (index == 2) {
+            _videoPlayerProvider.setIsInVideoPage(true);
+          } else {
+            _videoPlayerProvider.setIsInVideoPage(false);
+          }
+        },
         index: _selectedIndex,
       ),
       body: StreamBuilder(
@@ -60,14 +69,16 @@ class _AuthenticatedNavigatorState extends State<AuthenticatedNavigator> {
             if (snapshot.hasError) {
               return const ErrorGettingDataScreen();
             }
-
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const WaitingDataScreen();
-            }
-
             if (snapshot.hasData &&
                 snapshot.data!['device_id'] == _appService.deviceId) {
-              return _widgetOptions.elementAt(_selectedIndex);
+              return IndexedStack(
+                index: _selectedIndex,
+                children: _widgetOptions,
+              );
+              // _widgetOptions.elementAt(_selectedIndex);
+            }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const WaitingDataScreen();
             }
             _authService.logOut(context: context, isShowSnackbar: true);
             return const LogInUnknownPage();

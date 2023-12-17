@@ -5,6 +5,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:facebook_app/my_widgets/images_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:intl/intl.dart';
 
 Uri getUri({required String endpoind, Map<String, dynamic>? params}) {
   String queryParameters = "";
@@ -48,4 +49,12 @@ void showPopupList(BuildContext context, List<String> images) async {
       context: context,
       builder: (_) => ImagesDialog(images: images, index: 0,));
   debugPrint(result);
+}
+
+String getPostCreateAt(String inputDate) {
+  DateTime dateTime = DateTime.parse(inputDate);
+
+  DateFormat formatter = DateFormat("d 'Th'M");
+  String formattedDate = formatter.format(dateTime);
+  return formattedDate;
 }
