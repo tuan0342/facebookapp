@@ -25,6 +25,7 @@ class FullScreenVideoPage extends StatefulWidget {
 class _FullScreenVideoPageState extends State<FullScreenVideoPage> {
   late String lastId;
   List<VideoPost> videoPosts = [];
+  final _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -38,17 +39,36 @@ class _FullScreenVideoPageState extends State<FullScreenVideoPage> {
     });
 
     getVideoPosts();
+    _scrollController.addListener(_loadMore);
+
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   void getVideoPosts() async {
-    final result = await VideoService(context: context).getVideoPost(lastId, count: "1");
+    final result = await VideoService(context: context).getVideoPost(lastId, count: "2");
 
     setState(() {
       videoPosts.insertAll(videoPosts.length, result["posts"]);
       lastId = result["last_id"];
     });
-
   }
+
+  Future<void> _loadMore() async {
+    if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+      final result = await VideoService(context: context).getVideoPost(lastId, count: "2");
+
+      setState(() {
+        videoPosts.insertAll(videoPosts.length, result["posts"]);
+        lastId = result["last_id"];
+      });
+    }
+  }
+
 
   void _showMiniVideo(BuildContext context, VideoPlayerProvider videoPlayerProvider) {
     videoPlayerProvider.setIsPlayMiniVideo(true);
@@ -79,6 +99,7 @@ class _FullScreenVideoPageState extends State<FullScreenVideoPage> {
                 ),
                   body: Expanded(
                     child: InViewNotifierList(
+                      controller: _scrollController,
                       isInViewPortCondition: (double deltaTop, double deltaBottom, double viewPortDimension) {
                         return deltaTop < (0.5 * viewPortDimension) && deltaBottom > (0.5 * viewPortDimension);
                       },

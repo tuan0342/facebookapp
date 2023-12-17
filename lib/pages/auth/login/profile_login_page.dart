@@ -12,7 +12,7 @@ class ProfileLoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _appService = Provider.of<AppService>(context, listen: false);
+    final appService = Provider.of<AppService>(context, listen: false);
     // go to create account
     void createAccount() {
       context.push("/auth/register");
@@ -46,20 +46,20 @@ class ProfileLoginPage extends StatelessWidget {
                               ),
                             ),
                   ),
-                  if (_appService.email != "") Padding(
+                  if (appService.email != "") Padding(
                       padding: const EdgeInsets.fromLTRB(16, 24, 16, 0),
                       child: InkWell(
                           onTap: logIn,
                           child: Row(
                             children: [
-                              MyImage(imageUrl: _appService.avatar, width: 70, height: 70,),
+                              MyImage(imageUrl: appService.avatar, width: 70, height: 70,),
                               Expanded(
                                 child: Container(
                                     alignment: Alignment.bottomLeft,
                                     child: Container(
                                       padding: const EdgeInsets.only(left: 8.0),
                                       child: MyText(
-                                          title: _appService.username,
+                                          title: appService.username,
                                           type: "labelLarge"),
                                     )),
                               ),

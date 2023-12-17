@@ -1,6 +1,7 @@
 import 'package:facebook_app/models/friend_model.dart';
 import 'package:facebook_app/my_widgets/my_image.dart';
 import 'package:facebook_app/services/friend_service.dart';
+import 'package:facebook_app/util/common.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -35,7 +36,8 @@ class _AddBlockPageState extends State<AddBlockPage> {
         } else {
           setState(() {
             suggests.addAll(suggestResponse);
-            List<bool> isBlockListTmp = List.filled(suggestResponse.length, false);
+            List<bool> isBlockListTmp =
+                List.filled(suggestResponse.length, false);
             isBlocksList.addAll(isBlockListTmp);
             index = index + count;
           });
@@ -71,7 +73,7 @@ class _AddBlockPageState extends State<AddBlockPage> {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child:
-          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Padding(
               padding: const EdgeInsets.only(bottom: 3),
               child: Row(children: [
@@ -118,20 +120,21 @@ class _AddBlockPageState extends State<AddBlockPage> {
 
   Widget listSuggestFriends() {
     return suggests.isEmpty
-      ?  const Center(
-        child: Text("Chưa có gợi ý"),
-      )
-      : Expanded(
-          child: Column(
-          children: [
-            Expanded(
-              child: ListView.builder(
-                controller: _scrollController,
-                itemCount: suggests.length,
-                itemBuilder: (context, index) => Padding(
-                  padding: const EdgeInsets.only(bottom: 4),
-                  child: Padding(
-                      padding: const EdgeInsets.only(bottom: 10, left: 0, right: 0),
+        ? const Center(
+            child: Text("Chưa có gợi ý"),
+          )
+        : Expanded(
+            child: Column(
+            children: [
+              Expanded(
+                child: ListView.builder(
+                  controller: _scrollController,
+                  itemCount: suggests.length,
+                  itemBuilder: (context, index) => Padding(
+                    padding: const EdgeInsets.only(bottom: 4),
+                    child: Padding(
+                      padding:
+                          const EdgeInsets.only(bottom: 10, left: 0, right: 0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -144,28 +147,40 @@ class _AddBlockPageState extends State<AddBlockPage> {
                           const SizedBox(
                             width: 12,
                           ),
-                          Text(suggests[index].username, style: const TextStyle(fontSize: 16),),
+                          Text(
+                            suggests[index].username,
+                            style: const TextStyle(fontSize: 16),
+                          ),
                           const Spacer(),
                           TextButton(
-                            onPressed: isBlocksList[index] ? null : (){
-                              FriendService(context: context).setBlocksFriend(suggests[index].id.toString(), suggests[index].username);
-                              setState(() {
-                                isBlocksList[index] = true;
-                              });
-                            }, 
-                            child: isBlocksList[index] 
-                              ? const Text('Đã chặn', style: TextStyle(color: Colors.black87),) 
-                              : const Text('Chặn')
-                          ) 
+                              onPressed: isBlocksList[index]
+                                  ? null
+                                  : () {
+                                      FriendService(context: context)
+                                          .setBlocksFriend(
+                                              suggests[index].id.toString());
+                                      showSnackBar(
+                                          context: context,
+                                          msg:
+                                              "Đã chặn người dùng: ${suggests[index].username}");
+                                      setState(() {
+                                        isBlocksList[index] = true;
+                                      });
+                                    },
+                              child: isBlocksList[index]
+                                  ? const Text(
+                                      'Đã chặn',
+                                      style: TextStyle(color: Colors.black87),
+                                    )
+                                  : const Text('Chặn'))
                         ],
                       ),
+                    ),
                   ),
                 ),
               ),
-            ),
-            if (isLoading) const CircularProgressIndicator()
-          ],
-        )
-      );
+              if (isLoading) const CircularProgressIndicator()
+            ],
+          ));
   }
 }

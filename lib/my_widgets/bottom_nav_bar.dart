@@ -1,3 +1,4 @@
+import 'package:facebook_app/my_widgets/noti_icon_with_unread_count.dart';
 import 'package:flutter/material.dart';
 
 class BottomNavBar extends StatelessWidget {
@@ -8,15 +9,18 @@ class BottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.people), label: "Friend"),
-          BottomNavigationBarItem(icon: Icon(Icons.play_circle_fill), label: "Video"),
-          BottomNavigationBarItem(icon: Icon(Icons.notifications), label: "Notify"),
-          BottomNavigationBarItem(icon: Icon(Icons.menu), label: "Menu"),
-        ],
-        currentIndex: index,
-        onTap: onTap,);
+      type: BottomNavigationBarType.fixed,
+      items: const <BottomNavigationBarItem>[
+        BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+        BottomNavigationBarItem(icon: Icon(Icons.people), label: "Friend"),
+        BottomNavigationBarItem(
+            icon: Icon(Icons.play_circle_fill), label: "Video"),
+        BottomNavigationBarItem(
+            icon: NotiIconWithUnReadCount(), label: "Notify"),
+        BottomNavigationBarItem(icon: Icon(Icons.menu), label: "Menu"),
+      ],
+      currentIndex: index,
+      onTap: onTap,
+    );
   }
 }

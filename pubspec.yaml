@@ -68,6 +68,8 @@ dependencies:
   intl: ^0.19.0
   shimmer: ^3.0.0
   skeletonizer: ^0.8.0
+  readmore: ^2.2.0
+  popover: ^0.2.8+2
 
 dev_dependencies:
   flutter_test:
@@ -142,3 +144,5 @@ flutter:
     - assets/images/img.png
     - assets/images/af_logo.png
     - assets/images/globe-solid.svg
+    - assets/images/card.png
+    - assets/images/card_outline.png

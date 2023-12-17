@@ -66,7 +66,6 @@ class _VideoPageState extends State<VideoPage>  {
   }
 
   Future<void> _loadMore() async {
-    print("loadMore");
     if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
       final result = await VideoService(context: context).getVideoPost(lastId);
 
