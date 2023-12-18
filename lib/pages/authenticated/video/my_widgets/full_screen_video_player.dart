@@ -54,12 +54,6 @@ class _FullScreenVideoPlayerState extends State<FullScreenVideoPlayer> with Auto
   }
 
   @override
-  void onDispose() {
-    super.dispose();
-    _controller.pause();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Consumer<VideoPlayerProvider>(
         builder: (cContext, videoPlayerProvider, _) {
@@ -118,6 +112,7 @@ class _FullScreenVideoPlayerState extends State<FullScreenVideoPlayer> with Auto
   @override
   void dispose() {
     super.dispose();
+    _controller.dispose();
   }
 
   @override

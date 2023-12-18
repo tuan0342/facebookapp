@@ -49,11 +49,6 @@ class _MyVideoPlayerState extends State<MyVideoPlayer> with AutomaticKeepAliveCl
   }
 
   @override
-  void onDispose() {
-    _controller.pause();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Consumer<VideoPlayerProvider>(
       builder: (cContext, videoPlayerProvider, _) {
