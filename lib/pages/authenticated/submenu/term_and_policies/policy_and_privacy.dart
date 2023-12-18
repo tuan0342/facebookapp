@@ -27,7 +27,7 @@ class _PolicyAndPrivacyState extends State<PolicyAndPrivacy> {
               flex: 1,
               child: SingleChildScrollView(
                 child: Padding(
-                  padding: EdgeInsets.fromLTRB(20, 30, 20, 50),
+                  padding: const EdgeInsets.fromLTRB(20, 30, 20, 50),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

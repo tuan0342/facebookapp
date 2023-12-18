@@ -14,7 +14,7 @@ class PersonalInformation extends StatefulWidget {
 class _PersonalInformationState extends State<PersonalInformation> {
   @override
   Widget build(BuildContext context) {
-    final _appService = Provider.of<AppService>(context, listen: false);
+    final appService = Provider.of<AppService>(context, listen: false);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -61,7 +61,7 @@ class _PersonalInformationState extends State<PersonalInformation> {
                             style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.black)
                           ),
                           Text(
-                            _appService.username, 
+                            appService.username, 
                             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: Color.fromARGB(221, 59, 59, 59))
                           )
                         ],

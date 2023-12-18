@@ -166,13 +166,14 @@ class NotificationServices extends ChangeNotifier {
       required NotificationModel notification}) async {
     try {
       final body = {
-        'to': '/topics/${topic}',
+        'to': '/topics/$topic',
         'priority': priority ?? 'high',
         'notification': {
           'title': notification.title,
           'body': notification.message,
         },
         'data': notification.data ?? {},
+        'seen': false,
       };
 
       // send noti
@@ -191,8 +192,28 @@ class NotificationServices extends ChangeNotifier {
           .doc(topic)
           .collection("notifications")
           .add({...body, "createdAt": DateTime.now().millisecondsSinceEpoch});
+
+      // increse unRead noti
+      changeUnReadNotiOfTopic(topic: topic, numChange: 1);
     } catch (err) {
       debugPrint("get error when send noti to topic $err");
     }
+  }
+
+  void changeUnReadNotiOfTopic(
+      {required String topic, required int numChange}) {
+    fireStore.collection("topics").doc(topic).set(
+        {"unread": FieldValue.increment(numChange)}, SetOptions(merge: true));
+  }
+
+  void handleClickNotification(
+      {required String topic, required String messageId}) {
+    fireStore
+        .collection("topics")
+        .doc(topic)
+        .collection("notifications")
+        .doc(messageId)
+        .update({"seen": true});
+    changeUnReadNotiOfTopic(topic: topic, numChange: -1);
   }
 }

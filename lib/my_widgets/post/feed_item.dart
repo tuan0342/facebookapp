@@ -4,23 +4,30 @@ import 'package:facebook_app/my_widgets/post/list_image_layout.dart';
 import 'package:facebook_app/services/feed_service.dart';
 import 'package:facebook_app/util/common.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
+import 'package:popover/popover.dart';
 import 'package:readmore/readmore.dart';
 
 // ignore: must_be_immutable
 class FeedItem extends StatefulWidget {
   final Post postData;
-  const FeedItem({required this.postData});
+  const FeedItem({super.key, required this.postData});
 
   @override
   State<FeedItem> createState() => _FeedItemState();
 }
 
 class _FeedItemState extends State<FeedItem> {
+  bool isLoading = false;
   void onClickKudosBtn(FeedService feedService) async {
+    setState(() {
+      isLoading = true;
+    });
     if (widget.postData.isFelt == -1) {
       final isSuccess = await feedService.feelPost(
           context: context,
-          postOwnerId: 80,
+          postOwnerId: widget.postData.author.id,
           postId: widget.postData.id,
           feelType: 1);
       if (isSuccess) {
@@ -32,7 +39,7 @@ class _FeedItemState extends State<FeedItem> {
     } else if (widget.postData.isFelt == 0) {
       final isSuccess = await feedService.feelPost(
           context: context,
-          postOwnerId: 80,
+          postOwnerId: widget.postData.author.id,
           postId: widget.postData.id,
           feelType: 1);
       if (isSuccess) {
@@ -51,13 +58,19 @@ class _FeedItemState extends State<FeedItem> {
         });
       }
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   void onClickDisapointedBtn(FeedService feedService) async {
+    setState(() {
+      isLoading = true;
+    });
     if (widget.postData.isFelt == -1) {
       final isSuccess = await feedService.feelPost(
           context: context,
-          postOwnerId: 80,
+          postOwnerId: widget.postData.author.id,
           postId: widget.postData.id,
           feelType: 0);
       if (isSuccess) {
@@ -69,7 +82,7 @@ class _FeedItemState extends State<FeedItem> {
     } else if (widget.postData.isFelt == 1) {
       final isSuccess = await feedService.feelPost(
           context: context,
-          postOwnerId: 80,
+          postOwnerId: widget.postData.author.id,
           postId: widget.postData.id,
           feelType: 0);
       if (isSuccess) {
@@ -88,12 +101,21 @@ class _FeedItemState extends State<FeedItem> {
         });
       }
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   void onClickMarkdBtn(FeedService feedService) async {
+    setState(() {
+      isLoading = true;
+    });
     if (widget.postData.isFelt == -1) {
     } else if (widget.postData.isFelt == 1) {
     } else {}
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
@@ -202,7 +224,7 @@ class _FeedItemState extends State<FeedItem> {
   }
 
   Widget kudosButton(FeedService feedService) {
-    return Container(
+    return SizedBox(
       width: 100,
       child: OutlinedButton(
         style: OutlinedButton.styleFrom(
@@ -210,9 +232,11 @@ class _FeedItemState extends State<FeedItem> {
             shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50),
         )),
-        onPressed: () {
-          onClickKudosBtn(feedService);
-        },
+        onPressed: isLoading
+            ? null
+            : () {
+                onClickKudosBtn(feedService);
+              },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -244,9 +268,11 @@ class _FeedItemState extends State<FeedItem> {
             shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50),
         )),
-        onPressed: () {
-          onClickDisapointedBtn(feedService);
-        },
+        onPressed: isLoading
+            ? null
+            : () {
+                onClickDisapointedBtn(feedService);
+              },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -277,9 +303,11 @@ class _FeedItemState extends State<FeedItem> {
             shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50),
         )),
-        onPressed: () {
-          onClickMarkdBtn(feedService);
-        },
+        onPressed: isLoading
+            ? null
+            : () {
+                onClickMarkdBtn(feedService);
+              },
         child: const Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -304,8 +332,16 @@ class _FeedItemState extends State<FeedItem> {
       children: <Widget>[
         Row(
           children: [
-            MyImage(
-                imageUrl: widget.postData.author.avatar, height: 50, width: 50),
+            GestureDetector(
+              onTap: () {
+                context.push(
+                    "/authenticated/personalPage/${widget.postData.author.id}");
+              },
+              child: MyImage(
+                  imageUrl: widget.postData.author.avatar,
+                  height: 50,
+                  width: 50),
+            ),
             const SizedBox(
               width: 10,
             ),
@@ -346,26 +382,46 @@ class _FeedItemState extends State<FeedItem> {
   }
 
   Widget postContent() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ReadMoreText(
-            widget.postData.described,
-            style: TextStyle(
-                fontSize: 15,
-                color: Colors.grey[800],
-                height: 1.5,
-                letterSpacing: .7),
-                trimExpandedText: "Thu gọn",
-                trimCollapsedText: "Đọc thêm",
-          ),
-          const SizedBox(height: 15,),
-          widget.postData.image.isNotEmpty
-              ? ListImageLayout(images: widget.postData.image)
-              : Container()
-        ],
+    return GestureDetector(
+      onLongPress: () {
+        showPopover(
+            direction: PopoverDirection.top,
+            context: context,
+            bodyBuilder: (context) => TextButton(
+                onPressed: () {
+                  Clipboard.setData(
+                      ClipboardData(text: widget.postData.described));
+                  Navigator.pop(context);
+                },
+                child: const Text("Copy")));
+      },
+      child: Padding(
+        padding: const EdgeInsets.only(left: 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ReadMoreText(
+              widget.postData.described,
+              style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.grey[800],
+                  height: 1.5,
+                  letterSpacing: .7),
+              trimExpandedText: "Thu gọn",
+              trimCollapsedText: "Đọc thêm",
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            widget.postData.image.isNotEmpty
+                ? ListImageLayout(
+                    fullHeight: 300,
+                    images: widget.postData.image,
+                    postId: widget.postData.id,
+                  )
+                : Container()
+          ],
+        ),
       ),
     );
   }

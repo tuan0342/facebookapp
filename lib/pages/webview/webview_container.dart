@@ -13,6 +13,7 @@ class WebViewContainer extends StatefulWidget {
 
 class _WebViewContainerState extends State<WebViewContainer> {
   late String uriOfWebView;
+  // ignore: prefer_typing_uninitialized_variables
   var controller;
   var loadingPercentage = 0;
 

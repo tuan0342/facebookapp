@@ -24,13 +24,12 @@ class AppRouter {
           final uidLoggedIn = appService.uidLoggedIn;
           final isInitialized = appService.initialized;
 
-          // return "/auth/register/confirmCode/dtrang1570@gmail.com";
           if (!isInitialized) {
             return '/';
           } else if (isInitialized && uidLoggedIn == '') {
             return '/auth';
           } else if (isInitialized && uidLoggedIn != '') {
-            return '/authenticated';
+            return '/authenticated/0';
           } else {
             return null;
           }

@@ -13,12 +13,12 @@ class LogInKnownPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _appService = Provider.of<AppService>(context, listen: false);
-    final _authService = Provider.of<AuthService>(context, listen: false);
+    final appService = Provider.of<AppService>(context, listen: false);
+    final authService = Provider.of<AuthService>(context, listen: false);
     TextEditingController passwordController = TextEditingController();
 
     void logIn() {
-      _authService.logInWithApi(context: context, email: _appService.email, password: passwordController.text);
+      authService.logInWithApi(context: context, email: appService.email, password: passwordController.text);
     }
 
     void forgotPassword() {
@@ -35,11 +35,11 @@ class LogInKnownPage extends StatelessWidget {
               Expanded(
                 child: Column(
                   children: [
-                    MyImage(imageUrl: _appService.avatar, height: 70, width: 70, shape: BoxShape.rectangle,),
+                    MyImage(imageUrl: appService.avatar, height: 70, width: 70, shape: BoxShape.rectangle,),
                     Padding(
                       padding: const EdgeInsets.only(top: 16.0),
                       child: MyText(
-                        title: _appService.username,
+                        title: appService.username,
                         type: "labelLarge",
                       ),
                     ),

@@ -1,5 +1,4 @@
 import 'package:facebook_app/models/post_model.dart';
-import 'package:facebook_app/my_widgets/post/feed_item.dart';
 import 'package:facebook_app/my_widgets/my_image.dart';
 import 'package:facebook_app/my_widgets/post/list_post.dart';
 import 'package:facebook_app/pages/feed/post/add_post.dart';
@@ -11,8 +10,7 @@ import 'package:provider/provider.dart';
 import '../../services/app_service.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({super.key, required this.email});
-  final String email;
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() {
@@ -42,7 +40,6 @@ class HomePageState extends State<HomePage> {
         final fetchData = await FeedService(context: context)
             .getFeeds(index: index, count: count);
 
-        debugPrint("fetch: $fetchData");
         if (fetchData.isEmpty) {
           setState(() {
             isEnd = true;
@@ -80,27 +77,27 @@ class HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final _appService = Provider.of<AppService>(context, listen: false);
+    final appService = Provider.of<AppService>(context, listen: false);
     return SafeArea(
         child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
           decoration: const BoxDecoration(
-            border: Border(bottom: BorderSide(color: Colors.grey, width: 1)),
+            border: Border(bottom: BorderSide(color: Color(0xFFc9ccd1), width: 5)),
           ),
-          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+          padding: const EdgeInsets.symmetric(vertical: 9, horizontal: 10),
           child: Row(
             children: [
               GestureDetector(
                 onTap: () {
                   context.push(
-                      "/authenticated/personalPage/${_appService.uidLoggedIn}");
+                      "/authenticated/personalPage/${appService.uidLoggedIn}");
                 },
                 child: MyImage(
-                  imageUrl: _appService.avatar,
-                  width: 50,
-                  height: 50,
+                  imageUrl: appService.avatar,
+                  width: 40,
+                  height: 40,
                 ),
               ),
               const SizedBox(
@@ -123,8 +120,8 @@ class HomePageState extends State<HomePage> {
                 child: const Align(
                     alignment: Alignment.topLeft,
                     child: Text(
-                      "Bạn Đang Nghĩ Gì ?",
-                      style: TextStyle(color: Colors.grey, fontSize: 18),
+                      "Bạn đang nghĩ gì?",
+                      style: TextStyle(color: Colors.black87, fontSize: 16, fontWeight: FontWeight.w400),
                     )),
               ))
             ],

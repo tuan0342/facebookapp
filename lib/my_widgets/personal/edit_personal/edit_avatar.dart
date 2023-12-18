@@ -11,8 +11,12 @@ class EditAvatar extends StatefulWidget {
   final BuildContext contextPage;
   final File fileAvatar;
   final void Function(String) changeFileAvatar;
-  const EditAvatar({super.key, required this.profile, required this.fileAvatar, 
-        required this.contextPage, required this.changeFileAvatar});
+  const EditAvatar(
+      {super.key,
+      required this.profile,
+      required this.fileAvatar,
+      required this.contextPage,
+      required this.changeFileAvatar});
 
   @override
   State<EditAvatar> createState() => _EditAvatarState();
@@ -23,14 +27,18 @@ class _EditAvatarState extends State<EditAvatar> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('>>> >>> FIle: ${widget.fileAvatar}');
     return Column(
       children: [
         Row(
           children: [
-            const Text('Ảnh đại diện', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),),
+            const Text(
+              'Ảnh đại diện',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+            ),
             const Spacer(),
             TextButton(
-              onPressed: (){
+              onPressed: () {
                 showModalBottomSheet(
                   context: context,
                   builder: (BuildContext context) {
@@ -48,9 +56,17 @@ class _EditAvatarState extends State<EditAvatar> {
                             },
                             child: const Row(
                               children: [
-                                Icon(Icons.camera_alt, size: 32, color: Colors.black, ),
+                                Icon(
+                                  Icons.camera_alt,
+                                  size: 32,
+                                  color: Colors.black,
+                                ),
                                 SizedBox(width: 10),
-                                Text("Chụp ảnh", style: TextStyle(fontSize: 16, color:Colors.black),)
+                                Text(
+                                  "Chụp ảnh",
+                                  style: TextStyle(
+                                      fontSize: 16, color: Colors.black),
+                                )
                               ],
                             ),
                           ),
@@ -64,81 +80,103 @@ class _EditAvatarState extends State<EditAvatar> {
                             },
                             child: const Row(
                               children: [
-                                Icon(Icons.library_books, size: 32, color: Colors.black, ),
+                                Icon(
+                                  Icons.library_books,
+                                  size: 32,
+                                  color: Colors.black,
+                                ),
                                 SizedBox(width: 10),
-                                Text("Thư viện", style: TextStyle(fontSize: 16, color:Colors.black))
+                                Text("Thư viện",
+                                    style: TextStyle(
+                                        fontSize: 16, color: Colors.black))
                               ],
                             ),
                           ),
-                          const SizedBox(height: 16,),
+                          const SizedBox(
+                            height: 16,
+                          ),
                         ],
                       ),
                     );
                   },
                 );
-              }, 
-              child: const Text('Chỉnh sửa', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400, color: Colors.blue),),
+              },
+              child: const Text(
+                'Chỉnh sửa',
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.blue),
+              ),
             ),
           ],
         ),
         ButtonTheme(
-          height: 140,
-          minWidth: 140,
-          child: TextButton(
-            onPressed: (){ 
-              showPopupList(context, [widget.fileAvatar.path]);
-            },
-            child: CachedNetworkImage(
-              imageUrl: widget.profile.avatar,
-              imageBuilder: (context, imageProvider) => Container(
-                width: 140,
-                height: 140,
-                decoration: widget.fileAvatar.path == '' 
-                  ? BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
-                      border: Border.all(width: 3, color: Colors.white)
-                    ) : BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                        image: FileImage(widget.fileAvatar),
-                        fit: BoxFit.cover
+            height: 140,
+            minWidth: 140,
+            child: TextButton(
+              onPressed: () {
+                showPopupList(
+                    context: context, images: [widget.fileAvatar.path]);
+              },
+              child: CachedNetworkImage(
+                  imageUrl: widget.profile.avatar,
+                  imageBuilder: (context, imageProvider) => Container(
+                        width: 140,
+                        height: 140,
+                        decoration: widget.fileAvatar.path == ''
+                            ? BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    image: imageProvider, fit: BoxFit.cover),
+                                border:
+                                    Border.all(width: 3, color: Colors.white))
+                            : BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    image: FileImage(widget.fileAvatar),
+                                    fit: BoxFit.cover),
+                              ),
                       ),
-                    ),
-              ),
-              placeholder: (context, url) => Container(
-                width: 140,
-                height: 140,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                    image: AssetImage("assets/images/male_default_avatar.jpeg"),
-                    fit: BoxFit.cover
-                  ),
-                ),
-              ),
-              errorWidget: (context, url, error) => Container(
-                height: 140,
-                width: 140,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle, 
-                  image: DecorationImage(
-                    image: AssetImage("assets/images/male_default_avatar.jpeg"),
-                    fit: BoxFit.cover
-                  )
-                ),
-              )
-            ),
-          )
+                  placeholder: (context, url) => Container(
+                        width: 140,
+                        height: 140,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                              image: AssetImage(
+                                  "assets/images/male_default_avatar.jpeg"),
+                              fit: BoxFit.cover),
+                        ),
+                      ),
+                  errorWidget: (context, url, error) => Container(
+                        height: 140,
+                        width: 140,
+                        decoration: widget.fileAvatar.path == '' 
+                            ? const BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    image: AssetImage(
+                                        "assets/images/male_default_avatar.jpeg"),
+                                    fit: BoxFit.cover)
+                                )
+                            : BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    image: FileImage(widget.fileAvatar),
+                                    fit: BoxFit.cover),
+                              ),
+                      )),
+            )),
+        const SizedBox(
+          height: 10,
         ),
-        const SizedBox(height: 10,),
         const SizedBox(
           height: 1.0,
           width: double.infinity,
           child: DecoratedBox(
-            decoration: BoxDecoration(
-              color: Color.fromARGB(255, 220, 223, 226)
-            ),
+            decoration:
+                BoxDecoration(color: Color.fromARGB(255, 220, 223, 226)),
           ),
         ),
       ],

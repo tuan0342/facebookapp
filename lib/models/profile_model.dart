@@ -9,11 +9,11 @@ class Profile {
   final String address;
   final String city;
   final String country;
-  final String listing;  // count friends
+  final String listing; // count friends
   final String isFriend;
   final String online;
   final String coins;
-  
+
   const Profile({
     required this.id,
     required this.username,

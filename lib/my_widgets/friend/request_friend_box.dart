@@ -1,9 +1,13 @@
 import 'package:facebook_app/models/friend_model.dart';
+import 'package:facebook_app/models/notification_model.dart';
 import 'package:facebook_app/my_widgets/my_image.dart';
+import 'package:facebook_app/services/app_service.dart';
 import 'package:facebook_app/services/friend_service.dart';
+import 'package:facebook_app/services/notification_services.dart';
 import 'package:facebook_app/util/common.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class RequestFriendBox extends StatefulWidget {
   final RequestFriendModel friend;
@@ -30,9 +34,21 @@ class _RequestFriendBoxState extends State<RequestFriendBox> {
   }
 
   void _onAcceptRequest(BuildContext context) async {
+    final AppService appService =
+        Provider.of<AppService>(context, listen: false);
     final success = await FriendService(context: context)
         .setAcceptFriend(widget.friend.id, 1);
     if (success) {
+      // send noti
+      NotificationServices().sendNotificationToTopic(
+          topic: widget.friend.id.toString(),
+          notification: NotificationModel(
+              title: "Anti facebook",
+              message: "${appService.username} đã chấp nhận lời mời kết bạn",
+              data: AccepetFriendNotiModel(
+                      friendId: int.parse(appService.uidLoggedIn))
+                  .toMap()));
+
       // ignore: use_build_context_synchronously
       showSnackBar(context: context, msg: "Đã chấp nhận lời mời kết bạn");
       widget.onRemoveItem();
@@ -161,18 +177,45 @@ class _RequestFriendBoxState extends State<RequestFriendBox> {
                     children: <Widget>[
                       TextButton(
                         onPressed: () async {
-                          // block user
-                          final success = await FriendService(context: context)
-                              .setBlocksFriend(widget.friend.id.toString());
-                          if (success) {
-                            // ignore: use_build_context_synchronously
-                            showSnackBar(
-                                context: context,
-                                msg:
-                                    "Đã chặn tài khoản ${widget.friend.username}");
-                            widget.onRemoveItem();
-                          }
-                          Navigator.pop(context);
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              title: Text(
+                                  "xác nhận chặn ${widget.friend.username}"),
+                              // content: const Text(
+                              //     'AlertDialog description'),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text('Cancel'),
+                                ),
+                                TextButton(
+                                  onPressed: () async {
+                                    // block user
+                                    final success =
+                                        await FriendService(context: context)
+                                            .setBlocksFriend(
+                                                widget.friend.id.toString());
+                                    if (success) {
+                                      // ignore: use_build_context_synchronously
+                                      showSnackBar(
+                                          context: context,
+                                          msg:
+                                              "Đã chặn tài khoản ${widget.friend.username}");
+                                      widget.onRemoveItem();
+                                    }
+                                    // ignore: use_build_context_synchronously
+                                    Navigator.pop(context);
+                                    // ignore: use_build_context_synchronously
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text('OK'),
+                                ),
+                              ],
+                            ),
+                          );
                         },
                         child: Row(
                           children: [

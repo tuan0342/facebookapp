@@ -16,7 +16,7 @@ class ChoosingBirthdayPage extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: MyAppBar(title: "Ngày sinh"),
+      appBar: const MyAppBar(title: "Ngày sinh"),
       body: Center(
         child: Column(
           children: [
@@ -32,7 +32,7 @@ class ChoosingBirthdayPage extends StatelessWidget {
                     child: MyDatePicker(),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(top: 36.0),
+                    padding: const EdgeInsets.only(top: 36.0),
                     child: MyFilledButton(title: "Tiếp", isDisabled: false, cbFunction: nextScreen),
                   ),
                 ],

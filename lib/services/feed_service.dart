@@ -31,56 +31,13 @@ class FeedService {
       markComment: 0,
       isFelt: -1,
       state: "Not Hyped",
-      author: Author(
+      author: const Author(
           id: 1,
           name: "Nguyễn Khánh Duy",
           avatar:
-              "https://it4788.catan.io.vn/files/avatar-1700472905228-894880239.jpg"),
-      canEdit: 1,
-      banned: 0,
-      isBlocked: 0,
-    ),
-    Post(
-      id: 1,
-      name: "",
-      image: [const ImageModel(id: 1, url: "")],
-      described: "",
-      created: "2023-11-16T07:37:51.804Z",
-      feel: 0,
-      markComment: 1,
-      isFelt: 1,
-      state: "Not Hyped",
-      author: Author(id: 1, name: "Nguyễn Khánh Duy", avatar: ""),
-      canEdit: 1,
-      banned: 0,
-      isBlocked: 0,
-    ),
-    Post(
-      id: 1,
-      name: "",
-      image: [const ImageModel(id: 1, url: "")],
-      described: "",
-      created: "2023-11-16T07:37:51.804Z",
-      feel: 1,
-      markComment: 0,
-      isFelt: 0,
-      state: "Not Hyped",
-      author: Author(id: 1, name: "Nguyễn Khánh Duy", avatar: ""),
-      canEdit: 1,
-      banned: 0,
-      isBlocked: 0,
-    ),
-    Post(
-      id: 1,
-      name: "",
-      image: [const ImageModel(id: 1, url: "")],
-      described: "",
-      created: "2023-11-16T07:37:51.804Z",
-      feel: 10,
-      markComment: 0,
-      isFelt: 0,
-      state: "Not Hyped",
-      author: Author(id: 1, name: "Nguyễn Khánh Duy", avatar: ""),
+              "https://it4788.catan.io.vn/files/avatar-1700472905228-894880239.jpg",
+          coins: 0,
+          listing: []),
       canEdit: 1,
       banned: 0,
       isBlocked: 0,
@@ -357,13 +314,51 @@ class FeedService {
     return false;
   }
 
+  Future<PostDetailModel?> getPost({required int postId}) async {
+    final appService = Provider.of<AppService>(context, listen: false);
+    final authService = Provider.of<AuthService>(context, listen: false);
+    try {
+      Map<String, dynamic> body = {
+        "id": postId,
+      };
+
+      Map<String, String> headers = {
+        "Authorization": "Bearer ${appService.token}",
+        'Content-Type': 'application/json'
+      };
+
+      final response =
+          await postMethod(endpoind: "get_post", body: body, headers: headers);
+      final responseBody = jsonDecode(response.body);
+
+      if (int.parse(responseBody["code"]) == 9998) {
+        throw UnauthorizationException();
+      }
+      if (int.parse(responseBody["code"]) == 1000) {
+        return PostDetailModel.fromJson(responseBody["data"]);
+      }
+    } on UnauthorizationException {
+      // ignore: use_build_context_synchronously
+      authService.logOut(
+          context: context,
+          isShowSnackbar: true,
+          msg: "Phiên đăng nhập hết hạn");
+    } catch (e) {
+      debugPrint("get error $e");
+      // ignore: use_build_context_synchronously
+      showSnackBar(
+          context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau $e");
+    }
+
+    return null;
+  }
   Future<void> addPost({
     required BuildContext context,
     required List<File> imageList,
     required File? video,
     required String described,
     required String status
-})async {
+  })async {
     late AuthService _authService =
     Provider.of<AuthService>(context, listen: false);
     try {
@@ -379,9 +374,9 @@ class FeedService {
 
       List<FileData> files = [];
       if (imageList.isNotEmpty) {
-          for ( var image in imageList) {
-            files.add(FileData(fieldName: 'image', file: image, type: "image", subType: "png"),);
-          }
+        for ( var image in imageList) {
+          files.add(FileData(fieldName: 'image', file: image, type: "image", subType: "png"),);
+        }
       }
       if (video != null) {
         files.add(FileData(fieldName: 'video', file: video, type: "video", subType: "mp4"),);
@@ -409,11 +404,6 @@ class FeedService {
     } catch (err) {
       debugPrint("get exception $err");
     }
-
-
-
   }
-
-
-
 }
+
