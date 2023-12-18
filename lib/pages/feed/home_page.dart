@@ -114,7 +114,10 @@ class HomePageState extends State<HomePage> {
                 style: OutlinedButton.styleFrom(
                   backgroundColor: Colors.white,
                   foregroundColor: Colors.black,
-                  shape: const StadiumBorder(),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  side: const BorderSide(width: 0.8, color: Colors.black26),
                 ),
                 child: const Align(
                     alignment: Alignment.topLeft,
@@ -129,7 +132,8 @@ class HomePageState extends State<HomePage> {
         ListPost(
             posts: posts,
             scrollController: _scrollController,
-            isLoading: isLoading)
+            isLoading: isLoading,
+        ),
       ],
     ));
   }

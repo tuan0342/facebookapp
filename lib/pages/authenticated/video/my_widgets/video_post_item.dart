@@ -121,13 +121,13 @@ class _VideoPostItemState extends State<VideoPostItem> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(widget.videoPost.author.name, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15),),
-                        Text(formattedCreatedAt, style: const TextStyle(fontWeight: FontWeight.w200, fontSize: 12),),
+                        Text(formattedCreatedAt, style: const TextStyle(fontWeight: FontWeight.w300, fontSize: 12),),
                       ],
                     )
                     ),
                     InkWell(
                       onTap: () { _showOptionModal(context); },
-                      child: const Icon(Icons.more_horiz_rounded),
+                      child: Icon(Icons.more_horiz_rounded, color: Colors.grey[600]),
                     )
                   ],
                 ),

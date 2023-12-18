@@ -30,8 +30,8 @@ class ListPost extends StatelessWidget {
                           decoration: const BoxDecoration(
                               border: Border(
                                   bottom: BorderSide(
-                                      width: 4, color: Colors.grey))),
-                          padding: const EdgeInsets.fromLTRB(10, 10, 10, 5),
+                                      width: 6, color: Colors.black12))),
+                          padding: const EdgeInsets.fromLTRB(0, 12, 0, 0),
                           child: FeedItem(
                             postData: posts[index],
                           ),

@@ -124,17 +124,36 @@ class _FeedItemState extends State<FeedItem> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              postHeader(),
+              const SizedBox(
+                height: 6,
+              ),
+              // content
+              postContent(),
+              const SizedBox(
+                height: 6,
+              ),
+              postFooter(feedService),
+            ],
+          ),
+        ),
+        postAction(feedService)
         // header
-        postHeader(),
-        const SizedBox(
-          height: 20,
-        ),
-        // content
-        postContent(),
-        const SizedBox(
-          height: 20,
-        ),
-        postFooter(feedService),
+        // postHeader(),
+        // const SizedBox(
+        //   height: 4,
+        // ),
+        // // content
+        // postContent(),
+        // const SizedBox(
+        //   height: 4,
+        // ),
+        // postFooter(feedService),
       ],
     );
   }
@@ -224,103 +243,95 @@ class _FeedItemState extends State<FeedItem> {
   }
 
   Widget kudosButton(FeedService feedService) {
-    return SizedBox(
-      width: 100,
-      child: OutlinedButton(
-        style: OutlinedButton.styleFrom(
-            // backgroundColor: Colors.grey.shade200,
-            shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(50),
-        )),
-        onPressed: isLoading
+    return Expanded(
+      child: InkWell(
+        onTap: isLoading
             ? null
             : () {
                 onClickKudosBtn(feedService);
               },
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            kudosIcon(
-                bgColor: Colors.white,
-                iconColor:
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              kudosIcon(
+                  bgColor: Colors.white,
+                  iconColor:
+                  widget.postData.isFelt == 1 ? Colors.blue : Colors.grey),
+              const SizedBox(
+                width: 4,
+              ),
+              Text(
+                "Kudos",
+                style: TextStyle(
+                    color:
                     widget.postData.isFelt == 1 ? Colors.blue : Colors.grey),
-            const SizedBox(
-              width: 5,
-            ),
-            Text(
-              "Kudos",
-              style: TextStyle(
-                  color:
-                      widget.postData.isFelt == 1 ? Colors.blue : Colors.grey),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );
   }
 
   Widget disappointedButton(FeedService feedService) {
-    return SizedBox(
-      width: 100,
-      child: OutlinedButton(
-        style: OutlinedButton.styleFrom(
-            // backgroundColor: Colors.grey.shade200,
-            shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(50),
-        )),
-        onPressed: isLoading
+    return Expanded(
+      child: InkWell(
+        onTap: isLoading
             ? null
             : () {
                 onClickDisapointedBtn(feedService);
               },
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            disappointedIcon(
-                bgColor: Colors.white,
-                iconColor:
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              disappointedIcon(
+                  bgColor: Colors.white,
+                  iconColor:
+                  widget.postData.isFelt == 0 ? Colors.red : Colors.grey),
+              const SizedBox(
+                width: 4,
+              ),
+              Text(
+                "Diss",
+                style: TextStyle(
+                    color:
                     widget.postData.isFelt == 0 ? Colors.red : Colors.grey),
-            const SizedBox(
-              width: 5,
-            ),
-            Text(
-              "Diss",
-              style: TextStyle(
-                  color:
-                      widget.postData.isFelt == 0 ? Colors.red : Colors.grey),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );
   }
 
   Widget markButton(FeedService feedService) {
-    return SizedBox(
-      width: 100,
-      child: OutlinedButton(
-        style: OutlinedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(50),
-        )),
-        onPressed: isLoading
+    return Expanded(
+      child: InkWell(
+        onTap: isLoading
             ? null
             : () {
                 onClickMarkdBtn(feedService);
               },
-        child: const Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Icon(Icons.comment, color: Colors.grey, size: 18),
-            SizedBox(
-              width: 5,
-            ),
-            Text(
-              "Mark",
-              style: TextStyle(color: Colors.grey),
-            )
-          ],
-        ),
+        child: const Padding(
+          padding: EdgeInsets.symmetric(vertical: 12),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Icon(Icons.comment, color: Colors.grey, size: 18),
+              SizedBox(
+                width: 4,
+              ),
+              Text(
+                "Mark",
+                style: TextStyle(color: Colors.grey),
+              )
+            ],
+          ),
+        )
       ),
     );
   }
@@ -339,31 +350,38 @@ class _FeedItemState extends State<FeedItem> {
               },
               child: MyImage(
                   imageUrl: widget.postData.author.avatar,
-                  height: 50,
-                  width: 50),
+                  height: 44,
+                  width: 44),
             ),
             const SizedBox(
-              width: 10,
+              width: 8,
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(
-                  widget.postData.author.name,
-                  style: TextStyle(
+                GestureDetector(
+                  onTap: () {
+                    context.push(
+                        "/authenticated/personalPage/${widget.postData.author.id}");
+                  },
+                  child: Text(
+                    widget.postData.author.name,
+                    style: TextStyle(
                       color: Colors.grey[900],
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1),
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ),
-                const SizedBox(
-                  height: 3,
-                ),
+
+                // const SizedBox(
+                //   height: 3,
+                // ),
                 Text(
                   getDifferenceTime(
                       DateTime.now(), DateTime.parse(widget.postData.created)),
-                  style: const TextStyle(fontSize: 15, color: Colors.grey),
+                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w300),
                 ),
               ],
             ),
@@ -372,7 +390,7 @@ class _FeedItemState extends State<FeedItem> {
         IconButton(
           icon: Icon(
             Icons.more_horiz,
-            size: 25,
+            size: 24,
             color: Colors.grey[600],
           ),
           onPressed: () {},
@@ -396,22 +414,22 @@ class _FeedItemState extends State<FeedItem> {
                 child: const Text("Copy")));
       },
       child: Padding(
-        padding: const EdgeInsets.only(left: 10),
+        padding: const EdgeInsets.only(left: 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ReadMoreText(
               widget.postData.described,
-              style: TextStyle(
-                  fontSize: 15,
-                  color: Colors.grey[800],
-                  height: 1.5,
-                  letterSpacing: .7),
+              style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  // height: 1.2,
+                  letterSpacing: .3),
               trimExpandedText: "Thu gọn",
               trimCollapsedText: "Đọc thêm",
             ),
             const SizedBox(
-              height: 15,
+              height: 8,
             ),
             widget.postData.image.isNotEmpty
                 ? ListImageLayout(
@@ -434,32 +452,32 @@ class _FeedItemState extends State<FeedItem> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.only(left: 5, top: 5),
+                padding: const EdgeInsets.all(0),
                 child: widget.postData.feel > 0
                     ? Row(
                         children: [
                           allReactIcon(widget.postData.feel),
                           const SizedBox(
-                            width: 5,
+                            width: 4,
                           ),
                           Text(
                             "${widget.postData.feel}",
-                            style: TextStyle(
-                                fontSize: 15, color: Colors.grey[800]),
+                            style: const TextStyle(
+                                fontSize: 14, color: Colors.black87, fontWeight: FontWeight.w400),
                           ),
                         ],
                       )
                     : Container(),
               ),
               Padding(
-                padding: const EdgeInsets.only(right: 5),
+                padding: const EdgeInsets.only(right: 0),
                 child: widget.postData.markComment > 0
                     ? Row(
                         children: [
                           Text(
-                            "${widget.postData.markComment} Marks",
-                            style: TextStyle(
-                                fontSize: 15, color: Colors.grey[800]),
+                            "${widget.postData.markComment} marks",
+                            style: const TextStyle(
+                                fontSize: 14, color: Colors.black87, fontWeight: FontWeight.w400),
                           ),
                         ],
                       )
@@ -468,16 +486,24 @@ class _FeedItemState extends State<FeedItem> {
             ],
           ),
         const SizedBox(
-          height: 20,
+          height: 8,
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            kudosButton(feedService),
-            markButton(feedService),
-            disappointedButton(feedService),
-          ],
-        )
+        Divider(
+          height: 1,
+          thickness: 0.2,
+          color: Colors.black54,
+        ),
+      ],
+    );
+  }
+
+  Widget postAction(FeedService feedService) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: <Widget>[
+        kudosButton(feedService),
+        markButton(feedService),
+        disappointedButton(feedService),
       ],
     );
   }
