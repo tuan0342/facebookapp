@@ -66,7 +66,7 @@ class _FeedItemDetailState extends State<FeedItemDetail> {
         setState(() {
           postDetail!.isFelt = 1;
           postDetail!.kudos += 1;
-          postDetail!.disapointed -= 1;
+          postDetail!.disappointed -= 1;
         });
       }
     } else {
@@ -85,7 +85,7 @@ class _FeedItemDetailState extends State<FeedItemDetail> {
     });
   }
 
-  void onClickDisapointedBtn(FeedService feedService) async {
+  void onClickDisappointedBtn(FeedService feedService) async {
     setState(() {
       isLoading = true;
     });
@@ -98,7 +98,7 @@ class _FeedItemDetailState extends State<FeedItemDetail> {
       if (isSuccess) {
         setState(() {
           postDetail!.isFelt = 0;
-          postDetail!.disapointed += 1;
+          postDetail!.disappointed += 1;
         });
       }
     } else if (postDetail!.isFelt == 1) {
@@ -110,7 +110,7 @@ class _FeedItemDetailState extends State<FeedItemDetail> {
       if (isSuccess) {
         setState(() {
           postDetail!.isFelt = 0;
-          postDetail!.disapointed += 1;
+          postDetail!.disappointed += 1;
           postDetail!.kudos -= 1;
         });
       }
@@ -121,7 +121,7 @@ class _FeedItemDetailState extends State<FeedItemDetail> {
       if (isSuccess) {
         setState(() {
           postDetail!.isFelt = -1;
-          postDetail!.disapointed -= 1;
+          postDetail!.disappointed -= 1;
         });
       }
     }
@@ -273,7 +273,7 @@ class _FeedItemDetailState extends State<FeedItemDetail> {
         onPressed: isLoading
             ? null
             : () {
-                onClickDisapointedBtn(feedService);
+                onClickDisappointedBtn(feedService);
               },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -419,7 +419,7 @@ class _FeedItemDetailState extends State<FeedItemDetail> {
     return Column(
       children: [
         postDetail!.kudos > 0 ||
-                postDetail!.disapointed > 0 ||
+                postDetail!.disappointed > 0 ||
                 postDetail!.fake > 0 ||
                 postDetail!.trust > 0
             ? Row(
@@ -427,7 +427,7 @@ class _FeedItemDetailState extends State<FeedItemDetail> {
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.only(left: 5, top: 5),
-                    child: postDetail!.kudos > 0 || postDetail!.disapointed > 0
+                    child: postDetail!.kudos > 0 || postDetail!.disappointed > 0
                         ? Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
@@ -449,7 +449,7 @@ class _FeedItemDetailState extends State<FeedItemDetail> {
                                     )
                                   ]),
                                 ),
-                              if (postDetail!.disapointed > 0)
+                              if (postDetail!.disappointed > 0)
                                 SizedBox(
                                   child: Row(children: [
                                     disappointedIcon(),
@@ -457,7 +457,7 @@ class _FeedItemDetailState extends State<FeedItemDetail> {
                                       width: 3,
                                     ),
                                     Text(
-                                      "${postDetail!.disapointed}",
+                                      "${postDetail!.disappointed}",
                                       style: TextStyle(
                                           fontSize: 15,
                                           color: Colors.grey[800]),

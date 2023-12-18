@@ -12,15 +12,20 @@ import 'package:provider/provider.dart';
 
 class SearchService {
   final BuildContext context;
-  late final AppService _appService = Provider.of<AppService>(context, listen: false);
+  late final AppService _appService =
+      Provider.of<AppService>(context, listen: false);
   SearchService({required this.context});
 
-  Future<List<Post>> search(String keyword, int index, int count) async {
+  Future<List<Post>> search(
+    String keyword,
+    int index,
+    int count,
+  ) async {
     List<Post> posts = [];
     try {
       Map<String, dynamic> body = {
         "keyword": keyword,
-        "user_id": _appService.uidLoggedIn,
+        // "user_id": _appService.uidLoggedIn,
         "index": index,
         "count": count
       };
@@ -54,7 +59,7 @@ class SearchService {
   }
 
   Future<List<SuggestFriendModel>> searchUser(
-    String keyword, int index, int count) async {
+      String keyword, int index, int count) async {
     List<SuggestFriendModel> result = [];
     try {
       Map<String, dynamic> body = {
