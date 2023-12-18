@@ -46,7 +46,8 @@ class _RequestFriendBoxState extends State<RequestFriendBox> {
               title: "Anti facebook",
               message: "${appService.username} đã chấp nhận lời mời kết bạn",
               data: AccepetFriendNotiModel(
-                      friendId: int.parse(appService.uidLoggedIn))
+                      friendId: int.parse(appService.uidLoggedIn),
+                      avatar: appService.avatar)
                   .toMap()));
 
       // ignore: use_build_context_synchronously
