@@ -128,7 +128,8 @@ class _NotificationPageState extends State<NotificationPage> {
 
   void handleClickNotification(Map<String, dynamic> data) {
     final Map<String, dynamic> map = data["data"];
-    final route = mapNotiDataToStringRoute(map);
+    final route =
+        mapNotiDataToStringRoute(map, int.parse(appService.uidLoggedIn));
     if (route != null) {
       context.push(route);
     }

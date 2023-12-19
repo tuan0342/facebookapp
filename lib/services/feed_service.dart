@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:facebook_app/models/image_model.dart';
+import 'package:facebook_app/models/mark_comment_model.dart';
 import 'package:facebook_app/models/notification_model.dart';
 import 'package:facebook_app/models/post_model.dart';
 import 'package:facebook_app/rest_api/rest_api.dart';
@@ -357,5 +358,64 @@ class FeedService {
     }
 
     return null;
+  }
+
+// markId = 0 => mark
+// marId != 0 => comment
+// markType (1 is trust, 0 is fake)
+  Future<List<MarkModel>> setMarkComment({
+    required int postId,
+    required String content,
+    int index = 0,
+    int count = 10,
+    required int markId,
+    required int markType,
+  }) async {
+    final appService = Provider.of<AppService>(context, listen: false);
+    final authService = Provider.of<AuthService>(context, listen: false);
+    List<MarkModel> marks = [];
+    try {
+      Map<String, dynamic> body = {
+        "id": postId,
+        "content": content,
+        "index": index,
+        "count": count,
+        "mark_id": markId,
+        "type": markType
+      };
+
+      Map<String, String> header = {
+        "Authorization": "Bearer ${appService.token}",
+        'Content-Type': 'application/json'
+      };
+
+      final response = await postMethod(
+          endpoind: "set_mark_comment", body: body, headers: header);
+      final responseBody = jsonDecode(response.body);
+      if (int.parse(responseBody["code"]) == 9998) {
+        throw UnauthorizationException();
+      }
+      if (int.parse(responseBody["code"]) == 1000) {
+        marks = (responseBody["data"] as List)
+            .map((mark) => MarkModel.fromJson(mark))
+            .toList();
+      }
+    } on UnauthorizationException {
+      // ignore: use_build_context_synchronously
+      authService.logOut(
+          context: context,
+          isShowSnackbar: true,
+          msg: "Phiên đăng nhập hết hạn");
+    } catch (err) {
+      debugPrint("get error when set mark $err");
+      // ignore: use_build_context_synchronously
+      showSnackBar(context: context, msg: "get error when set mark $err");
+    } finally {
+      return marks;
+    }
+  }
+
+  Future<bool> getMarkComment() async {
+    return false;
   }
 }
