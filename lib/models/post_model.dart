@@ -49,19 +49,19 @@ class Post {
 
   Map<String, dynamic> toJson() {
     return {
-      "id": id,
+      "id": id.toString(),
       "name": name,
       "image": image.map((e) => e.toJson()).toList(),
       "described": described,
       "created": created,
-      "feel": feel,
-      "comment_mark": markComment,
-      "is_felt": isFelt,
+      "feel": feel.toString(),
+      "comment_mark": markComment.toString(),
+      "is_felt": isFelt.toString(),
       "state": state,
       "author": author,
-      "is_blocked": isBlocked,
-      "can_edit": canEdit,
-      "banned": banned,
+      "is_blocked": isBlocked.toString(),
+      "can_edit": canEdit.toString(),
+      "banned": banned.toString(),
     };
   }
 }
@@ -90,10 +90,10 @@ class Author {
         listing = [];
 
   Map<String, dynamic> toJson() => {
-        "id": id,
+        "id": id.toString(),
         "name": name,
         "avatar": avatar,
-        "coins": coins,
+        "coins": coins.toString(),
         "listing": listing,
       };
 }
@@ -132,7 +132,7 @@ class PostDetailModel {
   int fake;
   int trust;
   int kudos;
-  int disapointed;
+  int disappointed;
   int isMark;
   String state;
   Category category;
@@ -159,7 +159,7 @@ class PostDetailModel {
     required this.canMark,
     required this.canRate,
     required this.category,
-    required this.disapointed,
+    required this.disappointed,
     required this.fake,
     required this.isMark,
     required this.isFelt,
@@ -186,7 +186,7 @@ class PostDetailModel {
         canMark = int.parse(json["can_mark"] ?? "0"),
         canRate = int.parse(json["can_rate"] ?? "0"),
         category = Category.fromJson(json["category"]),
-        disapointed = int.parse(json["disapointed"] ?? "0"),
+        disappointed = int.parse(json["disappointed"] ?? "0"),
         fake = int.parse(json["fake"] ?? "0"),
         isMark = int.parse(json["is_mark"] ?? "0"),
         isFelt = int.parse(json["is_felt"] ?? "0"),
@@ -211,7 +211,7 @@ class PostDetailModel {
       "can_mark": canMark,
       "can_rate": canRate,
       "category": category,
-      "disapointed": disapointed,
+      "disappointed": disappointed,
       "fake": fake,
       "is_mark": isMark,
       "is_felt": isFelt,

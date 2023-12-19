@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facebook_app/my_widgets/error_when_get_data_screen.dart';
+import 'package:facebook_app/my_widgets/my_image.dart';
 import 'package:facebook_app/my_widgets/waiting_data_screen.dart';
 import 'package:facebook_app/services/app_service.dart';
 import 'package:facebook_app/services/notification_services.dart';
@@ -79,7 +80,7 @@ class _NotificationPageState extends State<NotificationPage> {
         }
       },
       child: Container(
-        padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
         color: data["seen"]
             ? Colors.white
             : const Color.fromARGB(255, 186, 232, 254),
@@ -89,11 +90,11 @@ class _NotificationPageState extends State<NotificationPage> {
                 flex: 1,
                 child: Padding(
                   padding: const EdgeInsets.all(2.0),
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.circular(90),
-                      // child: Image.network(friend.avatar))),
-                      child: Image.asset(
-                          "assets/images/male_default_avatar.jpeg")),
+                  child: MyImage(
+                    imageUrl: data["data"]["avatar"],
+                    height: 80,
+                    width: 80,
+                  ),
                 )),
             const SizedBox(
               width: 12,

@@ -9,6 +9,7 @@ final GoRoute authRoutes = GoRoute(
   routes: [
     logInKnownRoute,
     logInUnKnownRoute,
+    firstEditNameRoute,
     registerRoute,
   ],
   redirect: (context, state) {

@@ -19,32 +19,8 @@ class FeedService {
   late final AuthService _authService =
       Provider.of<AuthService>(context, listen: false);
 
-  List<Post> fakePosts = [
-    Post(
-      id: 1,
-      name: "",
-      image: [const ImageModel(id: 1, url: "assets/images/img")], //
-      described: "",
-      created: "2023-11-16T07:37:51.804Z",
-      feel: 0,
-      markComment: 0,
-      isFelt: -1,
-      state: "Not Hyped",
-      author: const Author(
-          id: 1,
-          name: "Nguyễn Khánh Duy",
-          avatar:
-              "https://it4788.catan.io.vn/files/avatar-1700472905228-894880239.jpg",
-          coins: 0,
-          listing: []),
-      canEdit: 1,
-      banned: 0,
-      isBlocked: 0,
-    ),
-  ];
-
   FeedService({required this.context});
-  Future<List<Post>> getFeeds(
+  Future<Map<String, dynamic>> getFeeds(
       {int? uid,
       inCampain = 0,
       campaignId = 0,
@@ -53,9 +29,8 @@ class FeedService {
       int? lastId,
       int index = 0,
       int count = 20}) async {
-    // return fakePosts;
-
     List<Post> posts = [];
+    int? lastID = lastId;
     try {
       Map<String, dynamic> body = {
         "user_id": uid,
@@ -85,6 +60,7 @@ class FeedService {
         posts = (responseBody["data"]["post"] as List)
             .map((e) => Post.fromJson(e))
             .toList();
+        lastID = int.parse(responseBody["data"]["last_id"]);
       } else {
         throw ApiFailException();
       }
@@ -98,7 +74,10 @@ class FeedService {
       debugPrint("get err $err");
     }
 
-    return posts;
+    return {
+      "feed": posts,
+      "last_id": lastID,
+    };
   }
 
   bool updateFeed(int index) {
@@ -210,7 +189,9 @@ class FeedService {
                   title: "Anti Facebook",
                   message:
                       "${appService.username} đã bày tỏ cảm xúc kudos vào bài viết của bạn",
-                  data: InteractPostNotiModel(postId: postId).toMap()),
+                  data: InteractPostNotiModel(
+                          postId: postId, avatar: appService.avatar)
+                      .toMap()),
             );
           } else {
             notificationService.sendNotificationToTopic(
@@ -220,7 +201,9 @@ class FeedService {
                     title: "Anti Facebook",
                     message:
                         "${appService.username} đã bày tỏ cảm xúc disapointed vào bài viết của bạn",
-                    data: InteractPostNotiModel(postId: postId).toMap()));
+                    data: InteractPostNotiModel(
+                            postId: postId, avatar: appService.avatar)
+                        .toMap()));
           }
         }
         return true;
