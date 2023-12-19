@@ -128,9 +128,16 @@ class AuthService extends ChangeNotifier {
 
         debugPrint("uid: $uid");
         debugPrint("uid: ${_appService.uidLoggedIn}");
+        debugPrint("active: ${body["data"]['active']}");
 
-        // ignore: use_build_context_synchronously
-        context.go("/authenticated/0");
+        if(body["data"]['active'] == "1") {
+          // ignore: use_build_context_synchronously
+          context.go("/authenticated/0");
+        } else {
+          // ignore: use_build_context_synchronously
+          context.go("/auth/firstEditName");
+        }
+
         // ignore: use_build_context_synchronously
         showSnackBar(context: context, msg: 'Đăng nhập thành công');
       } else {
