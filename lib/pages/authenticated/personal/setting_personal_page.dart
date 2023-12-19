@@ -76,7 +76,9 @@ class _SettingPersonalPageState extends State<SettingPersonalPage> {
                   style: TextButton.styleFrom(
                     padding: const EdgeInsets.only(top: 10, bottom: 10, left: 10),
                   ),
-                  onPressed: (){}, 
+                  onPressed: (){
+                    context.push("/authenticated/search");
+                  }, 
                   child: const Row(
                     children: [
                       Padding(

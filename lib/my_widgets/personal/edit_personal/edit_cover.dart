@@ -119,7 +119,7 @@ class _EditCoverState extends State<EditCover> {
             child: TextButton(
               onPressed: () {
                 showPopupList(
-                    context: context, images: [widget.fileCover.path]);
+                    context: context, images: [widget.fileCover.path.isNotEmpty ? widget.fileCover.path : widget.profile.imageCover]);
               },
               child: CachedNetworkImage(
                   imageUrl: widget.profile.imageCover,

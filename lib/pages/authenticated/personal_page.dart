@@ -115,6 +115,7 @@ class _PersonalPageState extends State<PersonalPage> {
     });
     final profile_ =
         await UserService().getProfile(context: context, uid: widget.uid);
+        
     setStateIfMounted(() {
       profile = profile_;
       isLoadingProfile = false;
