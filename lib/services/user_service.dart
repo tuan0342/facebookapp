@@ -114,7 +114,7 @@ class UserService {
         appService.username = responseBody["data"]["username"];
         appService.avatar = responseBody["data"]["avatar"];
         // ignore: use_build_context_synchronously
-        context.go('/authenticated');
+        context.go("/authenticated/0");
       }
     } on UnauthorizationException {
       // ignore: use_build_context_synchronously
@@ -186,10 +186,10 @@ class UserService {
         showSnackBar(
             context: context,
             msg: "Cập nhật thông tin cá nhân thành công");
-        appService.avatar = responseBody["data"]["avatar"];
-        appService.coverImage = responseBody["data"]["cover_image"];
+        appService.avatar = responseBody["data"]['avatar'];
+        appService.coverImage = responseBody["data"]['cover_image'];
         // ignore: use_build_context_synchronously
-        context.go('/authenticated');
+        context.go('/authenticated/4');
       } else {
         // ignore: use_build_context_synchronously
         showSnackBar(
