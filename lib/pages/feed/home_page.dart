@@ -79,62 +79,79 @@ class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final appService = Provider.of<AppService>(context, listen: false);
     return SafeArea(
-        child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          decoration: const BoxDecoration(
-            border: Border(bottom: BorderSide(color: Color(0xFFc9ccd1), width: 5)),
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 9, horizontal: 10),
-          child: Row(
-            children: [
-              GestureDetector(
-                onTap: () {
-                  context.push(
-                      "/authenticated/personalPage/${appService.uidLoggedIn}");
-                },
-                child: MyImage(
-                  imageUrl: appService.avatar,
-                  width: 40,
-                  height: 40,
-                ),
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              Expanded(
-                  child: OutlinedButton(
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("Anti Facebook"),
+          actions: [
+            IconButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const NewFeed()),
-                  );
+                  context.push("/authenticated/search");
                 },
-                style: OutlinedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  foregroundColor: Colors.black,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0),
+                icon: const Icon(Icons.search_rounded)),
+            // IconButton(
+            //     onPressed: () {
+            //       authService.logOut(context: context);
+            //     },
+            //     icon: const Icon(Icons.logout))
+          ],
+        ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                border: Border(bottom: BorderSide(color: Color(0xFFc9ccd1), width: 5)),
+              ),
+              padding: const EdgeInsets.symmetric(vertical: 9, horizontal: 10),
+              child: Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      context.push(
+                          "/authenticated/personalPage/${appService.uidLoggedIn}");
+                    },
+                    child: MyImage(
+                      imageUrl: appService.avatar,
+                      width: 40,
+                      height: 40,
+                    ),
                   ),
-                  side: const BorderSide(width: 0.8, color: Colors.black26),
-                ),
-                child: const Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      "Bạn đang nghĩ gì?",
-                      style: TextStyle(color: Colors.black87, fontSize: 16, fontWeight: FontWeight.w400),
-                    )),
-              ))
-            ],
-          ),
-        ),
-        ListPost(
-            posts: posts,
-            scrollController: _scrollController,
-            isLoading: isLoading,
-        ),
-      ],
-    ));
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                      child: OutlinedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const NewFeed()),
+                          );
+                        },
+                        style: OutlinedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          foregroundColor: Colors.black,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                          side: const BorderSide(width: 0.8, color: Colors.black26),
+                        ),
+                        child: const Align(
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              "Bạn đang nghĩ gì?",
+                              style: TextStyle(color: Colors.black87, fontSize: 16, fontWeight: FontWeight.w400),
+                            )),
+                      ))
+                ],
+              ),
+            ),
+            ListPost(
+              posts: posts,
+              scrollController: _scrollController,
+              isLoading: isLoading,
+            ),
+          ],
+        )),
+      );
   }
 }

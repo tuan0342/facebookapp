@@ -108,8 +108,10 @@ class _AuthenticatedNavigatorState extends State<AuthenticatedNavigator> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const WaitingDataScreen();
             }
-            authService.logOut(context: context, isShowSnackbar: true);
-            return const LogInUnknownPage();
+            WidgetsBinding.instance.addPostFrameCallback(
+                  (_) => authService.logOut(context: context, isShowSnackbar: true)
+            );
+            return const WaitingDataScreen();
           }),
     );
   }
