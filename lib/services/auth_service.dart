@@ -217,7 +217,7 @@ class AuthService extends ChangeNotifier {
       debugPrint("get exception $err");
       // ignore: use_build_context_synchronously
       showSnackBar(
-          context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau $err");
+          context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
     }
   }
 }

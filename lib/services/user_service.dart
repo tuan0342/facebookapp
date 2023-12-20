@@ -62,7 +62,7 @@ class UserService {
       debugPrint("get exception $err");
       // ignore: use_build_context_synchronously
       showSnackBar(
-          context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau $err");
+          context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
     }
 
     return profile;
@@ -126,7 +126,7 @@ class UserService {
       debugPrint("get exception $err");
       // ignore: use_build_context_synchronously
       showSnackBar(
-          context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau $err");
+          context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
     }
   }
 
@@ -193,7 +193,7 @@ class UserService {
       } else {
         // ignore: use_build_context_synchronously
         showSnackBar(
-          context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau ${responseBody["error"]["message"]}");
+          context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
       }
     } on UnauthorizationException {
       // ignore: use_build_context_synchronously
@@ -204,7 +204,7 @@ class UserService {
     } catch (err) {
       // ignore: use_build_context_synchronously
       showSnackBar(
-          context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau $err");
+          context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
     }
   }
 
@@ -249,7 +249,7 @@ class UserService {
       debugPrint("get exception $err");
       // ignore: use_build_context_synchronously
       showSnackBar(
-          context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau $err");
+          context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
     }
   }  
 }
