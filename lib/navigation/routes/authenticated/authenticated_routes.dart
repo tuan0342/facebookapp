@@ -1,5 +1,6 @@
 import 'package:facebook_app/models/profile_model.dart';
 import 'package:facebook_app/models/webview_model.dart';
+import 'package:facebook_app/my_widgets/post/feed_item_detail.dart';
 import 'package:facebook_app/navigation/authenticated_navigator.dart';
 import 'package:facebook_app/navigation/routes/authenticated/submenu_route.dart';
 import 'package:facebook_app/navigation/routes/authenticated/search_routes.dart';
@@ -13,12 +14,11 @@ import 'package:go_router/go_router.dart';
 
 final GoRoute authenticatedRoute = GoRoute(
   path: '/authenticated',
-  builder: (context, state) => const AuthenticatedNavigator(),
   routes: [
     searchRoutes,
     menuRoute,
     GoRoute(
-        path: 'personalPage/:uid',
+        path: "personalPage/:uid",
         builder: (context, state) => PersonalPage(
               uid: state.pathParameters["uid"]!,
             ),
@@ -49,6 +49,24 @@ final GoRoute authenticatedRoute = GoRoute(
         WebView webView = state.extra as WebView;
         return WebViewContainer(
           webView: webView,
+        );
+      },
+    ),
+    GoRoute(
+        path: "postDetail/:id",
+        builder: (context, state) =>
+            FeedItemDetail(postId: state.pathParameters["id"]!)),
+    GoRoute(
+      path: ":index",
+      builder: (context, state) {
+        late int index;
+        if (state.pathParameters["index"] == null) {
+          index = 0;
+        } else {
+          index = int.parse(state.pathParameters["index"]!);
+        }
+        return AuthenticatedNavigator(
+          selected: index,
         );
       },
     ),

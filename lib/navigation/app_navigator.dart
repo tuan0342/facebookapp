@@ -3,7 +3,6 @@ import 'package:facebook_app/services/app_service.dart';
 import 'package:facebook_app/services/auth_service.dart';
 import 'package:facebook_app/services/notification_services.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 
@@ -32,9 +31,6 @@ class _AppNavigatorState extends State<AppNavigator> {
     notificationServices.requestNotificationPermission();
     notificationServices.firebaseInit(context);
     notificationServices.setupInteractMessage(context);
-    // notificationServices.getDeviceToken().then((value) {
-    //   debugPrint("divice token: $value");
-    // });
     super.initState();
   }
 
@@ -56,11 +52,10 @@ class _AppNavigatorState extends State<AppNavigator> {
       ],
       child: Builder(
         builder: (context) {
-          final GoRouter goRouter =
-              Provider.of<AppRouter>(context, listen: false).router;
+          final appRouter = Provider.of<AppRouter>(context, listen: false);
           return MaterialApp.router(
             title: "Facebook app",
-            routerConfig: goRouter,
+            routerConfig: appRouter.router,
             debugShowCheckedModeBanner: false,
           );
         },

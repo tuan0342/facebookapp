@@ -118,7 +118,8 @@ class _EditCoverState extends State<EditCover> {
             minWidth: MediaQuery.of(context).size.width - 20,
             child: TextButton(
               onPressed: () {
-                showPopupList(context, [widget.fileCover.path]);
+                showPopupList(
+                    context: context, images: [widget.fileCover.path.isNotEmpty ? widget.fileCover.path : widget.profile.imageCover]);
               },
               child: CachedNetworkImage(
                   imageUrl: widget.profile.imageCover,
@@ -155,14 +156,23 @@ class _EditCoverState extends State<EditCover> {
                   errorWidget: (context, url, error) => Container(
                         height: 200,
                         width: MediaQuery.of(context).size.width - 20,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.rectangle,
-                          image: const DecorationImage(
-                              image: AssetImage(
-                                  "assets/images/male_default_avatar.jpeg"),
-                              fit: BoxFit.cover),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
+                        decoration: widget.fileCover.path == ''
+                            ? BoxDecoration(
+                                shape: BoxShape.rectangle,
+                                image:  const DecorationImage(
+                                    image: AssetImage(
+                                        "assets/images/male_default_avatar.jpeg"),
+                                    fit: BoxFit.cover)
+                                  ,
+                                borderRadius: BorderRadius.circular(10),
+                              ) 
+                            : BoxDecoration(
+                                shape: BoxShape.rectangle,
+                                image: DecorationImage(
+                                    image: FileImage(widget.fileCover),
+                                    fit: BoxFit.cover),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
                       )),
             )),
         const SizedBox(

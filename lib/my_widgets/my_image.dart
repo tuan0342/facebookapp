@@ -8,7 +8,7 @@ class MyImage extends StatelessWidget {
   final BoxFit fit;
   Widget? placeOrderImage;
   Widget? errorImage;
-  final double height;
+  final double? height;
   final double width;
 
   MyImage(
@@ -16,7 +16,7 @@ class MyImage extends StatelessWidget {
       this.shape = BoxShape.circle,
       this.fit = BoxFit.cover,
       required this.imageUrl,
-      this.height = 100,
+      this.height,
       this.width = 100,
       this.placeOrderImage,
       this.errorImage});
@@ -28,9 +28,12 @@ class MyImage extends StatelessWidget {
         imageBuilder: (context, imageProvider) => Container(
               width: width,
               height: height,
-              decoration: BoxDecoration(
-                  shape: shape,
-                  image: DecorationImage(image: imageProvider, fit: fit)),
+              clipBehavior: Clip.hardEdge,
+              decoration: BoxDecoration(shape: shape),
+              child: Image(
+                image: imageProvider,
+                fit: fit,
+              ),
             ),
         placeholder: (context, url) =>
             placeOrderImage ??

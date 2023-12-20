@@ -44,7 +44,12 @@ class _RequestFriendBoxState extends State<RequestFriendBox> {
           topic: widget.friend.id.toString(),
           notification: NotificationModel(
               title: "Anti facebook",
-              message: "${appService.username} đã chấp nhận lời mời kết bạn"));
+              message: "${appService.username} đã chấp nhận lời mời kết bạn",
+              data: AccepetFriendNotiModel(
+                      friendId: int.parse(appService.uidLoggedIn),
+                      avatar: appService.avatar)
+                  .toMap()));
+
       // ignore: use_build_context_synchronously
       showSnackBar(context: context, msg: "Đã chấp nhận lời mời kết bạn");
       widget.onRemoveItem();
@@ -173,19 +178,45 @@ class _RequestFriendBoxState extends State<RequestFriendBox> {
                     children: <Widget>[
                       TextButton(
                         onPressed: () async {
-                          // block user
-                          final success = await FriendService(context: context)
-                              .setBlocksFriend(widget.friend.id.toString());
-                          if (success) {
-                            // ignore: use_build_context_synchronously
-                            showSnackBar(
-                                context: context,
-                                msg:
-                                    "Đã chặn tài khoản ${widget.friend.username}");
-                            widget.onRemoveItem();
-                          }
-                          // ignore: use_build_context_synchronously
-                          Navigator.pop(context);
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              title: Text(
+                                  "xác nhận chặn ${widget.friend.username}"),
+                              // content: const Text(
+                              //     'AlertDialog description'),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text('Cancel'),
+                                ),
+                                TextButton(
+                                  onPressed: () async {
+                                    // block user
+                                    final success =
+                                        await FriendService(context: context)
+                                            .setBlocksFriend(
+                                                widget.friend.id.toString());
+                                    if (success) {
+                                      // ignore: use_build_context_synchronously
+                                      showSnackBar(
+                                          context: context,
+                                          msg:
+                                              "Đã chặn tài khoản ${widget.friend.username}");
+                                      widget.onRemoveItem();
+                                    }
+                                    // ignore: use_build_context_synchronously
+                                    Navigator.pop(context);
+                                    // ignore: use_build_context_synchronously
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text('OK'),
+                                ),
+                              ],
+                            ),
+                          );
                         },
                         child: Row(
                           children: [

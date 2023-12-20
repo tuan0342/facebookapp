@@ -5,9 +5,13 @@ import 'package:go_router/go_router.dart';
 
 class FriendItem extends StatelessWidget {
   final FriendModel friend;
+  final VoidCallback refreshFriend;
+  final BuildContext contextPage;
   const FriendItem({
     super.key,
     required this.friend,
+    required this.refreshFriend,
+    required this.contextPage,
   });
 
   @override
@@ -17,7 +21,10 @@ class FriendItem extends StatelessWidget {
       width: (MediaQuery.of(context).size.width - 60) / 3,
       child: TextButton(
         onPressed: () {
-          context.push('/authenticated/personalPage/${friend.id}');
+          contextPage.push('/authenticated/personalPage/${friend.id}')
+            .then((value) => refreshFriend());
+          // context.push('/authenticated/personalPage/${friend.id}')
+          //   .then((value) => refreshFriend());
         },
         style: TextButton.styleFrom(padding: EdgeInsets.zero),
         child: Column(

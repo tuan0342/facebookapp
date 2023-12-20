@@ -1,5 +1,5 @@
 import 'package:facebook_app/models/friend_model.dart';
-import 'package:facebook_app/my_widgets/friend_box.dart';
+import 'package:facebook_app/my_widgets/friend/friend_box.dart';
 import 'package:facebook_app/my_widgets/my_text_button.dart';
 import 'package:facebook_app/services/app_service.dart';
 import 'package:facebook_app/services/friend_service.dart';
@@ -53,6 +53,7 @@ class _UserFriendsPageState extends State<UserFriendsPage> {
                 DateTime.parse(a.created).compareTo(DateTime.parse(b.created)));
           }
           total = data["total"];
+          index = index + count;
         });
       }
 
@@ -74,8 +75,16 @@ class _UserFriendsPageState extends State<UserFriendsPage> {
     _scrollController = ScrollController();
     _scrollController.addListener(_scrollListener);
     onLoad(context);
+  }
 
-    debugPrint("uid: ${widget.uid}");
+  Future refresh() async {
+    setState(() {
+      isLoading = false;
+      isEnd = false;
+      index = 0;
+      friends = [];
+    });
+    onLoad(context);
   }
 
   @override
@@ -268,6 +277,7 @@ class _UserFriendsPageState extends State<UserFriendsPage> {
                           friends.removeAt(index);
                         });
                       },
+                      refresh: refresh,
                     ),
                   ),
                 ),

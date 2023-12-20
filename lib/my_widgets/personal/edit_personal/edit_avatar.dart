@@ -115,7 +115,8 @@ class _EditAvatarState extends State<EditAvatar> {
             minWidth: 140,
             child: TextButton(
               onPressed: () {
-                showPopupList(context, [widget.fileAvatar.path]);
+                showPopupList(
+                    context: context, images: [widget.fileAvatar.path.isNotEmpty ? widget.fileAvatar.path : widget.profile.avatar]);
               },
               child: CachedNetworkImage(
                   imageUrl: widget.profile.avatar,
@@ -150,12 +151,20 @@ class _EditAvatarState extends State<EditAvatar> {
                   errorWidget: (context, url, error) => Container(
                         height: 140,
                         width: 140,
-                        decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                                image: AssetImage(
-                                    "assets/images/male_default_avatar.jpeg"),
-                                fit: BoxFit.cover)),
+                        decoration: widget.fileAvatar.path == '' 
+                            ? const BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    image: AssetImage(
+                                        "assets/images/male_default_avatar.jpeg"),
+                                    fit: BoxFit.cover)
+                                )
+                            : BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    image: FileImage(widget.fileAvatar),
+                                    fit: BoxFit.cover),
+                              ),
                       )),
             )),
         const SizedBox(
@@ -178,10 +187,6 @@ class _EditAvatarState extends State<EditAvatar> {
         source: source, imageQuality: 100, maxHeight: 10000, maxWidth: 10000);
     if (pickedFile != null) {
       widget.changeFileAvatar(pickedFile.path);
-
-      // ignore: use_build_context_synchronously
-      // await UserService().changeUsernameOrAvt(
-      //     context: context, fullName: profile.username, avatar: file);
     } else {
       debugPrint("no change");
     }

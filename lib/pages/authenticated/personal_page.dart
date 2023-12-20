@@ -13,7 +13,6 @@ import 'package:facebook_app/services/friend_service.dart';
 import 'package:facebook_app/services/user_service.dart';
 import 'package:flutter/material.dart';
 
-
 class PersonalPage extends StatefulWidget {
   final String uid;
   const PersonalPage({super.key, required this.uid});
@@ -24,13 +23,13 @@ class PersonalPage extends StatefulWidget {
 
 class _PersonalPageState extends State<PersonalPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  late Profile profile = const Profile(
+  Profile profile = const Profile(
       id: "",
       username: "",
       created: "",
       description: "",
-      avatar: "",
-      imageCover: "",
+      avatar: "https://t4.ftcdn.net/jpg/05/49/98/39/360_F_549983970_bRCkYfk0P6PP5fKbMhZMIb07mCJ6esXL.jpg",
+      imageCover: "https://t4.ftcdn.net/jpg/05/49/98/39/360_F_549983970_bRCkYfk0P6PP5fKbMhZMIb07mCJ6esXL.jpg",
       link: "",
       address: "",
       city: "",
@@ -40,39 +39,40 @@ class _PersonalPageState extends State<PersonalPage> {
       online: "",
       coins: "");
   List<FriendModel> friends = [];
-  late List<Post> feeds = [];
+  List<Post> feeds = [];
 
   bool isLoadingProfile = false;
   bool isLoadingFriend = false;
   bool isLoadingNewFeeds = false;
 
-  final ScrollController controller = ScrollController();
-  int lastId = 0;
+  late ScrollController controller;
+  // int lastId = 0;
   int indexPost = 0;
   int countPost = 20;
   bool isEndPosts = false;
 
-  bool isEndFriend = false;
   int totalFriend = 0;
 
   @override
   void initState() {
     super.initState();
-    getProfile();
+    controller = ScrollController();
     controller.addListener(handleScrolling);
+    getProfile();
     getNewFeed();
     onLoadFriend(context);
   }
 
   void handleScrolling() {
-    if (controller.position.pixels == controller.position.maxScrollExtent) {
+    // if (controller.position.pixels == controller.position.maxScrollExtent) {
+    if (controller.position.extentAfter == 0) {
       getNewFeed();
     }
   }
 
   void getNewFeed() async {
     if (!isEndPosts) {
-      setState(() {
+      setStateIfMounted(() {
         isLoadingNewFeeds = true;
       });
 
@@ -89,20 +89,20 @@ class _PersonalPageState extends State<PersonalPage> {
             uid: widget.uid);
 
         if (data["posts"].isEmpty) {
-          setState(() {
+          setStateIfMounted(() {
             isEndPosts = true;
           });
         } else {
-          setState(() {
+          setStateIfMounted(() {
             feeds.addAll(data["posts"]);
-            lastId = int.parse(data["lastId"]);
+            // lastId = int.parse(data["lastId"]);
             indexPost += countPost;
           });
         }
       } catch (err) {
         debugPrint("exception $err");
       } finally {
-        setState(() {
+        setStateIfMounted(() {
           isLoadingNewFeeds = false;
         });
       }
@@ -110,51 +110,43 @@ class _PersonalPageState extends State<PersonalPage> {
   }
 
   void getProfile() async {
-    setState(() {
+    setStateIfMounted(() {
       isLoadingProfile = true;
     });
     final profile_ =
         await UserService().getProfile(context: context, uid: widget.uid);
-    setState(() {
+        
+    setStateIfMounted(() {
       profile = profile_;
       isLoadingProfile = false;
     });
   }
 
-  void clickKudosButton(int index) {
-    setState(() {
-      if (feeds[index].isFelt == 0) {
-        feeds[index].feel += 1;
-        feeds[index].isFelt = 1;
-      } else {
-        feeds[index].feel -= 1;
-        feeds[index].isFelt = 0;
-      }
+  void onLoadFriend(BuildContext context) async {
+    setStateIfMounted(() {
+      isLoadingFriend = true;
+    });
+    final data =
+        await FriendService(context: context).getFriends(0, 6, widget.uid);
+
+    setStateIfMounted(() {
+      friends.addAll(data["friends"]);
+    });
+
+    setStateIfMounted(() {
+      isLoadingFriend = false;
     });
   }
 
-  void onLoadFriend(BuildContext context) async {
-    if (!isEndFriend) {
-      setState(() {
-        isLoadingFriend = true;
-      });
-      final data =
-          await FriendService(context: context).getFriends(0, 6, widget.uid);
+  Future refreshFriend() async{
+    setStateIfMounted(() {
+      friends = [];
+    });
+    onLoadFriend(context);
+  }
 
-      if (data["friends"].isEmpty) {
-        setState(() {
-          isEndFriend = true;
-        });
-      } else {
-        setState(() {
-          friends.addAll(data["friends"]);
-        });
-      }
-
-      setState(() {
-        isLoadingFriend = false;
-      });
-    }
+  void setStateIfMounted(f) {
+    if (mounted) setState(f);
   }
 
   @override
@@ -190,7 +182,8 @@ class _PersonalPageState extends State<PersonalPage> {
                         contextPage: context,
                       ),
 
-                    PersonalFriend(friends: friends, contextPage: context, uid: profile.id,),
+                      PersonalFriend(friends: friends, contextPage: context, 
+                        uid: profile.id, profile: profile, refreshFriend: refreshFriend,),
 
                       Container(
                         height: 20,
@@ -201,10 +194,7 @@ class _PersonalPageState extends State<PersonalPage> {
                       const SizedBox(
                         height: 10,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: personalNewFeed(),
-                      ),
+                      personalNewFeed(),
                     ],
                   ),
           ),
@@ -233,14 +223,45 @@ class _PersonalPageState extends State<PersonalPage> {
                 )
               ],
             ))
-        : ListView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            itemCount: feeds.length,
-            itemBuilder: (context, index) => FeedItem(
-              postData: feeds[index],
+        : Column(
+          children: [
+            ListView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: feeds.length,
+              itemBuilder: (context, index) =>Container(
+                              decoration: const BoxDecoration(border: Border(bottom: BorderSide(width: 4, color: Colors.grey))),
+                              padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
+                              child: FeedItem(
+                                postData: feeds[index],
+                              ),
+                            ),
+              
             ),
-          );
+            if (isLoadingNewFeeds) const Padding(padding: EdgeInsets.only(top: 20), child: CircularProgressIndicator()),
+            Container(
+              alignment: Alignment.topCenter,
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    isEndPosts ? 'Hết bài đăng!' : '',
+                    style: const  TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700),
+                  ),
+                  const SizedBox(
+                    height: 100,
+                  )
+                ],
+              )
+            )
+          ],
+        );
   }
 
   @override

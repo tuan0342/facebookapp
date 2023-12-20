@@ -1,5 +1,5 @@
 import 'package:facebook_app/models/friend_model.dart';
-import 'package:facebook_app/my_widgets/request_friend_box.dart';
+import 'package:facebook_app/my_widgets/friend/request_friend_box.dart';
 import 'package:facebook_app/services/app_service.dart';
 import 'package:facebook_app/services/friend_service.dart';
 import "package:flutter/material.dart";
@@ -45,7 +45,6 @@ class _RequestFriendsPageState extends State<RequestFriendsPage> {
       final data =
           await FriendService(context: context).getRequests(index, count);
 
-      debugPrint("data: $data");
       if (data["requests"].isEmpty) {
         setState(() {
           isEnd = true;
@@ -69,6 +68,13 @@ class _RequestFriendsPageState extends State<RequestFriendsPage> {
     _scrollController = ScrollController();
     _scrollController.addListener(_scrollListener);
     onGetRequest(context);
+  }
+
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
   }
 
   @override
@@ -164,14 +170,17 @@ class _RequestFriendsPageState extends State<RequestFriendsPage> {
                 child: ListView.builder(
                   controller: _scrollController,
                   itemCount: requests.length,
-                  itemBuilder: (context, index) => RequestFriendBox(
-                    friend: requests[index],
-                    onRemoveItem: () {
-                      setState(() {
-                        requests.removeAt(index);
-                        total -= 1;
-                      });
-                    },
+                  itemBuilder: (context, index) => Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: RequestFriendBox(
+                      friend: requests[index],
+                      onRemoveItem: () {
+                        setState(() {
+                          requests.removeAt(index);
+                          total -= 1;
+                        });
+                      },
+                    ),
                   ),
                 ),
               ),

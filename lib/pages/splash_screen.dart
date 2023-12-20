@@ -34,8 +34,8 @@ class _SplashScreenState extends State<SplashScreen> {
         ),
         Image.asset(
           "assets/images/af_logo.png",
-          height: 300,
-          width: 300,
+          height: 200,
+          width: 200,
         ),
         const CircularProgressIndicator()
       ])),

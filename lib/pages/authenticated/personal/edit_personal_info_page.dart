@@ -166,6 +166,7 @@ class _EditPersonalInfoPageState extends State<EditPersonalInfoPage> {
     setState(() {
       fileAvatar = File(path);
     });
+    debugPrint('>>> ${fileAvatar}');
   }
 
   void changeCover(String path) {

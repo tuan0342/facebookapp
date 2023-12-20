@@ -1,6 +1,8 @@
 // ignore: non_constant_identifier_names
 import 'dart:async';
+import 'dart:convert';
 
+import 'package:facebook_app/models/post_model.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -22,6 +24,8 @@ const String USERNAME_KEY = "username";
 const String COINS_KEY = "coins";
 // ignore: constant_identifier_names
 const String SUBCRIBE_TOPIC = "subcribe";
+// ignore: constant_identifier_names
+const String CACHE_FEED = "cache_feed";
 
 class AppService with ChangeNotifier {
   late final SharedPreferences sharedPreferences;
@@ -35,6 +39,7 @@ class AppService with ChangeNotifier {
   String _coverImage = '';
   String _username = '';
   String _subcribe = '';
+  List<Post> _feed_cache = [];
   int _coins = 0;
   bool _initialized = false;
 
@@ -47,6 +52,7 @@ class AppService with ChangeNotifier {
   String get avatar => _avatar;
   String get coverImage => _coverImage;
   String get username => _username;
+  List<Post> get feedCache => _feed_cache;
   int get coins => _coins;
   String get subcribe => _subcribe;
   bool get initialized => _initialized;
@@ -99,7 +105,7 @@ class AppService with ChangeNotifier {
     notifyListeners();
   }
 
-    set subcribe(String topic) {
+  set subcribe(String topic) {
     sharedPreferences.setString(SUBCRIBE_TOPIC, topic);
     _subcribe = topic;
     notifyListeners();
@@ -108,6 +114,16 @@ class AppService with ChangeNotifier {
   set initialized(bool value) {
     _initialized = value;
     notifyListeners();
+  }
+
+  set feedCache(List<Post> posts) {
+    _feed_cache = posts;
+    List<String> cache = [];
+    for (var post in posts) {
+      cache.add(jsonEncode(post));
+    }
+
+    sharedPreferences.setStringList(CACHE_FEED, cache);
   }
 
   Future<void> onAppStart() async {
@@ -119,9 +135,14 @@ class AppService with ChangeNotifier {
     _coverImage = sharedPreferences.getString(COVER_IMAGE_KEY) ?? '';
     _username = sharedPreferences.getString(USERNAME_KEY) ?? '';
     _coins = sharedPreferences.getInt(COINS_KEY) ?? 0;
+    List<Post> cache = [];
+    for (var postString in sharedPreferences.getStringList(CACHE_FEED) ?? []) {
+      cache.add(Post.fromJson(jsonDecode(postString)));
+    }
+    _feed_cache = cache;
     _initialized = true;
     // solve exception setState or markBuild during build
-    Future.delayed(const Duration(seconds: 1), () {
+    Future.delayed(Duration.zero, () {
       notifyListeners();
     });
   }
