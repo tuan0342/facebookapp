@@ -68,6 +68,10 @@ class _MyVideoPlayerState extends State<MyVideoPlayer> with AutomaticKeepAliveCl
         if (!videoPlayerProvider.isPlayMiniVideo) {
           if (widget.isInView || !videoPlayerProvider.isIsInitialize) {
             _controller.play();
+
+            if (videoPlayerProvider.isIsInitialize) {
+              videoPlayerProvider.curController.pause();
+            }
             videoPlayerProvider.setController(_controller);
             videoPlayerProvider.setVideoPost(widget.videoPost);
           } else {
@@ -126,8 +130,8 @@ class _MyVideoPlayerState extends State<MyVideoPlayer> with AutomaticKeepAliveCl
 
   @override
   void dispose() {
-    super.dispose();
     _controller.dispose();
+    super.dispose();
   }
 
   @override

@@ -46,7 +46,6 @@ class VideoPlayerProvider extends ChangeNotifier {
   }
 
   void setController(VideoPlayerController controller) {
-    print("setController");
     _controller = controller;
     _isIsInitialize = true;
     notifyListeners();

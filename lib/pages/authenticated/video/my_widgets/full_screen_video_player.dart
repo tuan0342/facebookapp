@@ -32,11 +32,15 @@ class _FullScreenVideoPlayerState extends State<FullScreenVideoPlayer> with Auto
       _controller.initialize().then((_) {
         setState(() {
           isInitialized = true;
-          shouldKeepAlive = widget.vController != null ? true : false;
         });
-        updateKeepAlive();
-        });
-      }
+      });
+    } else {
+      setState(() {
+        isInitialized = true;
+        shouldKeepAlive = true;
+      });
+      updateKeepAlive();
+    }
   }
 
   @override
@@ -72,6 +76,7 @@ class _FullScreenVideoPlayerState extends State<FullScreenVideoPlayer> with Auto
           }
           if (widget.isInView || widget.vController != null) {
             _controller.play();
+
             videoPlayerProvider.setController(_controller);
             videoPlayerProvider.setVideoPost(widget.videoPost);
           } else {
@@ -111,8 +116,9 @@ class _FullScreenVideoPlayerState extends State<FullScreenVideoPlayer> with Auto
 
   @override
   void dispose() {
+    if (!shouldKeepAlive) {
+      _controller.dispose();
     super.dispose();
-    _controller.dispose();
   }
 
   @override
