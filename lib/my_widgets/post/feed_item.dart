@@ -110,9 +110,7 @@ class _FeedItemState extends State<FeedItem> {
     setState(() {
       isLoading = true;
     });
-    if (widget.postData.isFelt == -1) {
-    } else if (widget.postData.isFelt == 1) {
-    } else {}
+    context.push("/authenticated/postDetail/${widget.postData.id}");
     setState(() {
       isLoading = false;
     });
@@ -477,7 +475,7 @@ class _FeedItemState extends State<FeedItem> {
             markButton(feedService),
             disappointedButton(feedService),
           ],
-        )
+        ),
       ],
     );
   }

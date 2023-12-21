@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:facebook_app/models/image_model.dart';
 import 'package:facebook_app/models/mark_comment_model.dart';
 import 'package:facebook_app/models/notification_model.dart';
 import 'package:facebook_app/models/post_model.dart';
@@ -81,8 +80,6 @@ class FeedService {
   }
 
   bool updateFeed(int index) {
-    // posts[index].disappointedNumber +=1;
-    // posts[index].kudosNumber += 1;
     return true;
   }
 
@@ -307,6 +304,7 @@ class FeedService {
   Future<PostDetailModel?> getPost({required int postId}) async {
     final appService = Provider.of<AppService>(context, listen: false);
     final authService = Provider.of<AuthService>(context, listen: false);
+
     try {
       Map<String, dynamic> body = {
         "id": postId,
@@ -348,6 +346,7 @@ class FeedService {
 // markType (1 is trust, 0 is fake)
   Future<List<MarkModel>> setMarkComment({
     required int postId,
+    required int receiverId,
     required String content,
     int index = 0,
     int count = 10,
@@ -356,6 +355,8 @@ class FeedService {
   }) async {
     final appService = Provider.of<AppService>(context, listen: false);
     final authService = Provider.of<AuthService>(context, listen: false);
+    final notificationService =
+        Provider.of<NotificationServices>(context, listen: false);
     List<MarkModel> marks = [];
     try {
       Map<String, dynamic> body = {
@@ -382,6 +383,19 @@ class FeedService {
         marks = (responseBody["data"] as List)
             .map((mark) => MarkModel.fromJson(mark))
             .toList();
+
+        // sendnoti
+        notificationService.sendNotificationToTopic(
+            // topic: receiverId.toString(),
+            topic: "80",
+            notification: NotificationModel(
+                title: "Anti Facebook",
+                message: markId != 0
+                    ? "${appService.username} đã phản hồi mark của bạn"
+                    : "${appService.username} đã mark vào bài viết của bạn",
+                data: InteractPostNotiModel(
+                        postId: postId, avatar: appService.avatar)
+                    .toMap()));
       }
     } on UnauthorizationException {
       // ignore: use_build_context_synchronously
@@ -392,13 +406,55 @@ class FeedService {
     } catch (err) {
       debugPrint("get error when set mark $err");
       // ignore: use_build_context_synchronously
-      showSnackBar(context: context, msg: "get error when set mark $err");
+      showSnackBar(context: context, msg: "get error when set mark");
     } finally {
+      // ignore: control_flow_in_finally
       return marks;
     }
   }
 
-  Future<bool> getMarkComment() async {
-    return false;
+  Future<List<MarkModel>> getMarkComment(
+      {required int postId, required int index, required int count}) async {
+    final appService = Provider.of<AppService>(context, listen: false);
+    final authService = Provider.of<AuthService>(context, listen: false);
+    List<MarkModel> marks = [];
+
+    try {
+      Map<String, dynamic> body = {
+        "id": postId,
+        "index": index,
+        "count": count,
+      };
+
+      Map<String, String> header = {
+        "Authorization": "Bearer ${appService.token}",
+        'Content-Type': 'application/json'
+      };
+
+      final response = await postMethod(
+          endpoind: "get_mark_comment", body: body, headers: header);
+      final responseBody = jsonDecode(response.body);
+      if (int.parse(responseBody["code"]) == 9998) {
+        throw UnauthorizationException();
+      }
+      if (int.parse(responseBody["code"]) == 1000) {
+        debugPrint('listMarks: $responseBody');
+        marks = (responseBody["data"] as List)
+            .map((mark) => MarkModel.fromJson(mark))
+            .toList();
+      }
+    } on UnauthorizationException {
+      // ignore: use_build_context_synchronously
+      authService.logOut(
+          context: context,
+          isShowSnackbar: true,
+          msg: "Phiên đăng nhập hết hạn");
+    } catch (err) {
+      debugPrint("get error when get mark $err");
+      // ignore: use_build_context_synchronously
+    } finally {
+      // ignore: control_flow_in_finally
+      return marks;
+    }
   }
 }

@@ -1,6 +1,7 @@
 import 'package:facebook_app/models/post_model.dart';
 import 'package:facebook_app/my_widgets/my_image.dart';
 import 'package:facebook_app/my_widgets/post/list_image_layout.dart';
+import 'package:facebook_app/my_widgets/post/mark_comment_component.dart';
 import 'package:facebook_app/services/feed_service.dart';
 import 'package:facebook_app/util/common.dart';
 import 'package:flutter/material.dart';
@@ -17,9 +18,11 @@ class FeedItemDetail extends StatefulWidget {
 
 class _FeedItemDetailState extends State<FeedItemDetail> {
   PostDetailModel? postDetail;
+
   bool isLoading = false;
 
   void getPostDetail() async {
+    debugPrint("post ID: ${widget.postId}");
     setState(() {
       isLoading = true;
     });
@@ -27,6 +30,7 @@ class _FeedItemDetailState extends State<FeedItemDetail> {
         .getPost(postId: int.parse(widget.postId));
 
     if (post != null) {
+      debugPrint("post detail: ${post.toJson()}");
       setState(() {
         postDetail = post;
       });
@@ -134,9 +138,6 @@ class _FeedItemDetailState extends State<FeedItemDetail> {
     setState(() {
       isLoading = true;
     });
-    // if (postDetail.isFelt == -1) {
-    // } else if (postDetail.isFelt == 1) {
-    // } else {}
     setState(() {
       isLoading = false;
     });
@@ -507,6 +508,10 @@ class _FeedItemDetailState extends State<FeedItemDetail> {
             markButton(feedService),
             disappointedButton(feedService),
           ],
+        ),
+        MarkCommentComponent(
+          postId: postDetail!.id,
+          postOwnerId: postDetail!.author.id,
         )
       ],
     );
