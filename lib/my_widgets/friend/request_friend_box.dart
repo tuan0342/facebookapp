@@ -51,7 +51,7 @@ class _RequestFriendBoxState extends State<RequestFriendBox> {
                   .toMap()));
 
       // ignore: use_build_context_synchronously
-      showSnackBar(context: context, msg: "Đã chấp nhận lời mời kết bạn");
+      showSnackBar(context: context, msg: "Đã chấp nhận lời mời kết bạn", timeShow: 1000);
       widget.onRemoveItem();
     }
   }

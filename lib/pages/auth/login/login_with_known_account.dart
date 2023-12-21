@@ -5,6 +5,7 @@ import 'package:facebook_app/my_widgets/my_text.dart';
 import 'package:facebook_app/my_widgets/my_text_button.dart';
 import 'package:facebook_app/services/app_service.dart';
 import 'package:facebook_app/services/auth_service.dart';
+import 'package:facebook_app/util/common.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -22,7 +23,7 @@ class LogInKnownPage extends StatelessWidget {
     }
 
     void forgotPassword() {
-      debugPrint("forget passowrd");
+      showSnackBar(context: context, msg: 'Hiện chúng tôi chưa hỗ trợ tính năng này', timeShow: 1500);
     }
 
     return Scaffold(
