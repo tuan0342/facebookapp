@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:android_id/android_id.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:facebook_app/my_widgets/images_dialog.dart';
+import 'package:facebook_app/services/app_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:provider/provider.dart';
 
 Uri getUri({required String endpoind, Map<String, dynamic>? params}) {
   String queryParameters = "";
@@ -62,14 +64,13 @@ const String INTERACTPOST = "interact post";
 const String ACCEPTFRIEND = "accept friend";
 const String REQUESTFRIEND = "request friend";
 
-String? mapNotiDataToStringRoute(Map<String, dynamic> map) {
+String? mapNotiDataToStringRoute(Map<String, dynamic> map, int uidLoggedIn) {
   switch (map["type"]) {
     case INTERACTPOST:
       final postId = map["postId"];
       return "/authenticated/postDetail/$postId";
     case ACCEPTFRIEND:
-      final uid = map["friendId"];
-      return "/authenticated/friends/$uid";
+      return "/authenticated/friends/$uidLoggedIn";
     case REQUESTFRIEND:
       return "/authenticated/1";
     default:

@@ -51,7 +51,7 @@ class AuthService extends ChangeNotifier {
     }
   }
 
-  Future<void> register({
+  Future<bool> register({
     required BuildContext context,
     required String email,
     required String password,
@@ -72,6 +72,7 @@ class AuthService extends ChangeNotifier {
         // showSnackBar(context: context, msg: 'Đăng ký thành công');
         // ignore: use_build_context_synchronously
         context.go('/auth/register/confirmCode/$email');
+        return true;
       } else {
         // ignore: use_build_context_synchronously
         showSnackBar(context: context, msg: body['message']);
@@ -81,9 +82,10 @@ class AuthService extends ChangeNotifier {
       // ignore: use_build_context_synchronously
       showSnackBar(context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
     }
+    return false;
   }
 
-  void logInWithApi({
+  Future<void> logInWithApi({
     required BuildContext context,
     required String email,
     required String password,
@@ -162,6 +164,8 @@ class AuthService extends ChangeNotifier {
       if (isShowSnackbar) {
         // ignore: use_build_context_synchronously
         showSnackBar(context: context, msg: msg);
+        Future.delayed(const Duration(seconds: 1));
+        context.go("/auth");
       }
       await FirebaseMessaging.instance
           .unsubscribeFromTopic(appService.uidLoggedIn)
@@ -173,7 +177,6 @@ class AuthService extends ChangeNotifier {
       appService.uidLoggedIn = '';
       appService.token = '';
       // ignore: use_build_context_synchronously
-      context.go("/auth");
     }
   }
 
