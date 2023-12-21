@@ -452,14 +452,20 @@ class _FeedItemState extends State<FeedItem> {
               Padding(
                 padding: const EdgeInsets.only(right: 5),
                 child: widget.postData.markComment > 0
-                    ? Row(
-                        children: [
-                          Text(
-                            "${widget.postData.markComment} Marks",
-                            style: TextStyle(
-                                fontSize: 15, color: Colors.grey[800]),
-                          ),
-                        ],
+                    ? GestureDetector(
+                        onTap: () {
+                          context.push(
+                              "/authenticated/postDetail/${widget.postData.id}");
+                        },
+                        child: Row(
+                          children: [
+                            Text(
+                              "${widget.postData.markComment} Marks & Comments",
+                              style: TextStyle(
+                                  fontSize: 15, color: Colors.grey[800]),
+                            ),
+                          ],
+                        ),
                       )
                     : Container(),
               )

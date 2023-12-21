@@ -141,8 +141,7 @@ class FeedService {
     } catch (err) {
       debugPrint("get exception $err");
       // ignore: use_build_context_synchronously
-      showSnackBar(
-          context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
+      showSnackBar(context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
     }
 
     return result;
@@ -214,8 +213,7 @@ class FeedService {
     } catch (e) {
       debugPrint("get error $e");
       // ignore: use_build_context_synchronously
-      showSnackBar(
-          context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
+      showSnackBar(context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
     }
 
     return false;
@@ -254,8 +252,7 @@ class FeedService {
     } catch (e) {
       debugPrint("get error $e");
       // ignore: use_build_context_synchronously
-      showSnackBar(
-          context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
+      showSnackBar(context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
     }
 
     return false;
@@ -294,8 +291,7 @@ class FeedService {
     } catch (e) {
       debugPrint("get error $e");
       // ignore: use_build_context_synchronously
-      showSnackBar(
-          context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
+      showSnackBar(context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
     }
 
     return false;
@@ -334,8 +330,7 @@ class FeedService {
     } catch (e) {
       debugPrint("get error $e");
       // ignore: use_build_context_synchronously
-      showSnackBar(
-          context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
+      showSnackBar(context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
     }
 
     return null;
@@ -386,8 +381,7 @@ class FeedService {
 
         // sendnoti
         notificationService.sendNotificationToTopic(
-            // topic: receiverId.toString(),
-            topic: "80",
+            topic: receiverId.toString(),
             notification: NotificationModel(
                 title: "Anti Facebook",
                 message: markId != 0
