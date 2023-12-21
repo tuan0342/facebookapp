@@ -1,6 +1,7 @@
 import 'package:facebook_app/models/post_model.dart';
 import 'package:facebook_app/my_widgets/my_image.dart';
 import 'package:facebook_app/my_widgets/post/list_image_layout.dart';
+import 'package:facebook_app/my_widgets/post/video/video_screen.dart';
 import 'package:facebook_app/services/feed_service.dart';
 import 'package:facebook_app/util/common.dart';
 import 'package:flutter/material.dart';
@@ -110,9 +111,7 @@ class _FeedItemState extends State<FeedItem> {
     setState(() {
       isLoading = true;
     });
-    if (widget.postData.isFelt == -1) {
-    } else if (widget.postData.isFelt == 1) {
-    } else {}
+    context.push("/authenticated/postDetail/${widget.postData.id}");
     setState(() {
       isLoading = false;
     });
@@ -120,6 +119,7 @@ class _FeedItemState extends State<FeedItem> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint("post data: ${widget.postData.toJson()}");
     final FeedService feedService = FeedService(context: context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -419,7 +419,11 @@ class _FeedItemState extends State<FeedItem> {
                     images: widget.postData.image,
                     postId: widget.postData.id,
                   )
-                : Container()
+                : widget.postData.video.url.isNotEmpty
+                    ? VideoPlayerScreen(
+                        url: widget.postData.video.url,
+                      )
+                    : Container()
           ],
         ),
       ),
@@ -454,14 +458,20 @@ class _FeedItemState extends State<FeedItem> {
               Padding(
                 padding: const EdgeInsets.only(right: 5),
                 child: widget.postData.markComment > 0
-                    ? Row(
-                        children: [
-                          Text(
-                            "${widget.postData.markComment} Marks",
-                            style: TextStyle(
-                                fontSize: 15, color: Colors.grey[800]),
-                          ),
-                        ],
+                    ? GestureDetector(
+                        onTap: () {
+                          context.push(
+                              "/authenticated/postDetail/${widget.postData.id}");
+                        },
+                        child: Row(
+                          children: [
+                            Text(
+                              "${widget.postData.markComment} Marks & Comments",
+                              style: TextStyle(
+                                  fontSize: 15, color: Colors.grey[800]),
+                            ),
+                          ],
+                        ),
                       )
                     : Container(),
               )
@@ -477,7 +487,7 @@ class _FeedItemState extends State<FeedItem> {
             markButton(feedService),
             disappointedButton(feedService),
           ],
-        )
+        ),
       ],
     );
   }

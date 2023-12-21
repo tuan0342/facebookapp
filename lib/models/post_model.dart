@@ -4,6 +4,7 @@ class Post {
   final int id;
   final String name;
   List<ImageModel> image;
+  Video video;
   String described;
   String created;
   int feel;
@@ -19,6 +20,7 @@ class Post {
       {required this.id,
       required this.name,
       required this.image,
+      required this.video,
       required this.described,
       required this.created,
       required this.feel,
@@ -36,6 +38,7 @@ class Post {
         image = (json["image"] as List)
             .map((image) => ImageModel.fromJson(image))
             .toList(),
+        video = Video.fromJson(json["video"] ?? {"url": ""}),
         described = json["described"] ?? "",
         created = json["created"] ?? "",
         feel = int.parse(json["feel"] ?? "0"),
@@ -52,6 +55,7 @@ class Post {
       "id": id.toString(),
       "name": name,
       "image": image.map((e) => e.toJson()).toList(),
+      "video": video.toJson(),
       "described": described,
       "created": created,
       "feel": feel.toString(),
@@ -64,6 +68,18 @@ class Post {
       "banned": banned.toString(),
     };
   }
+}
+
+class Video {
+  final String url;
+
+  Video({required this.url});
+
+  Video.fromJson(Map<String, dynamic> json) : url = json["url"];
+
+  Map<String, dynamic> toJson() => {
+        "url": url,
+      };
 }
 
 class Author {
@@ -125,6 +141,7 @@ class PostDetailModel {
   final int id;
   final String name;
   List<ImageModel> image;
+  final Video video;
   int modified;
   String described;
   String created;
@@ -149,6 +166,7 @@ class PostDetailModel {
     required this.id,
     required this.name,
     required this.image,
+    required this.video,
     required this.described,
     required this.created,
     required this.state,
@@ -176,6 +194,7 @@ class PostDetailModel {
         image = (json["image"] as List)
             .map((image) => ImageModel.fromJson(image))
             .toList(),
+        video = Video.fromJson(json["video"] ?? {"url": ""}),
         described = json["described"] ?? "",
         created = json["created"] ?? "",
         state = json["state"] ?? "",
@@ -201,6 +220,7 @@ class PostDetailModel {
       "id": id,
       "name": name,
       "image": image.map((e) => e.toJson()).toList(),
+      "video": video.toJson(),
       "described": described,
       "created": created,
       "state": state,

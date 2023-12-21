@@ -42,7 +42,6 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   void onSearch(BuildContext context) async {
-    debugPrint('bcd posts: ${isEnd}');
     if (!isEnd) {
       setState(() {
         isLoading = true;
@@ -50,7 +49,6 @@ class _SearchPageState extends State<SearchPage> {
       try {
         final posts = await SearchService(context: context)
             .search(_keywordController.text, index, count);
-        debugPrint('bcd posts data: ${posts.length}');
         if (posts.isEmpty) {
           setState(() {
             result = result ?? posts;
@@ -77,7 +75,7 @@ class _SearchPageState extends State<SearchPage> {
     }
   }
 
-  void onSearchUser (BuildContext context) async {
+  void onSearchUser(BuildContext context) async {
     debugPrint('bcd users: ${isEndUsers}');
     if (!isEndUsers) {
       setState(() {
@@ -96,7 +94,7 @@ class _SearchPageState extends State<SearchPage> {
           setState(() {
             if (users == null) {
               users = usersResponse;
-              indexUsers = count; 
+              indexUsers = count;
             } else {
               users!.addAll(usersResponse);
               indexUsers = indexUsers + count;
@@ -274,12 +272,17 @@ class _SearchPageState extends State<SearchPage> {
                                     Icon(
                                       Icons.question_answer,
                                       size: 32,
-                                      color: isPost ? Colors.blue : Colors.black,
+                                      color:
+                                          isPost ? Colors.blue : Colors.black,
                                     ),
                                     const SizedBox(width: 10),
                                     Text(
                                       "Bài viết",
-                                      style: TextStyle(fontSize: 16, color: isPost ? Colors.blue : Colors.black),
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          color: isPost
+                                              ? Colors.blue
+                                              : Colors.black),
                                     )
                                   ],
                                 ),
@@ -297,12 +300,17 @@ class _SearchPageState extends State<SearchPage> {
                                     Icon(
                                       Icons.people,
                                       size: 32,
-                                      color: isPost ? Colors.black : Colors.blue,
+                                      color:
+                                          isPost ? Colors.black : Colors.blue,
                                     ),
                                     const SizedBox(width: 10),
                                     Text(
                                       "Người dùng",
-                                      style: TextStyle(fontSize: 16, color: isPost ? Colors.black : Colors.blue),
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          color: isPost
+                                              ? Colors.black
+                                              : Colors.blue),
                                     )
                                   ],
                                 ),
@@ -323,13 +331,13 @@ class _SearchPageState extends State<SearchPage> {
             // _focus.hasFocus || result == null
             //     ? recentSearches()
             //     : showResult(),
-            isPost 
-              ? _focus.hasFocus || result == null
-                ? recentSearches()
-                : showPostResult()
-              : _focus.hasFocus || users == null
-                ? recentSearches()
-                : showUserResult(),
+            isPost
+                ? _focus.hasFocus || result == null
+                    ? recentSearches()
+                    : showPostResult()
+                : _focus.hasFocus || users == null
+                    ? recentSearches()
+                    : showUserResult(),
           ]),
         ),
       ),
@@ -339,34 +347,37 @@ class _SearchPageState extends State<SearchPage> {
   // Widget show kết quả tìm kiếm
   Widget showPostResult() {
     return ListPost(
-      posts: result!,
-      scrollController: _scrollController,
-      isLoading: isLoading);
+        posts: result!,
+        scrollController: _scrollController,
+        isLoading: isLoading);
   }
 
   Widget showUserResult() {
     return Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(left: 15, bottom: 25, top: 10), 
-                  child: Text("Mọi người", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),),
-                ),
-                Expanded(
-                  child: ListView.builder(
-                    controller: _scrollController,
-                    itemCount: users!.length,
-                    itemBuilder: (context, index) => Padding(
-                      padding: const EdgeInsets.only(bottom: 4),
-                      child: SearchFriendBox(friend: users![index], refresh: refresh)
-                    ),
-                  ),
-                ),
-                if (isLoading) const CircularProgressIndicator()
-              ],
-          ));
+        child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.only(left: 15, bottom: 25, top: 10),
+          child: Text(
+            "Mọi người",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+          ),
+        ),
+        Expanded(
+          child: ListView.builder(
+            controller: _scrollController,
+            itemCount: users!.length,
+            itemBuilder: (context, index) => Padding(
+                padding: const EdgeInsets.only(bottom: 4),
+                child:
+                    SearchFriendBox(friend: users![index], refresh: refresh)),
+          ),
+        ),
+        if (isLoading) const CircularProgressIndicator()
+      ],
+    ));
   }
 
   // Widget show tìm kiếm gần đây
