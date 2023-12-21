@@ -132,7 +132,7 @@ class AuthService extends ChangeNotifier {
         debugPrint("uid: ${_appService.uidLoggedIn}");
         debugPrint("active: ${body["data"]['active']}");
 
-        if(body["data"]['active'] == "1") {
+        if (body["data"]['active'] == "1") {
           // ignore: use_build_context_synchronously
           context.go("/authenticated/0");
         } else {
@@ -164,8 +164,6 @@ class AuthService extends ChangeNotifier {
       if (isShowSnackbar) {
         // ignore: use_build_context_synchronously
         showSnackBar(context: context, msg: msg);
-        Future.delayed(const Duration(seconds: 1));
-        context.go("/auth");
       }
       await FirebaseMessaging.instance
           .unsubscribeFromTopic(appService.uidLoggedIn)
@@ -177,6 +175,7 @@ class AuthService extends ChangeNotifier {
       appService.uidLoggedIn = '';
       appService.token = '';
       // ignore: use_build_context_synchronously
+      context.go("/auth");
     }
   }
 
@@ -219,8 +218,7 @@ class AuthService extends ChangeNotifier {
     } catch (err) {
       debugPrint("get exception $err");
       // ignore: use_build_context_synchronously
-      showSnackBar(
-          context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
+      showSnackBar(context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
     }
   }
 }
