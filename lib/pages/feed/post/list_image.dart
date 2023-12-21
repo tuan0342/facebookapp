@@ -1,53 +1,288 @@
 import 'dart:io';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:flutter/widgets.dart';
+
+class ListImageLayout extends StatefulWidget {
+
+  final List<File> images;
+  final ListCallback cbFunction;
+  final double? fullHeight;
+
+  const ListImageLayout(
+      {super.key, required this.images, this.fullHeight, required this.cbFunction});
 
 
-class ListImage extends StatefulWidget {
   @override
-  State<ListImage> createState() {
-    return _ListImagePageState();
+  State<ListImageLayout> createState() {
+    return _imageListState ();
   }
 }
+typedef void ListCallback(List<File> val);
 
-class _ListImagePageState extends State<ListImage>  {
-  List<File> selectedImages = [];
-  final picker = ImagePicker();
-  @override
-  Widget build(BuildContext context) {
-    // display image selected from gallery
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+
+class _imageListState extends State<ListImageLayout>  {
+  Widget getLayoutByLength(int length, BuildContext context) {
+    switch (length) {
+      case 1:
+        {
+          return
+            Stack(
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: 400,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.rectangle,
+                  ),
+                  child: Image(
+                    image: FileImage(widget.images[0]),
+                    fit: BoxFit.fill,
+                  ),
+                ),
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        widget.images.removeAt(0);
+                        widget.cbFunction(widget.images);
+                      });
+
+                    },
+                    child: const Icon(Icons.close,
+                        color: Colors.black),
+                  ),
+                ),
+              ],
+            );
+        }
+      case 2:
+        return Row(
           children: [
-            ElevatedButton(
-              style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.green)),
-              child: const Text('Select Image from Gallery and Camera'),
-              onPressed: () {
-                getImages();
-              },
-            ), Expanded(
-              child: SizedBox(
-                width: 300.0,
-                child: selectedImages.isEmpty
-                    ? Container()
-                    : GridView.builder(
-                  itemCount: selectedImages.length,
-                  gridDelegate:
-                  const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3),
-                  itemBuilder: (BuildContext context, int index) {
-                    return Center(
-                        child: kIsWeb
-                            ? Stack(
-                          children: <Widget>[
+            Expanded(
+              flex: 2,
+              child: Padding(
+                  padding: const EdgeInsets.only(right: 2),
+                  child: Stack(
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        height: 400,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.rectangle,
+                        ),
+                        child: Image(
+                          image: FileImage(widget.images[0]),
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                      Positioned(
+                        top: 0,
+                        right: 0,
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              widget.images.removeAt(0);
+                              widget.cbFunction(widget.images);
+
+                            });
+                          },
+                          child: const Icon(Icons.close,
+                              color: Colors.black),
+                        ),
+                      ),
+                    ],
+                  )
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Padding(
+                  padding: const EdgeInsets.only(right: 2),
+                  child: Stack(
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        height: 400,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.rectangle,
+                        ),
+                        child: Image(
+                          image: FileImage(widget.images[1]),
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                      Positioned(
+                        top: 0,
+                        right: 0,
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              widget.images.removeAt(1);
+                              widget.cbFunction(widget.images);
+
+                            });
+                          },
+                          child: const Icon(Icons.close,
+                              color: Colors.black),
+                        ),
+                      ),
+                    ],
+                  )
+              ),
+            ),
+          ],
+        );
+      case 3:
+        return Row(
+          children: [
+            Expanded(
+              flex: 2,
+              child: Padding(
+                  padding: const EdgeInsets.only(right: 2),
+                  child: Stack(
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        height: 400,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.rectangle,
+                        ),
+                        child: Image(
+                          image: FileImage(widget.images[0]),
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                      Positioned(
+                        top: 0,
+                        right: 0,
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              widget.images.removeAt(0);
+                              widget.cbFunction(widget.images);
+
+                            });
+                          },
+                          child: const Icon(Icons.close,
+                              color: Colors.black),
+                        ),
+                      ),
+                    ],
+                  )
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 2),
+                child: SizedBox(
+                  height: 400,
+                  width: double.infinity,
+                  child: Column(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Padding(
+                            padding: const EdgeInsets.only(bottom: 2),
+                            child: Stack(
+                              children: [
+                                Container(
+                                  width: double.infinity,
+                                  height: 400,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.rectangle,
+                                  ),
+                                  child: Image(
+                                    image: FileImage(widget.images[1]),
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 0,
+                                  right: 0,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        widget.images.removeAt(1);
+                                        widget.cbFunction(widget.images);
+
+                                      });
+                                    },
+                                    child: const Icon(Icons.close,
+                                        color: Colors.black),
+                                  ),
+                                ),
+                              ],
+                            )
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Padding(
+                            padding: const EdgeInsets.only(top: 2),
+                            child: Stack(
+                              children: [
+                                Container(
+                                  width: double.infinity,
+                                  height: 400,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.rectangle,
+                                  ),
+                                  child: Image(
+                                    image: FileImage(widget.images[2]),
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 0,
+                                  right: 0,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        widget.images.removeAt(2);
+                                        widget.cbFunction(widget.images);
+
+                                      });
+                                    },
+                                    child: const Icon(Icons.close,
+                                        color: Colors.black),
+                                  ),
+                                ),
+                              ],
+                            )
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      case 4:
+        return Row(
+          children: [
+            Expanded(
+                flex: 2,
+                child: Column(
+                  children: [
+                    Padding(
+                        padding: const EdgeInsets.only(right: 2),
+                        child: Stack(
+                          children: [
                             Container(
-                              child: Image.network(
-                                  selectedImages[index].path),
+                              width: double.infinity,
+                              height: 400,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.rectangle,
+                              ),
+                              child: Image(
+                                image: FileImage(widget.images[0]),
+                                fit: BoxFit.fill,
+                              ),
                             ),
                             Positioned(
                               top: 0,
@@ -55,7 +290,9 @@ class _ListImagePageState extends State<ListImage>  {
                               child: GestureDetector(
                                 onTap: () {
                                   setState(() {
-                                    selectedImages.removeAt(index);
+                                    widget.images.removeAt(0);
+                                    widget.cbFunction(widget.images);
+
                                   });
                                 },
                                 child: const Icon(Icons.close,
@@ -64,18 +301,31 @@ class _ListImagePageState extends State<ListImage>  {
                             ),
                           ],
                         )
-                            : Stack(
-                          children: <Widget>[
+                    ),
+                    Padding(
+                        padding: const EdgeInsets.only(right: 2),
+                        child: Stack(
+                          children: [
                             Container(
-                                child: Image.file(
-                                    selectedImages[index])),
+                              width: double.infinity,
+                              height: 400,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.rectangle,
+                              ),
+                              child: Image(
+                                image: FileImage(widget.images[1]),
+                                fit: BoxFit.fill,
+                              ),
+                            ),
                             Positioned(
                               top: 0,
                               right: 0,
                               child: GestureDetector(
                                 onTap: () {
                                   setState(() {
-                                    selectedImages.removeAt(index);
+                                    widget.images.removeAt(1);
+                                    widget.cbFunction(widget.images);
+
                                   });
                                 },
                                 child: const Icon(Icons.close,
@@ -83,33 +333,100 @@ class _ListImagePageState extends State<ListImage>  {
                               ),
                             ),
                           ],
-                        ),);
-                  },
-                ),
-              ),
+                        )
+                    ),
+                  ],
+                )
+
+            ),
+            Expanded(
+                flex: 2,
+                child: Column(
+                  children: [
+                    Padding(
+                        padding: const EdgeInsets.only(right: 2),
+                        child: Stack(
+                          children: [
+                            Container(
+                              width: double.infinity,
+                              height: 400,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.rectangle,
+                              ),
+                              child: Image(
+                                image: FileImage(widget.images[3]),
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                            Positioned(
+                              top: 0,
+                              right: 0,
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    widget.images.removeAt(2);
+                                    widget.cbFunction(widget.images);
+
+                                  });
+                                },
+                                child: const Icon(Icons.close,
+                                    color: Colors.black),
+                              ),
+                            ),
+                          ],
+                        )
+                    ),
+                    Padding(
+                        padding: const EdgeInsets.only(right: 2),
+                        child: Stack(
+                          children: [
+                            Container(
+                              width: double.infinity,
+                              height: 400,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.rectangle,
+                              ),
+                              child: Image(
+                                image: FileImage(widget.images[3]),
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                            Positioned(
+                              top: 0,
+                              right: 0,
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    widget.images.removeAt(3);
+                                    widget.cbFunction(widget.images);
+
+                                  });
+                                },
+                                child: const Icon(Icons.close,
+                                    color: Colors.black),
+                              ),
+                            ),
+                          ],
+                        )
+                    ),
+                  ],
+                )
             ),
           ],
-        ),
-      ),
-    );
+        );
+      default:
+        return Container();
+    }
+
   }
 
-  Future getImages() async {
-    final pickedFile = await picker.pickMultiImage(
-        imageQuality: 100, maxHeight: 1000, maxWidth: 1000);
-    List<XFile> xfilePick = pickedFile;
-    setState(
-          () {
-        if (xfilePick.isNotEmpty) {
-          for (var i = 0; i < xfilePick.length; i++) {
-            selectedImages.add(File(xfilePick[i].path));
-          }
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Nothing is selected')));
-        }
-      },
-    );
+
+  @override
+  Widget  build(BuildContext context) {
+    return Container(
+        width: double.infinity,
+        height: 400,
+        child: getLayoutByLength(widget.images.length, context));
   }
 
 }

@@ -27,7 +27,6 @@ class _EditAvatarState extends State<EditAvatar> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('>>> >>> FIle: ${widget.fileAvatar}');
     return Column(
       children: [
         Row(
@@ -117,7 +116,7 @@ class _EditAvatarState extends State<EditAvatar> {
             child: TextButton(
               onPressed: () {
                 showPopupList(
-                    context: context, images: [widget.fileAvatar.path]);
+                    context: context, images: [widget.fileAvatar.path.isNotEmpty ? widget.fileAvatar.path : widget.profile.avatar]);
               },
               child: CachedNetworkImage(
                   imageUrl: widget.profile.avatar,
@@ -188,10 +187,6 @@ class _EditAvatarState extends State<EditAvatar> {
         source: source, imageQuality: 100, maxHeight: 10000, maxWidth: 10000);
     if (pickedFile != null) {
       widget.changeFileAvatar(pickedFile.path);
-
-      // ignore: use_build_context_synchronously
-      // await UserService().changeUsernameOrAvt(
-      //     context: context, fullName: profile.username, avatar: file);
     } else {
       debugPrint("no change");
     }

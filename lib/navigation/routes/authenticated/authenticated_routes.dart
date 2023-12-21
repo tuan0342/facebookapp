@@ -75,7 +75,7 @@ final GoRoute authenticatedRoute = GoRoute(
           selected: index,
         );
       },
-    )
+    ),
   ],
   redirect: (context, state) {
     return null;

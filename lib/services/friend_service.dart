@@ -241,7 +241,8 @@ class FriendService {
                 title: "Anti facebook",
                 message:
                     "${_appService.username} đã gửi lời mời kết bạn tới bạn",
-                data: RequestFriendNotiModel().toMap()));
+                data: RequestFriendNotiModel(avatar: _appService.avatar)
+                    .toMap()));
         return true;
       }
     } on UnauthorizationException {
@@ -410,8 +411,8 @@ class FriendService {
         'Content-Type': 'application/json; charset=UTF-8',
       };
 
-      final response = await postMethod(
-          endpoind: "unfriend", body: body, headers: headers);
+      final response =
+          await postMethod(endpoind: "unfriend", body: body, headers: headers);
       final responseBody = jsonDecode(response.body);
       debugPrint("response body: $responseBody");
 

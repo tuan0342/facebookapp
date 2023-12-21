@@ -1,5 +1,6 @@
 import 'package:facebook_app/pages/auth/login/login_with_known_account.dart';
 import 'package:facebook_app/pages/auth/login/login_with_unknown_account.dart';
+import 'package:facebook_app/pages/authenticated/first_edit_name.dart';
 import 'package:go_router/go_router.dart';
 
 final logInRoute = GoRoute(path: "", routes: [
@@ -16,3 +17,7 @@ final GoRoute logInUnKnownRoute = GoRoute(
   path: 'logInUnknown',
   builder: (context, state) => const LogInUnknownPage(),
 );
+
+final GoRoute firstEditNameRoute = GoRoute(
+      path: "firstEditName",
+      builder: (context, state) => const FirstEditName());

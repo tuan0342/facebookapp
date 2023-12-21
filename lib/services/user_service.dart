@@ -114,7 +114,7 @@ class UserService {
         appService.username = responseBody["data"]["username"];
         appService.avatar = responseBody["data"]["avatar"];
         // ignore: use_build_context_synchronously
-        context.go('/authenticated');
+        context.go("/authenticated/0");
       }
     } on UnauthorizationException {
       // ignore: use_build_context_synchronously
@@ -185,10 +185,10 @@ class UserService {
         showSnackBar(
             context: context,
             msg: "Cập nhật thông tin cá nhân thành công");
-        appService.avatar = responseBody["data"]["avatar"];
-        appService.coverImage = responseBody["data"]["cover_image"];
+        appService.avatar = responseBody["data"]['avatar'];
+        appService.coverImage = responseBody["data"]['cover_image'];
         // ignore: use_build_context_synchronously
-        context.go('/authenticated');
+        context.go('/authenticated/4');
       } else {
         // ignore: use_build_context_synchronously
         showSnackBar(
@@ -215,8 +215,8 @@ class UserService {
       final _appService = Provider.of<AppService>(context, listen: false);
 
       Map<String, dynamic> body = {
-        "code": "123456",
-        "coins": int.parse(coins),
+        "code": "1",
+        "coins": coins,
       };
       Map<String, String> headers = {
         "Authorization": "Bearer ${_appService.token}",
@@ -224,7 +224,7 @@ class UserService {
       };
 
       final response = await postMethod(
-          endpoind: "settings/buy_coins", body: body, headers: headers);
+          endpoind: "buy_coins", body: body, headers: headers);
       final responseBody = jsonDecode(response.body);
 
       if (int.parse(responseBody["code"]) == 9998) {
@@ -236,7 +236,7 @@ class UserService {
         // ignore: use_build_context_synchronously
         showSnackBar(context: context, msg: "Nạp coins thành công");
         // ignore: use_build_context_synchronously
-        context.go('/authenticated');
+        context.go('/authenticated/4');
       }
     } on UnauthorizationException {
       // ignore: use_build_context_synchronously

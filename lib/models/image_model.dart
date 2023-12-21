@@ -9,7 +9,7 @@ class ImageModel {
         url = json["url"] ?? "";
 
   Map<String, dynamic> toJson() => {
-        "id": id,
+        "id": id.toString(),
         "url": url,
       };
 }

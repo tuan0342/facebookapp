@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:facebook_app/models/image_model.dart';
 import 'package:facebook_app/models/notification_model.dart';
 import 'package:facebook_app/models/post_model.dart';
 import 'package:facebook_app/rest_api/rest_api.dart';
@@ -20,32 +19,8 @@ class FeedService {
   late final AuthService _authService =
       Provider.of<AuthService>(context, listen: false);
 
-  List<Post> fakePosts = [
-    Post(
-      id: 1,
-      name: "",
-      image: [const ImageModel(id: 1, url: "assets/images/img")], //
-      described: "",
-      created: "2023-11-16T07:37:51.804Z",
-      feel: 0,
-      markComment: 0,
-      isFelt: -1,
-      state: "Not Hyped",
-      author: const Author(
-          id: 1,
-          name: "Nguyễn Khánh Duy",
-          avatar:
-              "https://it4788.catan.io.vn/files/avatar-1700472905228-894880239.jpg",
-          coins: 0,
-          listing: []),
-      canEdit: 1,
-      banned: 0,
-      isBlocked: 0,
-    ),
-  ];
-
   FeedService({required this.context});
-  Future<List<Post>> getFeeds(
+  Future<Map<String, dynamic>> getFeeds(
       {int? uid,
       inCampain = 0,
       campaignId = 0,
@@ -54,9 +29,8 @@ class FeedService {
       int? lastId,
       int index = 0,
       int count = 20}) async {
-    // return fakePosts;
-
     List<Post> posts = [];
+    int? lastID = lastId;
     try {
       Map<String, dynamic> body = {
         "user_id": uid,
@@ -86,6 +60,7 @@ class FeedService {
         posts = (responseBody["data"]["post"] as List)
             .map((e) => Post.fromJson(e))
             .toList();
+        lastID = int.parse(responseBody["data"]["last_id"]);
       } else {
         throw ApiFailException();
       }
@@ -99,7 +74,10 @@ class FeedService {
       debugPrint("get err $err");
     }
 
-    return posts;
+    return {
+      "feed": posts,
+      "last_id": lastID,
+    };
   }
 
   bool updateFeed(int index) {
@@ -178,9 +156,9 @@ class FeedService {
       required int postId,
       required int postOwnerId,
       required int feelType}) async {
-    final _appService = Provider.of<AppService>(context, listen: false);
-    final _authService = Provider.of<AuthService>(context, listen: false);
-    final _notificationService =
+    final appService = Provider.of<AppService>(context, listen: false);
+    final authService = Provider.of<AuthService>(context, listen: false);
+    final notificationService =
         Provider.of<NotificationServices>(context, listen: false);
     try {
       Map<String, dynamic> body = {
@@ -189,38 +167,50 @@ class FeedService {
       };
 
       Map<String, String> headers = {
-        "Authorization": "Bearer ${_appService.token}",
+        "Authorization": "Bearer ${appService.token}",
         'Content-Type': 'application/json'
       };
 
       final response =
           await postMethod(endpoind: "feel", body: body, headers: headers);
       final responseBody = jsonDecode(response.body);
+
       if (int.parse(responseBody["code"]) == 9998) {
         throw UnauthorizationException();
       }
       if (int.parse(responseBody["code"]) == 1000) {
         // send noti
-        if (feelType == 1) {
-          _notificationService.sendNotificationToTopic(
+        if (postOwnerId != int.parse(_appService.uidLoggedIn)) {
+          if (feelType == 1) {
+            notificationService.sendNotificationToTopic(
+              // topic: postOwnerId.toString(),
               topic: postOwnerId.toString(),
               notification: NotificationModel(
                   title: "Anti Facebook",
                   message:
-                      "${_appService.username} đã bày tỏ cảm xúc kudos vào bài viết của bạn"));
-        } else {
-          _notificationService.sendNotificationToTopic(
-              topic: postOwnerId.toString(),
-              notification: NotificationModel(
-                  title: "Anti Facebook",
-                  message:
-                      "${_appService.username} đã bày tỏ cảm xúc disapointed vào bài viết của bạn"));
+                      "${appService.username} đã bày tỏ cảm xúc kudos vào bài viết của bạn",
+                  data: InteractPostNotiModel(
+                          postId: postId, avatar: appService.avatar)
+                      .toMap()),
+            );
+          } else {
+            notificationService.sendNotificationToTopic(
+                // topic: postOwnerId.toString(),
+                topic: postOwnerId.toString(),
+                notification: NotificationModel(
+                    title: "Anti Facebook",
+                    message:
+                        "${appService.username} đã bày tỏ cảm xúc disapointed vào bài viết của bạn",
+                    data: InteractPostNotiModel(
+                            postId: postId, avatar: appService.avatar)
+                        .toMap()));
+          }
         }
         return true;
       }
     } on UnauthorizationException {
       // ignore: use_build_context_synchronously
-      _authService.logOut(
+      authService.logOut(
           context: context,
           isShowSnackbar: true,
           msg: "Phiên đăng nhập hết hạn");
@@ -236,8 +226,8 @@ class FeedService {
 
   Future<bool> deleteFeelPost(
       {required BuildContext context, required int postId}) async {
-    final _appService = Provider.of<AppService>(context, listen: false);
-    final _authService = Provider.of<AuthService>(context, listen: false);
+    final appService = Provider.of<AppService>(context, listen: false);
+    final authService = Provider.of<AuthService>(context, listen: false);
 
     try {
       Map<String, dynamic> body = {
@@ -245,7 +235,7 @@ class FeedService {
       };
 
       Map<String, String> headers = {
-        "Authorization": "Bearer ${_appService.token}",
+        "Authorization": "Bearer ${appService.token}",
         'Content-Type': 'application/json'
       };
 
@@ -260,7 +250,7 @@ class FeedService {
       }
     } on UnauthorizationException {
       // ignore: use_build_context_synchronously
-      _authService.logOut(
+      authService.logOut(
           context: context,
           isShowSnackbar: true,
           msg: "Phiên đăng nhập hết hạn");
@@ -276,8 +266,8 @@ class FeedService {
 
   Future<bool> getListFeel(
       {required BuildContext context, required int postId}) async {
-    final _appService = Provider.of<AppService>(context, listen: false);
-    final _authService = Provider.of<AuthService>(context, listen: false);
+    final appService = Provider.of<AppService>(context, listen: false);
+    final authService = Provider.of<AuthService>(context, listen: false);
 
     try {
       Map<String, dynamic> body = {
@@ -285,7 +275,7 @@ class FeedService {
       };
 
       Map<String, String> headers = {
-        "Authorization": "Bearer ${_appService.token}",
+        "Authorization": "Bearer ${appService.token}",
         'Content-Type': 'application/json'
       };
 
@@ -300,7 +290,7 @@ class FeedService {
       }
     } on UnauthorizationException {
       // ignore: use_build_context_synchronously
-      _authService.logOut(
+      authService.logOut(
           context: context,
           isShowSnackbar: true,
           msg: "Phiên đăng nhập hết hạn");
@@ -354,10 +344,10 @@ class FeedService {
   }
   Future<void> addPost({
     required BuildContext context,
-    required List<File> imageList,
-    required File? video,
-    required String described,
-    required String status
+    List<File>? imageList,
+    File? video,
+    String? described,
+    String? status,
   })async {
     late AuthService _authService =
     Provider.of<AuthService>(context, listen: false);
@@ -367,13 +357,13 @@ class FeedService {
       final _appService = Provider.of<AppService>(context, listen: false);
 
       Map<String, String> body = {
-        "described": described.trim(),
-        "status": status.trim()
+        "described": described!.trim(),
+        "status": status!.trim()
       };
       debugPrint('go body: ${body}');
 
       List<FileData> files = [];
-      if (imageList.isNotEmpty) {
+      if (imageList!.isNotEmpty) {
         for ( var image in imageList) {
           files.add(FileData(fieldName: 'image', file: image, type: "image", subType: "png"),);
         }
@@ -390,7 +380,7 @@ class FeedService {
 
 
       final response = await postWithFormDataMethod(
-          endpoind: "add_post", body: body, headers: headers);
+          endpoind: "add_post", body: body, headers: headers, files: files);
       final responseBody = jsonDecode(response.body);
       debugPrint('go res: $responseBody');
 
@@ -399,11 +389,10 @@ class FeedService {
             context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
       }
       if (int.parse(responseBody["code"]) == 1000) {
-        context.go('/authenticated');
+        context.go('/authenticated/0');
       }
     } catch (err) {
       debugPrint("get exception $err");
     }
   }
 }
-
