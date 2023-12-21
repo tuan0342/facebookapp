@@ -372,6 +372,8 @@ class FeedService {
         files.add(FileData(fieldName: 'video', file: video, type: "video", subType: "mp4"),);
       }
 
+      debugPrint("$imageList $video $status $described");
+
       Map<String, String> headers = {
         "Authorization": "Bearer ${_appService.token}",
         'Content-Type': 'application/json; charset=UTF-8'

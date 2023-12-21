@@ -7,7 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:popover/popover.dart';
+import 'package:provider/provider.dart';
 import 'package:readmore/readmore.dart';
+
+import '../../services/app_service.dart';
 
 // ignore: must_be_immutable
 class FeedItem extends StatefulWidget {
@@ -19,6 +22,7 @@ class FeedItem extends StatefulWidget {
 }
 
 class _FeedItemState extends State<FeedItem> {
+
   bool isLoading = false;
   void onClickKudosBtn(FeedService feedService) async {
     setState(() {
@@ -120,12 +124,14 @@ class _FeedItemState extends State<FeedItem> {
 
   @override
   Widget build(BuildContext context) {
+    final appService = Provider.of<AppService>(context, listen: false);
+
     final FeedService feedService = FeedService(context: context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         // header
-        postHeader(),
+        postHeader(appService),
         const SizedBox(
           height: 20,
         ),
@@ -325,7 +331,7 @@ class _FeedItemState extends State<FeedItem> {
     );
   }
 
-  Widget postHeader() {
+  Widget postHeader(AppService appService) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -375,7 +381,121 @@ class _FeedItemState extends State<FeedItem> {
             size: 25,
             color: Colors.grey[600],
           ),
-          onPressed: () {},
+          onPressed: () {
+            showModalBottomSheet(
+                context: context,
+                builder: (BuildContext context) {
+                  return Container(
+                    padding: const EdgeInsets.all(10),
+                    child: Column(
+                        mainAxisAlignment:
+                        MainAxisAlignment.center,
+                        crossAxisAlignment:
+                        CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                      children: [
+                        TextButton(
+                            onPressed: (){},
+                            child: const Row(
+                              children: [
+                                Icon(Icons.add_alert, color: Colors.black,),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                    "Tắt thông báo về bài viết này",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.normal
+                                  ),
+                                )
+                              ],
+                            )
+                        ),
+                        TextButton(
+                            onPressed: (){},
+                            child: const Row(
+                              children: [
+                                Icon(Icons.save, color: Colors.black),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                    "Lưu bài viết",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.normal
+                                  ),
+
+                                )
+                              ],
+                            )
+                        ),
+                        (widget.postData.author.name == appService.username) ?
+                        TextButton(
+                            onPressed: (){
+                              context.push("authenticated/addPost/editPost");
+                            },
+                            child: const Row(
+                              children: [
+                                Icon(Icons.edit,color: Colors.black,),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                    "Chỉnh sửa bài viết",
+                                    style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.normal
+                                ),
+                                )
+                              ],
+                            )
+                        ) : Container(),
+                        (widget.postData.author.name == appService.username) ?
+                        TextButton(
+                            onPressed: (){},
+                            child: const Row(
+                              children: [
+                                Icon(Icons.delete_rounded, color: Colors.black,),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                    "Xóa",
+                                    style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.normal
+                                    ),
+
+                                )
+                              ],
+                            )
+                        ) : Container(),
+
+                        TextButton(
+                            onPressed: (){},
+                            child: const Row(
+                            )
+                        ),
+
+
+
+
+                        // widget.postData.author.name == appService.username ?
+
+
+                      ],
+                    ),
+
+                  );
+            }
+            );
+          },
         ),
       ],
     );

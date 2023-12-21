@@ -59,6 +59,7 @@ class HomePageState extends State<HomePage> {
           }
           setState(() {
             posts.addAll(response["feed"]);
+            debugPrint("${posts[1].toJson().toString()}");
             lastId = response["last_id"];
             index = index + count;
           });

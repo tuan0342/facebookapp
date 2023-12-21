@@ -1,10 +1,11 @@
-import 'package:facebook_app/models/image_model.dart';
 
+import 'package:facebook_app/models/image_model.dart';
 class Post {
   final int id;
   final String name;
   List<ImageModel> image;
   String described;
+  String status;
   String created;
   int feel;
   int markComment;
@@ -14,12 +15,14 @@ class Post {
   int isBlocked;
   int canEdit;
   int banned;
-
+  // String video;
   Post(
       {required this.id,
       required this.name,
       required this.image,
       required this.described,
+        required this.status,
+        // required this.video,
       required this.created,
       required this.feel,
       required this.markComment,
@@ -37,6 +40,7 @@ class Post {
             .map((image) => ImageModel.fromJson(image))
             .toList(),
         described = json["described"] ?? "",
+        status = json["status"] ?? "",
         created = json["created"] ?? "",
         feel = int.parse(json["feel"] ?? "0"),
         markComment = int.parse(json["comment_mark"] ?? "0"),
@@ -46,13 +50,14 @@ class Post {
         isBlocked = int.parse(json["is_blocked"] ?? "0"),
         canEdit = int.parse(json["can_edit"] ?? "0"),
         banned = int.parse(json["banned"] ?? "0");
-
+        // video = json["video"] ?? "";
   Map<String, dynamic> toJson() {
     return {
       "id": id.toString(),
       "name": name,
       "image": image.map((e) => e.toJson()).toList(),
       "described": described,
+      "status": status,
       "created": created,
       "feel": feel.toString(),
       "comment_mark": markComment.toString(),
@@ -62,6 +67,7 @@ class Post {
       "is_blocked": isBlocked.toString(),
       "can_edit": canEdit.toString(),
       "banned": banned.toString(),
+      // "video": video.toString()
     };
   }
 }

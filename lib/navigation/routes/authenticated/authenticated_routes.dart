@@ -12,6 +12,9 @@ import 'package:facebook_app/pages/authenticated/personal_page.dart';
 import 'package:facebook_app/pages/feed/post/add_post.dart';
 import 'package:facebook_app/pages/webview/webview_container.dart';
 import 'package:go_router/go_router.dart';
+import 'package:http/http.dart';
+
+import '../../../pages/feed/post/edit_post.dart';
 
 final GoRoute authenticatedRoute = GoRoute(
   path: '/authenticated',
@@ -21,8 +24,18 @@ final GoRoute authenticatedRoute = GoRoute(
     menuRoute,
     GoRoute(
         path: "addPost",
-        builder: (context, state) => PostPage()
+        builder: (context, state) => const PostPage(),
+        routes: [
+          GoRoute(
+              path: "editPost",
+              builder: (context, state) => const EditPost()
+          ),
+        ]
         ),
+    // GoRoute(
+    //     path: "editPost",
+    //     builder: (context, state) => const EditPost()
+    // ),
     GoRoute(
         path: "personalPage/:uid",
         builder: (context, state) => PersonalPage(

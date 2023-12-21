@@ -179,7 +179,7 @@ class _imageListState extends State<ListImageLayout>  {
               child: Padding(
                 padding: const EdgeInsets.only(left: 2),
                 child: SizedBox(
-                  height: 400,
+                  height: 200,
                   width: double.infinity,
                   child: Column(
                     children: [
@@ -191,7 +191,7 @@ class _imageListState extends State<ListImageLayout>  {
                               children: [
                                 Container(
                                   width: double.infinity,
-                                  height: 400,
+                                  height: 200,
                                   decoration: BoxDecoration(
                                     shape: BoxShape.rectangle,
                                   ),
@@ -227,7 +227,7 @@ class _imageListState extends State<ListImageLayout>  {
                               children: [
                                 Container(
                                   width: double.infinity,
-                                  height: 400,
+                                  height: 200,
                                   decoration: BoxDecoration(
                                     shape: BoxShape.rectangle,
                                   ),
@@ -275,7 +275,7 @@ class _imageListState extends State<ListImageLayout>  {
                           children: [
                             Container(
                               width: double.infinity,
-                              height: 400,
+                              height: 200,
                               decoration: BoxDecoration(
                                 shape: BoxShape.rectangle,
                               ),
@@ -308,7 +308,7 @@ class _imageListState extends State<ListImageLayout>  {
                           children: [
                             Container(
                               width: double.infinity,
-                              height: 400,
+                              height: 200,
                               decoration: BoxDecoration(
                                 shape: BoxShape.rectangle,
                               ),
@@ -349,7 +349,7 @@ class _imageListState extends State<ListImageLayout>  {
                           children: [
                             Container(
                               width: double.infinity,
-                              height: 400,
+                              height: 200,
                               decoration: BoxDecoration(
                                 shape: BoxShape.rectangle,
                               ),
@@ -382,7 +382,7 @@ class _imageListState extends State<ListImageLayout>  {
                           children: [
                             Container(
                               width: double.infinity,
-                              height: 400,
+                              height: 200,
                               decoration: BoxDecoration(
                                 shape: BoxShape.rectangle,
                               ),
