@@ -21,20 +21,22 @@ class _LogInUnknownPageState extends State<LogInUnknownPage> {
   bool isLoading = false;
 
   void handleLogin() async {
-    setState(() {
-      isLoading = true;
-    });
     if (_formKey.currentState!.validate()) {
+      setState(() {
+        isLoading = true;
+      });
+
       final authService = Provider.of<AuthService>(context, listen: false);
       // call api here
-      authService.logInWithApi(
+      await authService.logInWithApi(
           context: context,
           email: emailController.text,
           password: passwordController.text);
+
+      setState(() {
+        isLoading = false;
+      });
     }
-    setState(() {
-      isLoading = false;
-    });
   }
 
   void forgetPasswordClick() {
@@ -107,6 +109,7 @@ class _LogInUnknownPageState extends State<LogInUnknownPage> {
                     },
                   ),
                 ),
+                isLoading ? const CircularProgressIndicator() : const SizedBox(),
                 MyFilledButton(
                     isDisabled: isLoading,
                     title: "Login",

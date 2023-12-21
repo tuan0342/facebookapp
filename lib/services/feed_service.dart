@@ -145,7 +145,7 @@ class FeedService {
       debugPrint("get exception $err");
       // ignore: use_build_context_synchronously
       showSnackBar(
-          context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau $err");
+          context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
     }
 
     return result;
@@ -218,7 +218,7 @@ class FeedService {
       debugPrint("get error $e");
       // ignore: use_build_context_synchronously
       showSnackBar(
-          context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau $e");
+          context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
     }
 
     return false;
@@ -258,7 +258,7 @@ class FeedService {
       debugPrint("get error $e");
       // ignore: use_build_context_synchronously
       showSnackBar(
-          context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau $e");
+          context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
     }
 
     return false;
@@ -298,7 +298,7 @@ class FeedService {
       debugPrint("get error $e");
       // ignore: use_build_context_synchronously
       showSnackBar(
-          context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau $e");
+          context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
     }
 
     return false;
@@ -337,7 +337,7 @@ class FeedService {
       debugPrint("get error $e");
       // ignore: use_build_context_synchronously
       showSnackBar(
-          context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau $e");
+          context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
     }
 
     return null;
