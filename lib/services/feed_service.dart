@@ -37,7 +37,7 @@ class FeedService {
         "campaign_id": campaignId,
         "latitude": latitude,
         "longitude": longitude,
-        "last_id": 1086,
+        "last_id": lastId,
         "index": index,
         "count": count
       };
