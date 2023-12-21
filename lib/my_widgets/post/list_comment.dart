@@ -13,6 +13,7 @@ class ListCommentWidget extends StatelessWidget {
         ? Container()
         : SingleChildScrollView(
             child: ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemBuilder: (_, index) {
                   return Container(
