@@ -23,6 +23,7 @@ typedef void ListCallback(List<File> val);
 
 class _imageListState extends State<ListImageLayout>  {
   Widget getLayoutByLength(int length, BuildContext context) {
+    debugPrint("imageLayout: ${widget.images.length}");
     switch (length) {
       case 1:
         {

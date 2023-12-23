@@ -1,7 +1,6 @@
 import 'package:facebook_app/models/post_model.dart';
 import 'package:facebook_app/my_widgets/my_image.dart';
 import 'package:facebook_app/my_widgets/post/list_post.dart';
-import 'package:facebook_app/pages/feed/post/add_post.dart';
 import 'package:facebook_app/services/feed_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';

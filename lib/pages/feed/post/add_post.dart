@@ -225,7 +225,7 @@ class _NewFeedState extends State<PostPage> {
             ),
             Row(
               children: [
-                MyImage(imageUrl: appService.avatar),
+                MyImage(imageUrl: appService.avatar, height: 90,width: 90),
                 Expanded(
                   child:Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

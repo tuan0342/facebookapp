@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:facebook_app/models/mark_comment_model.dart';
 import 'package:facebook_app/models/notification_model.dart';
 import 'package:facebook_app/models/post_model.dart';
 import 'package:facebook_app/rest_api/rest_api.dart';
@@ -60,6 +61,7 @@ class FeedService {
         posts = (responseBody["data"]["post"] as List)
             .map((e) => Post.fromJson(e))
             .toList();
+        debugPrint('check 123: ${posts[1].toJson()}');
         lastID = int.parse(responseBody["data"]["last_id"]);
       } else {
         throw ApiFailException();
@@ -81,8 +83,6 @@ class FeedService {
   }
 
   bool updateFeed(int index) {
-    // posts[index].disappointedNumber +=1;
-    // posts[index].kudosNumber += 1;
     return true;
   }
 
@@ -144,8 +144,7 @@ class FeedService {
     } catch (err) {
       debugPrint("get exception $err");
       // ignore: use_build_context_synchronously
-      showSnackBar(
-          context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
+      showSnackBar(context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
     }
 
     return result;
@@ -217,8 +216,7 @@ class FeedService {
     } catch (e) {
       debugPrint("get error $e");
       // ignore: use_build_context_synchronously
-      showSnackBar(
-          context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
+      showSnackBar(context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
     }
 
     return false;
@@ -257,8 +255,7 @@ class FeedService {
     } catch (e) {
       debugPrint("get error $e");
       // ignore: use_build_context_synchronously
-      showSnackBar(
-          context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
+      showSnackBar(context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
     }
 
     return false;
@@ -297,8 +294,7 @@ class FeedService {
     } catch (e) {
       debugPrint("get error $e");
       // ignore: use_build_context_synchronously
-      showSnackBar(
-          context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
+      showSnackBar(context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
     }
 
     return false;
@@ -307,6 +303,7 @@ class FeedService {
   Future<PostDetailModel?> getPost({required int postId}) async {
     final appService = Provider.of<AppService>(context, listen: false);
     final authService = Provider.of<AuthService>(context, listen: false);
+
     try {
       Map<String, dynamic> body = {
         "id": postId,
@@ -336,11 +333,126 @@ class FeedService {
     } catch (e) {
       debugPrint("get error $e");
       // ignore: use_build_context_synchronously
-      showSnackBar(
-          context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
+      showSnackBar(context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
     }
 
     return null;
+  }
+
+// markId = 0 => mark
+// marId != 0 => comment
+// markType (1 is trust, 0 is fake)
+  Future<List<MarkModel>> setMarkComment({
+    required int postId,
+    required int receiverId,
+    required String content,
+    int index = 0,
+    int count = 10,
+    required int markId,
+    required int markType,
+  }) async {
+    final appService = Provider.of<AppService>(context, listen: false);
+    final authService = Provider.of<AuthService>(context, listen: false);
+    final notificationService =
+        Provider.of<NotificationServices>(context, listen: false);
+    List<MarkModel> marks = [];
+    try {
+      Map<String, dynamic> body = {
+        "id": postId,
+        "content": content,
+        "index": index,
+        "count": count,
+        "mark_id": markId,
+        "type": markType
+      };
+
+      Map<String, String> header = {
+        "Authorization": "Bearer ${appService.token}",
+        'Content-Type': 'application/json'
+      };
+
+      final response = await postMethod(
+          endpoind: "set_mark_comment", body: body, headers: header);
+      final responseBody = jsonDecode(response.body);
+      if (int.parse(responseBody["code"]) == 9998) {
+        throw UnauthorizationException();
+      }
+      if (int.parse(responseBody["code"]) == 1000) {
+        marks = (responseBody["data"] as List)
+            .map((mark) => MarkModel.fromJson(mark))
+            .toList();
+
+        // sendnoti
+        notificationService.sendNotificationToTopic(
+            topic: receiverId.toString(),
+            notification: NotificationModel(
+                title: "Anti Facebook",
+                message: markId != 0
+                    ? "${appService.username} đã phản hồi mark của bạn"
+                    : "${appService.username} đã mark vào bài viết của bạn",
+                data: InteractPostNotiModel(
+                        postId: postId, avatar: appService.avatar)
+                    .toMap()));
+      }
+    } on UnauthorizationException {
+      // ignore: use_build_context_synchronously
+      authService.logOut(
+          context: context,
+          isShowSnackbar: true,
+          msg: "Phiên đăng nhập hết hạn");
+    } catch (err) {
+      debugPrint("get error when set mark $err");
+      // ignore: use_build_context_synchronously
+      showSnackBar(context: context, msg: "get error when set mark");
+    } finally {
+      // ignore: control_flow_in_finally
+      return marks;
+    }
+  }
+
+  Future<List<MarkModel>> getMarkComment(
+      {required int postId, required int index, required int count}) async {
+    final appService = Provider.of<AppService>(context, listen: false);
+    final authService = Provider.of<AuthService>(context, listen: false);
+    List<MarkModel> marks = [];
+
+    try {
+      Map<String, dynamic> body = {
+        "id": postId,
+        "index": index,
+        "count": count,
+      };
+
+      Map<String, String> header = {
+        "Authorization": "Bearer ${appService.token}",
+        'Content-Type': 'application/json'
+      };
+
+      final response = await postMethod(
+          endpoind: "get_mark_comment", body: body, headers: header);
+      final responseBody = jsonDecode(response.body);
+      if (int.parse(responseBody["code"]) == 9998) {
+        throw UnauthorizationException();
+      }
+      if (int.parse(responseBody["code"]) == 1000) {
+        debugPrint('listMarks: $responseBody');
+        marks = (responseBody["data"] as List)
+            .map((mark) => MarkModel.fromJson(mark))
+            .toList();
+      }
+    } on UnauthorizationException {
+      // ignore: use_build_context_synchronously
+      authService.logOut(
+          context: context,
+          isShowSnackbar: true,
+          msg: "Phiên đăng nhập hết hạn");
+    } catch (err) {
+      debugPrint("get error when get mark $err");
+      // ignore: use_build_context_synchronously
+    } finally {
+      // ignore: control_flow_in_finally
+      return marks;
+    }
   }
   Future<void> addPost({
     required BuildContext context,
@@ -397,4 +509,105 @@ class FeedService {
       debugPrint("get exception $err");
     }
   }
+
+  Future<void> deletePost({
+    required BuildContext context,
+    required int postId
+  }) async {
+    final appService = Provider.of<AppService>(context, listen: false);
+    final authService = Provider.of<AuthService>(context, listen: false);
+    try {
+      Map<String, dynamic> body = {
+        "id": postId,
+      };
+
+      Map<String, String> headers = {
+        "Authorization": "Bearer ${appService.token}",
+        'Content-Type': 'application/json'
+      };
+
+      final response =
+      await postMethod(endpoind: "delete_post", body: body, headers: headers);
+      final responseBody = jsonDecode(response.body);
+
+      if (int.parse(responseBody["code"]) == 9998) {
+        throw UnauthorizationException();
+      }
+      if (int.parse(responseBody["code"]) == 1000) {
+        debugPrint("sucessfully delete Pos ");
+      }
+    } on UnauthorizationException {
+      // ignore: use_build_context_synchronously
+      authService.logOut(
+          context: context,
+          isShowSnackbar: true,
+          msg: "Phiên đăng nhập hết hạn");
+    } catch (e) {
+      debugPrint("get error $e");
+      // ignore: use_build_context_synchronously
+      showSnackBar(
+          context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
+    }
+
+    return null;
+  }
+
+  Future<void> editPost({
+    required BuildContext context,
+    required int id,
+    List<File>? image,
+    File? video,
+    String? described,
+    String? status,
+    String? image_del,
+    String? image_sort
+}) async {
+    late AuthService _authService =
+    Provider.of<AuthService>(context, listen: false);
+    try {
+      debugPrint('go feed service');
+      final _appService = Provider.of<AppService>(context, listen: false);
+      Map<String, String> body = {
+        "id": id.toString(),
+        "described": described == null ? "" : described.trim(),
+        "status": status == null ? "" : status.trim(),
+        "image_del": image_del == null ? "" : image_del.trim(),
+        "image_sort":  image_sort == null ? "" : image_sort.trim(),
+      };
+      debugPrint('go body: ${body}');
+
+      List<FileData> files = [];
+      if (image!.isNotEmpty) {
+        for ( var a in image) {
+          files.add(FileData(fieldName: 'image', file: a, type: "image", subType: "png"),);
+        }
+      }
+      if (video != null) {
+        files.add(FileData(fieldName: 'video', file: video, type: "video", subType: "mp4"),);
+      }
+      debugPrint("$image $video $status $described");
+      Map<String, String> headers = {
+        "Authorization": "Bearer ${_appService.token}",
+        'Content-Type': 'application/json; charset=UTF-8'
+      };
+      final response = await postWithFormDataMethod(
+          endpoind: "edit_post", body: body, headers: headers, files: files);
+      final responseBody = jsonDecode(response.body);
+      debugPrint('go res: $responseBody');
+
+      if (int.parse(responseBody["code"]) == 9998) {
+        showSnackBar(
+            context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
+      }
+      if (int.parse(responseBody["code"]) == 1000) {
+        context.go('/authenticated/0');
+      }
+    } catch (err) {
+      debugPrint("get exception $err");
+    }
+
+}
+
+
+
 }

@@ -1,6 +1,8 @@
+
 import 'package:facebook_app/models/post_model.dart';
 import 'package:facebook_app/my_widgets/my_image.dart';
 import 'package:facebook_app/my_widgets/post/list_image_layout.dart';
+import 'package:facebook_app/my_widgets/post/video/video_screen.dart';
 import 'package:facebook_app/services/feed_service.dart';
 import 'package:facebook_app/util/common.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +11,6 @@ import 'package:go_router/go_router.dart';
 import 'package:popover/popover.dart';
 import 'package:provider/provider.dart';
 import 'package:readmore/readmore.dart';
-
 import '../../services/app_service.dart';
 
 // ignore: must_be_immutable
@@ -114,18 +115,20 @@ class _FeedItemState extends State<FeedItem> {
     setState(() {
       isLoading = true;
     });
-    if (widget.postData.isFelt == -1) {
-    } else if (widget.postData.isFelt == 1) {
-    } else {}
+    context.push("/authenticated/postDetail/${widget.postData.id}");
     setState(() {
       isLoading = false;
     });
   }
 
+  void deletePost(BuildContext context, int id) async {
+    await FeedService(context: context).deletePost(context: context, postId: id);
+
+  }
   @override
   Widget build(BuildContext context) {
+    debugPrint("post data: ${widget.postData.toJson()}");
     final appService = Provider.of<AppService>(context, listen: false);
-
     final FeedService feedService = FeedService(context: context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -436,7 +439,8 @@ class _FeedItemState extends State<FeedItem> {
                         (widget.postData.author.name == appService.username) ?
                         TextButton(
                             onPressed: (){
-                              context.push("authenticated/addPost/editPost");
+                              Navigator.pop;
+                              context.push("/authenticated/editPost", extra: widget.postData);
                             },
                             child: const Row(
                               children: [
@@ -457,7 +461,9 @@ class _FeedItemState extends State<FeedItem> {
                         ) : Container(),
                         (widget.postData.author.name == appService.username) ?
                         TextButton(
-                            onPressed: (){},
+                            onPressed: (){
+                              deletePost(context, widget.postData.id);
+                            },
                             child: const Row(
                               children: [
                                 Icon(Icons.delete_rounded, color: Colors.black,),
@@ -476,12 +482,6 @@ class _FeedItemState extends State<FeedItem> {
                               ],
                             )
                         ) : Container(),
-
-                        TextButton(
-                            onPressed: (){},
-                            child: const Row(
-                            )
-                        ),
 
 
 
@@ -539,7 +539,11 @@ class _FeedItemState extends State<FeedItem> {
                     images: widget.postData.image,
                     postId: widget.postData.id,
                   )
-                : Container()
+                : widget.postData.video.url.isNotEmpty
+                    ? VideoPlayerScreen(
+                        url: widget.postData.video.url,
+                      )
+                    : Container()
           ],
         ),
       ),
@@ -574,14 +578,20 @@ class _FeedItemState extends State<FeedItem> {
               Padding(
                 padding: const EdgeInsets.only(right: 5),
                 child: widget.postData.markComment > 0
-                    ? Row(
-                        children: [
-                          Text(
-                            "${widget.postData.markComment} Marks",
-                            style: TextStyle(
-                                fontSize: 15, color: Colors.grey[800]),
-                          ),
-                        ],
+                    ? GestureDetector(
+                        onTap: () {
+                          context.push(
+                              "/authenticated/postDetail/${widget.postData.id}");
+                        },
+                        child: Row(
+                          children: [
+                            Text(
+                              "${widget.postData.markComment} Marks & Comments",
+                              style: TextStyle(
+                                  fontSize: 15, color: Colors.grey[800]),
+                            ),
+                          ],
+                        ),
                       )
                     : Container(),
               )
@@ -597,7 +607,7 @@ class _FeedItemState extends State<FeedItem> {
             markButton(feedService),
             disappointedButton(feedService),
           ],
-        )
+        ),
       ],
     );
   }
