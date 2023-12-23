@@ -1,10 +1,12 @@
-import 'package:facebook_app/models/image_model.dart';
 
+import 'package:facebook_app/models/image_model.dart';
 class Post {
   final int id;
   final String name;
   List<ImageModel> image;
+  Video video;
   String described;
+  String status;
   String created;
   int feel;
   int markComment;
@@ -14,12 +16,13 @@ class Post {
   int isBlocked;
   int canEdit;
   int banned;
-
   Post(
       {required this.id,
       required this.name,
       required this.image,
+      required this.video,
       required this.described,
+        required this.status,
       required this.created,
       required this.feel,
       required this.markComment,
@@ -36,7 +39,9 @@ class Post {
         image = (json["image"] as List)
             .map((image) => ImageModel.fromJson(image))
             .toList(),
+        video = Video.fromJson(json["video"] ?? {"url": ""}),
         described = json["described"] ?? "",
+        status = json["status"] ?? "",
         created = json["created"] ?? "",
         feel = int.parse(json["feel"] ?? "0"),
         markComment = int.parse(json["comment_mark"] ?? "0"),
@@ -46,13 +51,15 @@ class Post {
         isBlocked = int.parse(json["is_blocked"] ?? "0"),
         canEdit = int.parse(json["can_edit"] ?? "0"),
         banned = int.parse(json["banned"] ?? "0");
-
+        // video = json["video"] ?? "";
   Map<String, dynamic> toJson() {
     return {
       "id": id.toString(),
       "name": name,
       "image": image.map((e) => e.toJson()).toList(),
+      "video": video.toJson(),
       "described": described,
+      "status": status,
       "created": created,
       "feel": feel.toString(),
       "comment_mark": markComment.toString(),
@@ -62,8 +69,21 @@ class Post {
       "is_blocked": isBlocked.toString(),
       "can_edit": canEdit.toString(),
       "banned": banned.toString(),
+      // "video": video.toString()
     };
   }
+}
+
+class Video {
+  final String url;
+
+  Video({required this.url});
+
+  Video.fromJson(Map<String, dynamic> json) : url = json["url"];
+
+  Map<String, dynamic> toJson() => {
+        "url": url,
+      };
 }
 
 class Author {
@@ -73,7 +93,6 @@ class Author {
   final int coins;
   // danh sách bài viết của tác giả
   final List<String> listing;
-
   const Author({
     required this.id,
     required this.name,
@@ -125,6 +144,7 @@ class PostDetailModel {
   final int id;
   final String name;
   List<ImageModel> image;
+  final Video video;
   int modified;
   String described;
   String created;
@@ -149,6 +169,7 @@ class PostDetailModel {
     required this.id,
     required this.name,
     required this.image,
+    required this.video,
     required this.described,
     required this.created,
     required this.state,
@@ -176,6 +197,7 @@ class PostDetailModel {
         image = (json["image"] as List)
             .map((image) => ImageModel.fromJson(image))
             .toList(),
+        video = Video.fromJson(json["video"] ?? {"url": ""}),
         described = json["described"] ?? "",
         created = json["created"] ?? "",
         state = json["state"] ?? "",
@@ -201,6 +223,7 @@ class PostDetailModel {
       "id": id,
       "name": name,
       "image": image.map((e) => e.toJson()).toList(),
+      "video": video.toJson(),
       "described": described,
       "created": created,
       "state": state,

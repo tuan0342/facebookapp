@@ -23,7 +23,7 @@ class PersonalFriend extends StatelessWidget {
           const SizedBox(height: 20,),
           const Text('Bạn bè', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),),
           const SizedBox(height: 5,),
-          Text('${friends.length} người bạn', style: const TextStyle(fontSize: 18, color: Colors.black54),),
+          Text('${profile.listing} người bạn', style: const TextStyle(fontSize: 18, color: Colors.black54),),
 
           const SizedBox(height: 20,),
           friends.isNotEmpty ? Wrap(

@@ -21,20 +21,22 @@ class _LogInUnknownPageState extends State<LogInUnknownPage> {
   bool isLoading = false;
 
   void handleLogin() async {
-    setState(() {
-      isLoading = true;
-    });
     if (_formKey.currentState!.validate()) {
+      setState(() {
+        isLoading = true;
+      });
+
       final authService = Provider.of<AuthService>(context, listen: false);
       // call api here
-      authService.logInWithApi(
+      await authService.logInWithApi(
           context: context,
           email: emailController.text,
           password: passwordController.text);
+
+      setState(() {
+        isLoading = false;
+      });
     }
-    setState(() {
-      isLoading = false;
-    });
   }
 
   void forgetPasswordClick() {
@@ -53,10 +55,14 @@ class _LogInUnknownPageState extends State<LogInUnknownPage> {
       body: Column(children: [
         Expanded(
           flex: 1,
-          child: Image.asset(
-            "assets/images/logo.png",
-            width: 80,
-            height: 80,
+          child: Center(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20), // Image border
+              child: SizedBox.fromSize(
+                size: const Size.fromRadius(50), // Image radius
+                child: Image.asset("assets/images/af_logo.png"),
+              ),
+            ),
           ),
         ),
         Expanded(
@@ -77,10 +83,10 @@ class _LogInUnknownPageState extends State<LogInUnknownPage> {
                         labelText: "Email"),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter your email';
+                        return 'Vui lòng nhập email của bạn!';
                       }
                       if (!EmailValidator.validate(value)) {
-                        return "Email is invalid!";
+                        return "Email không đúng định dạng!";
                       }
                       return null;
                     },
@@ -95,27 +101,33 @@ class _LogInUnknownPageState extends State<LogInUnknownPage> {
                     decoration: InputDecoration(
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10)),
-                        labelText: "Password"),
+                        labelText: "Mật khẩu"),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter your password';
+                        return 'Vui lòng nhập mật khẩu của bạn!';
                       }
                       if (value.length < 6 || value.length > 10) {
-                        return "Password must be between 6 and 10 characters";
+                        return "Mật khẩu phải có từ 6 tới 10 kí tự";
                       }
                       return null;
                     },
                   ),
                 ),
+                isLoading
+                    ? const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: CircularProgressIndicator(),
+                      )
+                    : const SizedBox(),
                 MyFilledButton(
                     isDisabled: isLoading,
-                    title: "Login",
+                    title: "Đăng nhập",
                     cbFunction: handleLogin,
                     style: ButtonStyle(
                         minimumSize:
                             MaterialStateProperty.all(const Size(200, 50)))),
                 MyTextButton(
-                  title: "forget password?",
+                  title: "Quên mật khẩu?",
                   textStyle: const TextStyle(color: Colors.black),
                   cbFunction: forgetPasswordClick,
                 ),
@@ -131,7 +143,7 @@ class _LogInUnknownPageState extends State<LogInUnknownPage> {
               padding: const EdgeInsets.only(bottom: 16),
               child: MyFilledButton(
                   isDisabled: false,
-                  title: "Register",
+                  title: "Đăng ký",
                   textStyle: const TextStyle(color: Colors.blueAccent),
                   style: FilledButton.styleFrom(
                     shape: RoundedRectangleBorder(

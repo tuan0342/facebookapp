@@ -31,7 +31,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
           color: Colors.transparent,
           child: InkWell(
               onTap: () {
-                context.pop();
+                context.go("/authenticated/4");
               },
               splashColor: Colors.black,
               child: Container(

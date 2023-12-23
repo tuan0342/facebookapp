@@ -1,3 +1,5 @@
+
+import 'package:facebook_app/models/post_model.dart';
 import 'package:facebook_app/models/profile_model.dart';
 import 'package:facebook_app/models/webview_model.dart';
 import 'package:facebook_app/my_widgets/post/feed_item_detail.dart';
@@ -9,14 +11,29 @@ import 'package:facebook_app/pages/authenticated/personal/setting_personal_page.
 import 'package:facebook_app/pages/authenticated/friend/suggest_friends_page.dart';
 import 'package:facebook_app/pages/authenticated/friend/user_friends_page.dart';
 import 'package:facebook_app/pages/authenticated/personal_page.dart';
+import 'package:facebook_app/pages/feed/post/add_post.dart';
 import 'package:facebook_app/pages/webview/webview_container.dart';
 import 'package:go_router/go_router.dart';
+import '../../../pages/feed/post/edit_post.dart';
 
 final GoRoute authenticatedRoute = GoRoute(
   path: '/authenticated',
+
   routes: [
     searchRoutes,
     menuRoute,
+    GoRoute(
+        path: "addPost",
+        builder: (context, state) => const PostPage(),
+
+        ),
+    GoRoute(
+        path: "editPost",
+        builder: (context, state) {
+          Post post = state.extra as Post;
+          return EditPost(postData: post);
+        }
+    ),
     GoRoute(
         path: "personalPage/:uid",
         builder: (context, state) => PersonalPage(
@@ -75,3 +92,4 @@ final GoRoute authenticatedRoute = GoRoute(
     return null;
   },
 );
+
