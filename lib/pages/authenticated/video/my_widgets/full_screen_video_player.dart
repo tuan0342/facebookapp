@@ -46,7 +46,7 @@ class _FullScreenVideoPlayerState extends State<FullScreenVideoPlayer> with Auto
   @override
   void didUpdateWidget(FullScreenVideoPlayer oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (!oldWidget.isInView && widget.isInView) {
+    if (widget.isInView) {
       setState(() {
         _isInView = true;
       });
@@ -116,7 +116,7 @@ class _FullScreenVideoPlayerState extends State<FullScreenVideoPlayer> with Auto
 
   @override
   void dispose() {
-    if (!shouldKeepAlive) {
+    if (!shouldKeepAlive && !_isInView) {
       _controller.dispose();
     }
     super.dispose();

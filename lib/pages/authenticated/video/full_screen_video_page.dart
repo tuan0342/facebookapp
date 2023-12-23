@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:inview_notifier_list/inview_notifier_list.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 import '../../../services/video_player_provider.dart';
 import '../../../services/video_service.dart';
 import '../../../util/common.dart';
@@ -69,6 +70,12 @@ class _FullScreenVideoPageState extends State<FullScreenVideoPage> {
     }
   }
 
+  void onBlockItem(int userId) {
+    setState(() {
+      videoPosts.retainWhere((videoPost) => videoPost.author.id != userId);
+    });
+  }
+
 
   void _showMiniVideo(BuildContext context, VideoPlayerProvider videoPlayerProvider) {
     videoPlayerProvider.setIsPlayMiniVideo(true);
@@ -76,27 +83,37 @@ class _FullScreenVideoPageState extends State<FullScreenVideoPage> {
   }
   @override
   Widget build(BuildContext context) {
-    print(videoPosts.length);
     return Consumer<VideoPlayerProvider>(
         builder: (context, videoPlayerProvider, _) {
         return Theme(
             data: specialThemeData,
-            child:
-              Scaffold(
-                appBar: AppBar(
-                  title: const Text("Video khác", style: TextStyle(fontSize: 16 )),
-                  actions: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 16),
-                      child: InkWell(
-                        onTap: () {
-                          _showMiniVideo(context, videoPlayerProvider);
-                        },
-                        child: const Icon(Icons.window_rounded),
+            child: VisibilityDetector(
+              key: Key("full_screen_video"),
+              onVisibilityChanged: (VisibilityInfo info) {
+                if (videoPlayerProvider.isIsInitialize) {
+                  if(info.visibleFraction == 0){
+                    videoPlayerProvider.curController.pause();
+                  }
+                  else{
+                    videoPlayerProvider.curController.play();
+                  }
+                }
+              },
+              child: Scaffold(
+                  appBar: AppBar(
+                    title: const Text("Video khác", style: TextStyle(fontSize: 16 )),
+                    actions: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 16),
+                        child: InkWell(
+                          onTap: () {
+                            _showMiniVideo(context, videoPlayerProvider);
+                          },
+                          child: const Icon(Icons.window_rounded),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
                   body: Expanded(
                     child: InViewNotifierList(
                       controller: _scrollController,
@@ -108,13 +125,14 @@ class _FullScreenVideoPageState extends State<FullScreenVideoPage> {
                         return InViewNotifierWidget(
                             id: "$index",
                             builder: (BuildContext context, bool isInView, Widget? child) {
-                              return FullScreenVideoPostItem(videoPost: videoPosts.elementAt(index), isInView: isInView, index: index, controller: index == 0 ? videoPlayerProvider.curController : null);
+                              return FullScreenVideoPostItem(videoPost: videoPosts.elementAt(index), isInView: isInView, index: index, controller: index == 0 ? videoPlayerProvider.curController : null, onBlock: onBlockItem);
                             }
                         );
                       },
                     ),
                   ),
               )
+            ),
         );
     });
   }

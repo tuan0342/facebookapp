@@ -29,6 +29,9 @@ class _OverLayState extends State<OverLayWidget> {
 
     return Consumer<VideoPlayerProvider>(
         builder: (cContext, videoPlayerProvider, _) {
+          if (videoPlayerProvider.isPlayMiniVideo) {
+            videoPlayerProvider.curController.play();
+          }
           return videoPlayerProvider.isPlayMiniVideo
               ? AnimatedPositioned(
             duration: Duration(milliseconds: animation_speed),

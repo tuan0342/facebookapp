@@ -69,9 +69,6 @@ class _MyVideoPlayerState extends State<MyVideoPlayer> with AutomaticKeepAliveCl
           if (widget.isInView || !videoPlayerProvider.isIsInitialize) {
             _controller.play();
 
-            if (videoPlayerProvider.isIsInitialize) {
-              videoPlayerProvider.curController.pause();
-            }
             videoPlayerProvider.setController(_controller);
             videoPlayerProvider.setVideoPost(widget.videoPost);
           } else {
