@@ -30,6 +30,7 @@ class FeedService {
       int count = 20}) async {
     List<Post> posts = [];
     int? lastID = lastId;
+    bool isSuccess = false;
     try {
       Map<String, dynamic> body = {
         "user_id": uid,
@@ -60,6 +61,7 @@ class FeedService {
             .map((e) => Post.fromJson(e))
             .toList();
         lastID = int.parse(responseBody["data"]["last_id"]);
+        isSuccess = true;
       } else {
         throw ApiFailException();
       }
@@ -76,6 +78,7 @@ class FeedService {
     return {
       "feed": posts,
       "last_id": lastID,
+      "isSuccess": false,
     };
   }
 
@@ -329,8 +332,6 @@ class FeedService {
           msg: "Phiên đăng nhập hết hạn");
     } catch (e) {
       debugPrint("get error $e");
-      // ignore: use_build_context_synchronously
-      showSnackBar(context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
     }
 
     return null;
