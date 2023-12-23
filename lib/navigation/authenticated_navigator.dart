@@ -95,8 +95,9 @@ class _AuthenticatedNavigatorState extends State<AuthenticatedNavigator> {
                 snapshot.data!['device_id'] == appService.deviceId) {
               return _widgetOptions.elementAt(_selectedIndex);
             }
-            authService.logOut(context: context, isShowSnackbar: true);
-            return const LogInUnknownPage();
+            WidgetsBinding.instance.addPostFrameCallback((_) =>
+                authService.logOut(context: context, isShowSnackbar: true));
+            return const WaitingDataScreen();
           }),
     );
   }

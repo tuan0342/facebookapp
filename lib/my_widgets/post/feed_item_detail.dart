@@ -2,6 +2,7 @@ import 'package:facebook_app/models/post_model.dart';
 import 'package:facebook_app/my_widgets/my_image.dart';
 import 'package:facebook_app/my_widgets/post/list_image_layout.dart';
 import 'package:facebook_app/my_widgets/post/mark_comment_component.dart';
+import 'package:facebook_app/my_widgets/post/video/video_screen.dart';
 import 'package:facebook_app/services/feed_service.dart';
 import 'package:facebook_app/util/common.dart';
 import 'package:flutter/material.dart';
@@ -410,7 +411,11 @@ class _FeedItemDetailState extends State<FeedItemDetail> {
                       )),
                   itemCount: postDetail!.image.length,
                 )
-              : Container()
+              : postDetail?.video.url.isNotEmpty == true
+                  ? VideoPlayerScreen(
+                      url: postDetail!.video.url,
+                    )
+                  : Container()
         ],
       ),
     );
