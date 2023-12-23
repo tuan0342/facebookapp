@@ -1,4 +1,3 @@
-
 import 'package:facebook_app/models/post_model.dart';
 import 'package:facebook_app/my_widgets/my_image.dart';
 import 'package:facebook_app/my_widgets/post/list_image_layout.dart';
@@ -23,7 +22,6 @@ class FeedItem extends StatefulWidget {
 }
 
 class _FeedItemState extends State<FeedItem> {
-
   bool isLoading = false;
   void onClickKudosBtn(FeedService feedService) async {
     setState(() {
