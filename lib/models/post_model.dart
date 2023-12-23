@@ -16,7 +16,6 @@ class Post {
   int isBlocked;
   int canEdit;
   int banned;
-  // String video;
   Post(
       {required this.id,
       required this.name,
@@ -24,7 +23,6 @@ class Post {
       required this.video,
       required this.described,
         required this.status,
-        // required this.video,
       required this.created,
       required this.feel,
       required this.markComment,

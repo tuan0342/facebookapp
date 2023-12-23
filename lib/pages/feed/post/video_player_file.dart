@@ -26,7 +26,6 @@ class _VideoPlayerFileState extends State<VideoPlayerFile> {
   void initState() {
     _controller = VideoPlayerController.file(File(widget.videoFile!.path));
     _video = _controller!.initialize();
-    debugPrint("1");
   }
 
   @override
@@ -43,10 +42,34 @@ class _VideoPlayerFileState extends State<VideoPlayerFile> {
                         if (snapshot.connectionState == ConnectionState.done) {
                           // If the VideoPlayerController has finished initialization, use
                           // the data it provides to limit the aspect ratio of the video.
-                          return AspectRatio(
-                            aspectRatio: _controller!.value.aspectRatio,
+                          return GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                // If the video is playing, pause it.
+                                if (_controller!.value.isPlaying) {
+                                  _controller?.pause();
+                                } else {
+                                  // If the video is paused, play it.
+                                  _controller?.play();
+                                }
+                              });
+                            },
                             // Use the VideoPlayer widget to display the video.
-                            child: VideoPlayer( _controller!),
+                            child: Stack(alignment: Alignment.center, children: [
+                              AspectRatio(
+                                aspectRatio: _controller!.value.aspectRatio,
+                                // Use the VideoPlayer widget to display the video.
+                                child: VideoPlayer(_controller!),
+                              ),
+                              if (!_controller!.value.isPlaying)
+                                Center(
+                                    child: Icon(
+                                      Icons.play_circle_outline,
+                                      color: Colors.grey[400],
+                                      size: 60,
+                                    ))
+                            ]),
+
                           );
                         } else {
                           // If the VideoPlayerController is still initializing, show a

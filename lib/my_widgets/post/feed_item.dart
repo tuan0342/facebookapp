@@ -127,7 +127,6 @@ class _FeedItemState extends State<FeedItem> {
   }
   @override
   Widget build(BuildContext context) {
-    debugPrint("post data: ${widget.postData.toJson()}");
     final appService = Provider.of<AppService>(context, listen: false);
     final FeedService feedService = FeedService(context: context);
     return Column(
@@ -359,7 +358,7 @@ class _FeedItemState extends State<FeedItem> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  widget.postData.author.name,
+                  widget.postData.author.name + " cảm thấy ${widget.postData.state}",
                   style: TextStyle(
                       color: Colors.grey[900],
                       fontSize: 18,
@@ -385,6 +384,7 @@ class _FeedItemState extends State<FeedItem> {
             color: Colors.grey[600],
           ),
           onPressed: () {
+            debugPrint("${widget.postData.toJson()}");
             showModalBottomSheet(
                 context: context,
                 builder: (BuildContext context) {
@@ -440,7 +440,7 @@ class _FeedItemState extends State<FeedItem> {
                         TextButton(
                             onPressed: (){
                               Navigator.pop;
-                              context.push("/authenticated/editPost", extra: widget.postData);
+                              context.go("/authenticated/editPost", extra: widget.postData);
                             },
                             child: const Row(
                               children: [

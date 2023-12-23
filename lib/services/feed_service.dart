@@ -472,8 +472,6 @@ class FeedService {
         "described": described!.trim(),
         "status": status!.trim()
       };
-      debugPrint('go body: ${body}');
-
       List<FileData> files = [];
       if (imageList!.isNotEmpty) {
         for ( var image in imageList) {
@@ -535,6 +533,7 @@ class FeedService {
       }
       if (int.parse(responseBody["code"]) == 1000) {
         debugPrint("sucessfully delete Pos ");
+        context.go("/authenticated/personalPage/${appService.uidLoggedIn}");
       }
     } on UnauthorizationException {
       // ignore: use_build_context_synchronously
@@ -565,7 +564,7 @@ class FeedService {
     late AuthService _authService =
     Provider.of<AuthService>(context, listen: false);
     try {
-      debugPrint('go feed service');
+      debugPrint('go feed service status: $status');
       final _appService = Provider.of<AppService>(context, listen: false);
       Map<String, String> body = {
         "id": id.toString(),
@@ -574,8 +573,7 @@ class FeedService {
         "image_del": image_del == null ? "" : image_del.trim(),
         "image_sort":  image_sort == null ? "" : image_sort.trim(),
       };
-      debugPrint('go body: ${body}');
-
+      debugPrint("$image  $described $image_del");
       List<FileData> files = [];
       if (image!.isNotEmpty) {
         for ( var a in image) {
@@ -585,7 +583,7 @@ class FeedService {
       if (video != null) {
         files.add(FileData(fieldName: 'video', file: video, type: "video", subType: "mp4"),);
       }
-      debugPrint("$image $video $status $described");
+      debugPrint("$image $status $described $image_del");
       Map<String, String> headers = {
         "Authorization": "Bearer ${_appService.token}",
         'Content-Type': 'application/json; charset=UTF-8'
@@ -600,7 +598,7 @@ class FeedService {
             context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
       }
       if (int.parse(responseBody["code"]) == 1000) {
-        context.go('/authenticated/0');
+          context.go('/authenticated/0');
       }
     } catch (err) {
       debugPrint("get exception $err");

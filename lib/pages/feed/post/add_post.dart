@@ -59,8 +59,6 @@ class _NewFeedState extends State<PostPage> {
                   IconButton(
                       onPressed: () {
                         if (selectedImages.isEmpty && videoFile == null && describedController.text == ""){
-                          debugPrint("1");
-                          debugPrint("${selectedImages.length} ${describedController.text}");
                           context.go("/authenticated/0");
                         } else {
                           debugPrint("${selectedImages.length} ${describedController.text}");
@@ -279,7 +277,7 @@ class _NewFeedState extends State<PostPage> {
             ),
 
             addImage ?
-            ListImageLayout(images: selectedImages, fullHeight: double.infinity, cbFunction: (val) => setState(() => selectedImages = val)) :
+            ListImageLayoutFile(images: selectedImages, fullHeight: double.infinity, cbFunction: (val) => setState(() => selectedImages = val)) :
             videoFile != null ? VideoPlayerFile(videoFile: videoFile, cbFunction:(val) => setState(() => videoFile = val)) : Container(),
           ],
         ),
