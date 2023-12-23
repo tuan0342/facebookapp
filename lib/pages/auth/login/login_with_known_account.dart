@@ -5,24 +5,43 @@ import 'package:facebook_app/my_widgets/my_text.dart';
 import 'package:facebook_app/my_widgets/my_text_button.dart';
 import 'package:facebook_app/services/app_service.dart';
 import 'package:facebook_app/services/auth_service.dart';
+import 'package:facebook_app/util/common.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class LogInKnownPage extends StatelessWidget {
+class LogInKnownPage extends StatefulWidget {
   const LogInKnownPage({super.key});
 
+  @override
+  State<LogInKnownPage> createState() => _LogInKnownPageState();
+}
+
+class _LogInKnownPageState extends State<LogInKnownPage> {
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     final appService = Provider.of<AppService>(context, listen: false);
     final authService = Provider.of<AuthService>(context, listen: false);
     TextEditingController passwordController = TextEditingController();
 
-    void logIn() {
-      authService.logInWithApi(context: context, email: appService.email, password: passwordController.text);
+    void logIn() async {
+      setState(() {
+        isLoading = true;
+      });
+      await authService.logInWithApi(
+          context: context,
+          email: appService.email,
+          password: passwordController.text);
+      setState(() {
+        isLoading = false;
+      });
     }
 
     void forgotPassword() {
-      debugPrint("forget passowrd");
+      showSnackBar(
+          context: context,
+          msg: 'Hiện chúng tôi chưa hỗ trợ tính năng này',
+          timeShow: 1500);
     }
 
     return Scaffold(
@@ -35,7 +54,12 @@ class LogInKnownPage extends StatelessWidget {
               Expanded(
                 child: Column(
                   children: [
-                    MyImage(imageUrl: appService.avatar, height: 70, width: 70, shape: BoxShape.rectangle,),
+                    MyImage(
+                      imageUrl: appService.avatar,
+                      height: 70,
+                      width: 70,
+                      shape: BoxShape.rectangle,
+                    ),
                     Padding(
                       padding: const EdgeInsets.only(top: 16.0),
                       child: MyText(
@@ -43,7 +67,7 @@ class LogInKnownPage extends StatelessWidget {
                         type: "labelLarge",
                       ),
                     ),
-                     Padding(
+                    Padding(
                       padding: const EdgeInsets.only(top: 24.0),
                       child: SizedBox(
                         width: 250,
@@ -59,10 +83,16 @@ class LogInKnownPage extends StatelessWidget {
                         ),
                       ),
                     ),
+                    isLoading
+                        ? const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: CircularProgressIndicator(),
+                          )
+                        : const SizedBox(),
                     Padding(
                       padding: const EdgeInsets.only(top: 16.0),
                       child: MyFilledButton(
-                          isDisabled: false,
+                          isDisabled: isLoading,
                           title: "Đăng nhập",
                           cbFunction: logIn),
                     ),

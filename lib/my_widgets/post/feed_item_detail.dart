@@ -1,6 +1,8 @@
 import 'package:facebook_app/models/post_model.dart';
 import 'package:facebook_app/my_widgets/my_image.dart';
 import 'package:facebook_app/my_widgets/post/list_image_layout.dart';
+import 'package:facebook_app/my_widgets/post/mark_comment_component.dart';
+import 'package:facebook_app/my_widgets/post/video/video_screen.dart';
 import 'package:facebook_app/services/feed_service.dart';
 import 'package:facebook_app/util/common.dart';
 import 'package:flutter/material.dart';
@@ -17,9 +19,11 @@ class FeedItemDetail extends StatefulWidget {
 
 class _FeedItemDetailState extends State<FeedItemDetail> {
   PostDetailModel? postDetail;
+
   bool isLoading = false;
 
   void getPostDetail() async {
+    debugPrint("post ID: ${widget.postId}");
     setState(() {
       isLoading = true;
     });
@@ -27,6 +31,7 @@ class _FeedItemDetailState extends State<FeedItemDetail> {
         .getPost(postId: int.parse(widget.postId));
 
     if (post != null) {
+      debugPrint("post detail: ${post.toJson()}");
       setState(() {
         postDetail = post;
       });
@@ -66,7 +71,7 @@ class _FeedItemDetailState extends State<FeedItemDetail> {
         setState(() {
           postDetail!.isFelt = 1;
           postDetail!.kudos += 1;
-          postDetail!.disapointed -= 1;
+          postDetail!.disappointed -= 1;
         });
       }
     } else {
@@ -85,7 +90,7 @@ class _FeedItemDetailState extends State<FeedItemDetail> {
     });
   }
 
-  void onClickDisapointedBtn(FeedService feedService) async {
+  void onClickDisappointedBtn(FeedService feedService) async {
     setState(() {
       isLoading = true;
     });
@@ -98,7 +103,7 @@ class _FeedItemDetailState extends State<FeedItemDetail> {
       if (isSuccess) {
         setState(() {
           postDetail!.isFelt = 0;
-          postDetail!.disapointed += 1;
+          postDetail!.disappointed += 1;
         });
       }
     } else if (postDetail!.isFelt == 1) {
@@ -110,7 +115,7 @@ class _FeedItemDetailState extends State<FeedItemDetail> {
       if (isSuccess) {
         setState(() {
           postDetail!.isFelt = 0;
-          postDetail!.disapointed += 1;
+          postDetail!.disappointed += 1;
           postDetail!.kudos -= 1;
         });
       }
@@ -121,7 +126,7 @@ class _FeedItemDetailState extends State<FeedItemDetail> {
       if (isSuccess) {
         setState(() {
           postDetail!.isFelt = -1;
-          postDetail!.disapointed -= 1;
+          postDetail!.disappointed -= 1;
         });
       }
     }
@@ -134,9 +139,6 @@ class _FeedItemDetailState extends State<FeedItemDetail> {
     setState(() {
       isLoading = true;
     });
-    // if (postDetail.isFelt == -1) {
-    // } else if (postDetail.isFelt == 1) {
-    // } else {}
     setState(() {
       isLoading = false;
     });
@@ -273,7 +275,7 @@ class _FeedItemDetailState extends State<FeedItemDetail> {
         onPressed: isLoading
             ? null
             : () {
-                onClickDisapointedBtn(feedService);
+                onClickDisappointedBtn(feedService);
               },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -409,7 +411,11 @@ class _FeedItemDetailState extends State<FeedItemDetail> {
                       )),
                   itemCount: postDetail!.image.length,
                 )
-              : Container()
+              : postDetail?.video.url.isNotEmpty == true
+                  ? VideoPlayerScreen(
+                      url: postDetail!.video.url,
+                    )
+                  : Container()
         ],
       ),
     );
@@ -419,7 +425,7 @@ class _FeedItemDetailState extends State<FeedItemDetail> {
     return Column(
       children: [
         postDetail!.kudos > 0 ||
-                postDetail!.disapointed > 0 ||
+                postDetail!.disappointed > 0 ||
                 postDetail!.fake > 0 ||
                 postDetail!.trust > 0
             ? Row(
@@ -427,7 +433,7 @@ class _FeedItemDetailState extends State<FeedItemDetail> {
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.only(left: 5, top: 5),
-                    child: postDetail!.kudos > 0 || postDetail!.disapointed > 0
+                    child: postDetail!.kudos > 0 || postDetail!.disappointed > 0
                         ? Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
@@ -449,7 +455,7 @@ class _FeedItemDetailState extends State<FeedItemDetail> {
                                     )
                                   ]),
                                 ),
-                              if (postDetail!.disapointed > 0)
+                              if (postDetail!.disappointed > 0)
                                 SizedBox(
                                   child: Row(children: [
                                     disappointedIcon(),
@@ -457,7 +463,7 @@ class _FeedItemDetailState extends State<FeedItemDetail> {
                                       width: 3,
                                     ),
                                     Text(
-                                      "${postDetail!.disapointed}",
+                                      "${postDetail!.disappointed}",
                                       style: TextStyle(
                                           fontSize: 15,
                                           color: Colors.grey[800]),
@@ -507,6 +513,10 @@ class _FeedItemDetailState extends State<FeedItemDetail> {
             markButton(feedService),
             disappointedButton(feedService),
           ],
+        ),
+        MarkCommentComponent(
+          postId: postDetail!.id,
+          postOwnerId: postDetail!.author.id,
         )
       ],
     );

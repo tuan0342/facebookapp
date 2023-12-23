@@ -17,6 +17,7 @@ class Menu extends StatefulWidget {
 }
 
 class _MenuState extends State<Menu> {
+  bool isLoading = false;
   List<MenuItem> supportList = [
     const MenuItem(
         icon: 'assets/images/rules_icon.png',
@@ -42,12 +43,23 @@ class _MenuState extends State<Menu> {
         Provider.of<AppService>(context, listen: false);
     final authService = Provider.of<AuthService>(context, listen: false);
 
+    void handleRegister() async { 
+      setState(() {
+        isLoading = true;
+      });
+      await authService.logOut(context: context);
+      setState(() {
+        isLoading = false;
+      });
+    }
+
     return SafeArea(
         child: SizedBox(
-      height: double.infinity,
+      height: MediaQuery.of(context).size.height,
       child: SingleChildScrollView(
           child: Container(
         color: const Color(0xFFf1f2f6),
+        height: MediaQuery.of(context).size.height,
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
@@ -71,18 +83,7 @@ class _MenuState extends State<Menu> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          appService.avatar.isNotEmpty ? ClipRRect(
-                              borderRadius: BorderRadius.circular(90),
-                              child: Selector<AppService, String>(
-                                selector: (_, notifier) => notifier.avatar,
-                                builder: (_, value, __) => Image.network(
-                                  appService.avatar,
-                                  height: 50,
-                                  width: 50,
-                                  fit: BoxFit.cover,
-                                ),
-                              )) 
-                          : MyImage(
+                          MyImage(
                               imageUrl: appService.avatar,
                               height: 50,
                               width: 50),
@@ -128,11 +129,14 @@ class _MenuState extends State<Menu> {
                         title: 'Quản lý coins',
                         iconOfTitle: 'assets/images/card.png',
                         arrayList: coinsList),
+                    isLoading ? const Center(
+                      child: CircularProgressIndicator(),
+                    ) : const SizedBox(),
                     Container(
                       margin: const EdgeInsets.only(top: 20.0),
                       child: ElevatedButton(
                         onPressed: () {
-                          authService.logOut(context: context);
+                          handleRegister();
                         },
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white),

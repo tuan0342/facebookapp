@@ -18,36 +18,44 @@ class NotificationModel {
 
 class BaseNotiData {
   final String type;
+  final String avatar;
 
-  BaseNotiData({required this.type});
+  BaseNotiData({required this.type, required this.avatar});
 }
 
 class InteractPostNotiModel extends BaseNotiData {
   final int postId;
 
-  InteractPostNotiModel({required this.postId, super.type = INTERACTPOST});
+  InteractPostNotiModel(
+      {required this.postId, super.type = INTERACTPOST, required super.avatar});
 
   Map<String, dynamic> toMap() => {
         "type": type,
         "postId": postId,
+        "avatar": avatar,
       };
 }
 
 class AccepetFriendNotiModel extends BaseNotiData {
   final int friendId;
 
-  AccepetFriendNotiModel({required this.friendId, super.type = ACCEPTFRIEND});
+  AccepetFriendNotiModel(
+      {required this.friendId,
+      super.type = ACCEPTFRIEND,
+      required super.avatar});
 
   Map<String, dynamic> toMap() => {
         "type": type,
         "friendId": friendId,
+        "avatar": avatar,
       };
 }
 
 class RequestFriendNotiModel extends BaseNotiData {
-  RequestFriendNotiModel({super.type = REQUESTFRIEND});
+  RequestFriendNotiModel({super.type = REQUESTFRIEND, required super.avatar});
 
   Map<String, dynamic> toMap() => {
         "type": type,
+        "avatar": avatar,
       };
 }

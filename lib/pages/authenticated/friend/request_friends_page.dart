@@ -72,7 +72,7 @@ class _RequestFriendsPageState extends State<RequestFriendsPage> {
 
   @override
   void setState(fn) {
-    if(mounted) {
+    if (mounted) {
       super.setState(fn);
     }
   }
@@ -170,14 +170,17 @@ class _RequestFriendsPageState extends State<RequestFriendsPage> {
                 child: ListView.builder(
                   controller: _scrollController,
                   itemCount: requests.length,
-                  itemBuilder: (context, index) => RequestFriendBox(
-                    friend: requests[index],
-                    onRemoveItem: () {
-                      setState(() {
-                        requests.removeAt(index);
-                        total -= 1;
-                      });
-                    },
+                  itemBuilder: (context, index) => Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: RequestFriendBox(
+                      friend: requests[index],
+                      onRemoveItem: () {
+                        setState(() {
+                          requests.removeAt(index);
+                          total -= 1;
+                        });
+                      },
+                    ),
                   ),
                 ),
               ),

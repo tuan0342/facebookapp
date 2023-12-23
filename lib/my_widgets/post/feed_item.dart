@@ -1,13 +1,16 @@
 import 'package:facebook_app/models/post_model.dart';
 import 'package:facebook_app/my_widgets/my_image.dart';
 import 'package:facebook_app/my_widgets/post/list_image_layout.dart';
+import 'package:facebook_app/my_widgets/post/video/video_screen.dart';
 import 'package:facebook_app/services/feed_service.dart';
 import 'package:facebook_app/util/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:popover/popover.dart';
+import 'package:provider/provider.dart';
 import 'package:readmore/readmore.dart';
+import '../../services/app_service.dart';
 
 // ignore: must_be_immutable
 class FeedItem extends StatefulWidget {
@@ -110,37 +113,32 @@ class _FeedItemState extends State<FeedItem> {
     setState(() {
       isLoading = true;
     });
-    if (widget.postData.isFelt == -1) {
-    } else if (widget.postData.isFelt == 1) {
-    } else {}
+    context.push("/authenticated/postDetail/${widget.postData.id}");
     setState(() {
       isLoading = false;
     });
   }
 
+  void deletePost(BuildContext context, int id) async {
+    await FeedService(context: context).deletePost(context: context, postId: id);
+
+  }
   @override
   Widget build(BuildContext context) {
+    final appService = Provider.of<AppService>(context, listen: false);
     final FeedService feedService = FeedService(context: context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              postHeader(),
-              const SizedBox(
-                height: 6,
-              ),
-              // content
-              postContent(),
-              const SizedBox(
-                height: 6,
-              ),
-              postFooter(feedService),
-            ],
-          ),
+        // header
+        postHeader(appService),
+        const SizedBox(
+          height: 20,
+        ),
+        // content
+        postContent(),
+        const SizedBox(
+          height: 20,
         ),
         postAction(feedService)
         // header
@@ -336,7 +334,7 @@ class _FeedItemState extends State<FeedItem> {
     );
   }
 
-  Widget postHeader() {
+  Widget postHeader(AppService appService) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -360,21 +358,14 @@ class _FeedItemState extends State<FeedItem> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                GestureDetector(
-                  onTap: () {
-                    context.push(
-                        "/authenticated/personalPage/${widget.postData.author.id}");
-                  },
-                  child: Text(
-                    widget.postData.author.name,
-                    style: TextStyle(
+                Text(
+                  widget.postData.author.name + " cảm thấy ${widget.postData.state}",
+                  style: TextStyle(
                       color: Colors.grey[900],
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                ),
-
                 // const SizedBox(
                 //   height: 3,
                 // ),
@@ -393,7 +384,119 @@ class _FeedItemState extends State<FeedItem> {
             size: 24,
             color: Colors.grey[600],
           ),
-          onPressed: () {},
+          onPressed: () {
+            debugPrint("${widget.postData.toJson()}");
+            showModalBottomSheet(
+                context: context,
+                builder: (BuildContext context) {
+                  return Container(
+                    padding: const EdgeInsets.all(10),
+                    child: Column(
+                        mainAxisAlignment:
+                        MainAxisAlignment.center,
+                        crossAxisAlignment:
+                        CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                      children: [
+                        TextButton(
+                            onPressed: (){},
+                            child: const Row(
+                              children: [
+                                Icon(Icons.add_alert, color: Colors.black,),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                    "Tắt thông báo về bài viết này",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.normal
+                                  ),
+                                )
+                              ],
+                            )
+                        ),
+                        TextButton(
+                            onPressed: (){},
+                            child: const Row(
+                              children: [
+                                Icon(Icons.save, color: Colors.black),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                    "Lưu bài viết",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.normal
+                                  ),
+
+                                )
+                              ],
+                            )
+                        ),
+                        (widget.postData.author.name == appService.username) ?
+                        TextButton(
+                            onPressed: (){
+                              Navigator.pop;
+                              context.go("/authenticated/editPost", extra: widget.postData);
+                            },
+                            child: const Row(
+                              children: [
+                                Icon(Icons.edit,color: Colors.black,),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                    "Chỉnh sửa bài viết",
+                                    style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.normal
+                                ),
+                                )
+                              ],
+                            )
+                        ) : Container(),
+                        (widget.postData.author.name == appService.username) ?
+                        TextButton(
+                            onPressed: (){
+                              deletePost(context, widget.postData.id);
+                            },
+                            child: const Row(
+                              children: [
+                                Icon(Icons.delete_rounded, color: Colors.black,),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                    "Xóa",
+                                    style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.normal
+                                    ),
+
+                                )
+                              ],
+                            )
+                        ) : Container(),
+
+
+
+
+                        // widget.postData.author.name == appService.username ?
+
+
+                      ],
+                    ),
+
+                  );
+            }
+            );
+          },
         ),
       ],
     );
@@ -437,7 +540,11 @@ class _FeedItemState extends State<FeedItem> {
                     images: widget.postData.image,
                     postId: widget.postData.id,
                   )
-                : Container()
+                : widget.postData.video.url.isNotEmpty
+                    ? VideoPlayerScreen(
+                        url: widget.postData.video.url,
+                      )
+                    : Container()
           ],
         ),
       ),
@@ -472,14 +579,20 @@ class _FeedItemState extends State<FeedItem> {
               Padding(
                 padding: const EdgeInsets.only(right: 0),
                 child: widget.postData.markComment > 0
-                    ? Row(
-                        children: [
-                          Text(
-                            "${widget.postData.markComment} marks",
-                            style: const TextStyle(
-                                fontSize: 14, color: Colors.black87, fontWeight: FontWeight.w400),
-                          ),
-                        ],
+                    ? GestureDetector(
+                        onTap: () {
+                          context.push(
+                              "/authenticated/postDetail/${widget.postData.id}");
+                        },
+                        child: Row(
+                          children: [
+                            Text(
+                              "${widget.postData.markComment} Marks & Comments",
+                              style: TextStyle(
+                                  fontSize: 15, color: Colors.grey[800]),
+                            ),
+                          ],
+                        ),
                       )
                     : Container(),
               )
@@ -504,6 +617,14 @@ class _FeedItemState extends State<FeedItem> {
         kudosButton(feedService),
         markButton(feedService),
         disappointedButton(feedService),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            kudosButton(feedService),
+            markButton(feedService),
+            disappointedButton(feedService),
+          ],
+        ),
       ],
     );
   }
