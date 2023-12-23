@@ -51,7 +51,7 @@ class _PersonalPageState extends State<PersonalPage> {
   late ScrollController controller;
   // int lastId = 0;
   int indexPost = 0;
-  int countPost = 2;
+  int countPost = 10;
   bool isEndPosts = false;
 
   int totalFriend = 0;
