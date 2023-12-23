@@ -119,7 +119,6 @@ class _FeedItemState extends State<FeedItem> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint("post data: ${widget.postData.toJson()}");
     final FeedService feedService = FeedService(context: context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
