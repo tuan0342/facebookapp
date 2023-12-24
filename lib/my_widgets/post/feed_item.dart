@@ -543,6 +543,7 @@ class _FeedItemState extends State<FeedItem> {
                     fullHeight: 300,
                     images: widget.postData.image,
                     postId: widget.postData.id,
+                    refresh: widget.refresh,
                   )
                 : widget.postData.video.url.isNotEmpty
                     ? VideoPlayerScreen(

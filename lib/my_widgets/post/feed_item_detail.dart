@@ -155,6 +155,7 @@ class _FeedItemDetailState extends State<FeedItemDetail> {
   void deletePost(BuildContext context, int id) async {
     await FeedService(context: context)
         .deletePost(context: context, postId: id);
+    context.pop();
   }
 
   @override
@@ -379,7 +380,7 @@ class _FeedItemDetailState extends State<FeedItemDetail> {
             ),
           ],
         ),
-        IconButton(
+        (postDetail!.author.name == appService.username) ? IconButton(
           icon: Icon(
             Icons.more_horiz,
             size: 25,
@@ -397,74 +398,34 @@ class _FeedItemDetailState extends State<FeedItemDetail> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         TextButton(
-                            onPressed: () {},
-                            child: const Row(
-                              children: [
-                                Icon(
-                                  Icons.add_alert,
-                                  color: Colors.black,
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  "Tắt thông báo về bài viết này",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.normal),
-                                )
-                              ],
-                            )),
-                        TextButton(
-                            onPressed: () {},
-                            child: const Row(
-                              children: [
-                                Icon(Icons.save, color: Colors.black),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  "Lưu bài viết",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.normal),
-                                )
-                              ],
-                            )),
-                        (postDetail!.author.name == appService.username)
-                            ? TextButton(
-                                onPressed: () {
-                                  deletePost(context, postDetail!.id);
-                                },
-                                child: const Row(
-                                  children: [
-                                    Icon(
-                                      Icons.delete_rounded,
-                                      color: Colors.black,
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                      "Xóa",
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.normal),
-                                    )
-                                  ],
-                                ))
-                            : Container(),
-
-                        // widget.postData.author.name == appService.username ?
+                          onPressed: () {
+                            Navigator.pop(context);
+                            deletePost(context, postDetail!.id);
+                          },
+                          child: const Row(
+                            children: [
+                              Icon(
+                                Icons.delete_rounded,
+                                color: Colors.black,
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                "Xóa",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.normal),
+                              )
+                            ],
+                          ))
                       ],
                     ),
                   );
                 });
           },
-        ),
+        ) : const SizedBox(),
       ],
     );
   }
