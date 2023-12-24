@@ -61,9 +61,9 @@ class _imageListState extends State<ListImageEditLayout>  {
                   child: GestureDetector(
                     onTap: () {
                       setState(() {
+                        widget.image_delFunction("${widget.images[0].id}");
                         widget.images.removeAt(0);
                         widget.urlFunction(widget.images);
-                        widget.image_delFunction("1");
                       });
                     },
                     child: const Icon(Icons.close,
@@ -128,9 +128,9 @@ class _imageListState extends State<ListImageEditLayout>  {
                         child: GestureDetector(
                           onTap: () {
                             setState(() {
+                              widget.image_delFunction("${widget.images[0].id}");
                               widget.images.removeAt(0);
                               widget.urlFunction(widget.images);
-                              widget.image_delFunction("1");
 
                               // widget.cbFunction(widget.images);
                             });
@@ -160,16 +160,8 @@ class _imageListState extends State<ListImageEditLayout>  {
                         child: GestureDetector(
                           onTap: () {
                             setState(() {
-                              widget.newImages.forEach((element) {
-                                if (element.path == widget.images[0].url) {
-                                  if (widget.newImages.length == 1) {
-                                    widget.newImages.removeAt(0);
-                                  } else {
-                                    widget.newImages.removeAt(0);
-                                  }
-                                }
-                              });
                               widget.images.removeAt(0);
+                              deleteNewImageFile(widget.images[0]);
                               widget.urlFunction(widget.images);
                               widget.cbFunction(widget.newImages);
                             });
@@ -203,8 +195,9 @@ class _imageListState extends State<ListImageEditLayout>  {
                         child: GestureDetector(
                           onTap: () {
                             setState(() {
+                              widget.image_delFunction("${widget.images[1].id}");
+
                               widget.images.removeAt(1);
-                              widget.image_delFunction("2");
                               widget.urlFunction(widget.images);
                             });
                           },
@@ -233,15 +226,7 @@ class _imageListState extends State<ListImageEditLayout>  {
                         child: GestureDetector(
                           onTap: () {
                             setState(() {
-                              widget.newImages.forEach((element) {
-                                if (element.path == widget.images[1].url) {
-                                  if (widget.newImages.length == 1) {
-                                    widget.newImages.removeAt(0);
-                                  } else {
-                                    widget.newImages.remove(element);
-                                  }
-                                }
-                              });
+                              deleteNewImageFile(widget.images[1]);
                               widget.images.removeAt(1);
                               widget.urlFunction(widget.images);
                               widget.cbFunction(widget.newImages);
@@ -282,9 +267,9 @@ class _imageListState extends State<ListImageEditLayout>  {
                         child: GestureDetector(
                           onTap: () {
                             setState(() {
+                              widget.image_delFunction("${widget.images[0].id}");
                               widget.images.removeAt(0);
                               widget.urlFunction(widget.images);
-                              widget.image_delFunction("1");
                             });
                           },
                           child: const Icon(Icons.close,
@@ -312,8 +297,8 @@ class _imageListState extends State<ListImageEditLayout>  {
                         child: GestureDetector(
                           onTap: () {
                             setState(() {
+                              deleteNewImageFile(widget.images[0]);
                               widget.images.removeAt(0);
-                              widget.newImages.removeAt(0);
                               widget.urlFunction(widget.images);
                               widget.cbFunction(widget.newImages);
                             });
@@ -357,9 +342,10 @@ class _imageListState extends State<ListImageEditLayout>  {
                                   child: GestureDetector(
                                     onTap: () {
                                       setState(() {
+                                        widget.image_delFunction("${widget.images[1].id}");
+
                                         widget.images.removeAt(1);
                                         widget.urlFunction(widget.images);
-                                        widget.image_delFunction("2");
 
                                         // widget.cbFunction(widget.images);
                                       });
@@ -389,8 +375,9 @@ class _imageListState extends State<ListImageEditLayout>  {
                                   child: GestureDetector(
                                     onTap: () {
                                       setState(() {
+                                        deleteNewImageFile(widget.images[1]);
+
                                         widget.images.removeAt(1);
-                                        widget.newImages.last;
                                         widget.cbFunction(widget.newImages);
                                       });
 
@@ -425,9 +412,10 @@ class _imageListState extends State<ListImageEditLayout>  {
                                   child: GestureDetector(
                                     onTap: () {
                                       setState(() {
+                                        widget.image_delFunction("${widget.images[2].id}");
+
                                         widget.images.removeAt(2);
                                         widget.urlFunction(widget.images);
-                                        widget.image_delFunction("3");
 
                                       });
                                     },
@@ -456,8 +444,8 @@ class _imageListState extends State<ListImageEditLayout>  {
                                   child: GestureDetector(
                                     onTap: () {
                                       setState(() {
+                                        deleteNewImageFile(widget.images[2]);
                                         widget.images.removeAt(2);
-                                        widget.newImages.last;
                                         widget.urlFunction(widget.images);
                                         widget.cbFunction(widget.newImages);
                                       });
@@ -503,10 +491,10 @@ class _imageListState extends State<ListImageEditLayout>  {
                               child: GestureDetector(
                                 onTap: () {
                                   setState(() {
+                                    widget.image_delFunction("${widget.images[0].id}");
+
                                     widget.images.removeAt(0);
                                     widget.urlFunction(widget.images);
-                                    widget.image_delFunction("1");
-                                    // widget.cbFunction(widget.images);
                                   });
                                 },
                                 child: const Icon(Icons.close,
@@ -534,8 +522,8 @@ class _imageListState extends State<ListImageEditLayout>  {
                               child: GestureDetector(
                                 onTap: () {
                                   setState(() {
+                                    deleteNewImageFile(widget.images[0]);
                                     widget.images.removeAt(0);
-                                    widget.newImages.last;
                                     widget.urlFunction(widget.images);
                                     widget.cbFunction(widget.newImages);
                                   });
@@ -567,10 +555,10 @@ class _imageListState extends State<ListImageEditLayout>  {
                               child: GestureDetector(
                                 onTap: () {
                                   setState(() {
+                                    widget.image_delFunction("${widget.images[1].id}");
+
                                     widget.images.removeAt(1);
                                     widget.urlFunction(widget.images);
-                                    widget.image_delFunction("2");
-                                    // widget.cbFunction(widget.images);
                                   });
                                 },
                                 child: const Icon(Icons.close,
@@ -598,8 +586,9 @@ class _imageListState extends State<ListImageEditLayout>  {
                               child: GestureDetector(
                                 onTap: () {
                                   setState(() {
+                                    deleteNewImageFile(widget.images[1]);
+
                                     widget.images.removeAt(1);
-                                    widget.newImages.last;
                                     widget.urlFunction(widget.images);
                                     widget.cbFunction(widget.newImages);
                                   });
@@ -637,9 +626,10 @@ class _imageListState extends State<ListImageEditLayout>  {
                               child: GestureDetector(
                                 onTap: () {
                                   setState(() {
+                                    widget.image_delFunction("${widget.images[2].id}");
+
                                     widget.images.removeAt(2);
                                     widget.urlFunction(widget.images);
-                                    widget.image_delFunction("3");
                                   });
                                 },
                                 child: const Icon(Icons.close,
@@ -667,8 +657,9 @@ class _imageListState extends State<ListImageEditLayout>  {
                               child: GestureDetector(
                                 onTap: () {
                                   setState(() {
+                                    deleteNewImageFile(widget.images[2]);
+
                                     widget.images.removeAt(2);
-                                    widget.newImages.last;
                                     widget.urlFunction(widget.images);
                                     widget.cbFunction(widget.newImages);
                                   });
@@ -699,9 +690,9 @@ class _imageListState extends State<ListImageEditLayout>  {
                               child: GestureDetector(
                                 onTap: () {
                                   setState(() {
+                                    widget.image_delFunction("${widget.images[3].id}");
                                     widget.images.removeAt(3);
                                     widget.urlFunction(widget.images);
-                                    widget.image_delFunction("4");
                                   });
                                 },
                                 child: const Icon(Icons.close,
@@ -729,8 +720,8 @@ class _imageListState extends State<ListImageEditLayout>  {
                               child: GestureDetector(
                                 onTap: () {
                                   setState(() {
+                                    deleteNewImageFile(widget.images[3]);
                                     widget.images.removeAt(3);
-                                    widget.newImages.last;
                                     widget.urlFunction(widget.images);
                                     widget.cbFunction(widget.newImages);
                                   });
@@ -752,6 +743,14 @@ class _imageListState extends State<ListImageEditLayout>  {
       default:
         return Container();
     }
+  }
+  void deleteNewImageFile(ImageModel newImageFile){
+    widget.newImages.forEach((image) {
+      if (image.path == newImageFile.url) {
+        int index = widget.newImages.indexOf(image);
+        widget.newImages.removeAt(index);
+      }
+    });
   }
 
 

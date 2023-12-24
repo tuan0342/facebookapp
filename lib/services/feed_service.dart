@@ -583,7 +583,7 @@ class FeedService {
       if (video != null) {
         files.add(FileData(fieldName: 'video', file: video, type: "video", subType: "mp4"),);
       }
-      debugPrint("$image $status $described $image_del");
+      debugPrint(" data: ${image.length}  $image_del  $image_del");
       Map<String, String> headers = {
         "Authorization": "Bearer ${_appService.token}",
         'Content-Type': 'application/json; charset=UTF-8'
@@ -591,14 +591,13 @@ class FeedService {
       final response = await postWithFormDataMethod(
           endpoind: "edit_post", body: body, headers: headers, files: files);
       final responseBody = jsonDecode(response.body);
-      debugPrint('go res: $responseBody');
-
       if (int.parse(responseBody["code"]) == 9998) {
         showSnackBar(
             context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
       }
       if (int.parse(responseBody["code"]) == 1000) {
-          context.go('/authenticated/0');
+          debugPrint("edit sucessfully");
+          context.go("/authenticated/personalPage/${_appService.uidLoggedIn}");
       }
     } catch (err) {
       debugPrint("get exception $err");

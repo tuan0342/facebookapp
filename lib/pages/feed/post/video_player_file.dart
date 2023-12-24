@@ -28,6 +28,13 @@ class _VideoPlayerFileState extends State<VideoPlayerFile> {
     _video = _controller!.initialize();
   }
 
+   void dispose() {
+     // Ensure disposing of the VideoPlayerController to free up resources.
+     _controller!.dispose();
+
+     super.dispose();
+   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
