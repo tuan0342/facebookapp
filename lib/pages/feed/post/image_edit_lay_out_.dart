@@ -8,15 +8,24 @@ import '../../../my_widgets/my_image.dart';
 
 class ListImageEditLayout extends StatefulWidget {
   final List<ImageModel> images;
+  final List<File> newImages;
   final ListCallback cbFunction;
+
   final UrlListCallBack urlFunction;
   final StringCallBack image_delFunction;
+
   final double? fullHeight;
 
 
   const ListImageEditLayout(
-      {super.key, required this.images, this.fullHeight,
-        required this.cbFunction, required this.urlFunction, required this.image_delFunction});
+      {super.key, required this.images,
+        required this.newImages
+        , this.fullHeight,
+
+        required this.cbFunction,
+        required this.urlFunction,
+        required this.image_delFunction,
+       });
 
 
   @override
@@ -26,6 +35,7 @@ class ListImageEditLayout extends StatefulWidget {
 }
 typedef void StringCallBack(String val);
 typedef void ListCallback(List<File> val);
+
 typedef void UrlListCallBack(List<ImageModel> val);
 
 
@@ -36,7 +46,7 @@ class _imageListState extends State<ListImageEditLayout>  {
     switch (length) {
       case 1:
         {
-          return
+          return (widget.images[0].url.contains("http")) ?
             Stack(
               children: [
                 MyImage(
@@ -52,8 +62,8 @@ class _imageListState extends State<ListImageEditLayout>  {
                     onTap: () {
                       setState(() {
                         widget.images.removeAt(0);
-                        widget.image_delFunction("0");
-                        // widget.cbFunction(widget.images);
+                        widget.urlFunction(widget.images);
+                        widget.image_delFunction("1");
                       });
                     },
                     child: const Icon(Icons.close,
@@ -61,7 +71,39 @@ class _imageListState extends State<ListImageEditLayout>  {
                   ),
                 ),
               ],
-            );
+            ):
+            Stack(
+            children: [
+              Container(
+                width: double.infinity,
+                height: 400,
+                decoration: BoxDecoration(
+                  shape: BoxShape.rectangle,
+                ),
+                child: Image(
+                  image: FileImage(new File(widget.images[0].url)),
+                  fit: BoxFit.fill,
+                ),
+              ),
+              Positioned(
+                top: 0,
+                right: 0,
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      widget.images.removeAt(0);
+                      widget.newImages.removeAt(0);
+                      widget.cbFunction(widget.newImages);
+                      widget.urlFunction(widget.images);
+                    });
+
+                  },
+                  child: const Icon(Icons.close,
+                      color: Colors.black),
+                ),
+              ),
+            ],
+          );
         }
       case 2:
         return Row(
@@ -70,12 +112,12 @@ class _imageListState extends State<ListImageEditLayout>  {
               flex: 2,
               child: Padding(
                   padding: const EdgeInsets.only(right: 2),
-                  child: Stack(
+                  child: (widget.images[0].url.contains("http")) ?
+                  Stack(
                     children: [
                       MyImage(
                         width: double.infinity,
                         height: double.infinity,
-
                         imageUrl: widget.images[0].url,
                         shape: BoxShape.rectangle,
                         fit: BoxFit.fill,
@@ -87,9 +129,49 @@ class _imageListState extends State<ListImageEditLayout>  {
                           onTap: () {
                             setState(() {
                               widget.images.removeAt(0);
-                              widget.image_delFunction("0");
+                              widget.urlFunction(widget.images);
+                              widget.image_delFunction("1");
 
                               // widget.cbFunction(widget.images);
+                            });
+                          },
+                          child: const Icon(Icons.close,
+                              color: Colors.black),
+                        ),
+                      ),
+                    ],
+                  ):
+                  Stack(
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        height: 400,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.rectangle,
+                        ),
+                        child: Image(
+                          image: FileImage(new File(widget.images[0].url)),
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                      Positioned(
+                        top: 0,
+                        right: 0,
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              widget.newImages.forEach((element) {
+                                if (element.path == widget.images[0].url) {
+                                  if (widget.newImages.length == 1) {
+                                    widget.newImages.removeAt(0);
+                                  } else {
+                                    widget.newImages.removeAt(0);
+                                  }
+                                }
+                              });
+                              widget.images.removeAt(0);
+                              widget.urlFunction(widget.images);
+                              widget.cbFunction(widget.newImages);
                             });
                           },
                           child: const Icon(Icons.close,
@@ -105,12 +187,12 @@ class _imageListState extends State<ListImageEditLayout>  {
               flex: 2,
               child: Padding(
                   padding: const EdgeInsets.only(right: 2),
-                  child: Stack(
+                  child: (widget.images[1].url.contains("http")) ?
+                  Stack(
                     children: [
                       MyImage(
                         width: double.infinity,
                         height: double.infinity,
-
                         imageUrl: widget.images[1].url,
                         shape: BoxShape.rectangle,
                         fit: BoxFit.fill,
@@ -122,7 +204,8 @@ class _imageListState extends State<ListImageEditLayout>  {
                           onTap: () {
                             setState(() {
                               widget.images.removeAt(1);
-                              widget.image_delFunction("1");
+                              widget.image_delFunction("2");
+                              widget.urlFunction(widget.images);
                             });
                           },
                           child: const Icon(Icons.close,
@@ -130,8 +213,47 @@ class _imageListState extends State<ListImageEditLayout>  {
                         ),
                       ),
                     ],
-                  )
+                  ):
+                  Stack(
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        height: 400,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.rectangle,
+                        ),
+                        child: Image(
+                          image: FileImage(new File(widget.images[1].url)),
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                      Positioned(
+                        top: 0,
+                        right: 0,
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              widget.newImages.forEach((element) {
+                                if (element.path == widget.images[1].url) {
+                                  if (widget.newImages.length == 1) {
+                                    widget.newImages.removeAt(0);
+                                  } else {
+                                    widget.newImages.remove(element);
+                                  }
+                                }
+                              });
+                              widget.images.removeAt(1);
+                              widget.urlFunction(widget.images);
+                              widget.cbFunction(widget.newImages);
+                            });
 
+                          },
+                          child: const Icon(Icons.close,
+                              color: Colors.black),
+                        ),
+                      ),
+                    ],
+                  )
               ),
             ),
           ],
@@ -143,7 +265,8 @@ class _imageListState extends State<ListImageEditLayout>  {
               flex: 2,
               child: Padding(
                   padding: const EdgeInsets.only(right: 2),
-                  child: Stack(
+                  child: (widget.images[0].url.contains("http")) ?
+                  Stack(
                     children: [
                       MyImage(
                         width: double.infinity,
@@ -160,9 +283,8 @@ class _imageListState extends State<ListImageEditLayout>  {
                           onTap: () {
                             setState(() {
                               widget.images.removeAt(0);
-                              widget.image_delFunction("0");
-
-                              // widget.cbFunction(widget.images);
+                              widget.urlFunction(widget.images);
+                              widget.image_delFunction("1");
                             });
                           },
                           child: const Icon(Icons.close,
@@ -170,8 +292,39 @@ class _imageListState extends State<ListImageEditLayout>  {
                         ),
                       ),
                     ],
-                  )
+                  ):
+                  Stack(
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        height: 400,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.rectangle,
+                        ),
+                        child: Image(
+                          image: FileImage(new File(widget.images[0].url)),
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                      Positioned(
+                        top: 0,
+                        right: 0,
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              widget.images.removeAt(0);
+                              widget.newImages.removeAt(0);
+                              widget.urlFunction(widget.images);
+                              widget.cbFunction(widget.newImages);
+                            });
 
+                          },
+                          child: const Icon(Icons.close,
+                              color: Colors.black),
+                        ),
+                      ),
+                    ],
+                  )
               ),
             ),
             Expanded(
@@ -180,13 +333,15 @@ class _imageListState extends State<ListImageEditLayout>  {
                 padding: const EdgeInsets.only(left: 2),
                 child: SizedBox(
                   width: double.infinity,
+                  height: 400,
                   child: Column(
                     children: [
                       Expanded(
                         flex: 1,
                         child: Padding(
                             padding: const EdgeInsets.only(bottom: 2),
-                            child: Stack(
+                            child: (widget.images[1].url.contains("http")) ?
+                            Stack(
                               children: [
                                 MyImage(
                                   width: double.infinity,
@@ -203,10 +358,42 @@ class _imageListState extends State<ListImageEditLayout>  {
                                     onTap: () {
                                       setState(() {
                                         widget.images.removeAt(1);
-                                        widget.image_delFunction("1");
+                                        widget.urlFunction(widget.images);
+                                        widget.image_delFunction("2");
 
                                         // widget.cbFunction(widget.images);
                                       });
+                                    },
+                                    child: const Icon(Icons.close,
+                                        color: Colors.black),
+                                  ),
+                                ),
+                              ],
+                            ):
+                            Stack(
+                              children: [
+                                Container(
+                                  width: double.infinity,
+                                  height: 200,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.rectangle,
+                                  ),
+                                  child: Image(
+                                    image: FileImage(new File(widget.images[1].url)),
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 0,
+                                  right: 0,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        widget.images.removeAt(1);
+                                        widget.newImages.last;
+                                        widget.cbFunction(widget.newImages);
+                                      });
+
                                     },
                                     child: const Icon(Icons.close,
                                         color: Colors.black),
@@ -221,7 +408,8 @@ class _imageListState extends State<ListImageEditLayout>  {
                         flex: 1,
                         child: Padding(
                             padding: const EdgeInsets.only(top: 2),
-                            child: Stack(
+                            child: (widget.images[2].url.contains("http")) ?
+                            Stack(
                               children: [
                                 MyImage(
                                   width: double.infinity,
@@ -238,9 +426,9 @@ class _imageListState extends State<ListImageEditLayout>  {
                                     onTap: () {
                                       setState(() {
                                         widget.images.removeAt(2);
-                                        widget.image_delFunction("2");
+                                        widget.urlFunction(widget.images);
+                                        widget.image_delFunction("3");
 
-                                        // widget.cbFunction(widget.images);
                                       });
                                     },
                                     child: const Icon(Icons.close,
@@ -248,8 +436,39 @@ class _imageListState extends State<ListImageEditLayout>  {
                                   ),
                                 ),
                               ],
-                            )
+                            ):
+                            Stack(
+                              children: [
+                                Container(
+                                  width: double.infinity,
+                                  height: 200,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.rectangle,
+                                  ),
+                                  child: Image(
+                                    image: FileImage(new File(widget.images[2].url)),
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 0,
+                                  right: 0,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        widget.images.removeAt(2);
+                                        widget.newImages.last;
+                                        widget.urlFunction(widget.images);
+                                        widget.cbFunction(widget.newImages);
+                                      });
 
+                                    },
+                                    child: const Icon(Icons.close,
+                                        color: Colors.black),
+                                  ),
+                                ),
+                              ],
+                            )
                         ),
                       ),
                     ],
@@ -268,12 +487,12 @@ class _imageListState extends State<ListImageEditLayout>  {
                   children: [
                     Padding(
                         padding: const EdgeInsets.only(right: 2),
-                        child:Stack(
+                        child: (widget.images[0].url.contains("http")) ?
+                        Stack(
                           children: [
                             MyImage(
                               width: double.infinity,
-                              height: double.infinity,
-
+                              height:200,
                               imageUrl: widget.images[0].url,
                               shape: BoxShape.rectangle,
                               fit: BoxFit.fill,
@@ -285,9 +504,40 @@ class _imageListState extends State<ListImageEditLayout>  {
                                 onTap: () {
                                   setState(() {
                                     widget.images.removeAt(0);
-                                    widget.image_delFunction("0");
-
+                                    widget.urlFunction(widget.images);
+                                    widget.image_delFunction("1");
                                     // widget.cbFunction(widget.images);
+                                  });
+                                },
+                                child: const Icon(Icons.close,
+                                    color: Colors.black),
+                              ),
+                            ),
+                          ],
+                        ):
+                        Stack(
+                          children: [
+                            Container(
+                              width: double.infinity,
+                              height: 200,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.rectangle,
+                              ),
+                              child: Image(
+                                image: FileImage(new File(widget.images[0].url)),
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                            Positioned(
+                              top: 0,
+                              right: 0,
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    widget.images.removeAt(0);
+                                    widget.newImages.last;
+                                    widget.urlFunction(widget.images);
+                                    widget.cbFunction(widget.newImages);
                                   });
                                 },
                                 child: const Icon(Icons.close,
@@ -300,11 +550,12 @@ class _imageListState extends State<ListImageEditLayout>  {
                     ),
                     Padding(
                         padding: const EdgeInsets.only(right: 2),
-                        child:Stack(
+                        child:(widget.images[1].url.contains("http")) ?
+                        Stack(
                           children: [
                             MyImage(
                               width: double.infinity,
-                              height: double.infinity,
+                              height:200,
 
                               imageUrl: widget.images[1].url,
                               shape: BoxShape.rectangle,
@@ -317,9 +568,40 @@ class _imageListState extends State<ListImageEditLayout>  {
                                 onTap: () {
                                   setState(() {
                                     widget.images.removeAt(1);
-                                    widget.image_delFunction("1");
-
+                                    widget.urlFunction(widget.images);
+                                    widget.image_delFunction("2");
                                     // widget.cbFunction(widget.images);
+                                  });
+                                },
+                                child: const Icon(Icons.close,
+                                    color: Colors.black),
+                              ),
+                            ),
+                          ],
+                        ):
+                        Stack(
+                          children: [
+                            Container(
+                              width: double.infinity,
+                              height: 200,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.rectangle,
+                              ),
+                              child: Image(
+                                image: FileImage(new File(widget.images[1].url)),
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                            Positioned(
+                              top: 0,
+                              right: 0,
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    widget.images.removeAt(1);
+                                    widget.newImages.last;
+                                    widget.urlFunction(widget.images);
+                                    widget.cbFunction(widget.newImages);
                                   });
                                 },
                                 child: const Icon(Icons.close,
@@ -332,7 +614,6 @@ class _imageListState extends State<ListImageEditLayout>  {
                     ),
                   ],
                 )
-
             ),
             Expanded(
                 flex: 2,
@@ -340,11 +621,12 @@ class _imageListState extends State<ListImageEditLayout>  {
                   children: [
                     Padding(
                         padding: const EdgeInsets.only(right: 2),
-                        child:Stack(
+                        child: (widget.images[2].url.contains("http")) ?
+                        Stack(
                           children: [
                             MyImage(
                               width: double.infinity,
-                              height: double.infinity,
+                              height: 200,
                               imageUrl: widget.images[2].url,
                               shape: BoxShape.rectangle,
                               fit: BoxFit.fill,
@@ -356,8 +638,8 @@ class _imageListState extends State<ListImageEditLayout>  {
                                 onTap: () {
                                   setState(() {
                                     widget.images.removeAt(2);
-                                    widget.image_delFunction("2");
-
+                                    widget.urlFunction(widget.images);
+                                    widget.image_delFunction("3");
                                   });
                                 },
                                 child: const Icon(Icons.close,
@@ -365,16 +647,48 @@ class _imageListState extends State<ListImageEditLayout>  {
                               ),
                             ),
                           ],
-                        )
+                        ):
+                        Stack(
+                          children: [
+                            Container(
+                              width: double.infinity,
+                              height:200,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.rectangle,
+                              ),
+                              child: Image(
+                                image: FileImage(new File(widget.images[2].url)),
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                            Positioned(
+                              top: 0,
+                              right: 0,
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    widget.images.removeAt(2);
+                                    widget.newImages.last;
+                                    widget.urlFunction(widget.images);
+                                    widget.cbFunction(widget.newImages);
+                                  });
 
+                                },
+                                child: const Icon(Icons.close,
+                                    color: Colors.black),
+                              ),
+                            ),
+                          ],
+                        )
                     ),
                     Padding(
                         padding: const EdgeInsets.only(right: 2),
-                        child:Stack(
+                        child: (widget.images[3].url.contains("http")) ?
+                        Stack(
                           children: [
                             MyImage(
                               width: double.infinity,
-                              height: double.infinity,
+                              height: 200,
                               imageUrl: widget.images[3].url,
                               shape: BoxShape.rectangle,
                               fit: BoxFit.fill,
@@ -386,8 +700,41 @@ class _imageListState extends State<ListImageEditLayout>  {
                                 onTap: () {
                                   setState(() {
                                     widget.images.removeAt(3);
-                                    widget.image_delFunction("3");
+                                    widget.urlFunction(widget.images);
+                                    widget.image_delFunction("4");
                                   });
+                                },
+                                child: const Icon(Icons.close,
+                                    color: Colors.black),
+                              ),
+                            ),
+                          ],
+                        ) :
+                        Stack(
+                          children: [
+                            Container(
+                              width: double.infinity,
+                              height: 200,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.rectangle,
+                              ),
+                              child: Image(
+                                image: FileImage(new File(widget.images[3].url)),
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                            Positioned(
+                              top: 0,
+                              right: 0,
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    widget.images.removeAt(3);
+                                    widget.newImages.last;
+                                    widget.urlFunction(widget.images);
+                                    widget.cbFunction(widget.newImages);
+                                  });
+
                                 },
                                 child: const Icon(Icons.close,
                                     color: Colors.black),
@@ -406,6 +753,8 @@ class _imageListState extends State<ListImageEditLayout>  {
         return Container();
     }
   }
+
+
   @override
   Widget  build(BuildContext context) {
     return Container(

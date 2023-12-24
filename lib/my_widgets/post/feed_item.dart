@@ -357,14 +357,38 @@ class _FeedItemState extends State<FeedItem> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+                (widget.postData.state) == ""?
                 Text(
-                  widget.postData.author.name + " cảm thấy ${widget.postData.state}",
+                  widget.postData.author.name,
                   style: TextStyle(
                       color: Colors.grey[900],
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 1),
-                ),
+                ) :
+                Text.rich(
+                    TextSpan(
+                      text: widget.postData.author.name,
+                      style: TextStyle(
+                          color: Colors.grey[900],
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1
+                      ),
+                      children: <TextSpan>[
+                      TextSpan(
+                        text: " đang cảm thấy ${widget.postData.state}",
+                        style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 18,
+                            fontWeight: FontWeight.normal,
+                            letterSpacing: 1
+
+                        )
+                      )
+                      ]
+                )),
+
                 const SizedBox(
                   height: 3,
                 ),

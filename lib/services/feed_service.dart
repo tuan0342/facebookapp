@@ -571,7 +571,7 @@ class FeedService {
         "described": described == null ? "" : described.trim(),
         "status": status == null ? "" : status.trim(),
         "image_del": image_del == null ? "" : image_del.trim(),
-        "image_sort":  image_sort == null ? "" : image_sort.trim(),
+        // "image_sort":  image_sort == null ? "" : image_sort.trim(),
       };
       debugPrint("$image  $described $image_del");
       List<FileData> files = [];

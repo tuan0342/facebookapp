@@ -180,7 +180,7 @@ class _imageListState extends State<ListImageLayoutFile>  {
               child: Padding(
                 padding: const EdgeInsets.only(left: 2),
                 child: SizedBox(
-                  height: 200,
+                  height: 400,
                   width: double.infinity,
                   child: Column(
                     children: [
@@ -293,7 +293,6 @@ class _imageListState extends State<ListImageLayoutFile>  {
                                   setState(() {
                                     widget.images.removeAt(0);
                                     widget.cbFunction(widget.images);
-
                                   });
                                 },
                                 child: const Icon(Icons.close,
