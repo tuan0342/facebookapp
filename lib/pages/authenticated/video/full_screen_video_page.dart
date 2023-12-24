@@ -114,22 +114,26 @@ class _FullScreenVideoPageState extends State<FullScreenVideoPage> {
                       ),
                     ],
                   ),
-                  body: Expanded(
-                    child: InViewNotifierList(
-                      controller: _scrollController,
-                      isInViewPortCondition: (double deltaTop, double deltaBottom, double viewPortDimension) {
-                        return deltaTop < (0.5 * viewPortDimension) && deltaBottom > (0.5 * viewPortDimension);
-                      },
-                      itemCount: videoPosts.length,
-                      builder: (BuildContext context, int index) {
-                        return InViewNotifierWidget(
-                            id: "$index",
-                            builder: (BuildContext context, bool isInView, Widget? child) {
-                              return FullScreenVideoPostItem(videoPost: videoPosts.elementAt(index), isInView: isInView, index: index, controller: index == 0 ? videoPlayerProvider.curController : null, onBlock: onBlockItem);
-                            }
-                        );
-                      },
-                    ),
+                  body: Column(
+                    children: [
+                      Expanded(
+                        child: InViewNotifierList(
+                          controller: _scrollController,
+                          isInViewPortCondition: (double deltaTop, double deltaBottom, double viewPortDimension) {
+                            return deltaTop < (0.5 * viewPortDimension) && deltaBottom > (0.5 * viewPortDimension);
+                          },
+                          itemCount: videoPosts.length,
+                          builder: (BuildContext context, int index) {
+                            return InViewNotifierWidget(
+                                id: "$index",
+                                builder: (BuildContext context, bool isInView, Widget? child) {
+                                  return FullScreenVideoPostItem(videoPost: videoPosts.elementAt(index), isInView: isInView, index: index, controller: index == 0 ? videoPlayerProvider.curController : null, onBlock: onBlockItem);
+                                }
+                            );
+                          },
+                        ),
+                      ),
+                    ],
                   ),
               )
             ),

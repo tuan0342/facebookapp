@@ -325,7 +325,7 @@ class _FullScreenVideoPostItem extends State<FullScreenVideoPostItem> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
+                padding: const EdgeInsets.only(left: 8),
                 child: widget.videoPost.feel > 0
                     ? Row(
                   children: [
@@ -336,21 +336,21 @@ class _FullScreenVideoPostItem extends State<FullScreenVideoPostItem> {
                     Text(
                       "${widget.videoPost.feel}",
                       style: const TextStyle(
-                          fontSize: 14, color: Colors.black87, fontWeight: FontWeight.w400),
+                          fontSize: 14, fontWeight: FontWeight.w400),
                     ),
                   ],
                 )
                     : Container(),
               ),
               Padding(
-                padding: const EdgeInsets.only(right: 0),
+                padding: const EdgeInsets.only(right: 8),
                 child: widget.videoPost.markComment > 0
                     ? Row(
                   children: [
                     Text(
                       "${widget.videoPost.markComment} marks",
                       style: const TextStyle(
-                          fontSize: 14, color: Colors.black87, fontWeight: FontWeight.w400),
+                          fontSize: 14, fontWeight: FontWeight.w400),
                     ),
                   ],
                 )
