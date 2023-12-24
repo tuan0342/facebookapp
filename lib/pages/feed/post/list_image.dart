@@ -38,7 +38,7 @@ class _imageListState extends State<ListImageLayoutFile>  {
                   ),
                   child: Image(
                     image: FileImage(widget.images[0]),
-                    fit: BoxFit.fill,
+                    fit: BoxFit.cover,
                   ),
                 ),
                 Positioned(
@@ -76,7 +76,7 @@ class _imageListState extends State<ListImageLayoutFile>  {
                         ),
                         child: Image(
                           image: FileImage(widget.images[0]),
-                          fit: BoxFit.fill,
+                          fit: BoxFit.cover,
                         ),
                       ),
                       Positioned(
@@ -112,7 +112,7 @@ class _imageListState extends State<ListImageLayoutFile>  {
                         ),
                         child: Image(
                           image: FileImage(widget.images[1]),
-                          fit: BoxFit.fill,
+                          fit: BoxFit.cover,
                         ),
                       ),
                       Positioned(
@@ -153,7 +153,7 @@ class _imageListState extends State<ListImageLayoutFile>  {
                         ),
                         child: Image(
                           image: FileImage(widget.images[0]),
-                          fit: BoxFit.fill,
+                          fit: BoxFit.cover,
                         ),
                       ),
                       Positioned(
@@ -198,7 +198,7 @@ class _imageListState extends State<ListImageLayoutFile>  {
                                   ),
                                   child: Image(
                                     image: FileImage(widget.images[1]),
-                                    fit: BoxFit.fill,
+                                    fit: BoxFit.cover,
                                   ),
                                 ),
                                 Positioned(
@@ -234,7 +234,7 @@ class _imageListState extends State<ListImageLayoutFile>  {
                                   ),
                                   child: Image(
                                     image: FileImage(widget.images[2]),
-                                    fit: BoxFit.fill,
+                                    fit: BoxFit.cover,
                                   ),
                                 ),
                                 Positioned(
@@ -282,7 +282,7 @@ class _imageListState extends State<ListImageLayoutFile>  {
                               ),
                               child: Image(
                                 image: FileImage(widget.images[0]),
-                                fit: BoxFit.fill,
+                                fit: BoxFit.cover,
                               ),
                             ),
                             Positioned(
@@ -314,7 +314,7 @@ class _imageListState extends State<ListImageLayoutFile>  {
                               ),
                               child: Image(
                                 image: FileImage(widget.images[1]),
-                                fit: BoxFit.fill,
+                                fit: BoxFit.cover,
                               ),
                             ),
                             Positioned(
@@ -355,7 +355,7 @@ class _imageListState extends State<ListImageLayoutFile>  {
                               ),
                               child: Image(
                                 image: FileImage(widget.images[3]),
-                                fit: BoxFit.fill,
+                                fit: BoxFit.cover,
                               ),
                             ),
                             Positioned(
@@ -388,7 +388,7 @@ class _imageListState extends State<ListImageLayoutFile>  {
                               ),
                               child: Image(
                                 image: FileImage(widget.images[3]),
-                                fit: BoxFit.fill,
+                                fit: BoxFit.cover,
                               ),
                             ),
                             Positioned(
