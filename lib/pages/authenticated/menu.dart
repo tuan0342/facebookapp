@@ -83,10 +83,17 @@ class _MenuState extends State<Menu> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          MyImage(
+                          // MyImage(
+                          //     imageUrl: appService.avatar,
+                          //     height: 50,
+                          //     width: 50),
+                          Selector<AppService, String>(
+                            selector: (_, notifier) =>
+                                notifier.avatar,
+                            builder: (_, value, __) => MyImage(
                               imageUrl: appService.avatar,
                               height: 50,
-                              width: 50),
+                              width: 50),),
                           const SizedBox(
                             width: 12,
                           ),

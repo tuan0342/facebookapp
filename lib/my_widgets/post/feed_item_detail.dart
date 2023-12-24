@@ -3,10 +3,12 @@ import 'package:facebook_app/my_widgets/my_image.dart';
 import 'package:facebook_app/my_widgets/post/list_image_layout.dart';
 import 'package:facebook_app/my_widgets/post/mark_comment_component.dart';
 import 'package:facebook_app/my_widgets/post/video/video_screen.dart';
+import 'package:facebook_app/services/app_service.dart';
 import 'package:facebook_app/services/feed_service.dart';
 import 'package:facebook_app/util/common.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class FeedItemDetail extends StatefulWidget {
@@ -150,9 +152,15 @@ class _FeedItemDetailState extends State<FeedItemDetail> {
     getPostDetail();
   }
 
+  void deletePost(BuildContext context, int id) async {
+    await FeedService(context: context)
+        .deletePost(context: context, postId: id);
+  }
+
   @override
   Widget build(BuildContext context) {
     final FeedService feedService = FeedService(context: context);
+    
     return postDetail == null
         ? Scaffold(
             appBar: AppBar(),
@@ -328,6 +336,7 @@ class _FeedItemDetailState extends State<FeedItemDetail> {
   }
 
   Widget postHeader() {
+    final appService = Provider.of<AppService>(context, listen: false);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -376,7 +385,85 @@ class _FeedItemDetailState extends State<FeedItemDetail> {
             size: 25,
             color: Colors.grey[600],
           ),
-          onPressed: () {},
+          onPressed: () {
+            showModalBottomSheet(
+                context: context,
+                builder: (BuildContext context) {
+                  return Container(
+                    padding: const EdgeInsets.all(10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        TextButton(
+                            onPressed: () {},
+                            child: const Row(
+                              children: [
+                                Icon(
+                                  Icons.add_alert,
+                                  color: Colors.black,
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  "Tắt thông báo về bài viết này",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.normal),
+                                )
+                              ],
+                            )),
+                        TextButton(
+                            onPressed: () {},
+                            child: const Row(
+                              children: [
+                                Icon(Icons.save, color: Colors.black),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  "Lưu bài viết",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.normal),
+                                )
+                              ],
+                            )),
+                        (postDetail!.author.name == appService.username)
+                            ? TextButton(
+                                onPressed: () {
+                                  deletePost(context, postDetail!.id);
+                                },
+                                child: const Row(
+                                  children: [
+                                    Icon(
+                                      Icons.delete_rounded,
+                                      color: Colors.black,
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      "Xóa",
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.normal),
+                                    )
+                                  ],
+                                ))
+                            : Container(),
+
+                        // widget.postData.author.name == appService.username ?
+                      ],
+                    ),
+                  );
+                });
+          },
         ),
       ],
     );

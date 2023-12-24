@@ -83,7 +83,7 @@ class _AuthenticatedNavigatorState extends State<AuthenticatedNavigator> {
           if (index == 2) {
             _videoPlayerProvider.setIsInVideoPage(true);
           } else {
-            _videoPlayerProvider.setIsInVideoPage(false);
+            _videoPlayerProvider.setIsInVideoPage(false); 
           }
         },
         index: _selectedIndex,
