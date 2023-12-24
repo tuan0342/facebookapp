@@ -14,7 +14,8 @@ class VideoPostItem extends StatefulWidget {
   final int index;
   final Function onBlock;
 
-  const VideoPostItem({super.key,
+  const VideoPostItem({
+    super.key,
     required this.videoPost,
     required this.isInView,
     required this.index,
@@ -23,7 +24,6 @@ class VideoPostItem extends StatefulWidget {
 
   @override
   _VideoPostItemState createState() => _VideoPostItemState();
-
 }
 
 class _VideoPostItemState extends State<VideoPostItem> {
@@ -104,9 +104,7 @@ class _VideoPostItemState extends State<VideoPostItem> {
   }
 
   void onClickMarkdBtn(FeedService feedService) async {
-    if (widget.videoPost.isFelt == -1) {
-    } else if (widget.videoPost.isFelt == 1) {
-    } else {}
+    context.push("/authenticated/postDetail/${widget.videoPost.id}");
   }
 
   void onAddFriend(BuildContext context) async {
@@ -114,7 +112,9 @@ class _VideoPostItemState extends State<VideoPostItem> {
         .setRequestFriend(int.parse(widget.videoPost.author.id.toString()));
 
     if (isSendRequested) {
+      // ignore: use_build_context_synchronously
       showSnackBar(context: context, msg: "Đã gửi lời mời kết bạn");
+      // ignore: use_build_context_synchronously
       Navigator.of(context).pop();
     }
   }
@@ -123,14 +123,15 @@ class _VideoPostItemState extends State<VideoPostItem> {
     final success = await FriendService(context: context)
         .setBlocksFriend(widget.videoPost.author.id.toString());
     if (success) {
+      // ignore: use_build_context_synchronously
       showSnackBar(
           context: context,
-          msg:
-          "Đã chặn tài khoản ${widget.videoPost.author.name}");
+          msg: "Đã chặn tài khoản ${widget.videoPost.author.name}");
       setState(() {
         isBlocked = true;
       });
       widget.onBlock(widget.videoPost.author.id);
+      // ignore: use_build_context_synchronously
       Navigator.of(context).pop();
     }
   }
@@ -141,11 +142,13 @@ class _VideoPostItemState extends State<VideoPostItem> {
       builder: (BuildContext context) {
         return Container(
           height: 180,
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             children: [
               InkWell(
-                onTap: () {onAddFriend(context);},
+                onTap: () {
+                  onAddFriend(context);
+                },
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -154,15 +157,23 @@ class _VideoPostItemState extends State<VideoPostItem> {
                       height: 48,
                       child: Icon(Icons.person_add_outlined),
                     ),
-                    SizedBox(width: 16,),
+                    SizedBox(
+                      width: 16,
+                    ),
                     Expanded(
-                      child: Text("Thêm bạn", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),),
+                      child: Text(
+                        "Thêm bạn",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500, fontSize: 16),
+                      ),
                     )
                   ],
                 ),
               ),
               InkWell(
-                onTap: () {blockFriend(context);},
+                onTap: () {
+                  blockFriend(context);
+                },
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -171,30 +182,41 @@ class _VideoPostItemState extends State<VideoPostItem> {
                       height: 48,
                       child: Icon(Icons.block_rounded),
                     ),
-                    SizedBox(width: 16,),
+                    SizedBox(
+                      width: 16,
+                    ),
                     Expanded(
-                      child: Text("Chặn người dùng", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),),
+                      child: Text(
+                        "Chặn người dùng",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500, fontSize: 16),
+                      ),
                     )
                   ],
                 ),
               ),
               InkWell(
-                onTap: () {},
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      width: 48,
-                      height: 48,
-                      child: Icon(Icons.warning_amber_rounded),
-                    ),
-                    SizedBox(width: 16,),
-                    Expanded(
-                      child: Text("Báo cáo vi phạm", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),),
-                    )
-                  ],
-                )
-              ),
+                  onTap: () {},
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        width: 48,
+                        height: 48,
+                        child: Icon(Icons.warning_amber_rounded),
+                      ),
+                      SizedBox(
+                        width: 16,
+                      ),
+                      Expanded(
+                        child: Text(
+                          "Báo cáo vi phạm",
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500, fontSize: 16),
+                        ),
+                      )
+                    ],
+                  )),
             ],
           ),
         );
@@ -206,107 +228,135 @@ class _VideoPostItemState extends State<VideoPostItem> {
   Widget build(BuildContext context) {
     final FeedService feedService = FeedService(context: context);
 
-    String formattedCreatedAt = getPostCreateAt(widget.videoPost.created);
-    return isBlocked ? Container() : Container(
-      color: Colors.white,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Container(
-            height: 6,
-            width: double.infinity,
-            color: Colors.black12,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(12),
+    String formattedCreatedAt = getDifferenceTime(
+        DateTime.now(), DateTime.parse(widget.videoPost.created));
+    return isBlocked
+        ? Container()
+        : Container(
+            color: Colors.white,
             child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        context.push(
-                            "/authenticated/personalPage/${widget.videoPost.author.id}");
-                      },
-                      child: MyImage(
-                        imageUrl: widget.videoPost.author.avatar,
-                        width: 44,
-                        height: 44
-                      ),
-                    ),
-                    const SizedBox(width: 8,),
-                    Expanded(child:
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            context.push(
-                                "/authenticated/personalPage/${widget.videoPost.author.id}");
-                          },
-                          child: Text(widget.videoPost.author.name, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15),),
-                        ),
-                        Text(formattedCreatedAt, style: const TextStyle(fontWeight: FontWeight.w300, fontSize: 12),),
-                      ],
-                    )
-                    ),
-                    InkWell(
-                      onTap: () { _showOptionModal(context); },
-                      child: Icon(Icons.more_horiz_rounded, color: Colors.grey[600]),
-                    )
-                  ],
-                ),
-                const SizedBox(height: 4,),
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
                 Container(
-                  alignment: Alignment.centerLeft,
-                  child: Text(widget.videoPost.described),
-                )
+                  height: 6,
+                  width: double.infinity,
+                  color: Colors.black12,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              context.push(
+                                  "/authenticated/personalPage/${widget.videoPost.author.id}");
+                            },
+                            child: MyImage(
+                                imageUrl: widget.videoPost.author.avatar,
+                                width: 44,
+                                height: 44),
+                          ),
+                          const SizedBox(
+                            width: 8,
+                          ),
+                          Expanded(
+                              child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  context.push(
+                                      "/authenticated/personalPage/${widget.videoPost.author.id}");
+                                },
+                                child: Text(
+                                  widget.videoPost.author.name,
+                                  style: TextStyle(
+                                    color: Colors.grey[900],
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 3,
+                              ),
+                              Text(
+                                formattedCreatedAt,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w300, fontSize: 12),
+                              ),
+                            ],
+                          )),
+                          InkWell(
+                            onTap: () {
+                              _showOptionModal(context);
+                            },
+                            child: Icon(Icons.more_horiz_rounded,
+                                color: Colors.grey[600]),
+                          )
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 4,
+                      ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: Text(widget.videoPost.described),
+                      )
+                    ],
+                  ),
+                ),
+                AspectRatio(
+                  aspectRatio: 4 / 3, // You may adjust this ratio as needed
+                  child: Container(
+                    color: Colors.black, // Placeholder color for the video
+                    child: Center(
+                        child: MyVideoPlayer(
+                      videoUrl: widget.videoPost.video.url,
+                      isInView: widget.isInView,
+                      videoPost: widget.videoPost,
+                      index: widget.index,
+                    )),
+                  ),
+                ),
+                // Padding(
+                //   padding: EdgeInsets.all(12.0),
+                //   child: Text(
+                //     "${widget.videoPost.markComment} comment marks",
+                //     style: TextStyle(
+                //       fontSize: 12.0,
+                //       fontWeight: FontWeight.w300,
+                //     ),
+                //   ),
+                // ),
+                // const Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                //   children: [
+                //     Expanded(
+                //       child: Center(child: Text("Thích")),
+                //     ),
+                //     Expanded(
+                //       child: Center(child: Text("Bình luận")),
+                //     ),
+                //     Expanded(
+                //       child: Center(child: Text("Chia sẻ")),
+                //     )
+                //   ],
+                // ),
+                const SizedBox(
+                  height: 12,
+                ),
+                postFooter(feedService),
+                const SizedBox(
+                  height: 6,
+                ),
+                postAction(feedService),
               ],
             ),
-          ),
-          AspectRatio(
-            aspectRatio: 4 / 3, // You may adjust this ratio as needed
-            child: Container(
-              color: Colors.black, // Placeholder color for the video
-              child: Center(
-                  child: MyVideoPlayer(videoUrl: widget.videoPost.video.url, isInView: widget.isInView, videoPost: widget.videoPost, index: widget.index,)
-              ),
-            ),
-          ),
-          // Padding(
-          //   padding: EdgeInsets.all(12.0),
-          //   child: Text(
-          //     "${widget.videoPost.markComment} comment marks",
-          //     style: TextStyle(
-          //       fontSize: 12.0,
-          //       fontWeight: FontWeight.w300,
-          //     ),
-          //   ),
-          // ),
-          // const Row(
-          //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          //   children: [
-          //     Expanded(
-          //       child: Center(child: Text("Thích")),
-          //     ),
-          //     Expanded(
-          //       child: Center(child: Text("Bình luận")),
-          //     ),
-          //     Expanded(
-          //       child: Center(child: Text("Chia sẻ")),
-          //     )
-          //   ],
-          // ),
-          const SizedBox(
-            height: 12,
-          ),
-          postFooter(feedService),
-          const SizedBox(height: 6,),
-          postAction(feedService),
-        ],
-      ),
-    );
+          );
   }
 
   Widget postFooter(FeedService feedService) {
@@ -320,32 +370,36 @@ class _VideoPostItemState extends State<VideoPostItem> {
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: widget.videoPost.feel > 0
                     ? Row(
-                  children: [
-                    allReactIcon(widget.videoPost.feel),
-                    const SizedBox(
-                      width: 4,
-                    ),
-                    Text(
-                      "${widget.videoPost.feel}",
-                      style: const TextStyle(
-                          fontSize: 14, color: Colors.black87, fontWeight: FontWeight.w400),
-                    ),
-                  ],
-                )
+                        children: [
+                          allReactIcon(widget.videoPost.feel),
+                          const SizedBox(
+                            width: 4,
+                          ),
+                          Text(
+                            "${widget.videoPost.feel}",
+                            style: const TextStyle(
+                                fontSize: 14,
+                                color: Colors.black87,
+                                fontWeight: FontWeight.w400),
+                          ),
+                        ],
+                      )
                     : Container(),
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 0),
                 child: widget.videoPost.markComment > 0
                     ? Row(
-                  children: [
-                    Text(
-                      "${widget.videoPost.markComment} marks",
-                      style: const TextStyle(
-                          fontSize: 14, color: Colors.black87, fontWeight: FontWeight.w400),
-                    ),
-                  ],
-                )
+                        children: [
+                          Text(
+                            "${widget.videoPost.markComment} marks & comments",
+                            style: const TextStyle(
+                                fontSize: 14,
+                                color: Colors.black87,
+                                fontWeight: FontWeight.w400),
+                          ),
+                        ],
+                      )
                     : Container(),
               )
             ],
@@ -353,7 +407,7 @@ class _VideoPostItemState extends State<VideoPostItem> {
         const SizedBox(
           height: 8,
         ),
-        Divider(
+        const Divider(
           height: 1,
           thickness: 0.2,
           color: Colors.black54,
@@ -387,15 +441,16 @@ class _VideoPostItemState extends State<VideoPostItem> {
               kudosIcon(
                   bgColor: Colors.white,
                   iconColor:
-                  widget.videoPost.isFelt == 1 ? Colors.blue : Colors.grey),
+                      widget.videoPost.isFelt == 1 ? Colors.blue : Colors.grey),
               const SizedBox(
                 width: 4,
               ),
               Text(
                 "Kudos",
                 style: TextStyle(
-                    color:
-                    widget.videoPost.isFelt == 1 ? Colors.blue : Colors.grey),
+                    color: widget.videoPost.isFelt == 1
+                        ? Colors.blue
+                        : Colors.grey),
               )
             ],
           ),
@@ -418,15 +473,16 @@ class _VideoPostItemState extends State<VideoPostItem> {
               disappointedIcon(
                   bgColor: Colors.white,
                   iconColor:
-                  widget.videoPost.isFelt == 0 ? Colors.red : Colors.grey),
+                      widget.videoPost.isFelt == 0 ? Colors.red : Colors.grey),
               const SizedBox(
                 width: 4,
               ),
               Text(
                 "Diss",
                 style: TextStyle(
-                    color:
-                    widget.videoPost.isFelt == 0 ? Colors.red : Colors.grey),
+                    color: widget.videoPost.isFelt == 0
+                        ? Colors.red
+                        : Colors.grey),
               )
             ],
           ),
@@ -456,8 +512,7 @@ class _VideoPostItemState extends State<VideoPostItem> {
                 )
               ],
             ),
-          )
-      ),
+          )),
     );
   }
 
@@ -467,17 +522,17 @@ class _VideoPostItemState extends State<VideoPostItem> {
         Positioned(left: 13, child: disappointedIcon()),
         Positioned(
             child: Row(
-              children: [
-                kudosIcon(),
-                const SizedBox(
-                  width: 13,
-                )
-              ],
-            )),
+          children: [
+            kudosIcon(),
+            const SizedBox(
+              width: 13,
+            )
+          ],
+        )),
       ],
     );
     switch (widget.videoPost.isFelt) {
-    // user haven't yet react
+      // user haven't yet react
       case -1:
         if (numOfReact <= 0) {
           return Container();
@@ -486,7 +541,7 @@ class _VideoPostItemState extends State<VideoPostItem> {
         } else {
           return multiFeelIcon;
         }
-    // user disapointed
+      // user disapointed
       case 0:
         if (numOfReact <= 0) {
           return Container();
@@ -495,7 +550,7 @@ class _VideoPostItemState extends State<VideoPostItem> {
         } else {
           return multiFeelIcon;
         }
-    // user kudos
+      // user kudos
       case 1:
         if (numOfReact <= 0) {
           return Container();
@@ -511,9 +566,9 @@ class _VideoPostItemState extends State<VideoPostItem> {
 
   Widget kudosIcon(
       {double bgSize = 20,
-        Color bgColor = Colors.blue,
-        double iconSize = 15,
-        Color iconColor = Colors.white}) {
+      Color bgColor = Colors.blue,
+      double iconSize = 15,
+      Color iconColor = Colors.white}) {
     return Container(
       width: bgSize,
       height: bgSize,
@@ -529,9 +584,9 @@ class _VideoPostItemState extends State<VideoPostItem> {
 
   Widget disappointedIcon(
       {double bgSize = 20,
-        Color bgColor = Colors.red,
-        double iconSize = 15,
-        Color iconColor = Colors.white}) {
+      Color bgColor = Colors.red,
+      double iconSize = 15,
+      Color iconColor = Colors.white}) {
     return Container(
       width: bgSize,
       height: bgSize,

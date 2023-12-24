@@ -34,6 +34,7 @@ class HomePageState extends State<HomePage> {
   }
 
   void fetchFeed(BuildContext context) async {
+    debugPrint("fetchFeed");
     if (!isEnd) {
       setState(() {
         isLoading = true;
@@ -41,6 +42,8 @@ class HomePageState extends State<HomePage> {
       try {
         final response = await FeedService(context: context)
             .getFeeds(index: index, count: count, lastId: lastId);
+
+        debugPrint("response: ${response.toString()}");
 
         if (response["feed"].isEmpty) {
           if (posts.isEmpty) {
