@@ -351,23 +351,22 @@ class _FeedItemState extends State<FeedItem> {
               children: <Widget>[
                 SizedBox(
                   width: MediaQuery.of(context).size.width - 130,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.postData.author.name,
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          color: Colors.grey[900],
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
+                  child: RichText(
+                    text: TextSpan(
+                      text: widget.postData.author.name,
+                      style: TextStyle(fontSize: 15, color: Colors.grey[900], fontWeight: FontWeight.w600),
+                      children: [
+                        TextSpan(
+                          text: widget.postData.state.isNotEmpty ? " đang cảm thấy ${widget.postData.state}" : "",
+                          style: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.normal,
+                            color: Colors.black54
+                          ),
                         ),
-                      ),
-                      if (widget.postData.state.isNotEmpty)
-                        Text("Đang cảm thấy ${widget.postData.state}",
-                            style:
-                                const TextStyle(fontWeight: FontWeight.normal)),
-                    ],
+                      ],
+                    ),
+                    softWrap: true,
                   ),
                 ),
                 const SizedBox(

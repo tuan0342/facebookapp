@@ -62,21 +62,21 @@ class _AuthenticatedNavigatorState extends State<AuthenticatedNavigator> {
       appService.subcribe = appService.uidLoggedIn;
     }
     return Scaffold(
-      // appBar: AppBar(
-      //   title: const Text("Anti Facebook"),
-      //   actions: [
-      //     IconButton(
-      //         onPressed: () {
-      //           context.push("/authenticated/search");
-      //         },
-      //         icon: const Icon(Icons.search_rounded)),
-      //     IconButton(
-      //         onPressed: () {
-      //           authService.logOut(context: context);
-      //         },
-      //         icon: const Icon(Icons.logout))
-      //   ],
-      // ),
+      appBar: AppBar(
+        title: const Text("Anti Facebook"),
+        actions: [
+          IconButton(
+              onPressed: () {
+                context.push("/authenticated/search");
+              },
+              icon: const Icon(Icons.search_rounded)),
+          IconButton(
+              onPressed: () {
+                authService.logOut(context: context);
+              },
+              icon: const Icon(Icons.logout))
+        ],
+      ),
       bottomNavigationBar: BottomNavBar(
         onTap: (index) {
           _onItemTapped(index);
