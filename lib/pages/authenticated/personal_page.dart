@@ -145,6 +145,15 @@ class _PersonalPageState extends State<PersonalPage> {
     onLoadFriend(context);
   }
 
+  Future refreshPost() async{
+    setStateIfMounted(() {
+      feeds = [];
+      isEndPosts = false;
+      indexPost = 0;
+    });
+    getNewFeed();
+  }
+
   void setStateIfMounted(f) {
     if (mounted) setState(f);
   }
@@ -234,6 +243,7 @@ class _PersonalPageState extends State<PersonalPage> {
                               padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
                               child: FeedItem(
                                 postData: feeds[index],
+                                refresh: refreshPost,
                               ),
                             ),
               

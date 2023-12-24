@@ -6,11 +6,13 @@ class ListPost extends StatelessWidget {
   final List<Post> posts;
   final ScrollController scrollController;
   final bool isLoading;
+  final VoidCallback refreshPosts;
   const ListPost(
       {super.key,
       required this.posts,
       required this.scrollController,
-      required this.isLoading});
+      required this.isLoading,
+      required this.refreshPosts});
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +36,7 @@ class ListPost extends StatelessWidget {
                           padding: const EdgeInsets.fromLTRB(10, 10, 10, 5),
                           child: FeedItem(
                             postData: posts[index],
+                            refresh: refreshPosts,
                           ),
                         );
                       },

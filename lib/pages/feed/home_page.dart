@@ -155,7 +155,8 @@ class HomePageState extends State<HomePage> {
           ListPost(
               posts: posts,
               scrollController: _scrollController,
-              isLoading: isLoading)
+              isLoading: isLoading,
+              refreshPosts: refresh,)
         ],
       ),
     ));

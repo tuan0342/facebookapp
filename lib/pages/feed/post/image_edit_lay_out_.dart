@@ -53,7 +53,7 @@ class _imageListState extends State<ListImageEditLayout>  {
                   width: double.infinity,
                   imageUrl: widget.images[0].url,
                   shape: BoxShape.rectangle,
-                  fit: BoxFit.fill,
+                  fit: BoxFit.cover,
                 ),
                 Positioned(
                   top: 0,
@@ -77,12 +77,12 @@ class _imageListState extends State<ListImageEditLayout>  {
               Container(
                 width: double.infinity,
                 height: 400,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   shape: BoxShape.rectangle,
                 ),
                 child: Image(
                   image: FileImage(new File(widget.images[0].url)),
-                  fit: BoxFit.fill,
+                  fit: BoxFit.cover,
                 ),
               ),
               Positioned(
@@ -120,7 +120,7 @@ class _imageListState extends State<ListImageEditLayout>  {
                         height: double.infinity,
                         imageUrl: widget.images[0].url,
                         shape: BoxShape.rectangle,
-                        fit: BoxFit.fill,
+                        fit: BoxFit.cover,
                       ),
                       Positioned(
                         top: 0,
@@ -146,12 +146,12 @@ class _imageListState extends State<ListImageEditLayout>  {
                       Container(
                         width: double.infinity,
                         height: 400,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           shape: BoxShape.rectangle,
                         ),
                         child: Image(
                           image: FileImage(new File(widget.images[0].url)),
-                          fit: BoxFit.fill,
+                          fit: BoxFit.cover,
                         ),
                       ),
                       Positioned(
@@ -187,7 +187,7 @@ class _imageListState extends State<ListImageEditLayout>  {
                         height: double.infinity,
                         imageUrl: widget.images[1].url,
                         shape: BoxShape.rectangle,
-                        fit: BoxFit.fill,
+                        fit: BoxFit.cover,
                       ),
                       Positioned(
                         top: 0,
@@ -212,12 +212,12 @@ class _imageListState extends State<ListImageEditLayout>  {
                       Container(
                         width: double.infinity,
                         height: 400,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           shape: BoxShape.rectangle,
                         ),
                         child: Image(
                           image: FileImage(new File(widget.images[1].url)),
-                          fit: BoxFit.fill,
+                          fit: BoxFit.cover,
                         ),
                       ),
                       Positioned(
@@ -259,7 +259,7 @@ class _imageListState extends State<ListImageEditLayout>  {
 
                         imageUrl: widget.images[0].url,
                         shape: BoxShape.rectangle,
-                        fit: BoxFit.fill,
+                        fit: BoxFit.cover,
                       ),
                       Positioned(
                         top: 0,
@@ -288,7 +288,7 @@ class _imageListState extends State<ListImageEditLayout>  {
                         ),
                         child: Image(
                           image: FileImage(new File(widget.images[0].url)),
-                          fit: BoxFit.fill,
+                          fit: BoxFit.cover,
                         ),
                       ),
                       Positioned(
@@ -334,7 +334,7 @@ class _imageListState extends State<ListImageEditLayout>  {
 
                                   imageUrl: widget.images[1].url,
                                   shape: BoxShape.rectangle,
-                                  fit: BoxFit.fill,
+                                  fit: BoxFit.cover,
                                 ),
                                 Positioned(
                                   top: 0,
@@ -366,7 +366,7 @@ class _imageListState extends State<ListImageEditLayout>  {
                                   ),
                                   child: Image(
                                     image: FileImage(new File(widget.images[1].url)),
-                                    fit: BoxFit.fill,
+                                    fit: BoxFit.cover,
                                   ),
                                 ),
                                 Positioned(
@@ -404,7 +404,7 @@ class _imageListState extends State<ListImageEditLayout>  {
 
                                   imageUrl: widget.images[2].url,
                                   shape: BoxShape.rectangle,
-                                  fit: BoxFit.fill,
+                                  fit: BoxFit.cover,
                                 ),
                                 Positioned(
                                   top: 0,
@@ -435,7 +435,7 @@ class _imageListState extends State<ListImageEditLayout>  {
                                   ),
                                   child: Image(
                                     image: FileImage(new File(widget.images[2].url)),
-                                    fit: BoxFit.fill,
+                                    fit: BoxFit.cover,
                                   ),
                                 ),
                                 Positioned(
@@ -483,7 +483,7 @@ class _imageListState extends State<ListImageEditLayout>  {
                               height:200,
                               imageUrl: widget.images[0].url,
                               shape: BoxShape.rectangle,
-                              fit: BoxFit.fill,
+                              fit: BoxFit.cover,
                             ),
                             Positioned(
                               top: 0,
@@ -513,7 +513,7 @@ class _imageListState extends State<ListImageEditLayout>  {
                               ),
                               child: Image(
                                 image: FileImage(new File(widget.images[0].url)),
-                                fit: BoxFit.fill,
+                                fit: BoxFit.cover,
                               ),
                             ),
                             Positioned(
@@ -547,7 +547,7 @@ class _imageListState extends State<ListImageEditLayout>  {
 
                               imageUrl: widget.images[1].url,
                               shape: BoxShape.rectangle,
-                              fit: BoxFit.fill,
+                              fit: BoxFit.cover,
                             ),
                             Positioned(
                               top: 0,
@@ -577,7 +577,7 @@ class _imageListState extends State<ListImageEditLayout>  {
                               ),
                               child: Image(
                                 image: FileImage(new File(widget.images[1].url)),
-                                fit: BoxFit.fill,
+                                fit: BoxFit.cover,
                               ),
                             ),
                             Positioned(
@@ -618,7 +618,7 @@ class _imageListState extends State<ListImageEditLayout>  {
                               height: 200,
                               imageUrl: widget.images[2].url,
                               shape: BoxShape.rectangle,
-                              fit: BoxFit.fill,
+                              fit: BoxFit.cover,
                             ),
                             Positioned(
                               top: 0,
@@ -648,7 +648,7 @@ class _imageListState extends State<ListImageEditLayout>  {
                               ),
                               child: Image(
                                 image: FileImage(new File(widget.images[2].url)),
-                                fit: BoxFit.fill,
+                                fit: BoxFit.cover,
                               ),
                             ),
                             Positioned(
@@ -682,7 +682,7 @@ class _imageListState extends State<ListImageEditLayout>  {
                               height: 200,
                               imageUrl: widget.images[3].url,
                               shape: BoxShape.rectangle,
-                              fit: BoxFit.fill,
+                              fit: BoxFit.cover,
                             ),
                             Positioned(
                               top: 0,
@@ -711,7 +711,7 @@ class _imageListState extends State<ListImageEditLayout>  {
                               ),
                               child: Image(
                                 image: FileImage(new File(widget.images[3].url)),
-                                fit: BoxFit.fill,
+                                fit: BoxFit.cover,
                               ),
                             ),
                             Positioned(

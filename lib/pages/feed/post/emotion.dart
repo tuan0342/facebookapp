@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class Emotions extends StatelessWidget {
 
   List <Emotion> emotionList = [
@@ -103,10 +104,10 @@ class Emotions extends StatelessWidget {
             ),
 
           ),
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
           Text(
             emotion.status,
-            style: TextStyle(
+            style: const TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.normal,
                 fontSize: 18

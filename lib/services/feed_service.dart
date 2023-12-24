@@ -533,7 +533,7 @@ class FeedService {
       }
       if (int.parse(responseBody["code"]) == 1000) {
         debugPrint("sucessfully delete Pos ");
-        context.go("/authenticated/personalPage/${appService.uidLoggedIn}");
+        context.pop();
       }
     } on UnauthorizationException {
       // ignore: use_build_context_synchronously
@@ -597,7 +597,7 @@ class FeedService {
       }
       if (int.parse(responseBody["code"]) == 1000) {
           debugPrint("edit sucessfully");
-          context.go("/authenticated/personalPage/${_appService.uidLoggedIn}");
+          context.pop();
       }
     } catch (err) {
       debugPrint("get exception $err");

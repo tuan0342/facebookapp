@@ -126,9 +126,8 @@ class _EditPostState extends State<EditPost> {
                                                 ),
                                                 TextButton(
                                                   onPressed: () {
-                                                    context.go(
-                                                        "/authenticated/personalPage/${appService.uidLoggedIn}"
-                                                    );
+                                                    Navigator.pop(context);
+                                                    context.pop();
 
                                                   },
                                                   child: const Row(
@@ -216,37 +215,48 @@ class _EditPostState extends State<EditPost> {
                       ],
                     ),
                   ),
+                  const SizedBox(height: 10,),
                   Row(
                     children: [
-                      MyImage(imageUrl: appService.avatar),
+                      MyImage(imageUrl: appService.avatar, height: 80, width: 80,),
+                      const SizedBox(width: 10,),
                       Expanded(
                         child:Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Text(
-                              status == "" ? appService.username : ("${appService.username} - Đang cảm thấy $status."),
-                              maxLines: 3,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: Colors.grey[900],
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 1,
+                            RichText(
+                              text: TextSpan(
+                                text: appService.username,
+                                style: TextStyle(fontSize: 18, color: Colors.grey[900], fontWeight: FontWeight.w600),
+                                children: [
+                                  TextSpan(
+                                    text: status == "" ? ""  :" đang cảm thấy $status" ,
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.normal,
+                                      color: Colors.black54
+                                    ),
+                                  ),],
                               ),
+                              softWrap: true,
                             ),
                             Container(
                               width: 95,
                               alignment: Alignment.center,
                               child: ElevatedButton(
                                   onPressed: null,
-                                  style: OutlinedButton.styleFrom(
+                                  style: ElevatedButton.styleFrom(
                                     side: BorderSide.none,
                                     padding: const EdgeInsets.all(2),
+                                    backgroundColor: const Color(0xFFebf5ff),
                                   ),
                                   child: const Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Icon(Icons.circle_rounded, color: Colors.blue,),
-                                      Text("Công khai", style: TextStyle(color: Colors.blue),)
+                                      Icon(Icons.public, color: Color(0xFF0065d1), size: 18,),
+                                      SizedBox(width: 2,),
+                                      Text("Công khai", style: TextStyle(color: Color(0xFF0065d1), fontWeight: FontWeight.w600),)
                                     ],
                                   )),
                             )

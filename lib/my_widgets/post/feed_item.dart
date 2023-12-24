@@ -16,7 +16,8 @@ import '../../services/app_service.dart';
 // ignore: must_be_immutable
 class FeedItem extends StatefulWidget {
   final Post postData;
-  const FeedItem({super.key, required this.postData});
+  final VoidCallback refresh;
+  const FeedItem({super.key, required this.postData, required this.refresh});
 
   @override
   State<FeedItem> createState() => _FeedItemState();
@@ -123,7 +124,7 @@ class _FeedItemState extends State<FeedItem> {
 
   void deletePost(BuildContext context, int id) async {
     await FeedService(context: context).deletePost(context: context, postId: id);
-
+    widget.refresh();
   }
   @override
   Widget build(BuildContext context) {
@@ -357,37 +358,25 @@ class _FeedItemState extends State<FeedItem> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                // (widget.postData.state) == ""?
-                Text(
-                  widget.postData.author.name,
-                  style: TextStyle(
-                      color: Colors.grey[900],
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width - 130,
+                  child: RichText(
+                    text: TextSpan(
+                      text: widget.postData.author.name,
+                      style: TextStyle(fontSize: 15, color: Colors.grey[900], fontWeight: FontWeight.w600),
+                      children: [
+                        TextSpan(
+                          text: widget.postData.state.isNotEmpty ? " đang cảm thấy ${widget.postData.state}" : "",
+                          style: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.normal,
+                            color: Colors.black54
+                          ),
+                        ),],
+                    ),
+                    softWrap: true,
+                  )
                 ),
-                // Text.rich(
-                //     TextSpan(
-                //       text: widget.postData.author.name,
-                //       style: TextStyle(
-                //           color: Colors.grey[900],
-                //           fontSize: 18,
-                //           fontWeight: FontWeight.bold,
-                //           letterSpacing: 1
-                //       ),
-                //       children: <TextSpan>[
-                //       TextSpan(
-                //         text: " cảm thấy ${widget.postData.state}",
-                //         style: TextStyle(
-                //             color: Colors.grey,
-                //             fontSize: 18,
-                //             fontWeight: FontWeight.normal,
-                //             letterSpacing: 1
-                //
-                //         )
-                //       )
-                //       ]
-                // )),
 
                 const SizedBox(
                   height: 3,
@@ -463,8 +452,8 @@ class _FeedItemState extends State<FeedItem> {
                         (widget.postData.author.name == appService.username) ?
                         TextButton(
                             onPressed: (){
-                              Navigator.pop;
-                              context.go("/authenticated/editPost", extra: widget.postData);
+                              Navigator.pop(context);
+                              context.push("/authenticated/editPost", extra: widget.postData).then((value) => widget.refresh());
                             },
                             child: const Row(
                               children: [
