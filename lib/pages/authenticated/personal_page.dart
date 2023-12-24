@@ -148,7 +148,7 @@ class _PersonalPageState extends State<PersonalPage> {
     onLoadFriend(context);
   }
 
-  Future refreshPost() async{
+  Future refreshPost() async {
     setStateIfMounted(() {
       feeds = [];
       isEndPosts = false;

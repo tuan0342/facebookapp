@@ -122,7 +122,8 @@ class _FeedItemState extends State<FeedItem> {
   }
 
   void deletePost(BuildContext context, int id) async {
-    await FeedService(context: context).deletePost(context: context, postId: id);
+    await FeedService(context: context)
+        .deletePost(context: context, postId: id);
     widget.refresh();
   }
 
@@ -355,22 +356,25 @@ class _FeedItemState extends State<FeedItem> {
                   child: RichText(
                     text: TextSpan(
                       text: widget.postData.author.name,
-                      style: TextStyle(fontSize: 15, color: Colors.grey[900], fontWeight: FontWeight.w600),
+                      style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.grey[900],
+                          fontWeight: FontWeight.w600),
                       children: [
                         TextSpan(
-                          text: widget.postData.state.isNotEmpty ? " đang cảm thấy ${widget.postData.state}" : "",
+                          text: widget.postData.state.isNotEmpty
+                              ? " đang cảm thấy ${widget.postData.state}"
+                              : "",
                           style: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.normal,
-                            color: Colors.black54
-                          ),
+                              fontSize: 15,
+                              fontWeight: FontWeight.normal,
+                              color: Colors.black54),
                         ),
                       ],
                     ),
                     softWrap: true,
                   ),
                 ),
-
                 const SizedBox(
                   height: 3,
                 ),
@@ -391,7 +395,6 @@ class _FeedItemState extends State<FeedItem> {
             color: Colors.grey[600],
           ),
           onPressed: () {
-            debugPrint("${widget.postData.toJson()}");
             showModalBottomSheet(
                 context: context,
                 builder: (BuildContext context) {
@@ -438,31 +441,35 @@ class _FeedItemState extends State<FeedItem> {
                                       fontWeight: FontWeight.normal),
                                 )
                               ],
-                            )
-                        ),
-                        (widget.postData.author.name == appService.username) ?
-                        TextButton(
-                            onPressed: (){
-                              Navigator.pop(context);
-                              context.push("/authenticated/editPost", extra: widget.postData).then((value) => widget.refresh());
-                            },
-                            child: const Row(
-                              children: [
-                                Icon(Icons.edit,color: Colors.black,),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                    "Chỉnh sửa bài viết",
-                                    style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.normal
-                                ),
-                                )
-                              ],
-                            )
-                        ) : Container(),
+                            )),
+                        (widget.postData.author.name == appService.username)
+                            ? TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  context
+                                      .push("/authenticated/editPost",
+                                          extra: widget.postData)
+                                      .then((value) => widget.refresh());
+                                },
+                                child: const Row(
+                                  children: [
+                                    Icon(
+                                      Icons.edit,
+                                      color: Colors.black,
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      "Chỉnh sửa bài viết",
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.normal),
+                                    )
+                                  ],
+                                ))
+                            : Container(),
                         (widget.postData.author.name == appService.username)
                             ? TextButton(
                                 onPressed: () {

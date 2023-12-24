@@ -455,15 +455,16 @@ class FeedService {
       return marks;
     }
   }
+
   Future<void> addPost({
     required BuildContext context,
     List<File>? imageList,
     File? video,
     String? described,
     String? status,
-  })async {
+  }) async {
     late AuthService _authService =
-    Provider.of<AuthService>(context, listen: false);
+        Provider.of<AuthService>(context, listen: false);
     try {
       debugPrint('go feed service');
 
@@ -475,12 +476,18 @@ class FeedService {
       };
       List<FileData> files = [];
       if (imageList!.isNotEmpty) {
-        for ( var image in imageList) {
-          files.add(FileData(fieldName: 'image', file: image, type: "image", subType: "png"),);
+        for (var image in imageList) {
+          files.add(
+            FileData(
+                fieldName: 'image', file: image, type: "image", subType: "png"),
+          );
         }
       }
       if (video != null) {
-        files.add(FileData(fieldName: 'video', file: video, type: "video", subType: "mp4"),);
+        files.add(
+          FileData(
+              fieldName: 'video', file: video, type: "video", subType: "mp4"),
+        );
       }
 
       debugPrint("$imageList $video $status $described");
@@ -489,8 +496,6 @@ class FeedService {
         "Authorization": "Bearer ${_appService.token}",
         'Content-Type': 'application/json; charset=UTF-8'
       };
-
-
 
       final response = await postWithFormDataMethod(
           endpoind: "add_post", body: body, headers: headers, files: files);
@@ -509,10 +514,8 @@ class FeedService {
     }
   }
 
-  Future<void> deletePost({
-    required BuildContext context,
-    required int postId
-  }) async {
+  Future<void> deletePost(
+      {required BuildContext context, required int postId}) async {
     final appService = Provider.of<AppService>(context, listen: false);
     final authService = Provider.of<AuthService>(context, listen: false);
     try {
@@ -525,8 +528,8 @@ class FeedService {
         'Content-Type': 'application/json'
       };
 
-      final response =
-      await postMethod(endpoind: "delete_post", body: body, headers: headers);
+      final response = await postMethod(
+          endpoind: "delete_post", body: body, headers: headers);
       final responseBody = jsonDecode(response.body);
 
       if (int.parse(responseBody["code"]) == 9998) {
@@ -545,25 +548,23 @@ class FeedService {
     } catch (e) {
       debugPrint("get error $e");
       // ignore: use_build_context_synchronously
-      showSnackBar(
-          context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
+      showSnackBar(context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
     }
 
     return null;
   }
 
-  Future<void> editPost({
-    required BuildContext context,
-    required int id,
-    List<File>? image,
-    File? video,
-    String? described,
-    String? status,
-    String? image_del,
-    String? image_sort
-}) async {
+  Future<void> editPost(
+      {required BuildContext context,
+      required int id,
+      List<File>? image,
+      File? video,
+      String? described,
+      String? status,
+      String? image_del,
+      String? image_sort}) async {
     late AuthService _authService =
-    Provider.of<AuthService>(context, listen: false);
+        Provider.of<AuthService>(context, listen: false);
     try {
       debugPrint('go feed service status: $status');
       final _appService = Provider.of<AppService>(context, listen: false);
@@ -577,12 +578,18 @@ class FeedService {
       debugPrint("$image  $described $image_del");
       List<FileData> files = [];
       if (image!.isNotEmpty) {
-        for ( var a in image) {
-          files.add(FileData(fieldName: 'image', file: a, type: "image", subType: "png"),);
+        for (var a in image) {
+          files.add(
+            FileData(
+                fieldName: 'image', file: a, type: "image", subType: "png"),
+          );
         }
       }
       if (video != null) {
-        files.add(FileData(fieldName: 'video', file: video, type: "video", subType: "mp4"),);
+        files.add(
+          FileData(
+              fieldName: 'video', file: video, type: "video", subType: "mp4"),
+        );
       }
       debugPrint(" data: ${image.length}  $image_del  $image_del");
       Map<String, String> headers = {
@@ -597,15 +604,11 @@ class FeedService {
             context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
       }
       if (int.parse(responseBody["code"]) == 1000) {
-          debugPrint("edit sucessfully");
-          context.pop();
+        debugPrint("edit sucessfully");
+        context.pop();
       }
     } catch (err) {
       debugPrint("get exception $err");
     }
-
-}
-
-
-
+  }
 }
