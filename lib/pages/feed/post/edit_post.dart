@@ -332,7 +332,7 @@ class _EditPostState extends State<EditPost> {
                   )),
               IconButton(
                   onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => Emotions(chosenEmotion: (val) => setState(() => status = val))));
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => Emotions(chosenEmotion: (val) => setState(() => status = val.status))));
                   },
 
                   icon:const Icon(

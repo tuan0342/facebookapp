@@ -327,7 +327,7 @@ class _NewFeedState extends State<PostPage> {
                 )),
             IconButton(
                 onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => Emotions(chosenEmotion: (val) => setState(() => status = val))));
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => Emotions(chosenEmotion: (val) => setState(() => status = val.status))));
                 },
                 // alignment: Alignment.,
 
