@@ -148,3 +148,12 @@ flutter:
     - assets/images/globe-solid.svg
     - assets/images/card.png
     - assets/images/card_outline.png
+    - assets/images/emotions_icon/angry.png
+    - assets/images/emotions_icon/cry.png
+    - assets/images/emotions_icon/cute.png
+    - assets/images/emotions_icon/love.png
+    - assets/images/emotions_icon/neutral.png
+    - assets/images/emotions_icon/sad.png
+    - assets/images/emotions_icon/smile.png
+    - assets/images/emotions_icon/smiling.png
+    - assets/images/emotions_icon/star.png

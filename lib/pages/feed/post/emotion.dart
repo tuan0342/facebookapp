@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class Emotions extends StatelessWidget {
 
   List <Emotion> emotionList = [
-    Emotion("happy","assets/images/emotions_icon/icon_1.svg"),
-    Emotion("happy","assets/images/emotions_icon/icon_1.svg"),
-    Emotion("happy","assets/images/emotions_icon/icon_1.svg"),
-    Emotion("happy","assets/images/emotions_icon/icon_1.svg"),
-    Emotion("happy","assets/images/emotions_icon/icon_1.svg"),
-    Emotion("happy","assets/images/emotions_icon/icon_1.svg"),
-    Emotion("happy","assets/images/emotions_icon/icon_1.svg"),
-    Emotion("happy","assets/images/emotions_icon/icon_1.svg"),
+    Emotion("angry","assets/images/emotions_icon/angry.png"),
+    Emotion("cry","assets/images/emotions_icon/cry.png"),
+    Emotion("cute","assets/images/emotions_icon/cute.png"),
+    Emotion("love","assets/images/emotions_icon/love.png"),
+    Emotion("neutral","assets/images/emotions_icon/neutral.png"),
+    Emotion("sad","assets/images/emotions_icon/sad.png"),
+    Emotion("smile","assets/images/emotions_icon/smile.png"),
+    Emotion("smilling","assets/images/emotions_icon/smiling.png"),
+    Emotion("star", "assets/images/emotions_icon/star.png")
   ];
 
   late final StringCallback chosenEmotion;
@@ -39,45 +41,49 @@ class Emotions extends StatelessWidget {
                   ],
                 ),
               ),
-              Expanded(
-                  child: Container(
-                    child: GridView.count(
-                      crossAxisCount: 2,
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      childAspectRatio: 3.3,
-                      children: List.generate(emotionList.length, (index) {
-                        return SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: OutlinedButton(
-                            onPressed: (){
-                                chosenEmotion(emotionList[index].status);
+
+              // chosenEmotion != "" ?
+              // Container(
+              //   child: Row(
+              //     children: [
+              //       Expanded(
+              //           child: EmotionLayOut(chosenEmotion as Emotion)
+              //       ),
+              //       IconButton(
+              //           onPressed:() {
+              //             chosenEmotion
+              //           },
+              //           icon: Icon(Icons.close))
+              //     ],
+              //   ),
+              //
+              // ) : SizedBox(),
+              SingleChildScrollView(
+                child:Expanded(
+                    child: Container(
+                      child: GridView.count(
+                        crossAxisCount: 2,
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        childAspectRatio: 3.3,
+                        children: List.generate(emotionList.length, (index) {
+                          return SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: OutlinedButton(
+                              onPressed: (){
+                                chosenEmotion(emotionList[index]);
                                 Navigator.pop(context, chosenEmotion);
-                            },
-                            child: Row(
-                              children: [
-                                Container(
-                                    height: 20,
-                                    child: Row(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        // Image.asset(emotionList[index].iconPath),
-                                        Icon(Icons.emoji_emotions),
-                                        SizedBox(width: 10,),
-                                        Text(emotionList[index].status, style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal))
-                                      ],
-                                    ))
-
-                              ],
+                              },
+                              child: EmotionLayOut(emotionList[index]),
                             ),
-                          ),
-                        );
-                      }),
-                    ),
-                  )
+                          );
+                        }),
+                      ),
+                    )
+                )
+                ,
               )
-
 
             ],
           )
@@ -86,8 +92,36 @@ class Emotions extends StatelessWidget {
     );
   }
 
+  Widget EmotionLayOut(Emotion emotion) {
+    return Container(
+      child: Row(
+        children: [
+          SizedBox(
+            width: 20,
+            height: 20,
+            child: Image.asset(
+              emotion.iconPath
+            ),
+
+          ),
+          const SizedBox(width: 10),
+          Text(
+            emotion.status,
+            style: const TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.normal,
+                fontSize: 18
+            )
+          )
+        ],
+      ),
+    );
+  }
+
 }
-typedef void StringCallback(String val);
+typedef void StringCallback(Emotion val);
+
+
 
 
 

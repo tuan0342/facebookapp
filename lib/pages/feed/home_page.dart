@@ -160,7 +160,8 @@ class HomePageState extends State<HomePage> {
               posts: posts,
               isEnd: isEnd,
               scrollController: _scrollController,
-              isLoading: isLoading)
+              isLoading: isLoading,
+              refreshPosts: refresh,)
         ],
       ),
     ));

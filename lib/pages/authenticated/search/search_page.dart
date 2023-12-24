@@ -350,7 +350,8 @@ class _SearchPageState extends State<SearchPage> {
         posts: result!,
         isEnd: isEnd,
         scrollController: _scrollController,
-        isLoading: isLoading);
+        isLoading: isLoading,
+        refreshPosts: refresh,);
   }
 
   Widget showUserResult() {

@@ -16,7 +16,8 @@ import 'package:readmore/readmore.dart';
 // ignore: must_be_immutable
 class FeedItem extends StatefulWidget {
   final Post postData;
-  const FeedItem({super.key, required this.postData});
+  final VoidCallback refresh;
+  const FeedItem({super.key, required this.postData, required this.refresh});
 
   @override
   State<FeedItem> createState() => _FeedItemState();
@@ -123,6 +124,7 @@ class _FeedItemState extends State<FeedItem> {
   void deletePost(BuildContext context, int id) async {
     await FeedService(context: context)
         .deletePost(context: context, postId: id);
+    widget.refresh();
   }
 
   @override
@@ -354,15 +356,19 @@ class _FeedItemState extends State<FeedItem> {
                   child: RichText(
                     text: TextSpan(
                       text: widget.postData.author.name,
-                      style: TextStyle(fontSize: 15, color: Colors.grey[900], fontWeight: FontWeight.w600),
+                      style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.grey[900],
+                          fontWeight: FontWeight.w600),
                       children: [
                         TextSpan(
-                          text: widget.postData.state.isNotEmpty ? " đang cảm thấy ${widget.postData.state}" : "",
+                          text: widget.postData.state.isNotEmpty
+                              ? " đang cảm thấy ${widget.postData.state}"
+                              : "",
                           style: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.normal,
-                            color: Colors.black54
-                          ),
+                              fontSize: 15,
+                              fontWeight: FontWeight.normal,
+                              color: Colors.black54),
                         ),
                       ],
                     ),
@@ -389,7 +395,6 @@ class _FeedItemState extends State<FeedItem> {
             color: Colors.grey[600],
           ),
           onPressed: () {
-            debugPrint("${widget.postData.toJson()}");
             showModalBottomSheet(
                 context: context,
                 builder: (BuildContext context) {
@@ -440,9 +445,11 @@ class _FeedItemState extends State<FeedItem> {
                         (widget.postData.author.name == appService.username)
                             ? TextButton(
                                 onPressed: () {
-                                  Navigator.pop;
-                                  context.go("/authenticated/editPost",
-                                      extra: widget.postData);
+                                  Navigator.pop(context);
+                                  context
+                                      .push("/authenticated/editPost",
+                                          extra: widget.postData)
+                                      .then((value) => widget.refresh());
                                 },
                                 child: const Row(
                                   children: [

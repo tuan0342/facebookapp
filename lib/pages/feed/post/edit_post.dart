@@ -77,280 +77,6 @@ class _EditPostState extends State<EditPost> {
     final appService = Provider.of<AppService>(context, listen: false);
       return Scaffold(
         body:
-        // widget.postData.image.length == 0 ?
-        // FutureBuilder(
-        //   future: urlToFile(widget.postData.image), // a Future or null
-        //   builder: (BuildContext context, AsyncSnapshot<List<File>> snapshot) {
-        //     switch (snapshot.connectionState) {
-        //       case ConnectionState.none: return new Text('Press button to start');
-        //       case ConnectionState.waiting: return new Text('Awaiting result...');
-        //       default:
-        //         if (snapshot.hasError)
-        //           return new Text('Error: ${snapshot.error}');
-        //         else {
-        //               debugPrint("async success");
-        //               debugPrint("${snapshot.data}");
-        //               return SafeArea(
-        //                 child: SingleChildScrollView(
-        //                   child: Container(
-        //                     padding: const EdgeInsets.all(5),
-        //                     child: Column(
-        //                       children: [
-        //                         Container(
-        //                           decoration: const BoxDecoration(
-        //                               border: Border(
-        //                                   bottom:
-        //                                       BorderSide(color: Colors.grey))),
-        //                           child: Row(
-        //                             children: [
-        //                               IconButton(
-        //                                   onPressed: () {
-        //                                     if (selectedImages.isEmpty &&
-        //                                         videoFile == null &&
-        //                                         describedController.text ==
-        //                                             "") {
-        //                                       context.pop();
-        //                                     } else {
-        //                                       showModalBottomSheet(
-        //                                           context: context,
-        //                                           builder:
-        //                                               (BuildContext context) {
-        //                                             return Container(
-        //                                                 padding:
-        //                                                     const EdgeInsets
-        //                                                         .all(10),
-        //                                                 child: Column(
-        //                                                     mainAxisAlignment:
-        //                                                         MainAxisAlignment
-        //                                                             .center,
-        //                                                     crossAxisAlignment:
-        //                                                         CrossAxisAlignment
-        //                                                             .start,
-        //                                                     mainAxisSize:
-        //                                                         MainAxisSize
-        //                                                             .min,
-        //                                                     children: <Widget>[
-        //                                                       const Column(
-        //                                                         children: [
-        //                                                           Text(
-        //                                                             "Bạn muốn hoàn thành bài viết của mình sau?",
-        //                                                             style: TextStyle(
-        //                                                                 color: Colors
-        //                                                                     .black,
-        //                                                                 fontSize:
-        //                                                                     18),
-        //                                                           ),
-        //                                                           Text(
-        //                                                             "Lưu làm bản nháp hoặc bạn có thể tiếp tục chỉnh sửa.",
-        //                                                             style: TextStyle(
-        //                                                                 color: Colors
-        //                                                                     .grey,
-        //                                                                 fontSize:
-        //                                                                     15),
-        //                                                           )
-        //                                                         ],
-        //                                                       ),
-        //                                                       const SizedBox(
-        //                                                         height: 15,
-        //                                                       ),
-        //                                                       TextButton(
-        //                                                         onPressed: () {
-        //                                                           context.push(
-        //                                                               "/authenticated/personalPage/${appService.uidLoggedIn}");
-        //                                                         },
-        //                                                         child:
-        //                                                             const Row(
-        //                                                           children: [
-        //                                                             Icon(
-        //                                                               Icons
-        //                                                                   .delete_forever,
-        //                                                               size: 32,
-        //                                                               color: Colors
-        //                                                                   .black,
-        //                                                             ),
-        //                                                             SizedBox(
-        //                                                               width: 15,
-        //                                                             ),
-        //                                                             Column(
-        //                                                               mainAxisAlignment:
-        //                                                                   MainAxisAlignment
-        //                                                                       .start,
-        //                                                               crossAxisAlignment:
-        //                                                                   CrossAxisAlignment
-        //                                                                       .start,
-        //                                                               children: [
-        //                                                                 Text(
-        //                                                                   "Thoát chỉnh sửa",
-        //                                                                   style: TextStyle(
-        //                                                                       fontSize: 16,
-        //                                                                       color: Colors.black),
-        //                                                                 ),
-        //                                                               ],
-        //                                                             ),
-        //                                                           ],
-        //                                                         ),
-        //                                                       ),
-        //                                                       const SizedBox(
-        //                                                         height: 15,
-        //                                                       ),
-        //                                                       TextButton(
-        //                                                         onPressed: () {
-        //                                                           Navigator.pop(
-        //                                                               context);
-        //                                                         },
-        //                                                         child:
-        //                                                             const Row(
-        //                                                           children: [
-        //                                                             Icon(
-        //                                                               Icons
-        //                                                                   .verified,
-        //                                                               size: 32,
-        //                                                               color: Colors
-        //                                                                   .lightBlue,
-        //                                                             ),
-        //                                                             SizedBox(
-        //                                                               width: 15,
-        //                                                             ),
-        //                                                             Column(
-        //                                                               mainAxisAlignment:
-        //                                                                   MainAxisAlignment
-        //                                                                       .start,
-        //                                                               crossAxisAlignment:
-        //                                                                   CrossAxisAlignment
-        //                                                                       .start,
-        //                                                               children: [
-        //                                                                 Text(
-        //                                                                   "Tiếp tục chỉnh sửa",
-        //                                                                   style: TextStyle(
-        //                                                                       fontSize: 16,
-        //                                                                       color: Colors.lightBlue),
-        //                                                                 ),
-        //                                                               ],
-        //                                                             ),
-        //                                                           ],
-        //                                                         ),
-        //                                                       ),
-        //                                                     ]));
-        //                                           });
-        //                                     }
-        //                                   },
-        //                                   icon: const Icon(Icons.arrow_back)),
-        //                               const Expanded(
-        //                                 child: Text("Tạo bài viết"),
-        //                               ),
-        //                               OutlinedButton(
-        //                                 onPressed: (selectedImages.isEmpty &&
-        //                                         videoFile == null &&
-        //                                         status == "")
-        //                                     ? null
-        //                                     : () {},
-        //                                 style: OutlinedButton.styleFrom(
-        //                                     side: BorderSide.none),
-        //                                 child: Text(
-        //                                   "ĐĂNG",
-        //                                   style: TextStyle(
-        //                                       color: (selectedImages.isEmpty &&
-        //                                               videoFile == null &&
-        //                                               describedController
-        //                                                       .text ==
-        //                                                   "" &&
-        //                                               status == "")
-        //                                           ? Colors.grey
-        //                                           : Colors.black),
-        //                                 ),
-        //                               ),
-        //                             ],
-        //                           ),
-        //                         ),
-        //                         Row(
-        //                           children: [
-        //                             MyImage(imageUrl: appService.avatar),
-        //                             Expanded(
-        //                               child: Column(
-        //                                 crossAxisAlignment:
-        //                                     CrossAxisAlignment.start,
-        //                                 children: <Widget>[
-        //                                   Text(
-        //                                     status == ""
-        //                                         ? appService.username
-        //                                         : ("${appService.username} - Đang cảm thấy $status."),
-        //                                     maxLines: 3,
-        //                                     overflow: TextOverflow.ellipsis,
-        //                                     style: TextStyle(
-        //                                       color: Colors.grey[900],
-        //                                       fontSize: 18,
-        //                                       fontWeight: FontWeight.bold,
-        //                                       letterSpacing: 1,
-        //                                     ),
-        //                                   ),
-        //                                   Container(
-        //                                     width: 95,
-        //                                     alignment: Alignment.center,
-        //                                     child: ElevatedButton(
-        //                                         onPressed: null,
-        //                                         style: OutlinedButton.styleFrom(
-        //                                           side: BorderSide.none,
-        //                                           padding:
-        //                                               const EdgeInsets.all(2),
-        //                                         ),
-        //                                         child: const Row(
-        //                                           children: [
-        //                                             Icon(
-        //                                               Icons.circle_rounded,
-        //                                               color: Colors.blue,
-        //                                             ),
-        //                                             Text(
-        //                                               "Công khai",
-        //                                               style: TextStyle(
-        //                                                   color: Colors.blue),
-        //                                             )
-        //                                           ],
-        //                                         )),
-        //                                   )
-        //                                 ],
-        //                               ),
-        //                             ),
-        //                           ],
-        //                         ),
-        //                         Container(
-        //                           padding:
-        //                               const EdgeInsets.fromLTRB(4, 0, 4, 0),
-        //                           margin: const EdgeInsets.only(bottom: 10),
-        //                           child: TextField(
-        //                             controller: describedController,
-        //                             decoration: InputDecoration(
-        //                                 border: InputBorder.none,
-        //                                 hintText: selectedImages.isEmpty &&
-        //                                         videoFile == null
-        //                                     ? "Bạn đang nghĩ gì?"
-        //                                     : selectedImages.isNotEmpty
-        //                                         ? "Hãy nói gì đó về bức ảnh này"
-        //                                         : "Hãy nói gì đó về video này"),
-        //                             style: const TextStyle(fontSize: 24),
-        //                           ),
-        //                         ),
-        //                         addImage
-        //                             ? ListImageLayout(
-        //                                 images: selectedImages,
-        //                                 fullHeight: double.infinity,
-        //                                 cbFunction: (val) => setState(
-        //                                     () => selectedImages = val))
-        //                             : videoFile != null
-        //                                 ? VideoPlayerFile(
-        //                                     videoFile: videoFile,
-        //                                     cbFunction: (val) =>
-        //                                         setState(() => videoFile = val))
-        //                                 : Container(),
-        //                       ],
-        //                     ),
-        //                   ),
-        //                 ),
-        //               );
-        //             }
-        //         }
-        //   },
-        //
-        // ) :
         SafeArea(
           child: SingleChildScrollView(
             child: Container(
@@ -400,9 +126,8 @@ class _EditPostState extends State<EditPost> {
                                                 ),
                                                 TextButton(
                                                   onPressed: () {
-                                                    context.go(
-                                                        "/authenticated/personalPage/${appService.uidLoggedIn}"
-                                                    );
+                                                    Navigator.pop(context);
+                                                    context.pop();
 
                                                   },
                                                   child: const Row(
@@ -477,9 +202,8 @@ class _EditPostState extends State<EditPost> {
                         ),
                         OutlinedButton(
                           onPressed: (describedController.text == "" && status == "") ? null : () async{
-                            debugPrint("${image_del}");
                             editPost(context);
-                            context.pop();
+
                           },
                           style: OutlinedButton.styleFrom(side: BorderSide.none),
                           child:  Text(
@@ -491,37 +215,48 @@ class _EditPostState extends State<EditPost> {
                       ],
                     ),
                   ),
+                  const SizedBox(height: 10,),
                   Row(
                     children: [
-                      MyImage(imageUrl: appService.avatar),
+                      MyImage(imageUrl: appService.avatar, height: 80, width: 80,),
+                      const SizedBox(width: 10,),
                       Expanded(
                         child:Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Text(
-                              status == "" ? appService.username : ("${appService.username} - Đang cảm thấy $status."),
-                              maxLines: 3,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: Colors.grey[900],
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 1,
+                            RichText(
+                              text: TextSpan(
+                                text: appService.username,
+                                style: TextStyle(fontSize: 18, color: Colors.grey[900], fontWeight: FontWeight.w600),
+                                children: [
+                                  TextSpan(
+                                    text: status == "" ? ""  :" đang cảm thấy $status" ,
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.normal,
+                                      color: Colors.black54
+                                    ),
+                                  ),],
                               ),
+                              softWrap: true,
                             ),
                             Container(
                               width: 95,
                               alignment: Alignment.center,
                               child: ElevatedButton(
                                   onPressed: null,
-                                  style: OutlinedButton.styleFrom(
+                                  style: ElevatedButton.styleFrom(
                                     side: BorderSide.none,
                                     padding: const EdgeInsets.all(2),
+                                    backgroundColor: const Color(0xFFebf5ff),
                                   ),
                                   child: const Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Icon(Icons.circle_rounded, color: Colors.blue,),
-                                      Text("Công khai", style: TextStyle(color: Colors.blue),)
+                                      Icon(Icons.public, color: Color(0xFF0065d1), size: 18,),
+                                      SizedBox(width: 2,),
+                                      Text("Công khai", style: TextStyle(color: Color(0xFF0065d1), fontWeight: FontWeight.w600),)
                                     ],
                                   )),
                             )
@@ -544,12 +279,19 @@ class _EditPostState extends State<EditPost> {
                   ),
 
                   widget.postData.image.length != 0 ?
-                  ListImageEditLayout(images: widget.postData.image, fullHeight: 400,
-                    cbFunction: (val) => setState(() => newImages = val),
+                  ListImageEditLayout(
+                    images: widget.postData.image,
+                    newImages: newImages,
+                    fullHeight: 400,
+                    cbFunction: (val) => setState(() => {
+                      newImages = val,
+                      debugPrint("NewImage Length: ${newImages.length}")
+                    }),
                     urlFunction: (val) => setState(() => widget.postData.image = val),
                     image_delFunction: (String val)=> setState(() {
-                      image_del = val;
-                    })) :
+                      image_del += val + ',';
+                    }),
+                    ) :
                   // ListImageLayoutFile(images: selectedImages, fullHeight: double.infinity, cbFunction: (val) => setState(() => selectedImages = val)) :
                   videoFile != null ? VideoPlayerFile(videoFile: videoFile,cbFunction:(val) => setState(() => videoFile = val)) : Container(),
                 ],
@@ -557,203 +299,6 @@ class _EditPostState extends State<EditPost> {
             ),
           ),
         ),
-        // body: SafeArea(
-        //   child: SingleChildScrollView(
-        //     child: Container(
-        //       padding: const EdgeInsets.all(5),
-        //       child: Column(
-        //         children: [
-        //           Container(
-        //             decoration: const BoxDecoration(
-        //                 border: Border(bottom: BorderSide(color: Colors.grey))),
-        //             child: Row(
-        //               children: [
-        //                 IconButton(
-        //                     onPressed: () {
-        //                       if (selectedImages.isEmpty && videoFile == null && describedController.text == ""){
-        //                         context.pop();
-        //                       } else {
-        //                         showModalBottomSheet(
-        //                             context: context,
-        //                             builder: (BuildContext context) {
-        //                               return Container(
-        //                                   padding: const EdgeInsets.all(10),
-        //                                   child: Column(
-        //                                       mainAxisAlignment:
-        //                                       MainAxisAlignment.center,
-        //                                       crossAxisAlignment:
-        //                                       CrossAxisAlignment.start,
-        //                                       mainAxisSize: MainAxisSize.min,
-        //                                       children: <Widget>[
-        //                                         const Column(
-        //                                           children: [
-        //                                             Text(
-        //                                               "Bạn muốn hoàn thành bài viết của mình sau?",
-        //                                               style: TextStyle(
-        //                                                   color: Colors.black,
-        //                                                   fontSize: 18),
-        //                                             ),
-        //                                             Text(
-        //                                               "Lưu làm bản nháp hoặc bạn có thể tiếp tục chỉnh sửa.",
-        //                                               style: TextStyle(
-        //                                                   color: Colors.grey,
-        //                                                   fontSize: 15),
-        //                                             )
-        //                                           ],
-        //                                         ),
-        //                                         const SizedBox(
-        //                                           height: 15,
-        //                                         ),
-        //                                         TextButton(
-        //                                           onPressed: () {
-        //                                             context.push(
-        //                                                 "/authenticated/personalPage/${appService.uidLoggedIn}"
-        //                                             );
-        //
-        //                                           },
-        //                                           child: const Row(
-        //                                             children: [
-        //                                               Icon(
-        //                                                 Icons.delete_forever,
-        //                                                 size: 32,
-        //                                                 color: Colors.black,
-        //                                               ),
-        //                                               SizedBox(
-        //                                                 width: 15,
-        //                                               ),
-        //                                               Column(
-        //                                                 mainAxisAlignment:
-        //                                                 MainAxisAlignment.start,
-        //                                                 crossAxisAlignment:
-        //                                                 CrossAxisAlignment.start,
-        //                                                 children: [
-        //                                                   Text(
-        //                                                     "Thoát chỉnh sửa",
-        //                                                     style: TextStyle(
-        //                                                         fontSize: 16,
-        //                                                         color: Colors.black),
-        //                                                   ),
-        //                                                 ],
-        //                                               ),
-        //                                             ],
-        //                                           ),
-        //                                         ),
-        //                                         const SizedBox(
-        //                                           height: 15,
-        //                                         ),
-        //                                         TextButton(
-        //                                           onPressed: () {
-        //                                             Navigator.pop(context);
-        //                                           },
-        //                                           child: const Row(
-        //                                             children: [
-        //                                               Icon(
-        //                                                 Icons.verified,
-        //                                                 size: 32,
-        //                                                 color: Colors.lightBlue,
-        //                                               ),
-        //                                               SizedBox(
-        //                                                 width: 15,
-        //                                               ),
-        //                                               Column(
-        //                                                 mainAxisAlignment:
-        //                                                 MainAxisAlignment.start,
-        //                                                 crossAxisAlignment:
-        //                                                 CrossAxisAlignment.start,
-        //                                                 children: [
-        //                                                   Text(
-        //                                                     "Tiếp tục chỉnh sửa",
-        //                                                     style: TextStyle(
-        //                                                         fontSize: 16,
-        //                                                         color: Colors.lightBlue),
-        //                                                   ),
-        //                                                 ],
-        //                                               ),
-        //                                             ],
-        //                                           ),
-        //                                         ),
-        //                                       ]));
-        //                             });
-        //                       }
-        //                     },
-        //
-        //                     icon: const Icon(Icons.arrow_back)),
-        //                 const Expanded(
-        //                   child: Text("Tạo bài viết"),
-        //                 ),
-        //                 OutlinedButton(
-        //                   onPressed: (selectedImages.isEmpty && videoFile == null  && status == "") ? null : () {
-        //                   },
-        //                   style: OutlinedButton.styleFrom(side: BorderSide.none),
-        //                   child:  Text(
-        //                     "ĐĂNG",
-        //                     style: TextStyle(
-        //                         color: (selectedImages.isEmpty && videoFile == null && describedController.text == "" && status == "") ? Colors.grey : Colors.black),
-        //                   ),
-        //                 ),
-        //               ],
-        //             ),
-        //           ),
-        //           Row(
-        //             children: [
-        //               MyImage(imageUrl: appService.avatar),
-        //               Expanded(
-        //                 child:Column(
-        //                   crossAxisAlignment: CrossAxisAlignment.start,
-        //                   children: <Widget>[
-        //                     Text(
-        //                       status == "" ? appService.username : ("${appService.username} - Đang cảm thấy $status."),
-        //                       maxLines: 3,
-        //                       overflow: TextOverflow.ellipsis,
-        //                       style: TextStyle(
-        //                         color: Colors.grey[900],
-        //                         fontSize: 18,
-        //                         fontWeight: FontWeight.bold,
-        //                         letterSpacing: 1,
-        //                       ),
-        //                     ),
-        //                     Container(
-        //                       width: 95,
-        //                       alignment: Alignment.center,
-        //                       child: ElevatedButton(
-        //                           onPressed: null,
-        //                           style: OutlinedButton.styleFrom(
-        //                             side: BorderSide.none,
-        //                             padding: const EdgeInsets.all(2),
-        //                           ),
-        //                           child: const Row(
-        //                             children: [
-        //                               Icon(Icons.circle_rounded, color: Colors.blue,),
-        //                               Text("Công khai", style: TextStyle(color: Colors.blue),)
-        //                             ],
-        //                           )),
-        //                     )
-        //
-        //                   ],
-        //                 ),
-        //               ),
-        //             ],
-        //           ),
-        //           Container(
-        //             padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
-        //             margin: const EdgeInsets.only(bottom: 10),
-        //             child: TextField(
-        //               controller: describedController,
-        //               decoration: InputDecoration(
-        //                   border: InputBorder.none,
-        //                   hintText: selectedImages.isEmpty && videoFile == null ? "Bạn đang nghĩ gì?" : selectedImages.isNotEmpty ? "Hãy nói gì đó về bức ảnh này" : "Hãy nói gì đó về video này"),
-        //               style: const TextStyle(fontSize: 24),
-        //             ),
-        //           ),
-        //
-        //           addImage ?
-        //           ListImageLayout(images: selectedImages, fullHeight: double.infinity, cbFunction: (val) => setState(() => selectedImages = val)) :
-        //           videoFile != null ? VideoPlayerFile(videoFile: videoFile,cbFunction:(val) => setState(() => videoFile = val)) : Container(),
-        //         ],
-        //       ),
-        //     ),
-        //   ),
-        // ),,
         persistentFooterButtons: [
           Row(
             children: [
@@ -797,7 +342,7 @@ class _EditPostState extends State<EditPost> {
                   )),
               IconButton(
                   onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => Emotions(chosenEmotion: (val) => setState(() => status = val))));
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => Emotions(chosenEmotion: (val) => setState(() => status = val.status))));
                   },
 
                   icon:const Icon(
@@ -833,7 +378,7 @@ class _EditPostState extends State<EditPost> {
   }
 
   void editPost(BuildContext context) async{
-    debugPrint("image size ${newImages.length}");
+    debugPrint("newimage size: ${newImages.length}, image_del: ${image_del}");
     await FeedService(context: context).editPost(
       id: widget.postData.id,
       context: context,
