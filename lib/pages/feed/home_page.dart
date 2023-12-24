@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:facebook_app/models/post_model.dart';
 import 'package:facebook_app/my_widgets/my_image.dart';
 import 'package:facebook_app/my_widgets/post/list_post.dart';
@@ -32,6 +34,7 @@ class HomePageState extends State<HomePage> {
   }
 
   void fetchFeed(BuildContext context) async {
+    debugPrint("fetchFeed");
     if (!isEnd) {
       setState(() {
         isLoading = true;
@@ -40,6 +43,8 @@ class HomePageState extends State<HomePage> {
         final response = await FeedService(context: context)
             .getFeeds(index: index, count: count, lastId: lastId);
 
+        debugPrint("response: ${response.toString()}");
+
         if (response["feed"].isEmpty) {
           if (posts.isEmpty) {
             setState(() {
@@ -47,9 +52,11 @@ class HomePageState extends State<HomePage> {
                   Provider.of<AppService>(context, listen: false).feedCache);
             });
           }
-          setState(() {
-            isEnd = true;
-          });
+          if (response["isSuccess"] == true) {
+            setState(() {
+              isEnd = true;
+            });
+          }
         } else {
           if (posts.isEmpty) {
             // ignore: use_build_context_synchronously
@@ -61,14 +68,11 @@ class HomePageState extends State<HomePage> {
             debugPrint("${posts[1].toJson().toString()}");
             lastId = response["last_id"];
             index = index + count;
+            isLoading = false;
           });
         }
       } catch (err) {
         debugPrint("exception $err");
-      } finally {
-        setState(() {
-          isLoading = false;
-        });
       }
     }
   }
@@ -154,6 +158,7 @@ class HomePageState extends State<HomePage> {
           ),
           ListPost(
               posts: posts,
+              isEnd: isEnd,
               scrollController: _scrollController,
               isLoading: isLoading,
               refreshPosts: refresh,)

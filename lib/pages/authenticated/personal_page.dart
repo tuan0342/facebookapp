@@ -12,6 +12,7 @@ import 'package:facebook_app/services/feed_service.dart';
 import 'package:facebook_app/services/friend_service.dart';
 import 'package:facebook_app/services/user_service.dart';
 import 'package:flutter/material.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class PersonalPage extends StatefulWidget {
   final String uid;
@@ -28,8 +29,10 @@ class _PersonalPageState extends State<PersonalPage> {
       username: "",
       created: "",
       description: "",
-      avatar: "https://t4.ftcdn.net/jpg/05/49/98/39/360_F_549983970_bRCkYfk0P6PP5fKbMhZMIb07mCJ6esXL.jpg",
-      imageCover: "https://t4.ftcdn.net/jpg/05/49/98/39/360_F_549983970_bRCkYfk0P6PP5fKbMhZMIb07mCJ6esXL.jpg",
+      avatar:
+          "https://t4.ftcdn.net/jpg/05/49/98/39/360_F_549983970_bRCkYfk0P6PP5fKbMhZMIb07mCJ6esXL.jpg",
+      imageCover:
+          "https://t4.ftcdn.net/jpg/05/49/98/39/360_F_549983970_bRCkYfk0P6PP5fKbMhZMIb07mCJ6esXL.jpg",
       link: "",
       address: "",
       city: "",
@@ -48,7 +51,7 @@ class _PersonalPageState extends State<PersonalPage> {
   late ScrollController controller;
   // int lastId = 0;
   int indexPost = 0;
-  int countPost = 20;
+  int countPost = 10;
   bool isEndPosts = false;
 
   int totalFriend = 0;
@@ -89,7 +92,7 @@ class _PersonalPageState extends State<PersonalPage> {
             uid: widget.uid);
 
         if (data["posts"].isEmpty) {
-          setStateIfMounted(() {
+          setState(() {
             isEndPosts = true;
           });
         } else {
@@ -115,7 +118,7 @@ class _PersonalPageState extends State<PersonalPage> {
     });
     final profile_ =
         await UserService().getProfile(context: context, uid: widget.uid);
-        
+
     setStateIfMounted(() {
       profile = profile_;
       isLoadingProfile = false;
@@ -138,7 +141,7 @@ class _PersonalPageState extends State<PersonalPage> {
     });
   }
 
-  Future refreshFriend() async{
+  Future refreshFriend() async {
     setStateIfMounted(() {
       friends = [];
     });
@@ -190,10 +193,13 @@ class _PersonalPageState extends State<PersonalPage> {
                         profile: profile,
                         contextPage: context,
                       ),
-
-                      PersonalFriend(friends: friends, contextPage: context, 
-                        uid: profile.id, profile: profile, refreshFriend: refreshFriend,),
-
+                      PersonalFriend(
+                        friends: friends,
+                        contextPage: context,
+                        uid: profile.id,
+                        profile: profile,
+                        refreshFriend: refreshFriend,
+                      ),
                       Container(
                         height: 20,
                         width: MediaQuery.of(context).size.width,
@@ -233,45 +239,124 @@ class _PersonalPageState extends State<PersonalPage> {
               ],
             ))
         : Column(
-          children: [
-            ListView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: feeds.length,
-              itemBuilder: (context, index) =>Container(
-                              decoration: const BoxDecoration(border: Border(bottom: BorderSide(width: 4, color: Colors.grey))),
-                              padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
-                              child: FeedItem(
-                                postData: feeds[index],
-                                refresh: refreshPost,
-                              ),
+            children: [
+              ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: feeds.length + 1,
+                  itemBuilder: (context, index) {
+                    if (index == feeds.length) {
+                      if (isEndPosts) return Container();
+                      return Expanded(
+                        child: Skeletonizer(
+                          child: Container(
+                            color: Colors.white,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Container(
+                                  height: 6,
+                                  width: double.infinity,
+                                  color: Colors.black12,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.all(12),
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                              width: 44,
+                                              height: 44,
+                                              child: const Icon(
+                                                Icons.add,
+                                                size: 44,
+                                              )),
+                                          const SizedBox(
+                                            width: 8,
+                                          ),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Container(
+                                                  width: 80,
+                                                  height: 12,
+                                                  color: Colors.black26,
+                                                ),
+                                                const SizedBox(
+                                                  height: 8,
+                                                ),
+                                                Container(
+                                                  width: 50,
+                                                  height: 8,
+                                                  color: Colors.black26,
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 28,
+                                ),
+                                AspectRatio(
+                                  aspectRatio: 4 / 3,
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    color: Colors.white12,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 40,
+                                )
+                              ],
                             ),
-              
-            ),
-            if (isLoadingNewFeeds) const Padding(padding: EdgeInsets.only(top: 20), child: CircularProgressIndicator()),
-            Container(
-              alignment: Alignment.topCenter,
-              width: MediaQuery.of(context).size.width,
-              child: Column(
-                children: [
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    isEndPosts ? 'Hết bài đăng!' : '',
-                    style: const  TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700),
-                  ),
-                  const SizedBox(
-                    height: 100,
-                  )
-                ],
-              )
-            )
-          ],
-        );
+                          ),
+                        ),
+                      );
+                    }
+                    return Container(
+                      decoration: const BoxDecoration(
+                          border: Border(
+                              bottom:
+                                  BorderSide(width: 4, color: Colors.grey))),
+                      padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
+                      child: FeedItem(
+                        postData: feeds[index],
+                        refresh: refreshPost,
+                      ),
+                    );
+                  }),
+              Container(
+                  alignment: Alignment.topCenter,
+                  width: MediaQuery.of(context).size.width,
+                  child: Column(
+                    children: [
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        isEndPosts ? 'Hết bài đăng!' : '',
+                        style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700),
+                      ),
+                      const SizedBox(
+                        height: 100,
+                      )
+                    ],
+                  ))
+            ],
+          );
   }
 
   @override

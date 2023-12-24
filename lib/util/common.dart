@@ -6,6 +6,7 @@ import 'package:facebook_app/my_widgets/images_dialog.dart';
 import 'package:facebook_app/services/app_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 Uri getUri({required String endpoind, Map<String, dynamic>? params}) {
@@ -60,6 +61,13 @@ void showPopupList(
   debugPrint(result);
 }
 
+String getPostCreateAt(String inputDate) {
+  DateTime dateTime = DateTime.parse(inputDate);
+
+  DateFormat formatter = DateFormat("d 'Th'M");
+  String formattedDate = formatter.format(dateTime);
+  return formattedDate;
+}
 const String INTERACTPOST = "interact post";
 const String ACCEPTFRIEND = "accept friend";
 const String REQUESTFRIEND = "request friend";

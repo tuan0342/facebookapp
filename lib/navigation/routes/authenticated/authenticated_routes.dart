@@ -8,13 +8,23 @@ import 'package:facebook_app/navigation/routes/authenticated/submenu_route.dart'
 import 'package:facebook_app/navigation/routes/authenticated/search_routes.dart';
 import 'package:facebook_app/pages/authenticated/personal/edit_personal_info_page.dart';
 import 'package:facebook_app/pages/authenticated/personal/setting_personal_page.dart';
+import 'package:facebook_app/pages/authenticated/chat/camera_screen.dart';
+import 'package:facebook_app/pages/authenticated/chat/chat_my_profile.dart';
+import 'package:facebook_app/pages/authenticated/chat/chat_screen.dart';
+import 'package:facebook_app/pages/authenticated/chat/new_conversation.dart';
 import 'package:facebook_app/pages/authenticated/friend/suggest_friends_page.dart';
 import 'package:facebook_app/pages/authenticated/friend/user_friends_page.dart';
 import 'package:facebook_app/pages/authenticated/personal_page.dart';
+import 'package:facebook_app/pages/authenticated/video/full_screen_video_page.dart';
 import 'package:facebook_app/pages/feed/post/add_post.dart';
 import 'package:facebook_app/pages/webview/webview_container.dart';
 import 'package:go_router/go_router.dart';
 import '../../../pages/feed/post/edit_post.dart';
+
+import '../../../pages/authenticated/chat/camera_screen.dart';
+import '../../../pages/authenticated/chat/chat_my_profile.dart';
+import '../../../pages/authenticated/chat/chat_screen.dart';
+import '../../../pages/authenticated/chat/new_conversation.dart';
 
 final GoRoute authenticatedRoute = GoRoute(
   path: '/authenticated',
@@ -70,9 +80,25 @@ final GoRoute authenticatedRoute = GoRoute(
       },
     ),
     GoRoute(
-        path: "postDetail/:id",
-        builder: (context, state) =>
-            FeedItemDetail(postId: state.pathParameters["id"]!)),
+      path: "takePhoto",
+      builder: (context, state) => const TakePictureScreen(),
+    ),
+    GoRoute(
+      path: "chatMyProfile",
+      builder: (context, state) => const ChatMyProfile(),
+    ),
+    GoRoute(
+      path: "newConversation",
+      builder: (context, state) => const NewConversation(),
+    ),
+    GoRoute(
+      path: "fullScreenVideo",
+      builder: (context, state) => const FullScreenVideoPage(),
+    ),
+    GoRoute(
+      path: "postDetail/:id",
+      builder: (context, state) =>
+          FeedItemDetail(postId: state.pathParameters["id"]!)),
     GoRoute(
       path: ":index",
       builder: (context, state) {
