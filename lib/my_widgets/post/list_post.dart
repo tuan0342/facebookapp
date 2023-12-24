@@ -9,12 +9,14 @@ class ListPost extends StatelessWidget {
   final ScrollController scrollController;
   final bool isLoading;
   final VoidCallback refreshPosts;
+  final Function onReportItem;
   const ListPost(
       {super.key,
       required this.posts,
       required this.scrollController,
       required this.isLoading,
       required this.refreshPosts,
+      required this.onReportItem,
       required this.isEnd});
 
   @override
@@ -119,6 +121,7 @@ class ListPost extends StatelessWidget {
                           child: FeedItem(
                             postData: posts[index],
                             refresh: refreshPosts,
+                            onReportItem: onReportItem
                           ),
                         );
                       },

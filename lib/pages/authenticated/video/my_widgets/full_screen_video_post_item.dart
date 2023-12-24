@@ -219,10 +219,14 @@ class _FullScreenVideoPostItem extends State<FullScreenVideoPostItem> {
       data: specialThemeData,
       child:
         Container(
-          margin: const EdgeInsets.symmetric(vertical: 8.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
+              Container(
+                height: 4,
+                width: double.infinity,
+                color: Colors.black87,
+              ),
               Padding(
                 padding: const EdgeInsets.all(12),
                 child: Column(
@@ -257,10 +261,10 @@ class _FullScreenVideoPostItem extends State<FullScreenVideoPostItem> {
                           ],
                         )
                         ),
-                        InkWell(
-                          onTap: () { _showOptionModal(context); },
-                          child: const Icon(Icons.more_horiz_rounded),
-                        )
+                        // InkWell(
+                        //   onTap: () { _showOptionModal(context); },
+                        //   child: const Icon(Icons.more_horiz_rounded),
+                        // )
                       ],
                     ),
                     const SizedBox(height: 4,),
@@ -364,7 +368,7 @@ class _FullScreenVideoPostItem extends State<FullScreenVideoPostItem> {
         Divider(
           height: 1,
           thickness: 0.2,
-          color: Colors.black54,
+          color: Colors.white54,
         ),
       ],
     );

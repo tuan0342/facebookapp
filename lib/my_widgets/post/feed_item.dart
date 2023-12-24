@@ -13,11 +13,14 @@ import 'package:popover/popover.dart';
 import 'package:provider/provider.dart';
 import 'package:readmore/readmore.dart';
 
+import '../my_filled_button.dart';
+
 // ignore: must_be_immutable
 class FeedItem extends StatefulWidget {
   final Post postData;
   final VoidCallback refresh;
-  const FeedItem({super.key, required this.postData, required this.refresh});
+  final Function onReportItem;
+  const FeedItem({super.key, required this.postData, required this.refresh, required this.onReportItem});
 
   @override
   State<FeedItem> createState() => _FeedItemState();
@@ -25,6 +28,72 @@ class FeedItem extends StatefulWidget {
 
 class _FeedItemState extends State<FeedItem> {
   bool isLoading = false;
+
+  void reportPost(BuildContext context, String subject, String details) async {
+    final success = await FeedService(context: context)
+        .reportPost(context: context, id: widget.postData.id, subject: subject, details: details);
+    if (success) {
+      // ignore: use_build_context_synchronously
+      showSnackBar(
+          context: context,
+          msg: "Đã báo cáo video bài viết vi phạm");
+      widget.onReportItem(widget.postData.id);
+      Navigator.of(context).pop();
+    }
+  }
+
+  void _showReportMenu(BuildContext context) {
+    final TextEditingController _textFieldSubjectController = TextEditingController();
+    final TextEditingController _textFieldDetailsController = TextEditingController();
+    Navigator.of(context).pop();
+    showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return SingleChildScrollView(
+            child: Container(
+              height: 280 + MediaQuery.of(context).viewInsets.bottom,
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+                top: 16,
+                right: 24,
+                left: 24,
+              ),
+              child: Column(
+                children: [
+                  TextFormField(
+                    controller: _textFieldSubjectController,
+                    decoration: const InputDecoration(
+                      border: UnderlineInputBorder(),
+                      labelText: 'Subject',
+                    ),
+                  ),
+                  SizedBox(height: 16,),
+                  TextFormField(
+                    controller: _textFieldDetailsController,
+                    decoration: const InputDecoration(
+                      border: UnderlineInputBorder(),
+                      labelText: 'Details',
+                    ),
+                  ),
+                  SizedBox(height: 32,),
+                  MyFilledButton(
+                    title: "Báo cáo",
+                    isDisabled: false,
+                    cbFunction: () {
+                      String subject = _textFieldSubjectController.text;
+                      String details = _textFieldDetailsController.text;
+                      reportPost(context, subject, details);
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+    );
+  }
+
   void onClickKudosBtn(FeedService feedService) async {
     setState(() {
       isLoading = true;
@@ -405,36 +474,55 @@ class _FeedItemState extends State<FeedItem> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: [
+                        // TextButton(
+                        //     onPressed: () {},
+                        //     child: const Row(
+                        //       children: [
+                        //         Icon(
+                        //           Icons.add_alert,
+                        //           color: Colors.black,
+                        //         ),
+                        //         SizedBox(
+                        //           width: 10,
+                        //         ),
+                        //         Text(
+                        //           "Tắt thông báo về bài viết này",
+                        //           style: TextStyle(
+                        //               color: Colors.black,
+                        //               fontSize: 16,
+                        //               fontWeight: FontWeight.normal),
+                        //         )
+                        //       ],
+                        //     )),
+                        // TextButton(
+                        //     onPressed: () {},
+                        //     child: const Row(
+                        //       children: [
+                        //         Icon(Icons.save, color: Colors.black),
+                        //         SizedBox(
+                        //           width: 10,
+                        //         ),
+                        //         Text(
+                        //           "Lưu bài viết",
+                        //           style: TextStyle(
+                        //               color: Colors.black,
+                        //               fontSize: 16,
+                        //               fontWeight: FontWeight.normal),
+                        //         )
+                        //       ],
+                        //     )),
                         TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              _showReportMenu(context);
+                            },
                             child: const Row(
                               children: [
-                                Icon(
-                                  Icons.add_alert,
-                                  color: Colors.black,
-                                ),
+                                Icon(Icons.warning_amber_rounded, color: Colors.black),
                                 SizedBox(
                                   width: 10,
                                 ),
                                 Text(
-                                  "Tắt thông báo về bài viết này",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.normal),
-                                )
-                              ],
-                            )),
-                        TextButton(
-                            onPressed: () {},
-                            child: const Row(
-                              children: [
-                                Icon(Icons.save, color: Colors.black),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  "Lưu bài viết",
+                                  "Báo cáo bài viết",
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 16,

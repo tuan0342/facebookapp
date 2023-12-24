@@ -1,3 +1,5 @@
+import 'package:facebook_app/my_widgets/my_editText.dart';
+import 'package:facebook_app/my_widgets/my_filled_button.dart';
 import 'package:facebook_app/my_widgets/my_image.dart';
 import 'package:facebook_app/pages/authenticated/video/my_widgets/video_player.dart';
 import 'package:facebook_app/util/common.dart';
@@ -13,6 +15,7 @@ class VideoPostItem extends StatefulWidget {
   final bool isInView;
   final int index;
   final Function onBlock;
+  final Function onReport;
 
   const VideoPostItem({
     super.key,
@@ -20,6 +23,7 @@ class VideoPostItem extends StatefulWidget {
     required this.isInView,
     required this.index,
     required this.onBlock,
+    required this.onReport,
   });
 
   @override
@@ -136,6 +140,71 @@ class _VideoPostItemState extends State<VideoPostItem> {
     }
   }
 
+  void reportPost(BuildContext context, String subject, String details) async {
+    final success = await FeedService(context: context)
+      .reportPost(context: context, id: widget.videoPost.id, subject: subject, details: details);
+    if (success) {
+      // ignore: use_build_context_synchronously
+      showSnackBar(
+          context: context,
+          msg: "Đã báo cáo video bài viết vi phạm");
+      widget.onReport(widget.videoPost.id);
+      Navigator.of(context).pop();
+    }
+  }
+
+  void _showReportMenu(BuildContext context) {
+    final TextEditingController _textFieldSubjectController = TextEditingController();
+    final TextEditingController _textFieldDetailsController = TextEditingController();
+    Navigator.of(context).pop();
+    showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return SingleChildScrollView(
+            child: Container(
+              height: 280 + MediaQuery.of(context).viewInsets.bottom,
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+                top: 16,
+                right: 24,
+                left: 24,
+              ),
+              child: Column(
+                children: [
+                  TextFormField(
+                    controller: _textFieldSubjectController,
+                    decoration: const InputDecoration(
+                      border: UnderlineInputBorder(),
+                      labelText: 'Subject',
+                    ),
+                  ),
+                  SizedBox(height: 16,),
+                  TextFormField(
+                    controller: _textFieldDetailsController,
+                    decoration: const InputDecoration(
+                      border: UnderlineInputBorder(),
+                      labelText: 'Details',
+                    ),
+                  ),
+                  SizedBox(height: 32,),
+                  MyFilledButton(
+                    title: "Báo cáo",
+                    isDisabled: false,
+                    cbFunction: () {
+                      String subject = _textFieldSubjectController.text;
+                      String details = _textFieldDetailsController.text;
+                      reportPost(context, subject, details);
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+    );
+  }
+
   void _showOptionModal(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -196,7 +265,9 @@ class _VideoPostItemState extends State<VideoPostItem> {
                 ),
               ),
               InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    _showReportMenu(context);
+                  },
                   child: const Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [

@@ -102,6 +102,12 @@ class HomePageState extends State<HomePage> {
     fetchFeed(context);
   }
 
+  void _onReportItem(int postId) {
+    setState(() {
+      posts.retainWhere((post) => post.id != postId);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final appService = Provider.of<AppService>(context, listen: false);
@@ -161,7 +167,9 @@ class HomePageState extends State<HomePage> {
               isEnd: isEnd,
               scrollController: _scrollController,
               isLoading: isLoading,
-              refreshPosts: refresh,)
+              refreshPosts: refresh,
+              onReportItem: _onReportItem,
+          ),
         ],
       ),
     ));

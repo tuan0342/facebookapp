@@ -611,4 +611,36 @@ class FeedService {
       debugPrint("get exception $err");
     }
   }
+
+  Future<bool> reportPost(
+      {required BuildContext context,
+        required int id,
+        required String subject,
+        required String details}) async {
+    try {
+      Map<String, String> body = {
+        "id": id.toString(),
+        "subject": subject.trim(),
+        "details": details.trim(),
+      };
+      Map<String, String> headers = {
+        "Authorization": "Bearer ${_appService.token}",
+        'Content-Type': 'application/json; charset=UTF-8'
+      };
+      final response = await postMethod(
+          endpoind: "report_post", body: body, headers: headers);
+      final responseBody = jsonDecode(response.body);
+      if (int.parse(responseBody["code"]) == 9998) {
+        showSnackBar(
+            context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
+      }
+      if (int.parse(responseBody["code"]) == 1000) {
+        return true;
+      }
+      return false;
+    } catch (err) {
+      debugPrint("get exception $err");
+      return false;
+    }
+  }
 }
