@@ -86,6 +86,12 @@ class _VideoPageState extends State<VideoPage> {
     });
   }
 
+  void onReportItem(int postId) {
+    setState(() {
+      videoPosts.retainWhere((videoPost) => videoPost.id != postId);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -158,6 +164,7 @@ class _VideoPageState extends State<VideoPage> {
                                   isInView: isInView,
                                   index: index,
                                   onBlock: onBlockItem,
+                                  onReport: onReportItem,
                                 );
                               });
                         },

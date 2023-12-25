@@ -332,6 +332,11 @@ class _PersonalPageState extends State<PersonalPage> {
                       child: FeedItem(
                         postData: feeds[index],
                         refresh: refreshPost,
+                          onReportItem: (int postId) {
+                            setState(() {
+                              feeds!.retainWhere((post) => post.id != postId);
+                            });
+                          }
                       ),
                     );
                   }),

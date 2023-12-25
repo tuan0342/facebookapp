@@ -118,6 +118,8 @@ class _FullScreenVideoPlayerState extends State<FullScreenVideoPlayer> with Auto
   void dispose() {
     if (!shouldKeepAlive && !_isInView) {
       _controller.dispose();
+    } else {
+      _controller.pause();
     }
     super.dispose();
   }
