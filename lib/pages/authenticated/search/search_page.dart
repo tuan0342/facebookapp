@@ -11,7 +11,8 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class SearchPage extends StatefulWidget {
-  const SearchPage({super.key});
+  final String type;
+  const SearchPage({super.key, required this.type});
 
   @override
   State<SearchPage> createState() => _SearchPageState();
@@ -205,7 +206,9 @@ class _SearchPageState extends State<SearchPage> {
                         appService.sharedPreferences.setStringList(
                             "KEYWORDS_${appService.uidLoggedIn}", temp);
                         // search
-                        isPost ? onSearch(context) : onSearchUser(context);
+                        widget.type == "post"
+                            ? onSearch(context)
+                            : onSearchUser(context);
                       }
                     },
                     cursorColor: Colors.black,
@@ -246,83 +249,83 @@ class _SearchPageState extends State<SearchPage> {
                     ),
                   ),
                 ),
-                IconButton(
-                  iconSize: 30,
-                  icon: const Icon(Icons.tune),
-                  onPressed: () {
-                    showModalBottomSheet(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return Container(
-                          padding: const EdgeInsets.all(10),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              TextButton(
-                                onPressed: () {
-                                  setState(() {
-                                    isPost = true;
-                                  });
-                                  Navigator.pop(context);
-                                },
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      Icons.question_answer,
-                                      size: 32,
-                                      color:
-                                          isPost ? Colors.blue : Colors.black,
-                                    ),
-                                    const SizedBox(width: 10),
-                                    Text(
-                                      "Bài viết",
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          color: isPost
-                                              ? Colors.blue
-                                              : Colors.black),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(height: 5),
-                              TextButton(
-                                onPressed: () {
-                                  setState(() {
-                                    isPost = false;
-                                  });
-                                  Navigator.pop(context);
-                                },
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      Icons.people,
-                                      size: 32,
-                                      color:
-                                          isPost ? Colors.black : Colors.blue,
-                                    ),
-                                    const SizedBox(width: 10),
-                                    Text(
-                                      "Người dùng",
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          color: isPost
-                                              ? Colors.black
-                                              : Colors.blue),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(height: 20),
-                            ],
-                          ),
-                        );
-                      },
-                    );
-                  },
-                ),
+                // IconButton(
+                //   iconSize: 30,
+                //   icon: const Icon(Icons.tune),
+                //   onPressed: () {
+                //     showModalBottomSheet(
+                //       context: context,
+                //       builder: (BuildContext context) {
+                //         return Container(
+                //           padding: const EdgeInsets.all(10),
+                //           child: Column(
+                //             mainAxisAlignment: MainAxisAlignment.center,
+                //             crossAxisAlignment: CrossAxisAlignment.start,
+                //             mainAxisSize: MainAxisSize.min,
+                //             children: <Widget>[
+                //               TextButton(
+                //                 onPressed: () {
+                //                   setState(() {
+                //                     isPost = true;
+                //                   });
+                //                   Navigator.pop(context);
+                //                 },
+                //                 child: Row(
+                //                   children: [
+                //                     Icon(
+                //                       Icons.question_answer,
+                //                       size: 32,
+                //                       color:
+                //                           isPost ? Colors.blue : Colors.black,
+                //                     ),
+                //                     const SizedBox(width: 10),
+                //                     Text(
+                //                       "Bài viết",
+                //                       style: TextStyle(
+                //                           fontSize: 16,
+                //                           color: isPost
+                //                               ? Colors.blue
+                //                               : Colors.black),
+                //                     )
+                //                   ],
+                //                 ),
+                //               ),
+                //               const SizedBox(height: 5),
+                //               TextButton(
+                //                 onPressed: () {
+                //                   setState(() {
+                //                     isPost = false;
+                //                   });
+                //                   Navigator.pop(context);
+                //                 },
+                //                 child: Row(
+                //                   children: [
+                //                     Icon(
+                //                       Icons.people,
+                //                       size: 32,
+                //                       color:
+                //                           isPost ? Colors.black : Colors.blue,
+                //                     ),
+                //                     const SizedBox(width: 10),
+                //                     Text(
+                //                       "Người dùng",
+                //                       style: TextStyle(
+                //                           fontSize: 16,
+                //                           color: isPost
+                //                               ? Colors.black
+                //                               : Colors.blue),
+                //                     )
+                //                   ],
+                //                 ),
+                //               ),
+                //               const SizedBox(height: 20),
+                //             ],
+                //           ),
+                //         );
+                //       },
+                //     );
+                //   },
+                // ),
               ]),
             ),
             const Divider(
@@ -331,7 +334,7 @@ class _SearchPageState extends State<SearchPage> {
             // _focus.hasFocus || result == null
             //     ? recentSearches()
             //     : showResult(),
-            isPost
+            widget.type == "post"
                 ? _focus.hasFocus || result == null
                     ? recentSearches()
                     : showPostResult()
@@ -356,8 +359,7 @@ class _SearchPageState extends State<SearchPage> {
           setState(() {
             result!.retainWhere((post) => post.id != postId);
           });
-        }
-    );
+        });
   }
 
   Widget showUserResult() {

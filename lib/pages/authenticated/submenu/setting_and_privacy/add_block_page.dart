@@ -95,7 +95,7 @@ class _AddBlockPageState extends State<AddBlockPage> {
                 )),
                 IconButton(
                     onPressed: () {
-                      context.push("/authenticated/search");
+                      context.push("/authenticated/search/user");
                     },
                     icon: const Icon(Icons.search_rounded)),
               ]),

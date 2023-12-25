@@ -384,16 +384,20 @@ class FeedService {
             .toList();
 
         // sendnoti
-        notificationService.sendNotificationToTopic(
+        if (receiverId.toString() != appService.uidLoggedIn) {
+          notificationService.sendNotificationToTopic(
             topic: receiverId.toString(),
             notification: NotificationModel(
-                title: "Anti Facebook",
-                message: markId != 0
-                    ? "${appService.username} đã phản hồi mark của bạn"
-                    : "${appService.username} đã mark vào bài viết của bạn",
-                data: InteractPostNotiModel(
-                        postId: postId, avatar: appService.avatar)
-                    .toMap()));
+              title: "Anti Facebook",
+              message: markId != 0
+                  ? "${appService.username} đã phản hồi mark của bạn"
+                  : "${appService.username} đã mark vào bài viết của bạn",
+              data: InteractPostNotiModel(
+                      postId: postId, avatar: appService.avatar)
+                  .toMap(),
+            ),
+          );
+        }
       }
     } on UnauthorizationException {
       // ignore: use_build_context_synchronously

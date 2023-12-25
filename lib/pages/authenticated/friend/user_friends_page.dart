@@ -116,7 +116,7 @@ class _UserFriendsPageState extends State<UserFriendsPage> {
                 )),
                 IconButton(
                     onPressed: () {
-                      context.push("/authenticated/search");
+                      context.push("/authenticated/search/user");
                     },
                     icon: const Icon(Icons.search_rounded)),
               ]),

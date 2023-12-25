@@ -62,6 +62,10 @@ class _RequestFriendsPageState extends State<RequestFriendsPage> {
     }
   }
 
+  void _onShowSearchScreen(BuildContext context) async {
+    context.push("/authenticated/search/user");
+  }
+
   @override
   void initState() {
     super.initState();
@@ -87,7 +91,7 @@ class _RequestFriendsPageState extends State<RequestFriendsPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: const EdgeInsets.symmetric(horizontal: 12),
         child: Column(children: [
           Container(
             width: double.infinity,
@@ -95,9 +99,34 @@ class _RequestFriendsPageState extends State<RequestFriendsPage> {
                 border: Border(bottom: BorderSide(color: Colors.grey))),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const Text(
-                "Bạn bè",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+              Container(
+                padding: const EdgeInsets.only(
+                    left: 0, right: 0, top: 16, bottom: 0),
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const Expanded(
+                        child: Text(
+                      "Bạn bè",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                    )),
+                    SizedBox(
+                      width: 32,
+                      height: 32,
+                      child: InkWell(
+                        onTap: () {
+                          _onShowSearchScreen(context);
+                        },
+                        child: const Icon(Icons.search),
+                      ),
+                    )
+                  ],
+                ),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,

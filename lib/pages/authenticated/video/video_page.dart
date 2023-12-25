@@ -39,7 +39,7 @@ class _VideoPageState extends State<VideoPage> {
   }
 
   void _onShowSearchScreen(BuildContext context) async {
-    context.push("/authenticated/search");
+    context.push("/authenticated/search/post");
   }
 
   @override
