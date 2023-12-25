@@ -8,12 +8,13 @@ class ListImageLayout extends StatelessWidget {
   final int postId;
   final double? fullHeight;
   final List<ImageModel> images;
+  final VoidCallback? refresh;
   const ListImageLayout(
-      {super.key, required this.images, required this.postId, this.fullHeight});
+      {super.key, required this.images, required this.postId, this.fullHeight, this.refresh});
 
   void handleTapImage(BuildContext context) {
     if (images.length > 1) {
-      context.push("/authenticated/postDetail/$postId");
+      context.push("/authenticated/postDetail/$postId").then((value) => refresh!());
     } else {
       showPopupList(context: context, images: [images[0].url]);
     }

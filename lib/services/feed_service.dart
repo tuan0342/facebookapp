@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:facebook_app/models/mark_comment_model.dart';
 import 'package:facebook_app/models/notification_model.dart';
@@ -9,6 +10,7 @@ import 'package:facebook_app/services/auth_service.dart';
 import 'package:facebook_app/services/notification_services.dart';
 import 'package:facebook_app/util/common.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class FeedService {
@@ -30,6 +32,7 @@ class FeedService {
       int count = 20}) async {
     List<Post> posts = [];
     int? lastID = lastId;
+    bool isSuccess = false;
     try {
       Map<String, dynamic> body = {
         "user_id": uid,
@@ -59,7 +62,9 @@ class FeedService {
         posts = (responseBody["data"]["post"] as List)
             .map((e) => Post.fromJson(e))
             .toList();
+        debugPrint('check 123: ${posts[1].toJson()}');
         lastID = int.parse(responseBody["data"]["last_id"]);
+        isSuccess = true;
       } else {
         throw ApiFailException();
       }
@@ -76,6 +81,7 @@ class FeedService {
     return {
       "feed": posts,
       "last_id": lastID,
+      "isSuccess": false,
     };
   }
 
@@ -329,8 +335,6 @@ class FeedService {
           msg: "Phiên đăng nhập hết hạn");
     } catch (e) {
       debugPrint("get error $e");
-      // ignore: use_build_context_synchronously
-      showSnackBar(context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
     }
 
     return null;
@@ -449,6 +453,195 @@ class FeedService {
     } finally {
       // ignore: control_flow_in_finally
       return marks;
+    }
+  }
+
+  Future<void> addPost({
+    required BuildContext context,
+    List<File>? imageList,
+    File? video,
+    String? described,
+    String? status,
+  }) async {
+    late AuthService _authService =
+        Provider.of<AuthService>(context, listen: false);
+    try {
+      debugPrint('go feed service');
+
+      final _appService = Provider.of<AppService>(context, listen: false);
+
+      Map<String, String> body = {
+        "described": described!.trim(),
+        "status": status!.trim()
+      };
+      List<FileData> files = [];
+      if (imageList!.isNotEmpty) {
+        for (var image in imageList) {
+          files.add(
+            FileData(
+                fieldName: 'image', file: image, type: "image", subType: "png"),
+          );
+        }
+      }
+      if (video != null) {
+        files.add(
+          FileData(
+              fieldName: 'video', file: video, type: "video", subType: "mp4"),
+        );
+      }
+
+      debugPrint("$imageList $video $status $described");
+
+      Map<String, String> headers = {
+        "Authorization": "Bearer ${_appService.token}",
+        'Content-Type': 'application/json; charset=UTF-8'
+      };
+
+      final response = await postWithFormDataMethod(
+          endpoind: "add_post", body: body, headers: headers, files: files);
+      final responseBody = jsonDecode(response.body);
+      debugPrint('go res: $responseBody');
+
+      if (int.parse(responseBody["code"]) == 9998) {
+        showSnackBar(
+            context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
+      }
+      if (int.parse(responseBody["code"]) == 1000) {
+        // context.go('/authenticated/0');
+        context.pop();
+      }
+    } catch (err) {
+      debugPrint("get exception $err");
+    }
+  }
+
+  Future<void> deletePost(
+      {required BuildContext context, required int postId}) async {
+    final appService = Provider.of<AppService>(context, listen: false);
+    final authService = Provider.of<AuthService>(context, listen: false);
+    try {
+      Map<String, dynamic> body = {
+        "id": postId,
+      };
+
+      Map<String, String> headers = {
+        "Authorization": "Bearer ${appService.token}",
+        'Content-Type': 'application/json'
+      };
+
+      final response = await postMethod(
+          endpoind: "delete_post", body: body, headers: headers);
+      final responseBody = jsonDecode(response.body);
+
+      if (int.parse(responseBody["code"]) == 9998) {
+        throw UnauthorizationException();
+      }
+      if (int.parse(responseBody["code"]) == 1000) {
+        debugPrint("sucessfully delete Pos ");
+        context.pop();
+      }
+    } on UnauthorizationException {
+      // ignore: use_build_context_synchronously
+      authService.logOut(
+          context: context,
+          isShowSnackbar: true,
+          msg: "Phiên đăng nhập hết hạn");
+    } catch (e) {
+      debugPrint("get error $e");
+      // ignore: use_build_context_synchronously
+      showSnackBar(context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
+    }
+
+    return null;
+  }
+
+  Future<void> editPost(
+      {required BuildContext context,
+      required int id,
+      List<File>? image,
+      File? video,
+      String? described,
+      String? status,
+      String? image_del,
+      String? image_sort}) async {
+    late AuthService _authService =
+        Provider.of<AuthService>(context, listen: false);
+    try {
+      debugPrint('go feed service status: $status');
+      final _appService = Provider.of<AppService>(context, listen: false);
+      Map<String, String> body = {
+        "id": id.toString(),
+        "described": described == null ? "" : described.trim(),
+        "status": status == null ? "" : status.trim(),
+        "image_del": image_del == null ? "" : image_del.trim(),
+        // "image_sort":  image_sort == null ? "" : image_sort.trim(),
+      };
+      debugPrint("$image  $described $image_del");
+      List<FileData> files = [];
+      if (image!.isNotEmpty) {
+        for (var a in image) {
+          files.add(
+            FileData(
+                fieldName: 'image', file: a, type: "image", subType: "png"),
+          );
+        }
+      }
+      if (video != null) {
+        files.add(
+          FileData(
+              fieldName: 'video', file: video, type: "video", subType: "mp4"),
+        );
+      }
+      debugPrint(" data: ${image.length}  $image_del  $image_del");
+      Map<String, String> headers = {
+        "Authorization": "Bearer ${_appService.token}",
+        'Content-Type': 'application/json; charset=UTF-8'
+      };
+      final response = await postWithFormDataMethod(
+          endpoind: "edit_post", body: body, headers: headers, files: files);
+      final responseBody = jsonDecode(response.body);
+      if (int.parse(responseBody["code"]) == 9998) {
+        showSnackBar(
+            context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
+      }
+      if (int.parse(responseBody["code"]) == 1000) {
+        debugPrint("edit sucessfully");
+        context.pop();
+      }
+    } catch (err) {
+      debugPrint("get exception $err");
+    }
+  }
+
+  Future<bool> reportPost(
+      {required BuildContext context,
+        required int id,
+        required String subject,
+        required String details}) async {
+    try {
+      Map<String, String> body = {
+        "id": id.toString(),
+        "subject": subject.trim(),
+        "details": details.trim(),
+      };
+      Map<String, String> headers = {
+        "Authorization": "Bearer ${_appService.token}",
+        'Content-Type': 'application/json; charset=UTF-8'
+      };
+      final response = await postMethod(
+          endpoind: "report_post", body: body, headers: headers);
+      final responseBody = jsonDecode(response.body);
+      if (int.parse(responseBody["code"]) == 9998) {
+        showSnackBar(
+            context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
+      }
+      if (int.parse(responseBody["code"]) == 1000) {
+        return true;
+      }
+      return false;
+    } catch (err) {
+      debugPrint("get exception $err");
+      return false;
     }
   }
 }

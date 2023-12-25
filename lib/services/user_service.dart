@@ -50,7 +50,10 @@ class UserService {
       if (int.parse(responseBody["code"]) == 1000) {
         final result = responseBody["data"];
         profile = Profile.fromJson(result);
-        if(profile.id == appService.uidLoggedIn) appService.coverImage = profile.imageCover;
+        if(profile.id == appService.uidLoggedIn) {
+          appService.coverImage = profile.imageCover;
+          appService.coins = int.parse(profile.coins);
+        }
       }
     } on UnauthorizationException {
       // ignore: use_build_context_synchronously
@@ -157,7 +160,6 @@ class UserService {
       Map<String, String> headers = {
         "Authorization": "Bearer ${appService.token}",
       };
-
       List<FileData> files = [];
       if(avatar != null ) {
         if(avatar.path.isNotEmpty) {

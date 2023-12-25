@@ -348,8 +348,16 @@ class _SearchPageState extends State<SearchPage> {
   Widget showPostResult() {
     return ListPost(
         posts: result!,
+        isEnd: isEnd,
         scrollController: _scrollController,
-        isLoading: isLoading);
+        isLoading: isLoading,
+        refreshPosts: refresh,
+        onReportItem: (int postId) {
+          setState(() {
+            result!.retainWhere((post) => post.id != postId);
+          });
+        }
+    );
   }
 
   Widget showUserResult() {

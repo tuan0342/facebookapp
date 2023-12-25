@@ -1,7 +1,8 @@
+import 'dart:convert';
+
 import 'package:facebook_app/models/post_model.dart';
 import 'package:facebook_app/my_widgets/my_image.dart';
 import 'package:facebook_app/my_widgets/post/list_post.dart';
-import 'package:facebook_app/pages/feed/post/add_post_page.dart';
 import 'package:facebook_app/services/feed_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -33,6 +34,7 @@ class HomePageState extends State<HomePage> {
   }
 
   void fetchFeed(BuildContext context) async {
+    debugPrint("fetchFeed");
     if (!isEnd) {
       setState(() {
         isLoading = true;
@@ -41,6 +43,8 @@ class HomePageState extends State<HomePage> {
         final response = await FeedService(context: context)
             .getFeeds(index: index, count: count, lastId: lastId);
 
+        debugPrint("response: ${response.toString()}");
+
         if (response["feed"].isEmpty) {
           if (posts.isEmpty) {
             setState(() {
@@ -48,9 +52,11 @@ class HomePageState extends State<HomePage> {
                   Provider.of<AppService>(context, listen: false).feedCache);
             });
           }
-          setState(() {
-            isEnd = true;
-          });
+          if (response["isSuccess"] == true) {
+            setState(() {
+              isEnd = true;
+            });
+          }
         } else {
           if (posts.isEmpty) {
             // ignore: use_build_context_synchronously
@@ -59,16 +65,14 @@ class HomePageState extends State<HomePage> {
           }
           setState(() {
             posts.addAll(response["feed"]);
+            debugPrint("${posts[1].toJson().toString()}");
             lastId = response["last_id"];
             index = index + count;
+            isLoading = false;
           });
         }
       } catch (err) {
         debugPrint("exception $err");
-      } finally {
-        setState(() {
-          isLoading = false;
-        });
       }
     }
   }
@@ -94,8 +98,15 @@ class HomePageState extends State<HomePage> {
       isEnd = false;
       index = 0;
       posts = [];
+      lastId = null;
     });
     fetchFeed(context);
+  }
+
+  void _onReportItem(int postId) {
+    setState(() {
+      posts.retainWhere((post) => post.id != postId);
+    });
   }
 
   @override
@@ -118,13 +129,20 @@ class HomePageState extends State<HomePage> {
                 GestureDetector(
                   onTap: () {
                     context.push(
-                        "/authenticated/personalPage/${appService.uidLoggedIn}");
+                        "/authenticated/personalPage/${appService.uidLoggedIn}").then((value) => refresh());
                   },
-                  child: MyImage(
-                    imageUrl: appService.avatar,
-                    width: 40,
-                    height: 40,
-                  ),
+                  child: Selector<AppService, String>(
+                            selector: (_, notifier) =>
+                                notifier.avatar,
+                            builder: (_, value, __) => MyImage(
+                              imageUrl: appService.avatar,
+                              height: 40,
+                              width: 40),),
+                  // MyImage(
+                  //   imageUrl: appService.avatar,
+                  //   width: 40,
+                  //   height: 40,
+                  // ),
                 ),
                 const SizedBox(
                   width: 10,
@@ -132,10 +150,7 @@ class HomePageState extends State<HomePage> {
                 Expanded(
                     child: OutlinedButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const NewFeed()),
-                    );
+                    context.push("/authenticated/addPost").then((value) => refresh());
                   },
                   style: OutlinedButton.styleFrom(
                     backgroundColor: Colors.white,
@@ -156,9 +171,13 @@ class HomePageState extends State<HomePage> {
             ),
           ),
           ListPost(
-              posts: posts,
-              scrollController: _scrollController,
-              isLoading: isLoading)
+            posts: posts,
+            isEnd: isEnd,
+            scrollController: _scrollController,
+            isLoading: isLoading,
+            refreshPosts: refresh,
+            onReportItem: _onReportItem,
+          )
         ],
       ),
     ));
