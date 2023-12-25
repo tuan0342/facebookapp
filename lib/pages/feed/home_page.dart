@@ -171,13 +171,13 @@ class HomePageState extends State<HomePage> {
             ),
           ),
           ListPost(
-              posts: posts,
-              isEnd: isEnd,
-              scrollController: _scrollController,
-              isLoading: isLoading,
-              refreshPosts: refresh,
-              onReportItem: _onReportItem,
-          ),
+            posts: posts,
+            isEnd: isEnd,
+            scrollController: _scrollController,
+            isLoading: isLoading,
+            refreshPosts: refresh,
+            onReportItem: _onReportItem,
+          )
         ],
       ),
     ));
