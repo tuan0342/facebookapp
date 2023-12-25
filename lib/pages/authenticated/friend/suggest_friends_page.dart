@@ -74,58 +74,60 @@ class _SuggestFriendsPageState extends State<SuggestFriendsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: LayoutBuilder(
+        body: SafeArea(
+      child: LayoutBuilder(
           builder: (context, constraints) => RefreshIndicator(
-            onRefresh: refresh, 
-            child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 3),
-                  child: Row(children: [
-                    IconButton(
-                      onPressed: () {
-                        context.pop();
-                      },
-                      icon: const Icon(
-                        Icons.arrow_back,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    const Expanded(
-                        child: Text(
-                      "Gợi ý",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                    )),
-                    IconButton(
-                        onPressed: () {
-                          context.push("/authenticated/search");
-                        },
-                        icon: const Icon(Icons.search_rounded)),
-                  ]),
+                onRefresh: refresh,
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 3),
+                          child: Row(children: [
+                            IconButton(
+                              onPressed: () {
+                                context.pop();
+                              },
+                              icon: const Icon(
+                                Icons.arrow_back,
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            const Expanded(
+                                child: Text(
+                              "Gợi ý",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 20),
+                            )),
+                            IconButton(
+                                onPressed: () {
+                                  context.push("/authenticated/search/user");
+                                },
+                                icon: const Icon(Icons.search_rounded)),
+                          ]),
+                        ),
+                        const Divider(
+                          color: Colors.grey,
+                        ),
+                        const Text(
+                          "Những người bạn có thể biết",
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18),
+                        ),
+                        const SizedBox(
+                          height: 14,
+                        ),
+                        listSuggestFriends()
+                      ]),
                 ),
-                const Divider(
-                  color: Colors.grey,
-                ),
-                const Text(
-                  "Những người bạn có thể biết",
-                  textAlign: TextAlign.start,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                ),
-                const SizedBox(
-                  height: 14,
-                ),
-                listSuggestFriends()
-              ]),
-            ),
-          )
-        ),
-      )
-    );
+              )),
+    ));
   }
 
   Widget listSuggestFriends() {

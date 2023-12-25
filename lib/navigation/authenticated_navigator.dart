@@ -51,39 +51,37 @@ class _AuthenticatedNavigatorState extends State<AuthenticatedNavigator> {
 
   @override
   Widget build(BuildContext context) {
-    final appService = Provider.of<AppService>(context, listen: false);
+    final _appService = Provider.of<AppService>(context, listen: false);
     final authService = Provider.of<AuthService>(context, listen: false);
-    final _videoPlayerProvider = Provider.of<VideoPlayerProvider>(context, listen: false);
+    final _videoPlayerProvider =
+        Provider.of<VideoPlayerProvider>(context, listen: false);
 
-    FirebaseMessaging.instance.subscribeToTopic(appService.uidLoggedIn);
-    if (appService.subcribe.isNotEmpty &&
-        appService.subcribe != appService.uidLoggedIn) {
-      FirebaseMessaging.instance.unsubscribeFromTopic(appService.subcribe);
-      appService.subcribe = appService.uidLoggedIn;
+    FirebaseMessaging.instance.subscribeToTopic(_appService.uidLoggedIn);
+    if (_appService.subcribe.isNotEmpty &&
+        _appService.subcribe != _appService.uidLoggedIn) {
+      FirebaseMessaging.instance.unsubscribeFromTopic(_appService.subcribe);
+      _appService.subcribe = _appService.uidLoggedIn;
     }
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Anti Facebook"),
-        actions: [
-          IconButton(
-              onPressed: () {
-                context.push("/authenticated/search");
-              },
-              icon: const Icon(Icons.search_rounded)),
-          IconButton(
-              onPressed: () {
-                authService.logOut(context: context);
-              },
-              icon: const Icon(Icons.logout))
-        ],
-      ),
+      appBar: _selectedIndex == 0
+          ? AppBar(
+              title: const Text("Anti Facebook"),
+              actions: [
+                IconButton(
+                    onPressed: () {
+                      context.push("/authenticated/search/post");
+                    },
+                    icon: const Icon(Icons.search_rounded)),
+              ],
+            )
+          : null,
       bottomNavigationBar: BottomNavBar(
         onTap: (index) {
           _onItemTapped(index);
           if (index == 2) {
             _videoPlayerProvider.setIsInVideoPage(true);
           } else {
-            _videoPlayerProvider.setIsInVideoPage(false); 
+            _videoPlayerProvider.setIsInVideoPage(false);
           }
         },
         index: _selectedIndex,
@@ -91,14 +89,14 @@ class _AuthenticatedNavigatorState extends State<AuthenticatedNavigator> {
       body: StreamBuilder(
           stream: FirebaseFirestore.instance
               .collection('users')
-              .doc(appService.uidLoggedIn)
+              .doc(_appService.uidLoggedIn)
               .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return const ErrorGettingDataScreen();
             }
             if (snapshot.hasData &&
-                snapshot.data!['device_id'] == appService.deviceId) {
+                snapshot.data!['device_id'] == _appService.deviceId) {
               return IndexedStack(
                 index: _selectedIndex,
                 children: _widgetOptions,
@@ -108,9 +106,8 @@ class _AuthenticatedNavigatorState extends State<AuthenticatedNavigator> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const WaitingDataScreen();
             }
-            WidgetsBinding.instance.addPostFrameCallback(
-                    (_) => authService.logOut(context: context, isShowSnackbar: true)
-            );
+            WidgetsBinding.instance.addPostFrameCallback((_) =>
+                authService.logOut(context: context, isShowSnackbar: true));
             return const WaitingDataScreen();
           }),
     );
