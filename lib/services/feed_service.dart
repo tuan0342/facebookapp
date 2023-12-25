@@ -507,7 +507,8 @@ class FeedService {
             context: context, msg: "Có lỗi xảy ra vui lòng thử lại sau");
       }
       if (int.parse(responseBody["code"]) == 1000) {
-        context.go('/authenticated/0');
+        // context.go('/authenticated/0');
+        context.pop();
       }
     } catch (err) {
       debugPrint("get exception $err");

@@ -48,7 +48,12 @@ class _CoinsState extends State<Coins> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         const Text('Số coins hiện tại:  ', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600)),
-                        Text(_appService.coins.toString(), style: const TextStyle(fontSize: 30, fontWeight: FontWeight.w700, color: Colors.blue)),
+                        Selector<AppService, String>(
+                            selector: (_, notifier) =>
+                                notifier.coins.toString(),
+                            builder: (_, value, __) => Text(_appService.coins.toString(), 
+                              style: const TextStyle(fontSize: 30, fontWeight: FontWeight.w700, color: Colors.blue))),
+                        // Text(_appService.coins.toString(), style: const TextStyle(fontSize: 30, fontWeight: FontWeight.w700, color: Colors.blue)),
                       ],
                     ),
                     const Padding(

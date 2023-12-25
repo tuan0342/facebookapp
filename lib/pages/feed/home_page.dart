@@ -98,6 +98,7 @@ class HomePageState extends State<HomePage> {
       isEnd = false;
       index = 0;
       posts = [];
+      lastId = null;
     });
     fetchFeed(context);
   }
@@ -128,13 +129,20 @@ class HomePageState extends State<HomePage> {
                 GestureDetector(
                   onTap: () {
                     context.push(
-                        "/authenticated/personalPage/${appService.uidLoggedIn}");
+                        "/authenticated/personalPage/${appService.uidLoggedIn}").then((value) => refresh());
                   },
-                  child: MyImage(
-                    imageUrl: appService.avatar,
-                    width: 40,
-                    height: 40,
-                  ),
+                  child: Selector<AppService, String>(
+                            selector: (_, notifier) =>
+                                notifier.avatar,
+                            builder: (_, value, __) => MyImage(
+                              imageUrl: appService.avatar,
+                              height: 40,
+                              width: 40),),
+                  // MyImage(
+                  //   imageUrl: appService.avatar,
+                  //   width: 40,
+                  //   height: 40,
+                  // ),
                 ),
                 const SizedBox(
                   width: 10,
@@ -142,7 +150,7 @@ class HomePageState extends State<HomePage> {
                 Expanded(
                     child: OutlinedButton(
                   onPressed: () {
-                    context.push("/authenticated/addPost");
+                    context.push("/authenticated/addPost").then((value) => refresh());
                   },
                   style: OutlinedButton.styleFrom(
                     backgroundColor: Colors.white,
