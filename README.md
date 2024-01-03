@@ -50,9 +50,9 @@ Project môn học Phát triển ứng dụng đa nền tảng - Đại học B�
 - Vũ Văn Lợi - 20204577
 - Nguyễn Khánh Duy - 20204647
 
-# Ảnh demo sản phẩm
+# Ảnh demo sản phẩm (ảnh được lưu ở issues)
 
-### Đăng ký và đăng nhập (ảnh ở phần issues)
+### Đăng ký và đăng nhập
 <p float="left">
   <img src="https://private-user-images.githubusercontent.com/79151156/292741257-ca35651e-891f-42ee-92e1-ae4650d43d39.jpg?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MDQwOTk5MzgsIm5iZiI6MTcwNDA5OTYzOCwicGF0aCI6Ii83OTE1MTE1Ni8yOTI3NDEyNTctY2EzNTY1MWUtODkxZi00MmVlLTkyZTEtYWU0NjUwZDQzZDM5LmpwZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNDAxMDElMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjQwMTAxVDA5MDAzOFomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTNiZDhhNmVlZTNiODBkMjRkNTdjNTAwMTNkYmViNWNlN2ViYmNlZGUzMmQ5MTVkZjIzOGIxMjlmZGRmMjlhMDYmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JmFjdG9yX2lkPTAma2V5X2lkPTAmcmVwb19pZD0wIn0.9-UPzZQyvtsjnwvAs1wox-kjYqDf6HRMRuWiDHo8TpQ" width="200" />
   <img src="https://private-user-images.githubusercontent.com/79151156/292741262-7fbb6670-783c-479d-a6ac-02b686e926b6.jpg?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MDQwOTk5MzgsIm5iZiI6MTcwNDA5OTYzOCwicGF0aCI6Ii83OTE1MTE1Ni8yOTI3NDEyNjItN2ZiYjY2NzAtNzgzYy00NzlkLWE2YWMtMDJiNjg2ZTkyNmI2LmpwZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNDAxMDElMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjQwMTAxVDA5MDAzOFomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTczZDY1ZmFiMmY4OWM2MDM3Mzc4YTAxNmEzOWI2Mjk3MWUxM2U1MGU0NDZmZjkxOTQ1MWY3YTVkZTUyZjkzYzcmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JmFjdG9yX2lkPTAma2V5X2lkPTAmcmVwb19pZD0wIn0.1z-gaDg5gTetoAXfjmt72NXHwTKz98nI1l5SHfn86Uc" width="200" />
